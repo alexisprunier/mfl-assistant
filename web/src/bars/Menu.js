@@ -22,7 +22,7 @@ const Menu: React.FC < MenuProps > = (props) => {
 
   return (
     <nav id="Menu" className="navbar h-100 flex-md-column px-3 py-2">
-      {!location.pathname.startsWith("/search")
+      {!location.pathname.startsWith("/search") && location.pathname !== "/"
         && <Link
           to="/search"
           className={"nav-link nav-link-search py-2 px-3"}

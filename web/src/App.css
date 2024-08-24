@@ -63,6 +63,16 @@ a .card:hover {
   }
 }
 
+/* GLOBAL */
+
+.bg-black {
+  background-color: #0B0C0D;
+}
+
+.bg-soft-black {
+  background-color: #16191c;
+}
+
 /* POPUP */
 
 .popup-overlay {
@@ -116,6 +126,14 @@ svg .content .bar text {
 
 /* FLEX */
 
+.min-width-0 {
+  min-width: 0;
+}
+
+.flex-basis-0 {
+  flex-basis: 0;
+}
+
 .flex-basis-40 {
   flex-basis: 40px;
 }
@@ -125,6 +143,10 @@ svg .content .bar text {
 }
 
 @media (min-width: 768px) {
+  .flex-md-basis-50p {
+    flex-basis: 50%;
+  }
+
   .flex-basis-200 {
     flex-basis: 200px;
   }

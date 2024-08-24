@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import "./PageHome.css";
 import { Link } from 'react-router-dom';
 import BoxScrollDown from "components/box/BoxScrollDown.js";
@@ -13,169 +13,285 @@ interface PageHomeProps {
 }
 
 const PageHome: React.FC < PageHomeProps > = ({ yScrollPosition }) => {
+  const [searchValue, setSearchValue] = useState("");
+
   return (
-    <div id="PageHome">
+    <div id="PageHome" className="h-100">
       {yScrollPosition < 100
         ? <BoxScrollDown />
         : <BoxScrollUp />
       }
 
-      <BoxSocials />
-
-      <div className="container px-3 px-md-5">
-        <div className="row">
-          <div className="offset-xl-2 offset-lg-1 col-xl-8 col-lg-10">
-            <div className="row min-vh-100 mt-5">
-              <div className="offset-1 offset-md-0 col-10 col-md-6 d-flex align-items-end align-items-md-center pe-5 ps-5 p-md-0">
-                  <img
-                    className="w-100 mb-0 mb-md-5"
-                    src="/media/images/assistant.svg"
-                    alt="MFL Assistant"
-                  />
+      <div className="h-100 w-100">
+        <div className="d-flex h-100 w-100 flex-column flex-md-row flex-nowrap">
+          <div className="d-flex flex-column flex-grow-1 flex-md-basis-50p h-100 pe-md-3 pb-md-3" style={{ minWidth: "0" }}>
+            <div className="d-flex bg-black py-2 px-md-2" style={{ borderBottomRightRadius: "10px" }}>
+              <div className="d-flex flex-grow-1 ps-1 pe-2">
+                <input
+                  type="text"
+                  className="form-control w-100"
+                  value={searchValue}
+                  onChange={(v) => setSearchValue(v.target.value)}
+                  placeholder={"Search players, clubs, users..."}
+                  autoFocus
+                />
               </div>
 
-              <div className="col-md-6 py-4 d-flex align-items-start align-items-md-center text-center text-md-start">
-                <div className="flex-column w-100 w-md-auto">
+              <div className="d-flex flex-grow-0">
+                <button
+                  type="text"
+                  className="btn btn-link w-100"
+                  onClick={() => setSearchValue(searchValue)}
+                  disabled={searchValue.length < 2}
+                >
+                  <i className="bi bi-search text-white"></i>
+                </button>
+              </div>
+            </div>
+
+            <div className="d-flex flex-column flex-md-fill ps-md-3">
+              <div className="d-flex flex-column flex-md-row flex-fill justify-content-center">
+                <div className="d-flex flex-column align-self-center">
+                  <img
+                    width="auto" style={{ maxWidth: "300px" }}
+                    src="/media/images/assistant.png"
+                    alt="MFL Assistant"
+                  />
                   <span>Tighten your shoelaces thanks to the</span>
                   <h1 className="text-white">MFL Assistant.</h1>
                 </div>
-              </div>
-            </div>
-
-            {/*<div className="row mb-5">
-              <div className="col-md-12 mb-5">
-                <h1 className="text-white text-end">Check at the MFL activity!</h1>
+                {/*<div className="d-flex">
+                  media
+                </div>*/}
               </div>
 
-              <div className="col-md-4 mb-2">
-                <Link to="/dash/marketplace" className="text-decoration-none">
-                  <div className="card h-100">
-                    <img src="/media/images/podium.svg" className="card-img-top" alt="Random"></img>
-                    <div className="card-body">
-                      <h4 className="card-title text-white">Marketplace</h4>
-                      <p className="card-text">Check the report including the activity of the player sales and more.</p>
-                    </div>
-                  </div>
-                </Link>
-              </div>
+              <div className="d-flex flex-column card my-1 pt-1 pb-2 rounded-3">
+                <div className="d-flex h4 pt-1 px-2">
+                  <i className="bi bi-clipboard-data-fill mx-1"></i> Dashboard
+                </div>
 
-              <div className="col-md-4 mb-2">
-                <Link to="/dash/players" className="text-decoration-none">
-                  <div className="card h-100">
-                    <img src="/media/images/player.svg" className="card-img-top p-4" alt="Random"></img>
-                    <div className="card-body">
-                      <h4 className="card-title text-white">Players</h4>
-                      <p className="card-text">Task the assistant to give a perfect overview of the realm of players.</p>
-                    </div>
-                  </div>
-                </Link>
-              </div>
-
-              <div className="col-md-4 mb-2">
-                <Link to="/dash/clubs" className="text-decoration-none">
-                  <div className="card h-100">
-                    <img src="/media/images/buildings.svg" className="card-img-top p-4" alt="Random"></img>
-                    <div className="card-body">
-                      <h4 className="card-title text-white">Clubs</h4>
-                      <p className="card-text">He also knows everything about the clubs and the division structure!</p>
-                    </div>
-                  </div>
-                </Link>
-              </div>
-            </div>
-
-            <div className="row my-5 pt-5">
-              <div className="col-md-12 my-5 pt-5">
-                <h1 className="text-white">Analyze Mercato Trends!</h1>
-              </div>
-
-              <div className="col-md-6 d-flex flex-fill align-items-center">
-                <div className="d-flex flex-column w-100 text-center mt-5 mb-4">
-                  <h4>With the 2 tools:</h4>
-
-                  <div className="text-center my-4">
-                    <Link to="/tools/contracts" className="text-decoration-none">
-                      <div className="card-page card mb-2 mx-2 d-inline-block">
-                        <div className="card-body px-3 py-2">
-                          <p className="card-text text-info">Contracts</p>
-                        </div>
-                      </div>
+                <div className="d-flex flex-column flex-md-row">
+                  <div className="d-flex flex-grow-1 flex-shrink-1 flex-basis-0 min-width-0">
+                    <Link
+                      to="/search"
+                      className={"nav-link text-white px-3"}
+                    >
+                      <i className="bi bi-shop mx-1"></i>Marketplace
                     </Link>
-
-                    <Link to="/tools/sales" className="text-decoration-none">
-                      <div className="card-page card mb-2 mx-1 d-inline-block">
-                        <div className="card-body px-3 py-2">
-                          <p className="card-text text-info">Sales</p>
-                        </div>
-                      </div>
+                  </div>
+                  <div className="d-flex flex-grow-1 flex-shrink-1 flex-basis-0 min-width-0">
+                    <Link
+                      to="/search"
+                      className={"nav-link text-white px-3"}
+                    >
+                      <i className="bi bi-buildings mx-1"></i> Clubs
+                    </Link>
+                  </div>
+                  <div className="d-flex flex-grow-1 flex-shrink-1 flex-basis-0 min-width-0">
+                    <Link
+                      to="/search"
+                      className={"nav-link text-white px-3"}
+                    >
+                      <i className="bi bi-person-badge mx-1"></i> Players
                     </Link>
                   </div>
                 </div>
               </div>
 
-              <div className="col-md-6 mb-2">
-                <div className="mb-2 text-center">
-                  <h6>Enhanced by a filtering system:</h6>
+              <div className="d-flex flex-column card my-1 pt-1 pb-2 rounded-3">
+                <div className="d-flex h4 pt-1 px-2">
+                  <i className="bi bi-wrench-adjustable-circle-fill mx-1"></i> Tools
                 </div>
 
-                <Link to="/tools/contracts?overallMin=85" className="text-decoration-none">
-                  <div className="card mb-2 mt-4">
-                    <div className="card-body">
-                      <p className="card-text"><i className="bi bi-star-fill text-white me-2"></i>Examine the legendary player contracts</p>
-                    </div>
+                <div className="d-flex flex-column flex-md-row max-height-md-200">
+                  <div className="d-flex flex-grow-1 flex-shrink-1 flex-basis-0 min-width-0">
+                    <Link
+                      to="/search"
+                      className={"nav-link text-white px-3"}
+                    >
+                      <i className="bi bi-currency-exchange mx-1"></i> Player pricing
+                    </Link>
                   </div>
-                </Link>
+                  <div className="d-flex flex-grow-1 flex-shrink-1 flex-basis-0 min-width-0">
+                    <Link
+                      to="/search"
+                      className={"nav-link text-white px-3"}
+                    >
+                      <i className="bi bi bi-journal-bookmark-fill mx-1"></i> Contract eval.
+                    </Link>
+                  </div>
+                  <div className="d-flex flex-grow-1 flex-shrink-1 flex-basis-0 min-width-0">
+                    <Link
+                      to="/search"
+                      className={"nav-link text-white px-3"}
+                    >
+                      <i className="bi bi-clipboard2-check-fill mx-1"></i> Team builder
+                    </Link>
+                  </div>
+                </div>
+              </div>
 
-                <Link to="/tools/contracts?positions=CB" className="text-decoration-none">
-                  <div className="card mb-4">
-                    <div className="card-body">
-                      <p className="card-text"><i className="bi bi-shield-shaded text-white me-2"></i>Examine the CB contracts</p>
-                    </div>
+              <div className="d-flex flex-column card mt-1 py-2 rounded-3">
+                <div className="d-flex flex-column flex-md-row max-height-md-200">
+                  <div className="d-flex w-100 justify-content-center">
+                    <Link
+                      to="/search"
+                      className={"nav-link text-white px-3"}
+                    >
+                      <i className="bi bi-alarm-fill mx-1"></i> Notification center
+                    </Link>
                   </div>
-                </Link>
+                </div>
+              </div>
+            </div>
+          </div>
 
-                <Link to="/tools/sales?overallMax=64" className="text-decoration-none">
-                  <div className="card mb-2 mt-4">
-                    <div className="card-body">
-                      <p className="card-text"><i className="bi bi-speedometer text-white me-2"></i>Evaluate the common player sales</p>
-                    </div>
-                  </div>
-                </Link>
+          <div className="d-flex flex-column flex-grow-1 flex-md-basis-50p py-md-3 pe-md-3" style={{ minWidth: "0" }}>
+            <div className="d-flex flex-column card flex-grow-1 flex-fill" style={{ minWidth: "0" }}>
+              <h4>MFL Activity</h4>
 
-                <Link to="/tools/sales?positions=LW,RW" className="text-decoration-none">
-                  <div className="card mb-2">
-                    <div className="card-body">
-                      <p className="card-text"><i className="bi bi-shield-shaded text-white me-2"></i>Evaluate the ST sales</p>
-                    </div>
+              <div className="d-flex flex-column flex-fill">
+                <div className="d-flex flex-column flex-grow-1">
+                  <div>
+                    Listings
                   </div>
-                </Link>
+
+                  <div className="d-flex flex-row">
+                    <img
+                      style={{ maxHeight: "50px" }}
+                      src="https://d13e14gtps4iwl.cloudfront.net/players/36222/card_512.png"
+                      alt="MFL Assistant"
+                    />
+                    <img
+                      style={{ maxHeight: "50px" }}
+                      src="https://d13e14gtps4iwl.cloudfront.net/players/36222/card_512.png"
+                      alt="MFL Assistant"
+                    />
+                  </div>
+                </div>
+                <div className="d-flex flex-column flex-grow-1">
+                  <div>
+                    Sales
+                  </div>
+
+                  <div className="d-flex flex-row">
+                    <img
+                      style={{ maxHeight: "50px" }}
+                      src="https://d13e14gtps4iwl.cloudfront.net/players/36222/card_512.png"
+                      alt="MFL Assistant"
+                    />
+                    <img
+                      style={{ maxHeight: "50px" }}
+                      src="https://d13e14gtps4iwl.cloudfront.net/players/36222/card_512.png"
+                      alt="MFL Assistant"
+                    />
+                  </div>
+                </div>
+                <div className="d-flex flex-column flex-grow-1">
+                  <div>
+                    Contracts
+                  </div>
+
+                  <div className="d-flex flex-row">
+                    <img
+                      style={{ maxHeight: "50px" }}
+                      src="https://d13e14gtps4iwl.cloudfront.net/players/36222/card_512.png"
+                      alt="MFL Assistant"
+                    />
+                    <img
+                      style={{ maxHeight: "50px" }}
+                      src="https://d13e14gtps4iwl.cloudfront.net/players/36222/card_512.png"
+                      alt="MFL Assistant"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div className="row my-5 py-5">
-              <div className="col-md-12 my-5 pt-5">
-                <h1 className="text-white text-end">Tour the Global Club Scene!</h1>
-              </div>
+            <div className="d-flex flex-column card flex-grow-1 flex-fill" style={{ minWidth: "0" }}>
+              <h4>Community</h4>
 
-              <div className="offset-md-1 col-md-10 mb-2">
-                <BoxClubMap />
+              <div className="d-flex flex-column flex-fill">
+                <div className="d-flex flex-column flex-grow-1">
+                  <div>
+                    Content creators
+                  </div>
+
+                  <div className="d-flex flex-row">
+                    <img
+                      style={{ maxHeight: "50px" }}
+                      src="https://pbs.twimg.com/profile_images/1699478704479461376/FpyRcFYv_400x400.jpg"
+                      alt="MFL Assistant"
+                    />
+                    <img
+                      style={{ maxHeight: "50px" }}
+                      src="https://pbs.twimg.com/profile_images/1699478704479461376/FpyRcFYv_400x400.jpg"
+                      alt="MFL Assistant"
+                    />
+                  </div>
+                </div>
+                
+                <div className="d-flex flex-column flex-grow-1">
+                  <div>
+                    Tools
+                  </div>
+
+                  <div className="d-flex flex-row">
+                    <img
+                      style={{ maxHeight: "50px" }}
+                      src="https://pbs.twimg.com/profile_images/1699478704479461376/FpyRcFYv_400x400.jpg"
+                      alt="MFL Assistant"
+                    />
+                    <img
+                      style={{ maxHeight: "50px" }}
+                      src="https://pbs.twimg.com/profile_images/1699478704479461376/FpyRcFYv_400x400.jpg"
+                      alt="MFL Assistant"
+                    />
+                  </div>
+                </div>
+
+                <div className="d-flex flex-column flex-grow-1">
+                  <div>
+                    Initiatives
+                  </div>
+
+                  <div className="d-flex flex-row">
+                    <img
+                      style={{ maxHeight: "50px" }}
+                      src="https://pbs.twimg.com/profile_images/1721134227213750272/VsG_pArI_400x400.png"
+                      alt="MFL Assistant"
+                    />
+                    <img
+                      style={{ maxHeight: "50px" }}
+                      src="https://pbs.twimg.com/profile_images/1721134227213750272/VsG_pArI_400x400.png"
+                      alt="MFL Assistant"
+                    />
+                  </div>
+                </div>
+
+                <div className="d-flex flex-column flex-grow-1">
+                  <div>
+                    Club socials
+                  </div>
+
+                  <div className="d-flex flex-row">
+                    <img
+                      style={{ maxHeight: "50px" }}
+                      src="https://pbs.twimg.com/profile_images/1710982176609599488/MPBvpWXT_400x400.jpg"
+                      alt="MFL Assistant"
+                    />
+                    <img
+                      style={{ maxHeight: "50px" }}
+                      src="https://pbs.twimg.com/profile_images/1710982176609599488/MPBvpWXT_400x400.jpg"
+                      alt="MFL Assistant"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
-
-            <div className="row my-5 py-5">
-              <div className="col-md-12 my-5 pt-5">
-                <h1 className="text-white text-end">Enhance Scouting with Notif. Center!</h1>
-              </div>
-
-              <div className="offset-md-1 col-md-10 mb-2">
-                <BoxNotificationCenter />
-              </div>
-            </div>*/}
           </div>
         </div>
       </div>
-
-      <Footer />
     </div>
   );
 };

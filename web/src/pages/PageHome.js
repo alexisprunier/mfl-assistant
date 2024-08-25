@@ -192,13 +192,22 @@ const PageHome: React.FC < PageHomeProps > = ({ yScrollPosition }) => {
               </div>
 
               <div className="d-flex flex-column card mt-1 py-2 rounded-3">
-                <div className="d-flex flex-column flex-md-row max-height-md-200">
-                  <div className="d-flex w-100 justify-content-center">
+                <div className="d-flex flex-column flex-md-row">
+                  <div className="d-flex flex-grow-1 flex-shrink-1 flex-basis-0 min-width-0 justify-content-center">
                     <Link
                       to="/search"
-                      className={"nav-link text-white px-3"}
+                      className={"nav-link text-white"}
                     >
                       <i className="bi bi-alarm-fill mx-1"></i> Notification center
+                    </Link>
+                  </div>
+
+                  <div className="d-flex flex-grow-1 flex-shrink-1 flex-basis-0 min-width-0 justify-content-center">
+                    <Link
+                      to="/search"
+                      className={"nav-link text-dark"}
+                    >
+                      <i className="bi bi-hourglass-split mx-1"></i> Soon to come!
                     </Link>
                   </div>
                 </div>

@@ -42,7 +42,7 @@ export const getUnderContractPlayers = (handleSuccess, handleError, params) => g
   handleError,
 );
 
-export const getPlayerSales = (handleSuccess, handleError, params) => get(
+export const getPlayerSales = ({ handleSuccess, handleError, params }) => get(
   getMflApiEndpoint() +
   "listings?limit=25&type=PLAYER&status=BOUGHT&" +
   convertDictToUrlParams(params),
@@ -50,11 +50,21 @@ export const getPlayerSales = (handleSuccess, handleError, params) => get(
   handleError,
 );
 
-/* LISTINGS */
+/* CLUBS */
 
 export const getClubSales = (handleSuccess, handleError, params) => get(
   getMflApiEndpoint() +
   "listings?limit=25&type=CLUB&status=BOUGHT&" +
+  convertDictToUrlParams(params),
+  handleSuccess,
+  handleError,
+);
+
+/* LISTINGS */
+
+export const getPlayerListings = ({ handleSuccess, handleError, params }) => get(
+  getMflApiEndpoint() +
+  "listings?limit=25&type=PLAYER&status=AVAILABLE&view=full&" +
   convertDictToUrlParams(params),
   handleSuccess,
   handleError,

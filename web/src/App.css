@@ -227,6 +227,10 @@ select:focus {
 }
 
 @media (min-width: 768px) {
+  .h-md-100 {
+    height: 100%;
+  }
+
   .max-height-md-300 {
     max-height: 300px;
   }

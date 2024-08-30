@@ -10,6 +10,10 @@
     bottom: 120px;
     right: 50px;
   }
+
+  #PageHome .main-view {
+    height: calc(100vh - 100px);
+  }
 }
 
 @media (min-width: 768px) {
@@ -28,4 +32,29 @@
 
 #PageHome .nav-link:hover {
   color: #0dcaf0 !important;
+}
+
+#PageHome .media-mfl {
+  position: absolute;
+  top: 3%;
+  right: 8%;
+}
+
+#PageHome .media-x {
+  position: absolute;
+  top: 13%;
+  right: 4%;
+}
+
+#PageHome .media-discord {
+  position: absolute;
+  top: 23%;
+  right: -2%;
+}
+
+#PageHome .media-mfl:hover,
+#PageHome .media-x:hover,
+#PageHome .media-discord:hover {
+  box-shadow: 0 8px 15px rgba(13, 202, 240, 0.3);
+  transform: translateY(-3px);
 }

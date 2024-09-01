@@ -1,0 +1,7 @@
+.scroll-left {
+  background: linear-gradient(to right, rgba(22, 25, 28, 1) 0%, rgba(22, 25, 28, .7) 80%, rgba(22, 25, 28, .1) 100%);
+}
+
+.scroll-right {
+  background: linear-gradient(to left, rgba(22, 25, 28, 1) 0%, rgba(22, 25, 28, .7) 80%, rgba(22, 25, 28, .1) 100%);
+}

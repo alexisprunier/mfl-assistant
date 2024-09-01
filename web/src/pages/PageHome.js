@@ -75,6 +75,15 @@ const PageHome: React.FC < PageHomeProps > = ({ yScrollPosition }) => {
       getPlayerListingData();
     }, []);
 
+    const handleKeyDown = (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        if (searchValue.length >= 2) {
+          navigate('/search?q=' + searchValue);
+        }
+      }
+    };
+
     return (
         <div id="PageHome" className="h-100">
       {window.innerWidth < 768 && yScrollPosition < 100
@@ -88,7 +97,7 @@ const PageHome: React.FC < PageHomeProps > = ({ yScrollPosition }) => {
       <div className="h-md-100 w-100">
         <div className="d-flex h-md-100 w-100 flex-column flex-md-row flex-nowrap">
           <div className="d-flex flex-column flex-md-grow-1 flex-md-basis-50p h-100 pe-md-3 pb-md-3" style={{ minWidth: "0" }}>
-            <div className="d-flex bg-black py-2 px-md-2" style={{ borderBottomRightRadius: "10px" }}>
+            <div className="searchBar d-flex py-2 px-md-2" style={{ borderBottomRightRadius: "10px" }}>
               <div className="d-flex flex-grow-1 ps-3 ps-md-1 pe-2">
                 <input
                   type="text"
@@ -96,6 +105,7 @@ const PageHome: React.FC < PageHomeProps > = ({ yScrollPosition }) => {
                   value={searchValue}
                   onChange={(v) => setSearchValue(v.target.value)}
                   placeholder={"Search players, clubs, users..."}
+                  onKeyDown={handleKeyDown}
                 />
               </div>
 

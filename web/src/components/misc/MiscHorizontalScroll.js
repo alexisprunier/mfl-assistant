@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
+import "./MiscHorizontalScroll.css";
 
 interface MiscFlagProps {
   country: object;
@@ -35,17 +36,7 @@ const MiscHorizontalScroll: React.FC = ({ content }) => {
   }, []);
 
   return (
-    <div className="d-flex w-100 align-items-center">
-      {canScrollLeft && (
-        <button
-          className="btn btn-link"
-          onClick={() => scroll('left')}
-          aria-label="Scroll Left"
-        >
-          <i className="bi bi-arrow-left-circle-fill"></i>
-        </button>
-      )}
-
+    <div className="d-flex w-100 position-relative">
       <div
         ref={scrollContainerRef}
         className="flex-grow-1 d-flex overflow-hidden"
@@ -54,14 +45,28 @@ const MiscHorizontalScroll: React.FC = ({ content }) => {
         {content}
       </div>
 
+      {canScrollLeft && (
+        <div className="scroll-left position-absolute align-content-center start-0 h-100">
+          <button
+            className="btn btn-link"
+            onClick={() => scroll('left')}
+            aria-label="Scroll Left"
+          >
+            <i className="bi bi-arrow-left-circle-fill"></i>
+          </button>
+        </div>
+      )}
+
       {canScrollRight && (
-        <button
-          className="btn btn-link"
-          onClick={() => scroll('right')}
-          aria-label="Scroll Right"
-        >
-          <i className="bi bi-arrow-right-circle-fill"></i>
-        </button>
+        <div className="scroll-right position-absolute align-content-center end-0 h-100">
+          <button
+            className="btn btn-link"
+            onClick={() => scroll('right')}
+            aria-label="Scroll Right"
+          >
+            <i className="bi bi-arrow-right-circle-fill"></i>
+          </button>
+        </div>
       )}
     </div>
   );

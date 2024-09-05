@@ -36,11 +36,11 @@ const ItemCardSale: React.FC < ItemCardSaleProps > = ({ s }) => {
           </div>
 
           <div className="d-flex pe-2">
-            19
+            {s.player.metadata.age}
           </div>
 
           <div className="d-flex flex-fill justify-content-end">
-            CM,CDM
+            {s.player.metadata.positions.join(',')}
           </div>
         </div>
 
@@ -57,12 +57,12 @@ const ItemCardSale: React.FC < ItemCardSaleProps > = ({ s }) => {
         <div className="d-flex flex-row justify-content-end">
           <div className="me-1">
             <ButtonMflPlayerInfo
-              playerId={s.player.metadata.id}
+              playerId={s.player.id}
             />
           </div>
           <div>
             <ButtonMflPlayer
-              playerId={s.player.metadata.id}
+              playerId={s.player.id}
             />
           </div>
         </div>

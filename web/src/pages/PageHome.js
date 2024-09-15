@@ -8,6 +8,7 @@ import LoadingSquare from "components/loading/LoadingSquare.js";
 import MiscHorizontalScroll from "components/misc/MiscHorizontalScroll.js";
 import MiscFlag from "components/misc/MiscFlag.js";
 import ItemCardSale from "components/items/ItemCardSale.js";
+import ItemCardCommunityMember from "components/items/ItemCardCommunityMember.js";
 import { getPlayerSales, getPlayerListings } from "services/api-mfl.js";
 
 interface PageHomeProps {
@@ -15,77 +16,87 @@ interface PageHomeProps {
 }
 
 const PageHome: React.FC < PageHomeProps > = ({ yScrollPosition }) => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const [searchValue, setSearchValue] = useState("");
+  const [searchValue, setSearchValue] = useState("");
 
-    const [playerSales, setPlayerSales] = useState(null);
-    const [playerListings, setPlayerListings] = useState(null);
+  const [playerSales, setPlayerSales] = useState(null);
+  const [playerListings, setPlayerListings] = useState(null);
 
-    const contentCreators = [{
-      image: "https://d13e14gtps4iwl.cloudfront.net/players/36222/card_512.png",
-      link: "https://d13e14gtps4iwl.cloudfront.net/players/36222/card_512.png",
-      countries: ["FRANCE"],
-    }, ];
+  const contentCreators = [{
+    name: "WenDirkCast",
+    image: "https://pbs.twimg.com/profile_images/1699478704479461376/FpyRcFYv_400x400.jpg",
+    link: "https://d13e14gtps4iwl.cloudfront.net/players/36222/card_512.png",
+    countries: ["ENGLAND"],
+  }, ];
 
-    const tools = [{
-      image: "https://d13e14gtps4iwl.cloudfront.net/players/36222/card_512.png",
-      link: "https://d13e14gtps4iwl.cloudfront.net/players/36222/card_512.png",
-      countries: ["FRANCE"],
-    }, ];
+  const tools = [{
+    name: "MFL Player Info",
+    link: "https://mflplayer.info/",
+    countries: [],
+  }, {
+    name: "MFL Predictions",
+    image: "https://pbs.twimg.com/profile_images/1721134227213750272/VsG_pArI_400x400.png",
+    link: "https://mflmanager.fr/projections.html",
+    countries: [],
+  }];
 
-    const initiatives = [{
-      image: "https://d13e14gtps4iwl.cloudfront.net/players/36222/card_512.png",
-      link: "https://d13e14gtps4iwl.cloudfront.net/players/36222/card_512.png",
-      countries: ["FRANCE"],
-    }, ];
+  const initiatives = [{
+    name: "MFL Manager",
+    image: "https://pbs.twimg.com/profile_images/1721134227213750272/VsG_pArI_400x400.png",
+    link: "https://discord.gg/GMuRDJsq",
+    countries: ["FRANCE"],
+    platforms: ["discord"]
+  }, ];
 
-    const clubSocials = [{
-      image: "https://d13e14gtps4iwl.cloudfront.net/players/36222/card_512.png",
-      link: "https://d13e14gtps4iwl.cloudfront.net/players/36222/card_512.png",
-      countries: ["FRANCE"],
-    }, ];
+  const clubSocials = [{
+    name: "Sambre Hearts",
+    image: "https://pbs.twimg.com/profile_images/1792928428770942976/H_WfZk8c_400x400.jpg",
+    link: "https://x.com/SambreHearts",
+    countries: ["ENGLAND"],
+    platforms: ["twitter"]
+  }, ];
 
-    const getPlayerSalesData = () => {
-      getPlayerSales({
-        handleSuccess: (v) => {
-          setPlayerSales(v);
-        },
-        handleError: (e) => {
-          console.log(e);
-        },
-        params: {}
-      });
-    }
+  const getPlayerSalesData = () => {
+    getPlayerSales({
+      handleSuccess: (v) => {
+        setPlayerSales(v);
+      },
+      handleError: (e) => {
+        console.log(e);
+      },
+      params: {}
+    });
+  }
 
-    const getPlayerListingData = () => {
-      getPlayerListings({
-        handleSuccess: (v) => {
-          setPlayerListings(v);
-        },
-        handleError: (e) => {
-          console.log(e);
-        },
-        params: {}
-      });
-    }
+  const getPlayerListingData = () => {
+    getPlayerListings({
+      handleSuccess: (v) => {
+        setPlayerListings(v);
+      },
+      handleError: (e) => {
+        console.log(e);
+      },
+      params: {}
+    });
+  }
 
-    useEffect(() => {
-      getPlayerSalesData();
-      getPlayerListingData();
-    }, []);
+  useEffect(() => {
+    getPlayerSalesData();
+    getPlayerListingData();
+  }, []);
 
-    const handleKeyDown = (event) => {
-      if (event.key === 'Enter') {
-        event.preventDefault();
-        if (searchValue.length >= 2) {
-          navigate('/search?q=' + searchValue);
-        }
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      if (searchValue.length >= 2) {
+        navigate('/search?q=' + searchValue);
       }
-    };
+    }
+  };
 
-    return (
-        <div id="PageHome" className="h-100">
+  return (
+    <div id="PageHome" className="h-100">
       {window.innerWidth < 768 && yScrollPosition < 100
         && <BoxScrollDown />
       }
@@ -315,42 +326,28 @@ const PageHome: React.FC < PageHomeProps > = ({ yScrollPosition }) => {
               </div>
             </div>
 
-            <div className="d-flex flex-column card flex-grow-1 flex-fill py-2 px-3 m-2 mb-4 m-md-0" style={{ minWidth: "0" }}>
+            <div className="d-flex flex-column card flex-grow-1 flex-fill py-2 px-3 m-2 mb-4 m-md-0 overflow-auto" style={{ minWidth: "0" }}>
               <h4><i className="bi bi-person-hearts me-1"></i> Community</h4>
 
               <div className="d-flex flex-column flex-fill">
-                <BoxSoonToCome />
-              </div>
-
-              {/*<div className="d-flex flex-column flex-fill">
-                <div className="d-flex flex-column flex-grow-1">
+                <div className="position-relative">
+                <div className="d-flex flex-column flex-grow-1 mb-1">
                   <div>
                     Content creators
                   </div>
 
-                  <div className="d-flex flex-row">
+                  <div className="d-flex flex-row flex-fill">
                     <MiscHorizontalScroll
                       content={
                         <div className="d-flex flex-row">
                           {contentCreators.map((o) => (
-                            <a href={o.link} target="_blank">
-                              <div className="d-flex flex-row px-1">
-                                <img
-                                  style={{ maxWidth: "70px" }}
-                                  src={o.image}
-                                  alt="MFL Assistant"
-                                  className="px-1"
-                                />
-
-                                <div className="d-flex flex-column">
-                                  {o.countries && o.countries.map((c) => (
-                                    <MiscFlag
-                                      country={c}
-                                    />
-                                  ))}
-                                </div>
-                              </div>
-                            </a>
+                            <ItemCardCommunityMember
+                              name={o.name}
+                              link={o.link}
+                              countries={(o.countries)}
+                              image={o.image}
+                              platforms={o.platforms}
+                            />
                           ))}
                         </div>
                       }
@@ -358,34 +355,23 @@ const PageHome: React.FC < PageHomeProps > = ({ yScrollPosition }) => {
                   </div>
                 </div>
                 
-                <div className="d-flex flex-column flex-grow-1">
+                <div className="d-flex flex-column flex-grow-1 mb-1">
                   <div>
                     Tools
                   </div>
 
-                  <div className="d-flex flex-row">
+                  <div className="d-flex flex-row flex-fill">
                     <MiscHorizontalScroll
                       content={
                         <div className="d-flex flex-row">
                           {tools.map((o) => (
-                            <a href={o.link} target="_blank">
-                              <div className="d-flex flex-row px-1">
-                                <img
-                                  style={{ maxWidth: "70px" }}
-                                  src={o.image}
-                                  alt="MFL Assistant"
-                                  className="px-1"
-                                />
-
-                                <div className="d-flex flex-column">
-                                  {o.countries && o.countries.map((c) => (
-                                    <MiscFlag
-                                      country={c}
-                                    />
-                                  ))}
-                                </div>
-                              </div>
-                            </a>
+                            <ItemCardCommunityMember
+                              name={o.name}
+                              link={o.link}
+                              countries={(o.countries)}
+                              image={o.image}
+                              platforms={o.platforms}
+                            />
                           ))}
                         </div>
                       }
@@ -393,49 +379,60 @@ const PageHome: React.FC < PageHomeProps > = ({ yScrollPosition }) => {
                   </div>
                 </div>
 
-                <div className="d-flex flex-column flex-grow-1">
+                <div className="d-flex flex-column flex-grow-1 mb-1">
                   <div>
                     Initiatives
                   </div>
 
-                  <div className="d-flex flex-row">
+                  <div className="d-flex flex-row flex-fill">
                     <MiscHorizontalScroll
                       content={
                         <div className="d-flex flex-row">
                           {initiatives.map((o) => (
-                            <a href={o.link} target="_blank">
-                              <div className="d-flex flex-row px-1">
-                                <img
-                                  style={{ maxWidth: "70px" }}
-                                  src={o.image}
-                                  alt="MFL Assistant"
-                                  className="px-1"
-                                />
-
-                                <div className="d-flex flex-column">
-                                  {o.countries && o.countries.map((c) => (
-                                    <MiscFlag
-                                      country={c}
-                                    />
-                                  ))}
-                                </div>
-                              </div>
-                            </a>
+                            <ItemCardCommunityMember
+                              name={o.name}
+                              link={o.link}
+                              countries={(o.countries)}
+                              image={o.image}
+                              platforms={o.platforms}
+                            />
                           ))}
                         </div>
                       }
                     />
                   </div>
-                </div> <
-      /div> ** * )
-    }
-    */} < /
-  div > < /
-  div > <
+                </div>
+
+                <div className="d-flex flex-column flex-grow-1 mb-1">
+                  <div>
+                    Club socials
+                  </div>
+
+                  <div className="d-flex flex-row flex-fill">
+                    <MiscHorizontalScroll
+                      content={
+                        <div className="d-flex flex-row">
+                          {clubSocials.map((o) => (
+                            <ItemCardCommunityMember
+                              name={o.name}
+                              link={o.link}
+                              countries={(o.countries)}
+                              image={o.image}
+                              platforms={o.platforms}
+                            />
+                          ))}
+                        </div>
+                      }
+                    />
+                  </div>
+                </div></div> <
     /div> < /
-  div > <
+    div > < /
+    div > <
+    /div> < /
+    div > <
     /div>
-);
+  );
 };
 
 export default PageHome;

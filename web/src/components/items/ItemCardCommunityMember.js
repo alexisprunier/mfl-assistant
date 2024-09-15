@@ -12,8 +12,8 @@ interface ItemCardCommunityMemberProps {
 
 const ItemCardCommunityMember: React.FC < ItemCardCommunityMemberProps > = ({ image, countries, platforms, name, link }) => {
   return (
-    <div className={"ItemCardCommunityMember Item flex-fill"}>
-      <div className="card bg-black d-flex flex-fill flex-column py-1 px-2" style={{ width: "120px", height: "100px" }}
+    <div className={"ItemCardCommunityMember Item no-hover flex-fill"}>
+      <div className="card bg-black d-flex flex-fill flex-column py-1 px-2" style={{ width: "140px", height: "100px" }}
         onClick={() => window.open(link, "_blank")}>
         <div className="d-flex flex-fill flex-row">
           <div className="d-flex flex-fill flex-column flex-grow-1">
@@ -43,7 +43,7 @@ const ItemCardCommunityMember: React.FC < ItemCardCommunityMemberProps > = ({ im
             <div className="d-flex flex-grow-0 flex-column">
               {platforms && platforms.map((p) => (
                 <div>
-                  { p === "youtube" && <i className="bi bi-youtube"></i> } { p === "twitch" && <i className="bi bi-twitch"></i> } { p === "discord" && <i className="bi bi-discord"></i> } { p === "twitter" && <i className="bi bi-twitter"></i> } { p === "tiktok" && <i className="bi bi-tiktok"></i> }
+                  { p === "spotify" && <i className="bi bi-spotify"></i> } { p === "youtube" && <i className="bi bi-youtube"></i> } { p === "twitch" && <i className="bi bi-twitch"></i> } { p === "discord" && <i className="bi bi-discord"></i> } { p === "twitter" && <i className="bi bi-twitter"></i> } { p === "tiktok" && <i className="bi bi-tiktok"></i> }
                 </div>
               ))}
             </div>

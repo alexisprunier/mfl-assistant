@@ -24,11 +24,27 @@ const PageHome: React.FC < PageHomeProps > = ({ yScrollPosition }) => {
   const [playerListings, setPlayerListings] = useState(null);
 
   const contentCreators = [{
-    name: "WenDirkCast",
-    image: "https://pbs.twimg.com/profile_images/1699478704479461376/FpyRcFYv_400x400.jpg",
-    link: "https://linktr.ee/WenDirkCast",
-    countries: ["ENGLAND"],
-  }, ];
+      name: "WenDirkCast",
+      image: "https://pbs.twimg.com/profile_images/1699478704479461376/FpyRcFYv_400x400.jpg",
+      link: "https://linktr.ee/WenDirkCast",
+      countries: ["ENGLAND"],
+      platforms: ['twitch', 'spotify']
+    },
+    {
+      name: "Calvinator",
+      image: "https://pbs.twimg.com/profile_images/1731981717341151232/SskrGRnU_400x400.jpg",
+      link: "https://www.youtube.com/channel/UCEOcyeQQ5cv2eAsD1NnWR6w",
+      countries: ["ENGLAND"],
+      platforms: ['youtube']
+    },
+    {
+      name: "DomyDigital",
+      image: "https://pbs.twimg.com/profile_images/1785241500822966272/lTac2y6D_400x400.jpg",
+      link: "https://www.youtube.com/@DomyDigital",
+      countries: ["ITALY", "ENGLAND"],
+      platforms: ['youtube']
+    },
+  ];
 
   const tools = [{
     name: "MFL Player Info",
@@ -39,23 +55,44 @@ const PageHome: React.FC < PageHomeProps > = ({ yScrollPosition }) => {
     image: "https://pbs.twimg.com/profile_images/1721134227213750272/VsG_pArI_400x400.png",
     link: "https://mflmanager.fr/projections.html",
     countries: [],
+  }, {
+    name: "Flowty",
+    image: "https://pbs.twimg.com/profile_images/1752453575995768832/ZNeZxtww_400x400.jpg",
+    link: "https://www.flowty.io/",
+    countries: [],
   }];
 
   const initiatives = [{
-    name: "MFL Manager",
-    image: "https://pbs.twimg.com/profile_images/1721134227213750272/VsG_pArI_400x400.png",
-    link: "https://discord.gg/GMuRDJsq",
-    countries: ["FRANCE"],
-    platforms: ["discord"]
-  }, ];
+      name: "MFL Manager",
+      image: "https://pbs.twimg.com/profile_images/1721134227213750272/VsG_pArI_400x400.png",
+      link: "https://discord.gg/GMuRDJsq",
+      countries: ["FRANCE"],
+      platforms: ["discord"]
+    },
+    {
+      name: "K-Socios",
+      image: "https://pbs.twimg.com/profile_images/1791564818417082368/pc2FH3vq_400x400.jpg",
+      link: "https://x.com/K_Socios_MFL",
+      countries: ["FRANCE"],
+      platforms: ["discord"]
+    },
+  ];
 
   const clubSocials = [{
-    name: "Sambre Hearts",
-    image: "https://pbs.twimg.com/profile_images/1792928428770942976/H_WfZk8c_400x400.jpg",
-    link: "https://x.com/SambreHearts",
-    countries: ["ENGLAND"],
-    platforms: ["twitter"]
-  }, ];
+      name: "Sambre Hearts",
+      image: "https://pbs.twimg.com/profile_images/1792928428770942976/H_WfZk8c_400x400.jpg",
+      link: "https://x.com/SambreHearts",
+      countries: ["ENGLAND"],
+      platforms: ["twitter"]
+    },
+    {
+      name: "Apollo Sports Gr.",
+      image: "https://pbs.twimg.com/profile_images/1409242215990300682/8Yd96nWf_400x400.jpg",
+      link: "https://x.com/apollo11collect",
+      countries: ["ENGLAND"],
+      platforms: ["twitter"]
+    },
+  ];
 
   const getPlayerSalesData = () => {
     getPlayerSales({

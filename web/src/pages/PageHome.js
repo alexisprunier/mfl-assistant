@@ -26,7 +26,7 @@ const PageHome: React.FC < PageHomeProps > = ({ yScrollPosition }) => {
   const contentCreators = [{
     name: "WenDirkCast",
     image: "https://pbs.twimg.com/profile_images/1699478704479461376/FpyRcFYv_400x400.jpg",
-    link: "https://d13e14gtps4iwl.cloudfront.net/players/36222/card_512.png",
+    link: "https://linktr.ee/WenDirkCast",
     countries: ["ENGLAND"],
   }, ];
 

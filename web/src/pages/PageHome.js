@@ -41,7 +41,21 @@ const PageHome: React.FC < PageHomeProps > = ({ yScrollPosition }) => {
       name: "DomyDigital",
       image: "https://pbs.twimg.com/profile_images/1785241500822966272/lTac2y6D_400x400.jpg",
       link: "https://www.youtube.com/@DomyDigital",
-      countries: ["ITALY", "ENGLAND"],
+      countries: ["ITALY"],
+      platforms: ['youtube']
+    },
+    {
+      name: "Val2Play",
+      image: "https://pbs.twimg.com/profile_images/1827083517269786624/_O5v4Lxg_400x400.jpg",
+      link: "https://www.youtube.com/@Val2Play",
+      countries: ["FRANCE"],
+      platforms: ['youtube', 'tiktok']
+    },
+    {
+      name: "Alex Benito",
+      image: "https://pbs.twimg.com/profile_images/1831668492203880449/opZQi38n_400x400.jpg",
+      link: "https://www.youtube.com/@AlexBenito",
+      countries: ["FRANCE"],
       platforms: ['youtube']
     },
   ];
@@ -51,13 +65,18 @@ const PageHome: React.FC < PageHomeProps > = ({ yScrollPosition }) => {
     link: "https://mflplayer.info/",
     countries: [],
   }, {
-    name: "MFL Predictions",
+    name: "League predictions",
     image: "https://pbs.twimg.com/profile_images/1721134227213750272/VsG_pArI_400x400.png",
     link: "https://mflmanager.fr/projections.html",
     countries: [],
   }, {
+    name: "Team OVR calculator",
+    image: "https://pbs.twimg.com/profile_images/1721134227213750272/VsG_pArI_400x400.png",
+    link: "https://mflmanager.fr/capcalc.html",
+    countries: [],
+  }, {
     name: "Flowty",
-    image: "https://pbs.twimg.com/profile_images/1752453575995768832/ZNeZxtww_400x400.jpg",
+    image: "https://pbs.twimg.com/profile_images/1839328859818524672/NOH1yET3_400x400.jpg",
     link: "https://www.flowty.io/",
     countries: [],
   }];
@@ -76,6 +95,12 @@ const PageHome: React.FC < PageHomeProps > = ({ yScrollPosition }) => {
       countries: ["FRANCE"],
       platforms: ["discord"]
     },
+    {
+      name: "Twitter club list",
+      image: "https://pbs.twimg.com/profile_images/1609671494187249665/YehoRvrC_400x400.png",
+      link: "https://x.com/i/lists/1644128469939552256",
+      platforms: ["twitter"]
+    },
   ];
 
   const clubSocials = [{
@@ -89,6 +114,20 @@ const PageHome: React.FC < PageHomeProps > = ({ yScrollPosition }) => {
       name: "Apollo Sports Gr.",
       image: "https://pbs.twimg.com/profile_images/1409242215990300682/8Yd96nWf_400x400.jpg",
       link: "https://x.com/apollo11collect",
+      countries: ["ENGLAND"],
+      platforms: ["twitter"]
+    },
+    {
+      name: "Sunfire Jaguars",
+      image: "https://pbs.twimg.com/profile_images/1791094944779714561/hFiIp9ZX_400x400.jpg",
+      link: "https://x.com/Sunfire_Jaguars",
+      countries: ["ENGLAND"],
+      platforms: ["twitter"]
+    },
+    {
+      name: "Porto Vermelho",
+      image: "https://pbs.twimg.com/profile_images/1835804772512792576/OXKPiYTl_400x400.jpg",
+      link: "https://x.com/Porto_Vermelho",
       countries: ["ENGLAND"],
       platforms: ["twitter"]
     },

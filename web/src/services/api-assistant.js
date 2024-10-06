@@ -484,6 +484,7 @@ export const getUsers = ({ handleSuccess = null, handleError = null, params }) =
   JSON.stringify({
     query: `{
         getUsers(${jsonToParams(params)}) {
+          id,
           address,
           name
         }

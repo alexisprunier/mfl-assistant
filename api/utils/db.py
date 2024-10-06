@@ -108,8 +108,8 @@ async def build_and_upsert_player(db, mfl_player, owner=None):
             player["height"] = mfl_player["metadata"]["height"]
         if "preferredFoot" in mfl_player["metadata"]:
             player["preferred_foot"] = mfl_player["metadata"]["preferredFoot"]
-        if "ageAtMint" in mfl_player["metadata"]:
-            player["age_at_mint"] = mfl_player["metadata"]["ageAtMint"]
+        if "age" in mfl_player["metadata"]:
+            player["age"] = mfl_player["metadata"]["age"]
 
         if "pace" in mfl_player["metadata"]:
             player["pace"] = mfl_player["metadata"]["pace"]

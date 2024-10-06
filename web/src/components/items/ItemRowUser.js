@@ -1,6 +1,7 @@
 import React from 'react';
 import "./Item.css";
 import ButtonMflUser from "components/buttons/ButtonMflUser.js";
+import ButtonMflAssistantUser from "components/buttons/ButtonMflAssistantUser.js";
 
 interface ItemRowUserProps {
   c: object;
@@ -21,13 +22,20 @@ const ItemRowUser: React.FC < ItemRowUserProps > = ({ c }) => {
           </div>
 
           <div className="d-flex flex-row flex-md-grow-0 justify-content-end">
-            <div>
-              {c.address
-                && <ButtonMflUser
+            {c.address
+              && <div className="me-1">
+                <ButtonMflUser
                   address={c.address}
                 />
-              }
-            </div>
+              </div>
+            }
+            {c.address
+              && <div>
+                <ButtonMflAssistantUser
+                  address={c.address}
+                />
+              </div>
+            }
           </div>
         </div>
       </div>

@@ -103,7 +103,7 @@ class Query(ObjectType):
 
             player_filters = {
                 "overall": {"$gte": min_ovr, "$lte": max_ovr},
-                "age_at_mint": {"$gte": min_age, "$lte": max_age}
+                "age": {"$gte": min_age, "$lte": max_age}
             }
 
             if positions is not None:
@@ -184,7 +184,7 @@ class Query(ObjectType):
         player_match = {"$match": {}}
 
         player_match["$match"]["overall"] = {"$gte": min_ovr, "$lte": max_ovr}
-        player_match["$match"]["age_at_mint"] = {"$gte": min_age, "$lte": max_age}
+        player_match["$match"]["age"] = {"$gte": min_age, "$lte": max_age}
 
         if nationalities and len(nationalities) > 0:
             player_match["$match"]["nationalities"] = {"$in": nationalities}
@@ -229,7 +229,7 @@ class Query(ObjectType):
             match_stage["$match"]["owner_info.address"] = {"$ne": "0xf45dfaa6233fae44"}
 
         match_stage["$match"]["overall"] = {"$gte": min_ovr, "$lte": max_ovr}
-        match_stage["$match"]["age_at_mint"] = {"$gte": min_age, "$lte": max_age}
+        match_stage["$match"]["age"] = {"$gte": min_age, "$lte": max_age}
 
         if nationalities:
             match_stage["$match"]["nationalities"] = {"$in": nationalities}
@@ -241,7 +241,7 @@ class Query(ObjectType):
         if criteria == "OVR":
             c = "$overall"
         elif criteria == "AGE":
-            c = "$age_at_mint"
+            c = "$age"
         elif criteria == "POS":
             c = {"$arrayElemAt": ["$positions", 0]}
         elif criteria == "NAT":
@@ -355,11 +355,11 @@ class Query(ObjectType):
 
     get_players = List(PlayerType, search=String(), owners=List(String), min_ovr=Int(), max_ovr=Int(), min_age=Int(), max_age=Int(), nationalities=List(String), positions=List(String), skip=Int(), limit=Int(), sort=String(), order=Int())
 
-    async def resolve_get_players(self, info, search=None, owners=None, min_ovr=1, max_ovr=100, min_age=1, max_age=99, nationalities=None, positions=None, skip=0, limit=10, sort="overall", order=-1):
+    async def resolve_get_players(self, info, search=None, owners=None, min_ovr=1, max_ovr=100, min_age=1, max_age=99, nationalities=None, positions=None, skip=0, limit=500, sort="overall", order=-1):
 
         filters = {
             "overall": {"$gte": min_ovr, "$lte": max_ovr},
-            "age_at_mint": {"$gte": min_age, "$lte": max_age}
+            "age": {"$gte": min_age, "$lte": max_age}
         }
 
         if nationalities is not None:

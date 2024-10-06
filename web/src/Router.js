@@ -6,6 +6,7 @@ import PageHome from "pages/PageHome";
 import PageDash from "pages/PageDash";
 import PageTools from "pages/PageTools";
 import PageNotification from "pages/PageNotification.js";
+import PageUser from "pages/PageUser.js";
 import Page404 from "pages/Page404";
 import PageDashPlayers from "pages/pagedash/PageDashPlayers.js";
 import PageDashMarketplace from "pages/pagedash/PageDashMarketplace.js";
@@ -61,6 +62,10 @@ const Router: React.FC = (props) => {
             <Route
               path="/search"
               element={<PageSearch />}
+            />
+            <Route
+              path="/user/:address"
+              element={<PageUser />}
             />
             <Route
               path="dash"

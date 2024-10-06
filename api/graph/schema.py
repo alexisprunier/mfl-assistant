@@ -49,7 +49,7 @@ class PlayerType(ObjectType):
     positions = List(String)
     height = Int()
     preferred_foot = String()
-    age_at_mint = Int()
+    age = Int()
     pace = Int()
     shooting = Int()
     passing = Int()

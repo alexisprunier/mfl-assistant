@@ -357,11 +357,12 @@ class Query(ObjectType):
 
     async def resolve_get_players(self, info, search=None, owners=None, min_ovr=1, max_ovr=100, min_age=1, max_age=99, nationalities=None, positions=None, skip=0, limit=500, sort="overall", order=-1):
 
-        filters = {
-            "overall": {"$gte": min_ovr, "$lte": max_ovr},
-            "age": {"$gte": min_age, "$lte": max_age}
-        }
+        filters = {}
 
+        if min_ovr != 1 or max_ovr != 100:
+            filters["overall"] = {"$gte": min_ovr, "$lte": max_ovr}
+        if min_age != 1 or max_age != 99:
+            filters["age"] = {"$gte": min_age, "$lte": max_age}
         if nationalities is not None:
             filters["nationalities"] = {"$in": nationalities}
         if positions is not None:

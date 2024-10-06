@@ -81,6 +81,7 @@ const PageUser: React.FC < PageUserProps > = () => {
               {players.map((c) => (
                 <ItemRowPlayerAssist
                   p={c}
+                  display={"ovr"}
                 />
               ))}
             </div>

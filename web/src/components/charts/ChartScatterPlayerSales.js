@@ -178,7 +178,7 @@ const ChartScatterPlayerSales: React.FC < ChartScatterPlayerSalesProps > = ({ sa
                       label.push(`Date: ${point.raw.x}`);
                       label.push(``);
                       label.push(`${point.raw.player.firstName} ${point.raw.player.lastName}`);
-                      label.push(`OVR: ${point.raw.player.overall} - Age: ${point.raw.player.ageAtMint}`);
+                      label.push(`OVR: ${point.raw.player.overall} - Age: ${point.raw.player.age}`);
                       label.push(`Positions: ${point.raw.player.positions.join(",")}`);
                       label.push(``);
                       

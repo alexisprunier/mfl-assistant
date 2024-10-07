@@ -549,7 +549,7 @@ export const getPlayerSales = ({ handleSuccess = null, handleError = null, param
             id,
             firstName,
             lastName,
-            ageAtMint,
+            age,
             overall,
             nationalities,
             positions,

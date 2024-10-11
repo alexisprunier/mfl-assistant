@@ -30,6 +30,7 @@ const ItemCardSale: React.FC < ItemCardSaleProps > = ({ s }) => {
           <div className="d-flex flex-row pt-1 pe-1">
             {s.player.metadata.nationalities.map((c) => (
               <MiscFlag
+                key={c}
                 country={c}
               />
             ))}

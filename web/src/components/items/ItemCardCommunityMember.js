@@ -35,6 +35,7 @@ const ItemCardCommunityMember: React.FC < ItemCardCommunityMemberProps > = ({ im
             <div className="d-flex flex-grow-1 flex-column">
               {countries && countries.map((c) => (
                 <MiscFlag
+                  key={c}
                   country={c}
                 />
               ))}

@@ -12,7 +12,7 @@ interface ItemCardCommunityMemberProps {
 
 const ItemCardCommunityMember: React.FC < ItemCardCommunityMemberProps > = ({ image, countries, platforms, name, link }) => {
   return (
-    <div className={"ItemCardCommunityMember Item no-hover flex-fill"}>
+    <div className={"ItemCardCommunityMember Item flex-fill"}>
       <div className="card bg-black d-flex flex-fill flex-column py-1 px-2" style={{ width: "140px", height: "100px" }}
         onClick={() => window.open(link, "_blank")}>
         <div className="d-flex flex-fill flex-row">

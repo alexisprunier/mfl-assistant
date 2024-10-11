@@ -361,9 +361,11 @@ const PageHome: React.FC < PageHomeProps > = ({ yScrollPosition }) => {
                         content={
                           <div className="d-flex flex-row">
                             {playerListings.map((o) => (
-                              <ItemCardSale
-                                s={o}
-                              />
+                              <div>
+                                <ItemCardSale
+                                  s={o}
+                                />
+                              </div>
                             ))}
                           </div>
                         }
@@ -386,9 +388,11 @@ const PageHome: React.FC < PageHomeProps > = ({ yScrollPosition }) => {
                         content={
                           <div className="d-flex flex-row">
                             {playerSales.map((o) => (
-                              <ItemCardSale
-                                s={o}
-                              />
+                              <div>
+                                <ItemCardSale
+                                  s={o}
+                                />
+                              </div>
                             ))}
                           </div>
                         }
@@ -402,11 +406,14 @@ const PageHome: React.FC < PageHomeProps > = ({ yScrollPosition }) => {
               </div>
             </div>
 
-            <div className="d-flex flex-column card flex-grow-1 flex-fill py-2 px-3 m-2 mb-4 m-md-0 overflow-auto" style={{ minWidth: "0" }}>
-              <h4><i className="bi bi-person-hearts me-1"></i> Community</h4>
+    <
+    div className = "d-flex flex-column card flex-grow-1 flex-fill py-2 px-3 m-2 mb-4 m-md-0 overflow-auto"
+    style = { { minWidth: "0" } } >
+    <h4><i className="bi bi-person-hearts me-1"></i> Community</h4>
 
-              <div className="d-flex flex-column flex-fill">
-                <div className="position-relative">
+    <
+    div className = "d-flex flex-column flex-fill" >
+    <div className="position-relative">
                 <div className="d-flex flex-column flex-grow-1 mb-1">
                   <div>
                     Content creators
@@ -417,98 +424,115 @@ const PageHome: React.FC < PageHomeProps > = ({ yScrollPosition }) => {
                       content={
                         <div className="d-flex flex-row">
                           {contentCreators.map((o) => (
-                            <ItemCardCommunityMember
-                              name={o.name}
-                              link={o.link}
-                              countries={(o.countries)}
-                              image={o.image}
-                              platforms={o.platforms}
-                            />
+                            <div>
+                              <ItemCardCommunityMember
+                                name={o.name}
+                                link={o.link}
+                                countries={(o.countries)}
+                                image={o.image}
+                                platforms={o.platforms}
+                              />
+                            </div>
                           ))}
                         </div>
                       }
                     />
-                  </div>
-                </div>
-                
-                <div className="d-flex flex-column flex-grow-1 mb-1">
-                  <div>
+                  </div> <
+    /div>
+
+    <
+    div className = "d-flex flex-column flex-grow-1 mb-1" >
+    <div>
                     Tools
                   </div>
 
-                  <div className="d-flex flex-row flex-fill">
-                    <MiscHorizontalScroll
+    <
+    div className = "d-flex flex-row flex-fill" >
+    <MiscHorizontalScroll
                       content={
                         <div className="d-flex flex-row">
                           {tools.map((o) => (
-                            <ItemCardCommunityMember
-                              name={o.name}
-                              link={o.link}
-                              countries={(o.countries)}
-                              image={o.image}
-                              platforms={o.platforms}
-                            />
-                          ))}
-                        </div>
-                      }
-                    />
-                  </div>
-                </div>
+                            <div>
+                              <ItemCardCommunityMember
+                                name={o.name}
+                                link={o.link}
+                                countries={(o.countries)}
+                                image={o.image}
+                                platforms={o.platforms}
+                              /> <
+    /div>
+  ))
+} <
+/div>
+}
+/> <
+/div> <
+/div>
 
-                <div className="d-flex flex-column flex-grow-1 mb-1">
-                  <div>
+<
+div className = "d-flex flex-column flex-grow-1 mb-1" >
+  <div>
                     Initiatives
                   </div>
 
-                  <div className="d-flex flex-row flex-fill">
-                    <MiscHorizontalScroll
+  <
+  div className = "d-flex flex-row flex-fill" >
+  <MiscHorizontalScroll
                       content={
                         <div className="d-flex flex-row">
                           {initiatives.map((o) => (
-                            <ItemCardCommunityMember
-                              name={o.name}
-                              link={o.link}
-                              countries={(o.countries)}
-                              image={o.image}
-                              platforms={o.platforms}
-                            />
-                          ))}
-                        </div>
-                      }
-                    />
-                  </div>
-                </div>
+                            <div>
+                              <ItemCardCommunityMember
+                                name={o.name}
+                                link={o.link}
+                                countries={(o.countries)}
+                                image={o.image}
+                                platforms={o.platforms}
+                              /> <
+  /div>
+))
+} <
+/div>
+}
+/> <
+/div> <
+/div>
 
-                <div className="d-flex flex-column flex-grow-1 mb-1">
-                  <div>
+<
+div className = "d-flex flex-column flex-grow-1 mb-1" >
+  <div>
                     Club socials
                   </div>
 
-                  <div className="d-flex flex-row flex-fill">
-                    <MiscHorizontalScroll
+  <
+  div className = "d-flex flex-row flex-fill" >
+  <MiscHorizontalScroll
                       content={
                         <div className="d-flex flex-row">
                           {clubSocials.map((o) => (
-                            <ItemCardCommunityMember
-                              name={o.name}
-                              link={o.link}
-                              countries={(o.countries)}
-                              image={o.image}
-                              platforms={o.platforms}
-                            />
-                          ))}
-                        </div>
-                      }
-                    />
-                  </div>
-                </div></div> <
-    /div> < /
-    div > < /
-    div > <
-    /div> < /
-    div > <
-    /div>
-  );
+                            <div>
+                              <ItemCardCommunityMember
+                                name={o.name}
+                                link={o.link}
+                                countries={(o.countries)}
+                                image={o.image}
+                                platforms={o.platforms}
+                              /> <
+  /div>
+))
+} <
+/div>
+}
+/> <
+/div> <
+/div> < /div > < /
+div > < /
+div > < /
+div > <
+  /div> < /
+div > <
+  /div>
+);
 };
 
 export default PageHome;

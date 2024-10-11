@@ -87,7 +87,9 @@ const App: React.FC < AppProps > = (props) => {
     fcl.currentUser().subscribe(setFlowUser);
     fcl.config({
       "flow.network": "mainnet",
+      "walletconnect.projectId": "mfl-assistant",
       "app.detail.title": "mfl-assistant",
+      "app.detail.url": "https://mfl-assistant.com",
       "accessNode.api": "https://rest-mainnet.onflow.org",
       "discovery.wallet": "https://fcl-discovery.onflow.org/authn",
       "discovery.authn.endpoint": "https://fcl-discovery.onflow.org/api/authn",

@@ -121,8 +121,8 @@ async def _filter_listings_per_scope(scope, listings):
         l for l in listings
         if ("min_price" not in scope or scope["min_price"] is None or scope["min_price"] <= l["price"])
         and ("max_price" not in scope or scope["max_price"] is None or scope["max_price"] >= l["price"])
-        and ("min_age" not in scope or scope["min_age"] is None or scope["min_age"] <= l["player"]["metadata"]["ageAtMint"])
-        and ("max_age" not in scope or scope["max_age"] is None or scope["max_age"] >= l["player"]["metadata"]["ageAtMint"])
+        and ("min_age" not in scope or scope["min_age"] is None or scope["min_age"] <= l["player"]["metadata"]["age"])
+        and ("max_age" not in scope or scope["max_age"] is None or scope["max_age"] >= l["player"]["metadata"]["age"])
         and ("min_ovr" not in scope or scope["min_ovr"] is None or scope["min_ovr"] <= l["player"]["metadata"]["overall"])
         and ("max_ovr" not in scope or scope["max_ovr"] is None or scope["max_ovr"] >= l["player"]["metadata"]["overall"])
         and ("min_pac" not in scope or scope["min_pac"] is None or scope["min_pac"] <= l["player"]["metadata"]["pace"])

@@ -59,7 +59,7 @@ const PageHome: React.FC < PageHomeProps > = ({ yScrollPosition }) => {
       platforms: ['youtube']
     },
     {
-      name: "Marco | scoreadvise",
+      name: "scoreadvise",
       image: "https://pbs.twimg.com/profile_images/1633883637304180736/L4zykxAZ_400x400.jpg",
       link: "https://www.youtube.com/@scoreadvise_official",
       countries: ["GERMANY"],
@@ -99,6 +99,13 @@ const PageHome: React.FC < PageHomeProps > = ({ yScrollPosition }) => {
       name: "K-Socios",
       image: "https://pbs.twimg.com/profile_images/1791564818417082368/pc2FH3vq_400x400.jpg",
       link: "https://x.com/K_Socios_MFL",
+      countries: ["FRANCE"],
+      platforms: ["discord"]
+    },
+    {
+      name: "Académies MFL",
+      image: "https://cdn.discordapp.com/icons/1276645403600883835/dd6c3fa7d2d11e98d61c3ea1f81a6ab7.webp?size=128",
+      link: "https://discord.gg/zG8ptMTT",
       countries: ["FRANCE"],
       platforms: ["discord"]
     },

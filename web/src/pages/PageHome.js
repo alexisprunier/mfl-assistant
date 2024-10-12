@@ -58,6 +58,13 @@ const PageHome: React.FC < PageHomeProps > = ({ yScrollPosition }) => {
       countries: ["FRANCE"],
       platforms: ['youtube']
     },
+    {
+      name: "Marco | scoreadvise",
+      image: "https://pbs.twimg.com/profile_images/1633883637304180736/L4zykxAZ_400x400.jpg",
+      link: "https://www.youtube.com/@scoreadvise_official",
+      countries: ["GERMANY"],
+      platforms: ['youtube']
+    },
   ];
 
   const tools = [{
@@ -465,12 +472,12 @@ const PageHome: React.FC < PageHomeProps > = ({ yScrollPosition }) => {
 } <
 /div>
 }
-/> <
-/div> <
-/div>
+/> < /
+div > <
+  /div>
 
-<
-div className = "d-flex flex-column flex-grow-1 mb-1" >
+  <
+  div className = "d-flex flex-column flex-grow-1 mb-1" >
   <div>
                     Initiatives
                   </div>
@@ -494,12 +501,12 @@ div className = "d-flex flex-column flex-grow-1 mb-1" >
 } <
 /div>
 }
-/> <
-/div> <
-/div>
+/> < /
+div > <
+  /div>
 
-<
-div className = "d-flex flex-column flex-grow-1 mb-1" >
+  <
+  div className = "d-flex flex-column flex-grow-1 mb-1" >
   <div>
                     Club socials
                   </div>
@@ -523,9 +530,9 @@ div className = "d-flex flex-column flex-grow-1 mb-1" >
 } <
 /div>
 }
-/> <
-/div> <
-/div> < /div > < /
+/> < /
+div > <
+  /div> < /div > < /
 div > < /
 div > < /
 div > <

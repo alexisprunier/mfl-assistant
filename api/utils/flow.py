@@ -4,6 +4,7 @@ from flow_py_sdk.script import Script
 from flow_py_sdk.utils import CompositeSignature
 from flow_py_sdk import cadence, utils
 from rlp import encode
+from utils.nonce import cleanup_nonces, is_nonce_valid
 
 
 async def verify_signature(service):
@@ -14,6 +15,11 @@ async def verify_signature(service):
         signature = service["signatures"][0]["signature"]
     except KeyError:
         return False
+
+    #TODO###
+    cleanup_nonces()
+    return is_nonce_valid(nonce)
+    #####
 
     async with flow_client(host="access.mainnet.nodes.onflow.org", port=9000) as client:
         account = await client.get_account(

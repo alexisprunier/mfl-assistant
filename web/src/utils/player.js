@@ -69,6 +69,10 @@ export const getOverallColor = (overall) => {
   return "black";
 }
 
+export const getOverallTag = (overall) => {
+  return <span style={{ color: getOverallColor(overall) }}>{overall}</span>;
+}
+
 export const getCalculatedOverall = (player, position) => {
   let overall = 0;
 

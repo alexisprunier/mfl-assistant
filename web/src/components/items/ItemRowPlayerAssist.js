@@ -3,7 +3,7 @@ import "./Item.css";
 import ButtonMflPlayerInfo from "components/buttons/ButtonMflPlayerInfo.js";
 import ButtonMflPlayer from "components/buttons/ButtonMflPlayer.js";
 import MiscOverall from "components/misc/MiscOverall.js";
-import { positions, getCalculatedOverall } from "utils/player.js";
+import { positions, getCalculatedOverall, getOverallTag } from "utils/player.js";
 
 interface ItemRowPlayerAssistProps {
   p: object;
@@ -62,13 +62,13 @@ const ItemRowPlayerAssist: React.FC < ItemRowPlayerAssistProps > = ({ p, display
             />
           </div>
 
-          <div className="d-flex flex-basis-80">
+          <div className="d-flex flex-basis-100">
             {p.positions.join(", ")}
           </div>
         </div>
 
         <div className="d-flex flex-md-grow-1">
-          {!display
+          {(!display || display === "country")
             && <div className="d-flex flex-grow-1">
               {p.nationalities && p.nationalities[0]
                 ? <img
@@ -83,12 +83,25 @@ const ItemRowPlayerAssist: React.FC < ItemRowPlayerAssistProps > = ({ p, display
             </div>
           }
 
+          {display === "stats"
+            && <div className="d-flex flex-grow-1">
+              <div className={"me-1"}>
+                <div className={"d-inline-block"} style={{ width: "35px" }}>P: {getOverallTag(p.pace)}</div>
+                <div className={"d-inline-block"} style={{ width: "35px" }}>D: {getOverallTag(p.dribbling)}</div>
+                <div className={"d-inline-block"} style={{ width: "35px" }}>P: {getOverallTag(p.passing)}</div>
+                <div className={"d-inline-block"} style={{ width: "35px" }}>S: {getOverallTag(p.shooting)}</div>
+                <div className={"d-inline-block"} style={{ width: "35px" }}>D: {getOverallTag(p.defense)}</div>
+                <div className={"d-inline-block"} style={{ width: "35px" }}>P: {getOverallTag(p.physical)}</div>
+              </div>
+            </div>
+          }
+
           {display === "ovr"
             && <div className="d-flex flex-grow-1">
               {getOVRs().map((o) => 
                 <div className={"me-1"}>
                   <div className={"d-inline-block"} style={{ width: "35px" }}>{o.pos}:</div>
-                  <div className={"d-inline-block"} style={{ width: "40px" }}>{o.ovr}<small>{getDiff(o.diff)}</small></div>
+                  <div className={"d-inline-block"} style={{ width: "40px" }}>{getOverallTag(o.ovr)}<small>{getDiff(o.diff)}</small></div>
                 </div>
               )}
             </div>

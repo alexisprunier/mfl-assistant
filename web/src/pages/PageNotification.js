@@ -329,7 +329,7 @@ const PageNotification: React.FC < PageNotificationProps > = (props) => {
 
 return (
   <div id="PageNotification" className="h-100 w-100">
-      <div className="container-md h-100 w-100 px-4 py-5">
+      <div className="container-xl h-100 w-100 px-4 py-5">
         {getContent()}
       </div>
     </div>

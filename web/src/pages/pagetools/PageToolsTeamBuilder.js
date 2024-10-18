@@ -25,7 +25,7 @@ import MiscFlag from "components/misc/MiscFlag.js";
 import MiscOverall from "components/misc/MiscOverall.js";
 import ButtonLogin from "components/buttons/ButtonLogin.js";
 import { formations } from "utils/formation.js";
-
+import ButtonPlayerView from "components/buttons/ButtonPlayerView.js";
 
 interface PageToolsTeamBuilderProps {}
 
@@ -35,6 +35,8 @@ const PageToolsTeamBuilder: React.FC < PageToolsTeamBuilderProps > = (props) => 
   const [teams, setTeams] = useState(null);
   const [selectedTeam, setSelectedTeam] = useState(null);
   const [teamMembers, setTeamMembers] = useState(null);
+
+  const [playerView, setPlayerView] = useState(null);
 
   const fetchTeams = (triggerLoading = true) => {
     if (props.assistantUser) {
@@ -151,7 +153,7 @@ const PageToolsTeamBuilder: React.FC < PageToolsTeamBuilderProps > = (props) => 
 
   return (
     <div id="PageToolsTeamBuilder" className="h-100 w-100">
-      <div className="container-md h-100 px-2 px-md-4 py-4">
+      <div className="container-xl h-100 px-2 px-md-4 py-4">
         <div className="d-flex flex-column flex-md-row h-100 w-100 fade-in">
           <div className="d-flex flex-column flex-md-grow-0 flex-basis-300">
             <div className="card d-flex flex-column flex-md-grow-1 m-2 p-3 pt-2">
@@ -313,7 +315,7 @@ const PageToolsTeamBuilder: React.FC < PageToolsTeamBuilderProps > = (props) => 
           </div>
 
           <div className="d-flex flex-column flex-md-column flex-md-column-reverse flex-md-grow-1">
-            <div className="card d-flex flex-column flex-md-grow-1 flex-md-shrink-1 flex-basis-400 m-2 p-3 pt-2">
+            <div className="card d-flex flex-column flex-md-grow-1 flex-md-shrink-1 m-2 p-3 pt-2">
               <div className="d-flex flex-row">
                 <h4 className="flex-grow-1">
                   Formation
@@ -360,7 +362,7 @@ const PageToolsTeamBuilder: React.FC < PageToolsTeamBuilderProps > = (props) => 
                                 />
                               </div>
 
-                              <div className="d-flex flex-grow-1">
+                              <div className="d-flex flex-grow-1"  style={{ textShadow: "black 0px 0px 2px" }}>
                                 <MiscOverall
                                   player={getTeamMemberInPosition(parseInt(p)).player}
                                   actualPosition={formations[getSelectedTeam().formation][getTeamMemberInPosition(parseInt(p)).position].position.toString()}
@@ -397,7 +399,7 @@ const PageToolsTeamBuilder: React.FC < PageToolsTeamBuilderProps > = (props) => 
               </div>
             </div>
 
-            <div className="card d-flex flex-column flex-md-grow-1 flex-md-shrink-1 flex-md-basis-auto flex-basis-0 m-2 p-3 pt-2 max-height-md-200">
+            <div className="card d-flex flex-column flex-md-grow-1 flex-md-shrink-1 flex-md-basis-auto flex-basis-0 m-2 p-3 pt-2 max-height-md-300">
               <div className="d-flex flex-row flex-md-grow-0">
                 <h4 className="flex-grow-1">
                   Player group
@@ -414,6 +416,13 @@ const PageToolsTeamBuilder: React.FC < PageToolsTeamBuilderProps > = (props) => 
                     userId={props.assistantUser.id}
                   />
                 }
+              </div>
+
+              <div className="d-flex justify-content-end mb-2">
+                <ButtonPlayerView
+                  selectedView={playerView}
+                  onChange={(v) => setPlayerView(v)}
+                />
               </div>
 
               <div className="d-flex flex-fill flex-column overflow-auto">
@@ -441,7 +450,10 @@ const PageToolsTeamBuilder: React.FC < PageToolsTeamBuilderProps > = (props) => 
                     .map((p) => 
                       <div className="d-flex flex-row">
                         <div className="d-flex flex-grow-1 me-1">
-                          <ItemRowPlayerAssist p={p.player}/>
+                          <ItemRowPlayerAssist
+                            p={p.player}
+                            display={playerView}
+                          />
                         </div>
 
                         <button

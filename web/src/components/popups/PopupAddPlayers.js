@@ -5,6 +5,7 @@ import { getPlayers, getPlayerNationalities } from "services/api-assistant.js";
 import { prettifyId } from "utils/graphql.js";
 import ItemRowPlayerAssist from "components/items/ItemRowPlayerAssist.js";
 import BoxMessage from "components/box/BoxMessage.js";
+import ButtonPlayerView from "components/buttons/ButtonPlayerView.js";
 import LoadingSquare from "components/loading/LoadingSquare.js";
 import FilterContainerPlayer from "components/filters/FilterContainerPlayer.js";
 
@@ -31,6 +32,7 @@ const PopupAddPlayers: React.FC < PopupAddPlayersProps > = ({ trigger, onClose, 
 
   const [players, setPlayers] = useState(null);
   const [selectedPlayers, setSelectedPlayers] = useState([]);
+  const [playerView, setPlayerView] = useState(null);
 
   const [canLoadMore, setCanLoadMore] = useState(false);
 
@@ -174,7 +176,7 @@ const PopupAddPlayers: React.FC < PopupAddPlayersProps > = ({ trigger, onClose, 
 
             {selectedTab === "search"
               && <div className="d-flex flex-column flex-grow-1 overflow-auto">
-                <div className="d-flex flex-row flex-grow-0 mb-3">
+                <div className="d-flex flex-row flex-grow-0 mb-2">
                   <input
                     type="text"
                     className="form-control me-1"
@@ -213,10 +215,19 @@ const PopupAddPlayers: React.FC < PopupAddPlayersProps > = ({ trigger, onClose, 
                   </button>
                 </div>
 
+                <div className="d-flex flex-grow-0 justify-content-end mb-2">
+                  <ButtonPlayerView
+                    selectedView={playerView}
+                    onChange={(v) => setPlayerView(v)}
+                  />
+                </div>
+
                 <div className="d-flex flex-grow-1 flex-column overflow-auto">
+                  
                   {players && players.length > 0
                     && players.map((p) => <div><ItemRowPlayerAssist
                         p={p}
+                        display={playerView}
                         isSelected={selectedPlayers.map(p => p.id).indexOf(p.id) >= 0}
                         onSelect={(p) => onPlayerSelection(p)}
                       /></div>
@@ -228,7 +239,9 @@ const PopupAddPlayers: React.FC < PopupAddPlayersProps > = ({ trigger, onClose, 
                   }
 
                   {!players
-                    && <LoadingSquare />
+                    && <div style={{ height: "200px" }}>
+                      <LoadingSquare />
+                    </div>
                   }
 
                   {canLoadMore
@@ -245,10 +258,18 @@ const PopupAddPlayers: React.FC < PopupAddPlayersProps > = ({ trigger, onClose, 
 
             {selectedTab === "my-players"
               && <div className="d-flex flex-column flex-grow-1 overflow-auto">
-                <div className="d-flex flex-grow-1 flex-column mb-3">
+                <div className="d-flex justify-content-end mb-2">
+                  <ButtonPlayerView
+                    selectedView={playerView}
+                    onChange={(v) => setPlayerView(v)}
+                  />
+                </div>
+
+                <div className="d-flex flex-grow-1 flex-column mb-2">
                   {players && players.length > 0
                     && players.map((p) => <div><ItemRowPlayerAssist
                         p={p}
+                        display={playerView}
                         isSelected={selectedPlayers.map(p => p.id).indexOf(p.id) >= 0}
                         onSelect={(p) => onPlayerSelection(p)}
                       /></div>
@@ -260,7 +281,9 @@ const PopupAddPlayers: React.FC < PopupAddPlayersProps > = ({ trigger, onClose, 
                   }
 
                   {!players
-                    && <LoadingSquare />
+                    && <div style={{ height: "200px" }}>
+                      <LoadingSquare />
+                    </div>
                   }
 
                   {canLoadMore

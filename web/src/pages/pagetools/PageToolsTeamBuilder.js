@@ -37,6 +37,7 @@ const PageToolsTeamBuilder: React.FC < PageToolsTeamBuilderProps > = (props) => 
   const [teamMembers, setTeamMembers] = useState(null);
 
   const [playerView, setPlayerView] = useState(null);
+  const [showOnfieldPlayers, setShowOnfieldPlayers] = useState(false);
 
   const fetchTeams = (triggerLoading = true) => {
     if (props.assistantUser) {
@@ -418,13 +419,6 @@ const PageToolsTeamBuilder: React.FC < PageToolsTeamBuilderProps > = (props) => 
                 }
               </div>
 
-              <div className="d-flex justify-content-end mb-2">
-                <ButtonPlayerView
-                  selectedView={playerView}
-                  onChange={(v) => setPlayerView(v)}
-                />
-              </div>
-
               <div className="d-flex flex-fill flex-column overflow-auto">
                 {!selectedTeam
                   && <BoxMessage
@@ -445,25 +439,47 @@ const PageToolsTeamBuilder: React.FC < PageToolsTeamBuilderProps > = (props) => 
                 }
 
                 {selectedTeam && teamMembers
-                  && teamMembers
-                    .filter((p) => !p.position)
-                    .map((p) => 
-                      <div className="d-flex flex-row">
-                        <div className="d-flex flex-grow-1 me-1">
-                          <ItemRowPlayerAssist
-                            p={p.player}
-                            display={playerView}
-                          />
-                        </div>
+                  && <div className="d-flex flex-fill flex-column overflow-hidden">
+                    <div className="d-flex flex-grow-0 justify-content-end mb-2">
+                      <small>
+                        Show on-field players
+                        <input
+                          type="checkbox"
+                          className="ms-1"
+                          value={showOnfieldPlayers}
+                          onChange={() => setShowOnfieldPlayers(!showOnfieldPlayers)}
+                        />
+                      </small>
 
-                        <button
-                          className="btn btn-small text-danger"
-                          onClick={() => deleteTeamMemberInGroup(p.id)}
-                        >
-                          <i className="bi bi-x-circle"/>
-                        </button>
-                      </div>
-                    )
+                      <ButtonPlayerView
+                        selectedView={playerView}
+                        onChange={(v) => setPlayerView(v)}
+                      />
+                    </div>
+
+                    <div className="d-flex flex-column flex-grow-1 overflow-auto">
+                      {teamMembers
+                        .filter((p) => !p.position || showOnfieldPlayers)
+                        .map((p) => 
+                          <div className="d-flex flex-row">
+                            <div className="d-flex flex-grow-1 me-1">
+                              <ItemRowPlayerAssist
+                                p={p.player}
+                                display={playerView}
+                              />
+                            </div>
+
+                            <button
+                              className="btn btn-small text-danger"
+                              onClick={() => deleteTeamMemberInGroup(p.id)}
+                            >
+                              <i className="bi bi-x-circle"/>
+                            </button>
+                          </div>
+                        )
+                      }
+                    </div>
+                  </div>
                 }
               </div>
             </div>

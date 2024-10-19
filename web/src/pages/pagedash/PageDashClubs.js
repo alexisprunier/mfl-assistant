@@ -124,7 +124,7 @@ const PageDashClubs: React.FC < PageDashClubsProps > = ({}) => {
                     Established club only
                     <input
                       type="checkbox"
-                      className="ms-1"
+                      className="ms-1 mt-1"
                       value={foundedClubOnlyForDivisions}
                       onChange={() => setFoundedClubOnlyForDivisions(!foundedClubOnlyForDivisions)}
                     />

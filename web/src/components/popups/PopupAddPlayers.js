@@ -18,7 +18,7 @@ interface PopupAddPlayersProps {
 }
 
 const PopupAddPlayers: React.FC < PopupAddPlayersProps > = ({ trigger, onClose, onConfirm, userId }) => {
-  const [selectedTab, setSelectedTab] = useState("search");
+  const [selectedTab, setSelectedTab] = useState("my-players");
 
   const [defaultFilters] = useState({
     search: "",
@@ -34,6 +34,7 @@ const PopupAddPlayers: React.FC < PopupAddPlayersProps > = ({ trigger, onClose, 
   const [selectedPlayers, setSelectedPlayers] = useState([]);
   const [playerView, setPlayerView] = useState(null);
 
+  const [isLoading, setIsLoading] = useState(false);
   const [canLoadMore, setCanLoadMore] = useState(false);
 
   const confirm = (close) => {
@@ -46,6 +47,8 @@ const PopupAddPlayers: React.FC < PopupAddPlayersProps > = ({ trigger, onClose, 
   }
 
   const fetchPlayers = (page = 1) => {
+    setIsLoading(true);
+
     if (page === 1) {
       setPlayers(null);
     }
@@ -58,6 +61,7 @@ const PopupAddPlayers: React.FC < PopupAddPlayersProps > = ({ trigger, onClose, 
           setPlayers(players ? players.concat(v.data.getPlayers) : v.data.getPlayers);
         }
 
+        setIsLoading(false);
         setCanLoadMore(v.data.getPlayers.length === 20);
       },
       params: {
@@ -69,6 +73,8 @@ const PopupAddPlayers: React.FC < PopupAddPlayersProps > = ({ trigger, onClose, 
   }
 
   const fetchMyPlayers = (page = 1) => {
+    setIsLoading(true);
+
     getPlayers({
       handleSuccess: (v) => {
         if (page === 1) {
@@ -77,6 +83,7 @@ const PopupAddPlayers: React.FC < PopupAddPlayersProps > = ({ trigger, onClose, 
           setPlayers(players ? players.concat(v.data.getPlayers) : v.data.getPlayers);
         }
 
+        setIsLoading(false);
         setCanLoadMore(v.data.getPlayers.length === 20);
       },
       params: {
@@ -131,13 +138,13 @@ const PopupAddPlayers: React.FC < PopupAddPlayersProps > = ({ trigger, onClose, 
         trigger={trigger}
         modal
         closeOnDocumentClick={false}
-        onOpen={() => setSelectedTab("search")}
+        onOpen={() => setSelectedTab("my-players")}
         onClose={onClose}
         className={"fade-in popup-xl"}
       >
         {(close) => (
           <div className="container bg-dark d-flex flex-column border border-info border-3 rounded-3 p-4">
-            <div className="d-flex flex-row flex-grow-0 mb-3">
+            <div className="d-flex flex-row flex-grow-0 mb-2">
               <div className="flex-grow-1">
                 <h2 className="text-white">
                   Add players in the group
@@ -156,23 +163,71 @@ const PopupAddPlayers: React.FC < PopupAddPlayersProps > = ({ trigger, onClose, 
               <ul className="nav nav-tabs flex-fill">
                 <li className="nav-item" role="presentation">
                   <button
-                    className="nav-link active" id="home-tab" data-bs-toggle="tab"  type="button" role="tab" aria-controls="home"
-                    onClick={() => setSelectedTab("search")}
-                  >
-                    Search
-                  </button>
-                </li>
-                <li className="nav-item" role="presentation">
-                  <button
-                    className="nav-link" id="profile-tab" data-bs-toggle="tab" type="button" role="tab" aria-controls="profile"
+                    className="nav-link active" id="profile-tab" data-bs-toggle="tab" type="button" role="tab" aria-controls="profile"
                     onClick={() => setSelectedTab("my-players")}
                     disabled={!userId}
                   >
                     My players
                   </button>
                 </li>
+                <li className="nav-item" role="presentation">
+                  <button
+                    className="nav-link" id="home-tab" data-bs-toggle="tab"  type="button" role="tab" aria-controls="home"
+                    onClick={() => setSelectedTab("search")}
+                  >
+                    Search
+                  </button>
+                </li>
               </ul>
             </div>
+
+            {selectedTab === "my-players"
+              && <div className="d-flex flex-column flex-grow-1 overflow-hidden">
+                <div className="d-flex flex-grow-0 justify-content-end mb-2">
+                  <ButtonPlayerView
+                    selectedView={playerView}
+                    onChange={(v) => setPlayerView(v)}
+                  />
+                </div>
+
+                <div className="d-flex flex-grow-1 flex-column overflow-auto mb-2">
+                  {players && players.length > 0
+                    && players.map((p) => <div><ItemRowPlayerAssist
+                        p={p}
+                        display={playerView}
+                        isSelected={selectedPlayers.map(p => p.id).indexOf(p.id) >= 0}
+                        onSelect={(p) => onPlayerSelection(p)}
+                      /></div>
+                    )
+                  }
+
+                  {players && players.length === 0
+                    && <BoxMessage content={"No player found"} />
+                  }
+
+                  {!players
+                    && <div style={{ height: "200px" }}>
+                      <LoadingSquare />
+                    </div>
+                  }
+
+                  {players && isLoading
+                    && <div style={{ height: "20px" }}>
+                      <LoadingSquare />
+                    </div>
+                  }
+
+                  {canLoadMore && !isLoading
+                    && <button
+                      className="btn btn-sm btn-link align-self-start"
+                      onClick={() => loadMore()}
+                    >
+                      Load more
+                    </button>
+                  }
+                </div>
+              </div>
+            }
 
             {selectedTab === "search"
               && <div className="d-flex flex-column flex-grow-1 overflow-auto">
@@ -244,49 +299,13 @@ const PopupAddPlayers: React.FC < PopupAddPlayersProps > = ({ trigger, onClose, 
                     </div>
                   }
 
-                  {canLoadMore
-                    && <button
-                      className="btn btn-sm btn-link align-self-start"
-                      onClick={() => loadMore()}
-                    >
-                      Load more
-                    </button>
-                  }
-                </div>
-              </div>
-            }
-
-            {selectedTab === "my-players"
-              && <div className="d-flex flex-column flex-grow-1 overflow-auto">
-                <div className="d-flex justify-content-end mb-2">
-                  <ButtonPlayerView
-                    selectedView={playerView}
-                    onChange={(v) => setPlayerView(v)}
-                  />
-                </div>
-
-                <div className="d-flex flex-grow-1 flex-column mb-2">
-                  {players && players.length > 0
-                    && players.map((p) => <div><ItemRowPlayerAssist
-                        p={p}
-                        display={playerView}
-                        isSelected={selectedPlayers.map(p => p.id).indexOf(p.id) >= 0}
-                        onSelect={(p) => onPlayerSelection(p)}
-                      /></div>
-                    )
-                  }
-
-                  {players && players.length === 0
-                    && <BoxMessage content={"No player found"} />
-                  }
-
-                  {!players
-                    && <div style={{ height: "200px" }}>
+                  {players && isLoading
+                    && <div style={{ height: "30px" }}>
                       <LoadingSquare />
                     </div>
                   }
 
-                  {canLoadMore
+                  {canLoadMore && !isLoading
                     && <button
                       className="btn btn-sm btn-link align-self-start"
                       onClick={() => loadMore()}

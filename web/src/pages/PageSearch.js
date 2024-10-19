@@ -223,33 +223,6 @@ const PageSearch: React.FC < PageSearchProps > = () => {
           </div>
         }
 
-        {!isLoading && players && players.length > 0
-          && <div className="card d-flex mb-3 p-3 pt-2">
-            <div className="d-flex flex-column">
-              <div className="d-flex">
-                <div className="h4 flex-grow-1">
-                  Players
-                </div>
-              </div>
-
-              {players.map((c) => (
-                <ItemRowPlayerAssist
-                  p={c}
-                />
-              ))}
-
-              {canLoadMorePlayers
-                && <button
-                className="btn btn-sm btn-link align-self-start"
-                  onClick={() => { fetchPlayers() }}
-                >
-                  Load more
-                </button>
-              }
-            </div>
-          </div>
-        }
-
         {!isLoading && clubs && clubs.length > 0
           && <div className="card d-flex mb-3 p-3 pt-2">
             <div className="d-flex flex-column">
@@ -296,6 +269,33 @@ const PageSearch: React.FC < PageSearchProps > = () => {
                 && <button
                 className="btn btn-sm btn-link align-self-start"
                   onClick={() => { fetchUsers() }}
+                >
+                  Load more
+                </button>
+              }
+            </div>
+          </div>
+        }
+
+        {!isLoading && players && players.length > 0
+          && <div className="card d-flex mb-3 p-3 pt-2">
+            <div className="d-flex flex-column">
+              <div className="d-flex">
+                <div className="h4 flex-grow-1">
+                  Players
+                </div>
+              </div>
+
+              {players.map((c) => (
+                <ItemRowPlayerAssist
+                  p={c}
+                />
+              ))}
+
+              {canLoadMorePlayers
+                && <button
+                className="btn btn-sm btn-link align-self-start"
+                  onClick={() => { fetchPlayers() }}
                 >
                   Load more
                 </button>

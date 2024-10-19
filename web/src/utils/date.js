@@ -13,6 +13,15 @@ export const dateToMonthString = (date) => {
   return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
 }
 
+export const dateToDateTimeString = (date) => {
+  return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ` +
+    `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
+}
+
+export const dateToTimeString = (date) => {
+  return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
+}
+
 export const unixTimestampToDayString = (unixTimestamp) => {
   const date = new Date(unixTimestamp);
   return dateToDayString(date);
@@ -21,6 +30,11 @@ export const unixTimestampToDayString = (unixTimestamp) => {
 export const unixTimestampToMonthString = (unixTimestamp) => {
   const date = new Date(unixTimestamp);
   return dateToMonthString(date);
+}
+
+export const unixTimestampToTimeString = (unixTimestamp) => {
+  const date = new Date(unixTimestamp);
+  return dateToTimeString(date);
 }
 
 export const substractDate = (date, unit) => {

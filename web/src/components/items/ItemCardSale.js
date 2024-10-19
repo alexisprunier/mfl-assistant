@@ -4,7 +4,7 @@ import ButtonMflPlayerInfo from "components/buttons/ButtonMflPlayerInfo.js";
 import ButtonMflPlayer from "components/buttons/ButtonMflPlayer.js";
 import MiscOverall from "components/misc/MiscOverall.js";
 import MiscFlag from "components/misc/MiscFlag.js";
-import { unixTimestampToDayString } from "utils/date.js";
+import { unixTimestampToTimeString } from "utils/date.js";
 
 interface ItemCardSaleProps {
   s: object;
@@ -47,7 +47,9 @@ const ItemCardSale: React.FC < ItemCardSaleProps > = ({ s }) => {
 
         <div className="d-flex flex-row">
           <div className="text-dark pe-2">
-            {unixTimestampToDayString(s.purchaseDateTime)}
+            {s.status = "AVAILABLE"
+              ? unixTimestampToTimeString(s.createdDateTime)
+              : unixTimestampToTimeString(s.purchaseDateTime)}
           </div>
 
           <div className="d-flex flex-fill justify-content-end text-main">

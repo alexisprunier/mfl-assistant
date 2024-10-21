@@ -9,6 +9,7 @@ import MiscHorizontalScroll from "components/misc/MiscHorizontalScroll.js";
 import MiscFlag from "components/misc/MiscFlag.js";
 import ItemCardSale from "components/items/ItemCardSale.js";
 import ItemCardCommunityMember from "components/items/ItemCardCommunityMember.js";
+import BoxMflActivity from "components/box/BoxMflActivity.js"
 import { getPlayerSales, getPlayerListings } from "services/api-mfl.js";
 
 interface PageHomeProps {
@@ -16,177 +17,145 @@ interface PageHomeProps {
 }
 
 const PageHome: React.FC < PageHomeProps > = ({ yScrollPosition }) => {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  const [searchValue, setSearchValue] = useState("");
+    const [searchValue, setSearchValue] = useState("");
 
-  const [playerSales, setPlayerSales] = useState(null);
-  const [playerListings, setPlayerListings] = useState(null);
+    const contentCreators = [{
+        name: "WenDirkCast",
+        image: "https://pbs.twimg.com/profile_images/1699478704479461376/FpyRcFYv_400x400.jpg",
+        link: "https://linktr.ee/WenDirkCast",
+        countries: ["ENGLAND"],
+        platforms: ['twitch', 'spotify']
+      },
+      {
+        name: "Calvinator",
+        image: "https://pbs.twimg.com/profile_images/1731981717341151232/SskrGRnU_400x400.jpg",
+        link: "https://www.youtube.com/channel/UCEOcyeQQ5cv2eAsD1NnWR6w",
+        countries: ["ENGLAND"],
+        platforms: ['youtube']
+      },
+      {
+        name: "DomyDigital",
+        image: "https://pbs.twimg.com/profile_images/1785241500822966272/lTac2y6D_400x400.jpg",
+        link: "https://www.youtube.com/@DomyDigital",
+        countries: ["ITALY"],
+        platforms: ['youtube']
+      },
+      {
+        name: "Val2Play",
+        image: "https://pbs.twimg.com/profile_images/1827083517269786624/_O5v4Lxg_400x400.jpg",
+        link: "https://www.youtube.com/@Val2Play",
+        countries: ["FRANCE"],
+        platforms: ['youtube', 'tiktok']
+      },
+      {
+        name: "Alex Benito",
+        image: "https://pbs.twimg.com/profile_images/1831668492203880449/opZQi38n_400x400.jpg",
+        link: "https://www.youtube.com/@AlexBenito",
+        countries: ["FRANCE"],
+        platforms: ['youtube']
+      },
+      {
+        name: "scoreadvise",
+        image: "https://pbs.twimg.com/profile_images/1633883637304180736/L4zykxAZ_400x400.jpg",
+        link: "https://www.youtube.com/@scoreadvise_official",
+        countries: ["GERMANY"],
+        platforms: ['youtube']
+      },
+    ];
 
-  const contentCreators = [{
-      name: "WenDirkCast",
-      image: "https://pbs.twimg.com/profile_images/1699478704479461376/FpyRcFYv_400x400.jpg",
-      link: "https://linktr.ee/WenDirkCast",
-      countries: ["ENGLAND"],
-      platforms: ['twitch', 'spotify']
-    },
-    {
-      name: "Calvinator",
-      image: "https://pbs.twimg.com/profile_images/1731981717341151232/SskrGRnU_400x400.jpg",
-      link: "https://www.youtube.com/channel/UCEOcyeQQ5cv2eAsD1NnWR6w",
-      countries: ["ENGLAND"],
-      platforms: ['youtube']
-    },
-    {
-      name: "DomyDigital",
-      image: "https://pbs.twimg.com/profile_images/1785241500822966272/lTac2y6D_400x400.jpg",
-      link: "https://www.youtube.com/@DomyDigital",
-      countries: ["ITALY"],
-      platforms: ['youtube']
-    },
-    {
-      name: "Val2Play",
-      image: "https://pbs.twimg.com/profile_images/1827083517269786624/_O5v4Lxg_400x400.jpg",
-      link: "https://www.youtube.com/@Val2Play",
-      countries: ["FRANCE"],
-      platforms: ['youtube', 'tiktok']
-    },
-    {
-      name: "Alex Benito",
-      image: "https://pbs.twimg.com/profile_images/1831668492203880449/opZQi38n_400x400.jpg",
-      link: "https://www.youtube.com/@AlexBenito",
-      countries: ["FRANCE"],
-      platforms: ['youtube']
-    },
-    {
-      name: "scoreadvise",
-      image: "https://pbs.twimg.com/profile_images/1633883637304180736/L4zykxAZ_400x400.jpg",
-      link: "https://www.youtube.com/@scoreadvise_official",
-      countries: ["GERMANY"],
-      platforms: ['youtube']
-    },
-  ];
-
-  const tools = [{
-    name: "MFL Player Info",
-    link: "https://mflplayer.info/",
-    countries: [],
-  }, {
-    name: "League predictions",
-    image: "https://pbs.twimg.com/profile_images/1721134227213750272/VsG_pArI_400x400.png",
-    link: "https://mflmanager.fr/projections.html",
-    countries: [],
-  }, {
-    name: "Team OVR calculator",
-    image: "https://pbs.twimg.com/profile_images/1721134227213750272/VsG_pArI_400x400.png",
-    link: "https://mflmanager.fr/capcalc.html",
-    countries: [],
-  }, {
-    name: "Flowty",
-    image: "https://pbs.twimg.com/profile_images/1839328859818524672/NOH1yET3_400x400.jpg",
-    link: "https://www.flowty.io/",
-    countries: [],
-  }];
-
-  const initiatives = [{
-      name: "MFL Manager",
+    const tools = [{
+      name: "MFL Player Info",
+      link: "https://mflplayer.info/",
+      countries: [],
+    }, {
+      name: "League predictions",
       image: "https://pbs.twimg.com/profile_images/1721134227213750272/VsG_pArI_400x400.png",
-      link: "https://discord.gg/GMuRDJsq",
-      countries: ["FRANCE"],
-      platforms: ["discord"]
-    },
-    {
-      name: "K-Socios",
-      image: "https://pbs.twimg.com/profile_images/1791564818417082368/pc2FH3vq_400x400.jpg",
-      link: "https://x.com/K_Socios_MFL",
-      countries: ["FRANCE"],
-      platforms: ["discord"]
-    },
-    {
-      name: "Académies MFL",
-      image: "https://cdn.discordapp.com/icons/1276645403600883835/dd6c3fa7d2d11e98d61c3ea1f81a6ab7.webp?size=128",
-      link: "https://discord.gg/zG8ptMTT",
-      countries: ["FRANCE"],
-      platforms: ["discord"]
-    },
-    {
-      name: "Twitter club list",
-      image: "https://pbs.twimg.com/profile_images/1609671494187249665/YehoRvrC_400x400.png",
-      link: "https://x.com/i/lists/1644128469939552256",
-      platforms: ["twitter"]
-    },
-  ];
+      link: "https://mflmanager.fr/projections.html",
+      countries: [],
+    }, {
+      name: "Team OVR calculator",
+      image: "https://pbs.twimg.com/profile_images/1721134227213750272/VsG_pArI_400x400.png",
+      link: "https://mflmanager.fr/capcalc.html",
+      countries: [],
+    }, {
+      name: "Flowty",
+      image: "https://pbs.twimg.com/profile_images/1839328859818524672/NOH1yET3_400x400.jpg",
+      link: "https://www.flowty.io/",
+      countries: [],
+    }];
 
-  const clubSocials = [{
-      name: "Sambre Hearts",
-      image: "https://pbs.twimg.com/profile_images/1792928428770942976/H_WfZk8c_400x400.jpg",
-      link: "https://x.com/SambreHearts",
-      countries: ["ENGLAND"],
-      platforms: ["twitter"]
-    },
-    {
-      name: "Apollo Sports Gr.",
-      image: "https://pbs.twimg.com/profile_images/1409242215990300682/8Yd96nWf_400x400.jpg",
-      link: "https://x.com/apollo11collect",
-      countries: ["ENGLAND"],
-      platforms: ["twitter"]
-    },
-    {
-      name: "Sunfire Jaguars",
-      image: "https://pbs.twimg.com/profile_images/1791094944779714561/hFiIp9ZX_400x400.jpg",
-      link: "https://x.com/Sunfire_Jaguars",
-      countries: ["ENGLAND"],
-      platforms: ["twitter"]
-    },
-    {
-      name: "Porto Vermelho",
-      image: "https://pbs.twimg.com/profile_images/1835804772512792576/OXKPiYTl_400x400.jpg",
-      link: "https://x.com/Porto_Vermelho",
-      countries: ["ENGLAND"],
-      platforms: ["twitter"]
-    },
-  ];
-
-  const getPlayerSalesData = () => {
-    getPlayerSales({
-      handleSuccess: (v) => {
-        setPlayerSales(v);
+    const initiatives = [{
+        name: "MFL Manager",
+        image: "https://pbs.twimg.com/profile_images/1721134227213750272/VsG_pArI_400x400.png",
+        link: "https://discord.gg/GMuRDJsq",
+        countries: ["FRANCE"],
+        platforms: ["discord"]
       },
-      handleError: (e) => {
-        console.log(e);
+      {
+        name: "K-Socios",
+        image: "https://pbs.twimg.com/profile_images/1791564818417082368/pc2FH3vq_400x400.jpg",
+        link: "https://x.com/K_Socios_MFL",
+        countries: ["FRANCE"],
+        platforms: ["discord"]
       },
-      params: {}
-    });
-  }
-
-  const getPlayerListingData = () => {
-    getPlayerListings({
-      handleSuccess: (v) => {
-        setPlayerListings(v);
+      {
+        name: "Académies MFL",
+        image: "https://cdn.discordapp.com/icons/1276645403600883835/dd6c3fa7d2d11e98d61c3ea1f81a6ab7.webp?size=128",
+        link: "https://discord.gg/zG8ptMTT",
+        countries: ["FRANCE"],
+        platforms: ["discord"]
       },
-      handleError: (e) => {
-        console.log(e);
+      {
+        name: "Twitter club list",
+        image: "https://pbs.twimg.com/profile_images/1609671494187249665/YehoRvrC_400x400.png",
+        link: "https://x.com/i/lists/1644128469939552256",
+        platforms: ["twitter"]
       },
-      params: {}
-    });
-  }
+    ];
 
-  useEffect(() => {
-    getPlayerSalesData();
-    getPlayerListingData();
-  }, []);
+    const clubSocials = [{
+        name: "Sambre Hearts",
+        image: "https://pbs.twimg.com/profile_images/1792928428770942976/H_WfZk8c_400x400.jpg",
+        link: "https://x.com/SambreHearts",
+        countries: ["ENGLAND"],
+        platforms: ["twitter"]
+      },
+      {
+        name: "Apollo Sports Gr.",
+        image: "https://pbs.twimg.com/profile_images/1409242215990300682/8Yd96nWf_400x400.jpg",
+        link: "https://x.com/apollo11collect",
+        countries: ["ENGLAND"],
+        platforms: ["twitter"]
+      },
+      {
+        name: "Sunfire Jaguars",
+        image: "https://pbs.twimg.com/profile_images/1791094944779714561/hFiIp9ZX_400x400.jpg",
+        link: "https://x.com/Sunfire_Jaguars",
+        countries: ["ENGLAND"],
+        platforms: ["twitter"]
+      },
+      {
+        name: "Porto Vermelho",
+        image: "https://pbs.twimg.com/profile_images/1835804772512792576/OXKPiYTl_400x400.jpg",
+        link: "https://x.com/Porto_Vermelho",
+        countries: ["ENGLAND"],
+        platforms: ["twitter"]
+      },
+    ];
 
-  const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      if (searchValue.length >= 2) {
-        navigate('/search?q=' + searchValue);
+    const handleKeyDown = (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        if (searchValue.length >= 2) {
+          navigate('/search?q=' + searchValue);
+        }
       }
-    }
-  };
+    };
 
-  return (
-    <div id="PageHome" className="h-100">
+    return (
+        <div id="PageHome" className="h-100">
       {window.innerWidth < 768 && yScrollPosition < 100
         && <BoxScrollDown />
       }
@@ -361,63 +330,7 @@ const PageHome: React.FC < PageHomeProps > = ({ yScrollPosition }) => {
 
           <div className="d-flex flex-column flex-grow-1 flex-md-basis-50p py-md-3 pe-md-3" style={{ minWidth: "0" }}>
             <div className="d-flex flex-column card flex-grow-0 py-2 pb-3 px-3 m-2 m-md-0 mb-md-2" style={{ minWidth: "0" }}>
-              <h4><i className="bi bi-activity me-1"></i> MFL Activity</h4>
-
-              <div className="d-flex flex-column flex-fill">
-                <div className="d-flex flex-column flex-grow-1 mb-1">
-                  <div>
-                    Latest listings
-                  </div>
-
-                  <div className="d-flex flex-row">
-                    {playerListings
-                      ? <MiscHorizontalScroll
-                        content={
-                          <div className="d-flex flex-row">
-                            {playerListings.map((o) => (
-                              <div>
-                                <ItemCardSale
-                                  s={o}
-                                />
-                              </div>
-                            ))}
-                          </div>
-                        }
-                      />
-                      : <div className="w-100" style={{ height: "95px" }}>
-                        <LoadingSquare />
-                      </div>
-                    }
-                  </div>
-                </div>
-
-                <div className="d-flex flex-column flex-grow-1">
-                  <div>
-                    Latest sales
-                  </div>
-
-                  <div className="d-flex flex-row">
-                    {playerSales
-                      ? <MiscHorizontalScroll
-                        content={
-                          <div className="d-flex flex-row">
-                            {playerSales.map((o) => (
-                              <div>
-                                <ItemCardSale
-                                  s={o}
-                                />
-                              </div>
-                            ))}
-                          </div>
-                        }
-                      />
-                      : <div className="w-100" style={{ height: "95px" }}>
-                        <LoadingSquare />
-                      </div>
-                    }
-                  </div>
-                </div>
-              </div>
+            <BoxMflActivity/>
             </div>
 
     <

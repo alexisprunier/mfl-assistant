@@ -99,7 +99,7 @@ const PageDashClubs: React.FC < PageDashClubsProps > = ({}) => {
           </div>
 
           <div className="d-flex flex-column flex-md-row flex-md-grow-1">
-            <div className="card d-flex flex-md-grow-1 flex-md-shrink-1 flex-md-basis-auto flex-basis-0 m-2 p-3 pt-2">
+            <div className="card d-flex flex-md-grow-1 flex-md-shrink-1 flex-md-basis-50p m-2 p-3 pt-2">
               <div className="d-flex flex-row">
                 <div className="d-flex">
                   <h4 className="flex-grow-1">Established clubs</h4>
@@ -113,7 +113,7 @@ const PageDashClubs: React.FC < PageDashClubsProps > = ({}) => {
               </div>
             </div>
 
-            <div className="card d-flex flex-md-grow-1 flex-md-shrink-1 flex-md-basis-auto m-2 p-3 pt-2">
+            <div className="card d-flex flex-md-grow-1 flex-md-shrink-1 flex-md-basis-50p m-2 p-3 pt-2">
               <div className="d-flex flex-row">
                 <div className="d-flex">
                   <h4 className="flex-grow-1">Clubs per division</h4>

@@ -172,6 +172,27 @@ class UpdateTeam(Mutation):
         return UpdateTeam(status=True)
 
 
+class DeleteTeam(Mutation):
+    class Arguments:
+        id = ID(required=True)
+
+    status = Boolean()
+
+    @require_token
+    async def mutate(self, info, id, **kwargs):
+        team = await info.context["db"].teams.find_one({"_id": ObjectId(id)})
+
+        if team:
+            if team["user"] != info.context["user"]["_id"]:
+                raise Exception("You don't have access to this team")
+
+            await info.context["db"].team_members.delete_many({"team": team["_id"]})
+            await info.context["db"].teams.delete_one({'_id': team["_id"]})
+            return DeleteTeam(status=True)
+        else:
+            raise Exception("Team not found")
+
+
 class AddTeamMembers(Mutation):
     class Arguments:
         team_id = ID(required=True)
@@ -254,6 +275,7 @@ class Mutation(ObjectType):
     send_confirmation_mail = SendConfirmationEmail.Field()
     add_team = AddTeam.Field()
     update_team = UpdateTeam.Field()
+    delete_team = DeleteTeam.Field()
     add_team_members = AddTeamMembers.Field()
     update_team_member = UpdateTeamMember.Field()
     delete_team_member = DeleteTeamMember.Field()

@@ -31,131 +31,135 @@ import ButtonPlayerView from "components/buttons/ButtonPlayerView.js";
 interface PageToolsTeamBuilderProps {}
 
 const PageToolsTeamBuilder: React.FC < PageToolsTeamBuilderProps > = (props) => {
-  const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
-  const [teams, setTeams] = useState(null);
-  const [selectedTeam, setSelectedTeam] = useState(null);
-  const [teamMembers, setTeamMembers] = useState(null);
+    const [teams, setTeams] = useState(null);
+    const [selectedTeam, setSelectedTeam] = useState(null);
+    const [teamMembers, setTeamMembers] = useState(null);
 
-  const [playerView, setPlayerView] = useState(null);
-  const [showOnfieldPlayers, setShowOnfieldPlayers] = useState(false);
+    const [playerView, setPlayerView] = useState(null);
+    const [showOnfieldPlayers, setShowOnfieldPlayers] = useState(false);
 
-  const fetchTeams = (triggerLoading = true) => {
-    if (props.assistantUser) {
-      if (triggerLoading) {
-        setIsLoading(true);
+    const fetchTeams = (triggerLoading = true) => {
+      if (props.assistantUser) {
+        setTeams(null);
+        setSelectedTeam(null);
+        setTeamMembers(null);
+
+        if (triggerLoading) {
+          setIsLoading(true);
+        }
+
+        getTeams({
+          handleSuccess: (v) => {
+            setTeams(v.data.getTeams);
+            setIsLoading(false);
+          }
+        });
       }
+    }
 
-      getTeams({
+    const fetchTeamMembers = () => {
+      setTeamMembers(null);
+
+      getTeamMembers({
         handleSuccess: (v) => {
-          setTeams(v.data.getTeams);
-          setIsLoading(false);
+          setTeamMembers(v.data.getTeamMembers)
+        },
+        params: {
+          team: selectedTeam,
         }
       });
     }
-  }
 
-  const fetchTeamMembers = () => {
-    setTeamMembers(null);
-
-    getTeamMembers({
-      handleSuccess: (v) => {
-        setTeamMembers(v.data.getTeamMembers)
-      },
-      params: {
-        team: selectedTeam,
-      }
-    });
-  }
-
-  const addTeamMembersInGroup = (playerIds) => {
-    addTeamMembers({
-      handleSuccess: (v) => {
-        fetchTeamMembers();
-      },
-      params: {
-        teamId: selectedTeam,
-        playerIds,
-      },
-    });
-  }
-
-  const deleteTeamMemberInGroup = (id) => {
-    deleteTeamMember({
-      handleSuccess: (v) => {
-        fetchTeamMembers();
-      },
-      params: {
-        teamMemberId: id,
-      },
-    });
-  }
-
-  const getSelectedTeam = () => {
-    if (selectedTeam) {
-      return teams.filter((t) => t.id === selectedTeam).pop();
-    }
-
-    return null;
-  }
-
-  const saveTeam = (data) => {
-    if (getSelectedTeam) {
-      updateTeam({
-        handleSuccess: (v) => {
-          fetchTeams(false);
-        },
-        params: {
-          id: selectedTeam,
-          ...data,
-        },
-      });
-    }
-  }
-
-  const saveTeamMember = (id, position) => {
-    if (getSelectedTeam) {
-      updateTeamMember({
+    const addTeamMembersInGroup = (playerIds) => {
+      addTeamMembers({
         handleSuccess: (v) => {
           fetchTeamMembers();
         },
         params: {
-          id,
-          position,
+          teamId: selectedTeam,
+          playerIds,
         },
       });
     }
-  }
 
-  const getTeamMemberInPosition = (position) => {
-    if (!teamMembers) {
+    const deleteTeamMemberInGroup = (id) => {
+      deleteTeamMember({
+        handleSuccess: (v) => {
+          fetchTeamMembers();
+        },
+        params: {
+          teamMemberId: id,
+        },
+      });
+    }
+
+    const getSelectedTeam = () => {
+      if (selectedTeam) {
+        return teams.filter((t) => t.id === selectedTeam).pop();
+      }
+
       return null;
     }
 
-    return teamMembers.filter((tm) => tm.position === position).pop();
-  }
+    const saveTeam = (data) => {
+      if (getSelectedTeam) {
+        updateTeam({
+          handleSuccess: (v) => {
+            fetchTeams(false);
+          },
+          params: {
+            id: selectedTeam,
+            ...data,
+          },
+        });
+      }
+    }
 
-  useEffect(() => {
-    fetchTeams();
-  }, []);
+    const saveTeamMember = (id, position) => {
+      if (getSelectedTeam) {
+        updateTeamMember({
+          handleSuccess: (v) => {
+            fetchTeamMembers();
+          },
+          params: {
+            id,
+            position,
+          },
+        });
+      }
+    }
 
-  useEffect(() => {
-    if (props.assistantUser) {
+    const getTeamMemberInPosition = (position) => {
+      if (!teamMembers) {
+        return null;
+      }
+
+      return teamMembers.filter((tm) => tm.position === position).pop();
+    }
+
+    useEffect(() => {
       fetchTeams();
-    }
-  }, [props.assistantUser]);
+    }, []);
 
-  useEffect(() => {
-    if (selectedTeam === null) {
-      setTeamMembers(null);
-    } else {
-      fetchTeamMembers();
-    }
-  }, [selectedTeam]);
+    useEffect(() => {
+      if (props.assistantUser) {
+        fetchTeams();
+      }
+    }, [props.assistantUser]);
 
-  if (!props.assistantUser) {
-    return (
-      <div className="d-flex h-100 justify-content-center align-items-center">
+    useEffect(() => {
+      if (selectedTeam === null) {
+        setTeamMembers(null);
+      } else {
+        fetchTeamMembers();
+      }
+    }, [selectedTeam]);
+
+    if (!props.assistantUser) {
+      return (
+        <div className="d-flex h-100 justify-content-center align-items-center">
         <ButtonLogin
           flowUser={props.flowUser}
           assistantUser={props.assistantUser}
@@ -163,11 +167,11 @@ const PageToolsTeamBuilder: React.FC < PageToolsTeamBuilderProps > = (props) => 
           content={<BoxLogin/>}
         />
       </div>
-    )
-  }
+      )
+    }
 
-  return (
-    <div id="PageToolsTeamBuilder" className="h-100 w-100">
+    return (
+        <div id="PageToolsTeamBuilder" className="h-100 w-100">
       <div className="container-xl h-100 px-2 px-md-4 py-4">
         <div className="d-flex flex-column flex-md-row h-100 w-100 fade-in">
           <div className="d-flex flex-column flex-md-grow-0 flex-basis-300">
@@ -430,7 +434,7 @@ const PageToolsTeamBuilder: React.FC < PageToolsTeamBuilderProps > = (props) => 
                   />
                 }
 
-                {selectedTeam && teamMembers
+                {selectedTeam && teamMembers && teamMembers.length > 0
                   && <div className="d-flex flex-fill flex-column overflow-hidden">
                     <div className="d-flex flex-grow-0 justify-content-end mb-2">
                       <small>

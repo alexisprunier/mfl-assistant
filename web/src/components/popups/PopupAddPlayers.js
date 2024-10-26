@@ -116,7 +116,7 @@ const PopupAddPlayers: React.FC < PopupAddPlayersProps > = ({ trigger, onClose, 
       >
         {(close) => (
           <div className="container bg-dark d-flex flex-column border border-info border-3 rounded-3 p-4">
-            <div className="d-flex flex-row flex-grow-0 mb-2">
+            <div className="d-flex flex-row flex-grow-0 mb-3">
               <div className="flex-grow-1">
                 <h2 className="text-white">
                   Add players in the group
@@ -132,7 +132,7 @@ const PopupAddPlayers: React.FC < PopupAddPlayersProps > = ({ trigger, onClose, 
             </div>
 
             <div className="d-flex flex-column flex-grow-1 overflow-auto">
-              <div className="d-flex flex-row flex-grow-0 mb-2">
+              <div className="d-flex flex-row flex-grow-0 mb-3">
                 <input
                   type="text"
                   className="form-control me-1"
@@ -171,7 +171,7 @@ const PopupAddPlayers: React.FC < PopupAddPlayersProps > = ({ trigger, onClose, 
                 </button>
               </div>
 
-              <div className="d-flex flex-grow-0 justify-content-end mb-2">
+              <div className="d-flex flex-grow-0 justify-content-end mb-3">
                 <small>
                   My players only
                   <input

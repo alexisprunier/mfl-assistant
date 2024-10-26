@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { NotificationManager as nm } from "react-notifications";
 import Popup from "reactjs-popup";
-import { updateTeam } from "services/api-assistant.js";
+import { updateTeam, deleteTeam } from "services/api-assistant.js";
 import { prettifyId } from "utils/graphql.js";
 import { copyTextToClipboard } from "utils/clipboard.js"
 
@@ -28,9 +28,21 @@ const PopupEditTeam: React.FC < PopupEditTeamProps > = ({ trigger, team, onClose
     });
   }
 
+  const removeTeam = (close, id) => {
+    deleteTeam({
+      handleSuccess: (v) => {
+        if (onClose)
+          onClose();
+        if (close)
+          close();
+      },
+      params: {
+        id: id,
+      },
+    });
+  }
+
   const closePopup = (close) => {
-    if (onClose)
-      onClose();
     if (close)
       close();
   }
@@ -86,7 +98,16 @@ const PopupEditTeam: React.FC < PopupEditTeamProps > = ({ trigger, team, onClose
 							</div>
 						</div>
 
-						<div className="d-flex flex-row align-items-middle mt-3">
+						<div className="d-flex flex-row justify-content-end mt-3">
+							<button
+								className="btn btn-danger text-white"
+								onClick={() => removeTeam(close, team.id)}
+							>
+								<i className="bi bi-x-circle me-2"/> Delete team
+							</button>
+						</div>
+
+						{/*<div className="d-flex flex-row align-items-middle mt-3">
 							<input
 								className="form-check-input me-2"
 								type="checkbox"
@@ -108,7 +129,7 @@ const PopupEditTeam: React.FC < PopupEditTeamProps > = ({ trigger, team, onClose
 							>
 								<i className="bi bi-link-45deg"/> Copy link
 							</button>
-						</div>
+						</div>*/}
 					</div>
 				)}
 			</Popup>

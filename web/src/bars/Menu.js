@@ -122,6 +122,17 @@ const Menu: React.FC < MenuProps > = (props) => {
             flowUser={props.flowUser}
             assistantUser={props.assistantUser}
             logout={props.logout}
+            content={
+              <div
+                className="Menu-login d-inline-block align-items-center text-center"
+                title="Login"
+              >
+                <div className="text-center">
+                  <i className="bi bi-person-fill-check lh-1 px-1"></i>
+                  <div className="d-block w-100 lh-1">LOGIN</div>
+                </div>
+              </div>
+            }
           />
         </div>
       </div>

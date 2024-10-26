@@ -9,6 +9,7 @@ import ChartBarPlayerSales from "components/charts/ChartBarPlayerSales.js";
 import ChartBarPlayerSaleValue from "components/charts/ChartBarPlayerSaleValue.js";
 import ChartScatterPlayerSales from "components/charts/ChartScatterPlayerSales.js";
 import BoxWarning from "components/box/BoxWarning.js";
+import BoxLogin from "components/box/BoxLogin.js";
 import { getTeams, getTeamMembers, addTeamMembers, updateTeam, updateTeamMember, deleteTeamMember } from "services/api-assistant.js";
 import BoxSoonToCome from "components/box/BoxSoonToCome.js";
 import BoxMessage from "components/box/BoxMessage.js";
@@ -152,6 +153,19 @@ const PageToolsTeamBuilder: React.FC < PageToolsTeamBuilderProps > = (props) => 
     }
   }, [selectedTeam]);
 
+  if (!props.assistantUser) {
+    return (
+      <div className="d-flex h-100 justify-content-center align-items-center">
+        <ButtonLogin
+          flowUser={props.flowUser}
+          assistantUser={props.assistantUser}
+          logout={props.logout}
+          content={<BoxLogin/>}
+        />
+      </div>
+    )
+  }
+
   return (
     <div id="PageToolsTeamBuilder" className="h-100 w-100">
       <div className="container-xl h-100 px-2 px-md-4 py-4">
@@ -161,51 +175,29 @@ const PageToolsTeamBuilder: React.FC < PageToolsTeamBuilderProps > = (props) => 
               <div className="d-flex flex-row flex-md-grow-0">
                 <h4 className="flex-grow-1">My teams</h4>
 
-                {props.assistantUser
-                  && <PopupAddTeam
-                    trigger={
-                      <button className="btn btn-info btn-sm text-white">
-                        <i className="bi bi-plus"></i>
-                      </button>
-                    }
-                    onClose={fetchTeams}
-                  />
-                }
+                <PopupAddTeam
+                  trigger={
+                    <button className="btn btn-info btn-sm text-white">
+                      <i className="bi bi-plus"></i>
+                    </button>
+                  }
+                  onClose={fetchTeams}
+                />
               </div>
 
               <div className="d-flex flex-fill flex-column">
-                {!props.assistantUser
-                  && <BoxMessage
-                    content={<div className="d-flex flex-column align-items-center py-4 py-md-0">
-                        <div>
-                          <ButtonLogin
-                            className="btn btn-info text-white px-5 mb-3"
-                            flowUser={props.flowUser}
-                            assistantUser={props.assistantUser}
-                            logout={props.logout}
-                          />
-                        </div>
-
-                        <div className="d-flex flex-grow-1 text-center px-4">
-                          Connect your Dapper wallet to create your own teams
-                        </div>
-                      </div>
-                    }
-                  />
-                }
-
-                {props.assistantUser && (isLoading || !teams)
+                {(isLoading || !teams)
                   && <LoadingSquare />
                 }
 
-                {props.assistantUser && !isLoading && teams && teams.length === 0
+                {!isLoading && teams && teams.length === 0
                   && <BoxMessage
                     className={"py-4 py-md-0"}
                     content={"No team found"}
                   />
                 }
 
-                {props.assistantUser && !isLoading && teams && teams.length > 0
+                {!isLoading && teams && teams.length > 0
                   && teams.map((t) =>
                     <div className="d-flex flex-row">
                       <div className="d-flex flex-grow-1 me-1">
@@ -322,7 +314,7 @@ const PageToolsTeamBuilder: React.FC < PageToolsTeamBuilderProps > = (props) => 
                   Formation
                 </h4>
 
-                {props.assistantUser && selectedTeam
+                {selectedTeam
                   && <div className="d-flex flex-grow-0">
                     <select
                       className="form-select w-100 mb-1"
@@ -406,7 +398,7 @@ const PageToolsTeamBuilder: React.FC < PageToolsTeamBuilderProps > = (props) => 
                   Player group
                 </h4>
 
-                {props.assistantUser && selectedTeam
+                {selectedTeam
                   && <PopupAddPlayers
                     trigger={
                       <button className="btn btn-info btn-sm text-white">

@@ -33,6 +33,7 @@ const PopupAddPlayers: React.FC < PopupAddPlayersProps > = ({ trigger, onClose, 
   const [players, setPlayers] = useState(null);
   const [selectedPlayers, setSelectedPlayers] = useState([]);
   const [playerView, setPlayerView] = useState(null);
+  const [userPlayerOnly, setUserPlayerOnly] = useState(true);
 
   const [isLoading, setIsLoading] = useState(false);
   const [canLoadMore, setCanLoadMore] = useState(false);
@@ -66,28 +67,7 @@ const PopupAddPlayers: React.FC < PopupAddPlayersProps > = ({ trigger, onClose, 
       },
       params: {
         ...filters,
-        limit: 20,
-        skip: 20 * (page - 1),
-      }
-    });
-  }
-
-  const fetchMyPlayers = (page = 1) => {
-    setIsLoading(true);
-
-    getPlayers({
-      handleSuccess: (v) => {
-        if (page === 1) {
-          setPlayers(v.data.getPlayers);
-        } else {
-          setPlayers(players ? players.concat(v.data.getPlayers) : v.data.getPlayers);
-        }
-
-        setIsLoading(false);
-        setCanLoadMore(v.data.getPlayers.length === 20);
-      },
-      params: {
-        owners: [userId],
+        owners: userPlayerOnly ? [userId] : null,
         limit: 20,
         skip: 20 * (page - 1),
       }
@@ -95,11 +75,7 @@ const PopupAddPlayers: React.FC < PopupAddPlayersProps > = ({ trigger, onClose, 
   }
 
   const loadMore = () => {
-    if (selectedTab === "search") {
-      fetchPlayers(Math.round(players.length / 20) + 1);
-    } else if (selectedTab === "my-players") {
-      fetchMyPlayers(Math.round(players.length / 20) + 1);
-    }
+    fetchPlayers(Math.round(players.length / 20) + 1);
   }
 
   const onPlayerSelection = (p) => {
@@ -125,12 +101,8 @@ const PopupAddPlayers: React.FC < PopupAddPlayersProps > = ({ trigger, onClose, 
     setSelectedPlayers([]);
     setCanLoadMore(false);
 
-    if (selectedTab === "search") {
-      fetchPlayers();
-    } else if (selectedTab === "my-players") {
-      fetchMyPlayers();
-    }
-  }, [selectedTab]);
+    fetchPlayers();
+  }, [userPlayerOnly]);
 
   return (
     <div className="PopupAddPlayers">
@@ -159,163 +131,101 @@ const PopupAddPlayers: React.FC < PopupAddPlayersProps > = ({ trigger, onClose, 
               </div>
             </div>
 
-            <div className="d-flex flex-row flex-grow-0 mb-3">
-              <ul className="nav nav-tabs flex-fill">
-                <li className="nav-item" role="presentation">
-                  <button
-                    className="nav-link active" id="profile-tab" data-bs-toggle="tab" type="button" role="tab" aria-controls="profile"
-                    onClick={() => setSelectedTab("my-players")}
-                    disabled={!userId}
-                  >
-                    My players
-                  </button>
-                </li>
-                <li className="nav-item" role="presentation">
-                  <button
-                    className="nav-link" id="home-tab" data-bs-toggle="tab"  type="button" role="tab" aria-controls="home"
-                    onClick={() => setSelectedTab("search")}
-                  >
-                    Search
-                  </button>
-                </li>
-              </ul>
-            </div>
-
-            {selectedTab === "my-players"
-              && <div className="d-flex flex-column flex-grow-1 overflow-hidden">
-                <div className="d-flex flex-grow-0 justify-content-end mb-2">
-                  <ButtonPlayerView
-                    selectedView={playerView}
-                    onChange={(v) => setPlayerView(v)}
-                  />
-                </div>
-
-                <div className="d-flex flex-grow-1 flex-column overflow-auto mb-2">
-                  {players && players.length > 0
-                    && players.map((p) => <div><ItemRowPlayerAssist
-                        p={p}
-                        display={playerView}
-                        isSelected={selectedPlayers.map(p => p.id).indexOf(p.id) >= 0}
-                        onSelect={(p) => onPlayerSelection(p)}
-                      /></div>
-                    )
-                  }
-
-                  {players && players.length === 0
-                    && <BoxMessage content={"No player found"} />
-                  }
-
-                  {!players
-                    && <div style={{ height: "200px" }}>
-                      <LoadingSquare />
-                    </div>
-                  }
-
-                  {players && isLoading
-                    && <div style={{ height: "20px" }}>
-                      <LoadingSquare />
-                    </div>
-                  }
-
-                  {canLoadMore && !isLoading
-                    && <button
-                      className="btn btn-sm btn-link align-self-start"
-                      onClick={() => loadMore()}
-                    >
-                      Load more
+            <div className="d-flex flex-column flex-grow-1 overflow-auto">
+              <div className="d-flex flex-row flex-grow-0 mb-2">
+                <input
+                  type="text"
+                  className="form-control me-1"
+                  value={filters.search}
+                  onChange={(v) => setFilters({ ...filters, search: v.target.value})}
+                  placeholder={"Name"}
+                  autoFocus
+                />
+                <FilterContainerPlayer
+                  trigger={
+                    <button className="d-flex flex-row btn btn-info text-white me-1">
+                      <i className="bi bi-filter-square-fill"/>{countFilters() > 0 ? <div className="ms-2">{countFilters()}</div> : ""}
                     </button>
                   }
-                </div>
+                  filters={filters}
+                  onChange={(f) => setFilters(f)}
+                  onApply={() => fetchPlayers()}
+                  showPositions={true}
+                  showOverallScore={true}
+                  showAge={true}
+                  deactivateNavigate={true}
+                />
+                {(countFilters() > 0 || filters.search)
+                  && <button
+                    className="btn btn-warning text-white me-1"
+                    onClick={() => setFilters(defaultFilters)}
+                  >
+                    <i className="bi bi-x-square-fill text-white"></i>
+                  </button>
+                }
+                <button
+                  className="btn btn-info text-white"
+                  onClick={() => fetchPlayers()}
+                >
+                  <i className="bi bi-search text-white"></i>
+                </button>
               </div>
-            }
 
-            {selectedTab === "search"
-              && <div className="d-flex flex-column flex-grow-1 overflow-auto">
-                <div className="d-flex flex-row flex-grow-0 mb-2">
+              <div className="d-flex flex-grow-0 justify-content-end mb-2">
+                <small>
+                  My players only
                   <input
-                    type="text"
-                    className="form-control me-1"
-                    value={filters.search}
-                    onChange={(v) => setFilters({ ...filters, search: v.target.value})}
-                    placeholder={"Name"}
-                    autoFocus
+                    type="checkbox"
+                    className="ms-1"
+                    defaultChecked={userPlayerOnly}
+                    value={userPlayerOnly}
+                    onChange={() => setUserPlayerOnly(!userPlayerOnly)}
                   />
-                  <FilterContainerPlayer
-                    trigger={
-                      <button className="d-flex flex-row btn btn-info text-white me-1">
-                        <i className="bi bi-filter-square-fill"/>{countFilters() > 0 ? <div className="ms-2">{countFilters()}</div> : ""}
-                      </button>
-                    }
-                    filters={filters}
-                    onChange={(f) => setFilters(f)}
-                    onApply={() => fetchPlayers()}
-                    showPositions={true}
-                    showOverallScore={true}
-                    showAge={true}
-                    deactivateNavigate={true}
-                  />
-                  {(countFilters() > 0 || filters.search)
-                    && <button
-                      className="btn btn-warning text-white me-1"
-                      onClick={() => setFilters(defaultFilters)}
-                    >
-                      <i className="bi bi-x-square-fill text-white"></i>
-                    </button>
-                  }
-                  <button
-                    className="btn btn-info text-white"
-                    onClick={() => fetchPlayers()}
-                  >
-                    <i className="bi bi-search text-white"></i>
-                  </button>
-                </div>
-
-                <div className="d-flex flex-grow-0 justify-content-end mb-2">
-                  <ButtonPlayerView
-                    selectedView={playerView}
-                    onChange={(v) => setPlayerView(v)}
-                  />
-                </div>
-
-                <div className="d-flex flex-grow-1 flex-column overflow-auto">
-                  
-                  {players && players.length > 0
-                    && players.map((p) => <div><ItemRowPlayerAssist
-                        p={p}
-                        display={playerView}
-                        isSelected={selectedPlayers.map(p => p.id).indexOf(p.id) >= 0}
-                        onSelect={(p) => onPlayerSelection(p)}
-                      /></div>
-                    )
-                  }
-
-                  {players && players.length === 0
-                    && <BoxMessage content={"No player found"} />
-                  }
-
-                  {!players
-                    && <div style={{ height: "200px" }}>
-                      <LoadingSquare />
-                    </div>
-                  }
-
-                  {players && isLoading
-                    && <div style={{ height: "30px" }}>
-                      <LoadingSquare />
-                    </div>
-                  }
-
-                  {canLoadMore && !isLoading
-                    && <button
-                      className="btn btn-sm btn-link align-self-start"
-                      onClick={() => loadMore()}
-                    >
-                      Load more
-                    </button>
-                  }
-                </div>
+                </small>
+                <ButtonPlayerView
+                  selectedView={playerView}
+                  onChange={(v) => setPlayerView(v)}
+                />
               </div>
-            }
+
+              <div className="d-flex flex-grow-1 flex-column overflow-auto">
+                
+                {players && players.length > 0
+                  && players.map((p) => <div><ItemRowPlayerAssist
+                      p={p}
+                      display={playerView}
+                      isSelected={selectedPlayers.map(p => p.id).indexOf(p.id) >= 0}
+                      onSelect={(p) => onPlayerSelection(p)}
+                    /></div>
+                  )
+                }
+
+                {players && players.length === 0
+                  && <BoxMessage content={"No player found"} />
+                }
+
+                {!players
+                  && <div style={{ height: "200px" }}>
+                    <LoadingSquare />
+                  </div>
+                }
+
+                {players && isLoading
+                  && <div style={{ height: "30px" }}>
+                    <LoadingSquare />
+                  </div>
+                }
+
+                {canLoadMore && !isLoading
+                  && <button
+                    className="btn btn-sm btn-link align-self-start"
+                    onClick={() => loadMore()}
+                  >
+                    Load more
+                  </button>
+                }
+              </div>
+            </div>
 
             <div className="d-flex flex-grow-0 flex-row justify-content-end mt-3">
               <div>

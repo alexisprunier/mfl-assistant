@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { NotificationManager as nm } from "react-notifications";
 import ButtonLogin from "components/buttons/ButtonLogin.js";
+import BoxLogin from "components/box/BoxLogin.js";
 import LoadingSquare from "components/loading/LoadingSquare.js";
 import BoxMessage from "components/box/BoxMessage.js";
 import UtilConditionalRender from "components/utils/UtilConditionalRender.js";
@@ -78,14 +79,13 @@ const PageNotification: React.FC < PageNotificationProps > = (props) => {
     if (!props.assistantUser) {
       return (
         <div className="d-flex h-100 justify-content-center align-items-center">
-          <div className="card">
-            <ButtonLogin
-              className="PageNotification-ButtonLogin fade-in h4 mx-4 my-3"
-              flowUser={props.flowUser}
-              assistantUser={props.assistantUser}
-              logout={props.logout}
-            />
-          </div>
+		<ButtonLogin
+		  className="PageNotification-ButtonLogin"
+		  flowUser={props.flowUser}
+		  assistantUser={props.assistantUser}
+		  logout={props.logout}
+		  content={<BoxLogin/>}
+		/>
         </div>
       )
     }

@@ -34,6 +34,7 @@ const PopupAddPlayers: React.FC < PopupAddPlayersProps > = ({ trigger, onClose, 
   const [selectedPlayers, setSelectedPlayers] = useState([]);
   const [playerView, setPlayerView] = useState(null);
   const [userPlayerOnly, setUserPlayerOnly] = useState(true);
+  const [hidePlayersInTeams, setHidePlayersInTeams] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
   const [canLoadMore, setCanLoadMore] = useState(false);
@@ -68,6 +69,7 @@ const PopupAddPlayers: React.FC < PopupAddPlayersProps > = ({ trigger, onClose, 
       params: {
         ...filters,
         owners: userPlayerOnly ? [userId] : null,
+        ignorePlayersInTeams: hidePlayersInTeams,
         limit: 20,
         skip: 20 * (page - 1),
       }
@@ -102,7 +104,7 @@ const PopupAddPlayers: React.FC < PopupAddPlayersProps > = ({ trigger, onClose, 
     setCanLoadMore(false);
 
     fetchPlayers();
-  }, [userPlayerOnly]);
+  }, [userPlayerOnly, hidePlayersInTeams]);
 
   return (
     <div className="PopupAddPlayers">
@@ -119,7 +121,7 @@ const PopupAddPlayers: React.FC < PopupAddPlayersProps > = ({ trigger, onClose, 
             <div className="d-flex flex-row flex-grow-0 mb-3">
               <div className="flex-grow-1">
                 <h2 className="text-white">
-                  Add players in the group
+                  Add players
                 </h2>
               </div>
               <div className="flex-grow-0">
@@ -172,6 +174,16 @@ const PopupAddPlayers: React.FC < PopupAddPlayersProps > = ({ trigger, onClose, 
               </div>
 
               <div className="d-flex flex-grow-0 justify-content-end mb-3">
+                <small>
+                  Hide players in teams
+                  <input
+                    type="checkbox"
+                    className="ms-1 me-2"
+                    defaultChecked={hidePlayersInTeams}
+                    value={hidePlayersInTeams}
+                    onChange={() => setHidePlayersInTeams(!hidePlayersInTeams)}
+                  />
+                </small>
                 <small>
                   My players only
                   <input

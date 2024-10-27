@@ -2,6 +2,7 @@ from graphene import ObjectType, String, Int, Schema, Field, List, ID, Boolean, 
 from graph.schema import UserType, SaleType, ContractType, NotificationScopeType, NotificationType, CountType, DataPointType, ClubType, TeamType, TeamMemberType, PlayerType
 from bson import ObjectId
 from decorator.require_token import require_token
+from decorator.add_token_if_exists import add_token_if_exists
 from fastapi import HTTPException, status
 
 
@@ -353,9 +354,10 @@ class Query(ObjectType):
 
         return team_members
 
-    get_players = List(PlayerType, search=String(), owners=List(String), min_ovr=Int(), max_ovr=Int(), min_age=Int(), max_age=Int(), nationalities=List(String), positions=List(String), skip=Int(), limit=Int(), sort=String(), order=Int())
+    get_players = List(PlayerType, search=String(), owners=List(String), min_ovr=Int(), max_ovr=Int(), min_age=Int(), max_age=Int(), nationalities=List(String), positions=List(String), ignore_players_in_teams=Boolean(), skip=Int(), limit=Int(), sort=String(), order=Int())
 
-    async def resolve_get_players(self, info, search=None, owners=None, min_ovr=1, max_ovr=100, min_age=1, max_age=99, nationalities=None, positions=None, skip=0, limit=500, sort="overall", order=-1):
+    @add_token_if_exists
+    async def resolve_get_players(self, info, search=None, owners=None, min_ovr=1, max_ovr=100, min_age=1, max_age=99, nationalities=None, positions=None, ignore_players_in_teams=False, skip=0, limit=500, sort="overall", order=-1):
 
         filters = {}
 
@@ -391,6 +393,19 @@ class Query(ObjectType):
                     regex_query
                 ]
             }
+
+        if ignore_players_in_teams:
+            if "user" in info.context and "_id" in info.context["user"]:
+                user_team_ids = await info.context["db"].teams.find({"user": ObjectId(info.context["user"]["_id"])}).distinct("_id")
+                player_ids = await info.context["db"].team_members.find({"team": {"$in": user_team_ids}}).distinct("player")
+
+                if len(player_ids) > 0:
+                    filters["_id"] = {"$nin": player_ids}
+            else:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="User not found. Impossible to use 'ignore_players_in_teams'",
+                )
 
         players = await info.context["db"].players \
             .find(filters) \

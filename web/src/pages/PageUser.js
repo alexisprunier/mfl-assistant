@@ -10,6 +10,7 @@ import ItemRowClub from "components/items/ItemRowClub.js";
 import ItemRowUser from "components/items/ItemRowUser.js";
 import BoxMessage from "components/box/BoxMessage.js";
 import { useParams } from 'react-router-dom';
+import ButtonPlayerView from "components/buttons/ButtonPlayerView.js";
 
 interface PageUserProps {}
 
@@ -21,6 +22,8 @@ const PageUser: React.FC < PageUserProps > = () => {
   const [players, setPlayers] = useState(null);
   const [playerPage, setPlayerPage] = useState(0);
   const [canLoadMorePlayers, setCanLoadMorePlayers] = useState(true);
+
+  const [playerView, setPlayerView] = useState(null);
 
   const fetchUser = () => {
     getUsers({
@@ -78,10 +81,17 @@ const PageUser: React.FC < PageUserProps > = () => {
                 </div>
               </div>
 
+              <div className="d-flex justify-content-end mb-2">
+                <ButtonPlayerView
+                  selectedView={playerView}
+                  onChange={(v) => setPlayerView(v)}
+                />
+              </div>
+
               {players.map((c) => (
                 <ItemRowPlayerAssist
                   p={c}
-                  display={"ovr"}
+                  display={playerView}
                 />
               ))}
             </div>

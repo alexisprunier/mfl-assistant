@@ -16,12 +16,7 @@ def add_token_if_exists(f):
 
         try:
             decoded = verify_token(token)
-        except jwt.ExpiredSignatureError:
-            if inspect.iscoroutinefunction(f):
-                return await f(root, info, *args, **kwargs)
-            else:
-                return f(root, info, *args, **kwargs)
-        except jwt.InvalidTokenError:
+        except:
             if inspect.iscoroutinefunction(f):
                 return await f(root, info, *args, **kwargs)
             else:

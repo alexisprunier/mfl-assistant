@@ -63,6 +63,20 @@ const PageHome: React.FC < PageHomeProps > = ({ yScrollPosition }) => {
         countries: ["GERMANY"],
         platforms: ['youtube']
       },
+      {
+        name: "Quinny",
+        image: "https://pbs.twimg.com/profile_images/1638215583534555141/qnvlrbC0_400x400.jpg",
+        link: "https://www.youtube.com/@Quinny3001",
+        countries: ["ENGLAND"],
+        platforms: ['youtube']
+      },
+      {
+        name: "Tim Lanew",
+        image: "https://pbs.twimg.com/profile_images/1849863273769992192/rRZK1ZM7_400x400.jpg",
+        link: "https://www.youtube.com/@CoachTimTV",
+        countries: ["FRANCE"],
+        platforms: ['youtube']
+      },
     ];
 
     const tools = [{

@@ -338,6 +338,7 @@ export const getTeamMembers = ({ handleSuccess = null, handleError = null, param
             id,
             firstName,
             lastName,
+            age,
             overall,
             nationalities,
             positions,

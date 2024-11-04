@@ -9,10 +9,10 @@ const ButtonPlayerView: React.FC < ButtonPlayerViewProps > = ({ selectedView, on
   return (
     <div className="d-flex flex-row ms-md-2 border rounded-2">
 	    <button
-	      className={"btn btn-small" + (!selectedView || selectedView === "country" ? " btn-info text-white" : " text-info")}
-	      onClick={() => onChange("country")}
+	      className={"btn btn-small" + (!selectedView || selectedView === "profile" ? " btn-info text-white" : " text-info")}
+	      onClick={() => onChange("profile")}
 	    >
-	      Country
+	      Profile
 	    </button>
 	    <button
 	      className={"btn btn-small" + (selectedView === "stats" ? " btn-info text-white" : " text-info")}

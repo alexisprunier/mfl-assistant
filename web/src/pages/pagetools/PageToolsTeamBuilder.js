@@ -27,6 +27,7 @@ import MiscOverall from "components/misc/MiscOverall.js";
 import ButtonLogin from "components/buttons/ButtonLogin.js";
 import { formations } from "utils/formation.js";
 import ButtonPlayerView from "components/buttons/ButtonPlayerView.js";
+import ButtonOnFieldPlayerView from "components/buttons/ButtonOnFieldPlayerView.js";
 
 interface PageToolsTeamBuilderProps {}
 
@@ -38,6 +39,7 @@ const PageToolsTeamBuilder: React.FC < PageToolsTeamBuilderProps > = (props) => 
     const [teamMembers, setTeamMembers] = useState(null);
 
     const [playerView, setPlayerView] = useState(null);
+    const [onFieldPlayerView, setOnFieldPlayerView] = useState(null);
     const [showOnfieldPlayers, setShowOnfieldPlayers] = useState(false);
 
     const fetchTeams = (triggerLoading = true) => {
@@ -339,57 +341,77 @@ const PageToolsTeamBuilder: React.FC < PageToolsTeamBuilderProps > = (props) => 
 
               <div className="d-flex flex-fill overflow-hidden ratio-sm ratio-sm-1x1">
                 {selectedTeam && getSelectedTeam().formation
-                  ? <div className="d-block p-relative h-100 w-100 football-field rounded-2">
-                    {Object.keys(formations[getSelectedTeam().formation]).map(p =>
-                      <div style={{
-                        position: "absolute",
-                        top: formations[getSelectedTeam().formation][p].y + "%",
-                        left: formations[getSelectedTeam().formation][p].x + "%",
-                        transform: "translate(-50%,-50%)",
-                      }}>
-                        {getTeamMemberInPosition(parseInt(p))
-                          ? <div className="d-flex flex-column transform-scale-sm-80" style={{ lineHeight: 1.3 }}>
-                            <div className="text-white" style={{ textShadow: "black 0px 0px 2px" }}>
-                              {getTeamMemberInPosition(parseInt(p)).player.lastName}
-                            </div>
-                            <div className="d-flex flex-row">
-                              <div className="d-flex align-items-center flex-wrap me-1">
-                                <MiscFlag
-                                  country={getTeamMemberInPosition(parseInt(p)).player.nationalities[0]}
+                  ? <div className="d-flex flex-fill flex-column">
+                    <div className="d-flex justify-content-end flex-grow-0">
+                      <ButtonOnFieldPlayerView
+                        selectedView={onFieldPlayerView}
+                        onChange={(v) => setOnFieldPlayerView(v)}
+                      />
+                    </div>
+
+                    <div className="d-flex flex-fill flex-grow-1">
+                      <div className="d-block position-relative h-100 w-100 football-field rounded-2">
+                        {Object.keys(formations[getSelectedTeam().formation]).map(p =>
+                          <div style={{
+                            position: "absolute",
+                            top: formations[getSelectedTeam().formation][p].y + "%",
+                            left: formations[getSelectedTeam().formation][p].x + "%",
+                            transform: "translate(-50%,-50%)",
+                          }}>
+                            {getTeamMemberInPosition(parseInt(p))
+                              ? <div className="d-flex flex-column transform-scale-sm-80" style={{ lineHeight: 1.3 }}>
+                                <div className="text-white" style={{ textShadow: "black 0px 0px 2px" }}>
+                                  {getTeamMemberInPosition(parseInt(p)).player.lastName}
+                                </div>
+                                <div className="d-flex flex-row">
+                                  <div className="d-flex align-items-center flex-wrap me-1">
+                                    <MiscFlag
+                                      country={getTeamMemberInPosition(parseInt(p)).player.nationalities[0]}
+                                    />
+                                  </div>
+
+                                  <div className="d-flex flex-grow-1" style={{ textShadow: "black 0px 0px 1px" }}>
+                                    {onFieldPlayerView === null || onFieldPlayerView === "ovr"
+                                      && <MiscOverall
+                                        player={getTeamMemberInPosition(parseInt(p)).player}
+                                        actualPosition={formations[getSelectedTeam().formation][getTeamMemberInPosition(parseInt(p)).position].position.toString()}
+                                        calculatedOvr={true}
+                                      />
+                                    }
+
+                                    {onFieldPlayerView === "age"
+                                      && <div className="text-white">
+                                        <i className="bi bi-cake2-fill me-1"></i>
+                                        {getTeamMemberInPosition(parseInt(p)).player.age}
+                                      </div>
+                                    }
+                                  </div>
+
+                                  <button
+                                    className="btn btn-small text-danger"
+                                    onClick={() => saveTeamMember(getTeamMemberInPosition(parseInt(p)).id, null)}
+                                  >
+                                    <i className="bi bi-person-fill-x"></i>
+                                  </button>
+                                </div>
+                              </div>
+                              : <div className="transform-scale-sm-80">
+                                <PopupSelectPlayer
+                                  trigger={
+                                    <button className="btn btn-info btn-small text-white">
+                                      <i className="bi bi-person-fill-add me-1"/>
+                                      {formations[getSelectedTeam().formation][p].position}
+                                    </button>
+                                  }
+                                  teamMembers={teamMembers}
+                                  onConfirm={(m) => saveTeamMember(m.id, parseInt(p))}
                                 />
                               </div>
-
-                              <div className="d-flex flex-grow-1" style={{ textShadow: "black 0px 0px 1px" }}>
-                                <MiscOverall
-                                  player={getTeamMemberInPosition(parseInt(p)).player}
-                                  actualPosition={formations[getSelectedTeam().formation][getTeamMemberInPosition(parseInt(p)).position].position.toString()}
-                                  calculatedOvr={true}
-                                />
-                              </div>
-
-                              <button
-                                className="btn btn-small text-danger"
-                                onClick={() => saveTeamMember(getTeamMemberInPosition(parseInt(p)).id, null)}
-                              >
-                                <i className="bi bi-person-fill-x"></i>
-                              </button>
-                            </div>
+                            }
                           </div>
-                          : <div className="transform-scale-sm-80">
-                            <PopupSelectPlayer
-                              trigger={
-                                <button className="btn btn-info btn-small text-white">
-                                  <i className="bi bi-person-fill-add me-1"/>
-                                  {formations[getSelectedTeam().formation][p].position}
-                                </button>
-                              }
-                              teamMembers={teamMembers}
-                              onConfirm={(m) => saveTeamMember(m.id, parseInt(p))}
-                            />
-                          </div>
-                        }
+                        )}
                       </div>
-                    )}
+                    </div>
                   </div>
                   : <BoxMessage content={"No formation selected"} />
                 }

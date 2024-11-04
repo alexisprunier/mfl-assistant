@@ -68,8 +68,13 @@ const ItemRowPlayerAssist: React.FC < ItemRowPlayerAssistProps > = ({ p, display
         </div>
 
         <div className="d-flex flex-md-grow-1">
-          {(!display || display === "country")
+          {(!display || display === "profile")
             && <div className="d-flex flex-grow-1">
+              <div className={"d-inline-block"} style={{ width: "50px" }}>
+                <i class="bi bi-cake2-fill me-1"></i>
+                {p.age}
+              </div>
+
               {p.nationalities && p.nationalities[0]
                 ? <img
                   className="d-inline me-1 my-1 ms-md-1"

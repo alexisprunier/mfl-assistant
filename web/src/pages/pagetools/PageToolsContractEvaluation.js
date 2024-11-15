@@ -74,17 +74,6 @@ const PageToolsContractEvaluation: React.FC < PageToolsContractEvaluationProps >
                     </option>
                   ))}
                 </select>
-                <input
-                  type="number"
-                  min="0"
-                  max="100"
-                  step="0.1"
-                  className="form-control w-100 mb-1"
-                  value={rate}
-                  onChange={(v) => setRate(v.target.value)}
-                  disabled={true}
-                  placeholder={/*"Contract rate */"Soon to come!"}
-                />
                 <button
                   className="btn btn-info text-white align-self-end"
                   onClick={() => getData()}

@@ -19,5 +19,5 @@
       "no-param-reassign": ["error", { "props": true, "ignorePropertyModificationsFor": ["data"] }],
       "prefer-destructuring": ["error", {"object": true, "array": false}]
     },
-    "ignorePatterns": ["/node_modules/*", "/build/*", "/public/*"],
+    "ignorePatterns": ["/node_modules/*", "/build/*", "/public/*"]
 }

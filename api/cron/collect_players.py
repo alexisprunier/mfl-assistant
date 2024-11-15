@@ -54,6 +54,9 @@ async def main(db):
                         player,
                         club
                     )
+                else:
+                    await db.contracts.delete_one({"player": player["_id"]})
+
 
             await upsert_vars(db, last_treated_player_id_var, players[-1]["id"])
         else:

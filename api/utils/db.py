@@ -195,6 +195,8 @@ async def build_and_upsert_contract(db, mfl_contract, player=None, club=None):
         contract["status"] = mfl_contract["status"]
     if "revenueShare" in mfl_contract:
         contract["revenue_share"] = mfl_contract["revenueShare"]
+    if "revenueShare" in mfl_contract:
+        contract["total_revenue_share_locked"] = mfl_contract["revenueShare"]
     if "startSeason" in mfl_contract:
         contract["start_season"] = mfl_contract["startSeason"]
     if "nbSeasons" in mfl_contract:

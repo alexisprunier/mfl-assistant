@@ -77,6 +77,7 @@ class ContractType(ObjectType):
     id = Int(source='_id')
     status = String()
     revenue_share = Int()
+    total_revenue_share_locked = Int()
     start_season = Int()
     number_of_season = Int()
     auto_renewal = Boolean()

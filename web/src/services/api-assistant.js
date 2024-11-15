@@ -518,6 +518,7 @@ export const getContracts = ({ handleSuccess = null, handleError = null, params 
           id,
           status,
           revenueShare,
+          totalRevenueShareLocked,
           startSeason,
           numberOfSeason,
           autoRenewal,

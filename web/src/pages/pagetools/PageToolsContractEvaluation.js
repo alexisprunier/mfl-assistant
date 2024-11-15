@@ -7,6 +7,8 @@ import { getContracts } from "services/api-assistant.js";
 import BoxSoonToCome from "components/box/BoxSoonToCome.js";
 import BoxMessage from "components/box/BoxMessage.js";
 import Count from "components/counts/Count.js";
+import ItemRowContract from "components/items/ItemRowContract.js";
+import LoadingSquare from "components/loading/LoadingSquare.js";
 import { positions, scarcity } from "utils/player.js";
 import ChartScatterPlayerContracts from "components/charts/ChartScatterPlayerContracts.js";
 
@@ -128,15 +130,31 @@ const PageToolsContractEvaluation: React.FC < PageToolsContractEvaluationProps >
               </div>
             </div>
 
-            <div className="card d-flex flex-column flex-md-grow-1 flex-md-shrink-1 flex - basis - 400 m-2 p-3 pt-2">
+            <div className="card d-flex flex-column flex-md-grow-1 flex-md-shrink-1 flex-md-basis-auto flex-basis-0 m-2 p-3 pt-2 max-height-md-300">
               <div className="d-flex flex-row">
                 <div className="d-flex">
                   <h4 className="flex-grow-1">Contract details</h4>
                 </div>
               </div>
 
-              <div className="d-flex flex-fill overflow-hidden">
-                <BoxSoonToCome />
+              <div className="d-flex flex-fill flex-column overflow-auto">
+                {!contracts && !isLoading
+                  && <BoxMessage content="No criteria selected"/>
+                }
+
+                {isLoading
+                  && <LoadingSquare />
+                }
+
+                {contracts && !isLoading
+                  && contracts
+                    .filter((c) => !hideZeros || c.revenueShare > 0)
+                    .map((c) => (
+                      <ItemRowContract
+                        c={c}
+                      />
+                    ))
+                }
               </div>
             </div>
           </div>

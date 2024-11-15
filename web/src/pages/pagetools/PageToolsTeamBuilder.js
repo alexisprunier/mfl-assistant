@@ -443,7 +443,7 @@ const PageToolsTeamBuilder: React.FC < PageToolsTeamBuilderProps > = (props) => 
                                   </div>
 
                                   <div className="d-flex flex-grow-1" style={{ textShadow: "black 0px 0px 1px" }}>
-                                    {onFieldPlayerView === null || onFieldPlayerView === "ovr"
+                                    {(onFieldPlayerView == null || onFieldPlayerView === "ovr")
                                       && <MiscOverall
                                         player={getTeamMemberInPosition(parseInt(p)).player}
                                         actualPosition={formations[getSelectedTeam().formation][getTeamMemberInPosition(parseInt(p)).position].position.toString()}

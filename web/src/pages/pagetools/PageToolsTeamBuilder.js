@@ -238,34 +238,13 @@ const PageToolsTeamBuilder: React.FC < PageToolsTeamBuilderProps > = (props) => 
                 {selectedTeam
                   ? <div className="d-flex flex-column flex-grow-1">
                     <div className="d-flex flex-row flex-grow-1">
-                      <div className="d-flex flex-column flex-grow-1 flex-basis-0 align-items-center justify-content-center py-4 py-md-0">
+                      <div className="d-flex flex-column flex-grow-1 flex-basis-0 align-items-center justify-content-center py-4 py-md-0" style={{ transform: "scale(0.8)" }}>
                         <Count
-                          label="Group OVR"
-                          count={
-                            teamMembers && teamMembers.length > 0
-                              ? teamMembers
-                                .map((tm) => tm.player.overall)
-                                .reduce((acc, cur) => acc + cur)
-                              : 0
-                          }
+                          label="Group size"
+                          count={teamMembers ? teamMembers.length : 0}
                         />
                       </div>
-                      <div className="d-flex flex-column flex-grow-1 flex-basis-0 align-items-center justify-content-center py-4 py-md-0">
-                        <Count
-                          label="Starter OVR"
-                          count={
-                            teamMembers && teamMembers.filter((tm) => tm.position).length > 0
-                              ? teamMembers
-                                .filter((tm) => tm.position)
-                                .map((tm) => tm.player.overall)
-                                .reduce((acc, cur) => acc + cur)
-                              : 0
-                          }
-                        />
-                      </div>
-                    </div>
-                    <div className="d-flex flex-row flex-grow-1">
-                      <div className="d-flex flex-column flex-grow-1 flex-basis-0 align-items-center justify-content-center py-4 py-md-0">
+                      <div className="d-flex flex-column flex-grow-1 flex-basis-0 align-items-center justify-content-center py-4 py-md-0" style={{ transform: "scale(0.8)" }}>
                         <Count
                           label="Group AVR"
                           count={
@@ -282,21 +261,115 @@ const PageToolsTeamBuilder: React.FC < PageToolsTeamBuilderProps > = (props) => 
                           }
                         />
                       </div>
-                      <div className="d-flex flex-column flex-grow-1 flex-basis-0 align-items-center justify-content-center py-4 py-md-0">
+                    </div>
+
+                    <div className="d-flex flex-row flex-grow-1">
+                      <div className="d-flex flex-column flex-grow-1 flex-basis-0 align-items-center justify-content-center py-4 py-md-0" style={{ transform: "scale(0.8)" }}>
+                        <Count
+                          label="Starter OVR"
+                          count={
+                            teamMembers && teamMembers.filter((tm) => tm.position).length > 0
+                              ? teamMembers
+                                .filter((tm) => tm.position)
+                                .map((tm) => tm.player.overall)
+                                .reduce((acc, cur) => acc + cur)
+                              : 0
+                          }
+                        />
+                      </div>
+                      <div className="d-flex flex-column flex-grow-1 flex-basis-0 align-items-center justify-content-center py-4 py-md-0" style={{ transform: "scale(0.8)" }}>
                         <Count
                           label="Starter AVR"
                           count={
                             teamMembers && teamMembers.filter((tm) => tm.position).length > 0
                               ? Number(
                                 teamMembers
-                                  .filter((tm) => tm.position)
-                                  .map((tm) => tm.player.overall)
-                                  .reduce((acc, cur) => acc + cur)
+                                .filter((tm) => tm.position)
+                                .map((tm) => tm.player.overall)
+                                .reduce((acc, cur) => acc + cur)
                                 /
                                 teamMembers
-                                  .filter((tm) => tm.position)
-                                  .length
-                              ).toFixed(1)
+                                .filter((tm) => tm.position)
+                                .length
+                                ).toFixed(1)
+                              : 0
+                          }
+                        />
+                      </div>
+                    </div>
+
+                    <div className="d-flex flex-row flex-grow-1">
+                      <div className="d-flex flex-column flex-grow-1 flex-basis-0 align-items-center justify-content-center py-4 py-md-0" style={{ transform: "scale(0.8)" }}>
+                        <Count
+                          label="B11 OVR"
+                          count={
+                            teamMembers && teamMembers.length > 0
+                              ? teamMembers
+                                .map((tm) => tm.player.overall)
+                                .sort((a, b) => b - a) 
+                                .slice(0, 11)
+                                .reduce((acc, cur) => acc + cur, 0)
+                              : 0
+                          }
+                        />
+                      </div>
+                      <div className="d-flex flex-column flex-grow-1 flex-basis-0 align-items-center justify-content-center py-4 py-md-0" style={{ transform: "scale(0.8)" }}>
+                        <Count
+                          label="B11 AVR"
+                          count={
+                            teamMembers && teamMembers.length > 0
+                              ? Number(
+                                teamMembers
+                                .map((tm) => tm.player.overall)
+                                .sort((a, b) => b - a) 
+                                .slice(0, 11)
+                                .reduce((acc, cur) => acc + cur, 0)
+                                /
+                                teamMembers
+                                .map((tm) => tm.player.overall)
+                                .sort((a, b) => b - a) 
+                                .slice(0, 11)
+                                .length
+                                ).toFixed(1)
+                              : 0
+                          }
+                        />
+                      </div>
+                    </div>
+
+                    <div className="d-flex flex-row flex-grow-1">
+                      <div className="d-flex flex-column flex-grow-1 flex-basis-0 align-items-center justify-content-center py-4 py-md-0" style={{ transform: "scale(0.8)" }}>
+                        <Count
+                          label="B16 OVR"
+                          count={
+                            teamMembers && teamMembers.length > 0
+                              ? teamMembers
+                                .map((tm) => tm.player.overall)
+                                .sort((a, b) => b - a) 
+                                .slice(0, 16)
+                                .reduce((acc, cur) => acc + cur, 0)
+                              : 0
+                          }
+                        />
+                      </div>
+                      <div className="d-flex flex-column flex-grow-1 flex-basis-0 align-items-center justify-content-center py-4 py-md-0" style={{ transform: "scale(0.8)" }}>
+                        <Count
+                          label="B16 AVR"
+                          count={
+                            teamMembers && teamMembers.length > 0
+                              ? Number(
+                                teamMembers
+                                .map((tm) => tm.player.overall)
+                                .sort((a, b) => b - a) 
+                                .slice(0, 16)
+                                .reduce((acc, cur) => acc + cur, 0)
+                                /
+                                teamMembers
+                                .map((tm) => tm.player.overall)
+                                .sort((a, b) => b - a) 
+                                .slice(0, 16)
+                                .length
+                                ).toFixed(1)
                               : 0
                           }
                         />

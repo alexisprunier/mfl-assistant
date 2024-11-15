@@ -44,12 +44,11 @@ const PageToolsTeamBuilder: React.FC < PageToolsTeamBuilderProps > = (props) => 
 
     const fetchTeams = (triggerLoading = true) => {
       if (props.assistantUser) {
-        setTeams(null);
-        setSelectedTeam(null);
-        setTeamMembers(null);
-
         if (triggerLoading) {
           setIsLoading(true);
+          setSelectedTeam(null);
+          setTeams(null);
+          setTeamMembers(null);
         }
 
         getTeams({

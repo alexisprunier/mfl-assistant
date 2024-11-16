@@ -12,7 +12,7 @@ interface ItemCardSaleProps {
 
 const ItemCardSale: React.FC < ItemCardSaleProps > = ({ s }) => {
   return (
-    <div className={"Item no-hover flex-fill"}>
+    <div className={"ItemCardSale Item no-hover flex-fill"}>
       <div className="card bg-black d-flex flex-column py-1 px-2" style={{ minWidth: "140px" }}>
         <div className="d-flex flex-row">
           <div className="pe-2">

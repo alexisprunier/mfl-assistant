@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import "./BoxMflActivity.css";
 import { getPlayerSales, getPlayerListings } from "services/api-mfl.js";
 import LoadingSquare from "components/loading/LoadingSquare.js";
 import MiscHorizontalScroll from "components/misc/MiscHorizontalScroll.js";
@@ -11,10 +12,23 @@ const BoxMflActivity: React.FC < BoxMflActivityProps > = () => {
     const [playerSales, setPlayerSales] = useState(null);
     const [playerListings, setPlayerListings] = useState(null);
 
+    const [updatingSales, setUpdatingSales] = useState(false);
+    const [updatingListings, setUpdatingListings] = useState(false);
+
     const getPlayerSalesData = () => {
+      setUpdatingSales(true);
+
       getPlayerSales({
         handleSuccess: (v) => {
-          setPlayerSales(v);
+          if (playerSales === null || playerSales.length === 0) {
+            setPlayerSales(v);
+          } else {
+            const newSalesIndex = v.findIndex(item => item.listingResourceId === playerSales[0]);
+            const newSales = v.slice(0, newSalesIndex);
+            setPlayerSales(newSales.concat(playerSales));
+          }
+
+          setUpdatingSales(false);
         },
         handleError: (e) => {
           console.log(e);
@@ -24,9 +38,19 @@ const BoxMflActivity: React.FC < BoxMflActivityProps > = () => {
     }
 
     const getPlayerListingData = () => {
+      setUpdatingListings(true);
+
       getPlayerListings({
         handleSuccess: (v) => {
-          setPlayerListings(v);
+          if (playerListings === null || playerListings.length === 0) {
+            setPlayerListings(v);
+          } else {
+            const newListingIndex = v.findIndex(item => item.listingResourceId === playerListings[0]);
+            const newListings = v.slice(0, newListingIndex);
+            setPlayerListings(newListings.concat(playerListings));
+          }
+
+          setUpdatingListings(false);
         },
         handleError: (e) => {
           console.log(e);
@@ -38,16 +62,25 @@ const BoxMflActivity: React.FC < BoxMflActivityProps > = () => {
     useEffect(() => {
       getPlayerSalesData();
       getPlayerListingData();
+
+      const interval = setInterval(() => {
+        getPlayerSalesData();
+        getPlayerListingData();
+      }, 30 * 1000);
+      return () => clearInterval(interval);
     }, []);
 
     return (
-      <div>
-      <h4><i className="bi bi-activity me-1"></i> MFL Activity</h4>
+      <div className="BoxMflActivity">
+      <h4>
+        <i className="bi bi-activity me-1"></i>MFL Activity
+        <div class="live-dot"></div>
+      </h4>
 
       <div className="d-flex flex-column flex-fill">
         <div className="d-flex flex-column flex-grow-1 mb-1">
           <div>
-            Latest listings
+            Latest listings {updatingSales && <span className="small">updating...</span>}
           </div>
 
           <div className="d-flex flex-row">
@@ -58,6 +91,7 @@ const BoxMflActivity: React.FC < BoxMflActivityProps > = () => {
                     {playerListings.map((o) => (
                       <div>
                         <ItemCardSale
+                          key={o.listingResourceId}
                           s={o}
                         />
                       </div>
@@ -75,7 +109,7 @@ const BoxMflActivity: React.FC < BoxMflActivityProps > = () => {
       <
       div className = "d-flex flex-column flex-grow-1" >
       <div>
-            Latest sales
+            Latest sales {updatingListings && <span className="small">updating...</span>}
           </div>
 
       <

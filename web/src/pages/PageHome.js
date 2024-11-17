@@ -36,6 +36,20 @@ const PageHome: React.FC < PageHomeProps > = ({ yScrollPosition }) => {
       platforms: ['youtube']
     },
     {
+      name: "SRMonkey",
+      image: "https://pbs.twimg.com/profile_images/1514224760036675584/MfTVLKVa_400x400.jpg",
+      link: "https://open.spotify.com/show/4q8ZvGFlcIp9q1GQWNhRX7?si=WVDfzW9RR3KYP-xGbn3_OA&nd=1&dlsi=9afeee4459194df6",
+      countries: ["ENGLAND"],
+      platforms: ['spotify']
+    },
+    {
+      name: "Sorare Deke",
+      image: "https://pbs.twimg.com/profile_images/1797465950544965632/tDy3uUIz_400x400.jpg",
+      link: "https://www.youtube.com/@soraredeke",
+      countries: ["ENGLAND"],
+      platforms: ['youtube']
+    },
+    {
       name: "DomyDigital",
       image: "https://pbs.twimg.com/profile_images/1785241500822966272/lTac2y6D_400x400.jpg",
       link: "https://www.youtube.com/@DomyDigital",

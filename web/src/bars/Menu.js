@@ -128,7 +128,7 @@ const Menu: React.FC < MenuProps > = (props) => {
                 title="Login"
               >
                 <div className="text-center">
-                  <i className="bi bi-person-fill-check lh-1 px-1"></i>
+                  <i className="bi bi-person lh-1 px-1"></i>
                   <div className="d-block w-100 lh-1">LOGIN</div>
                 </div>
               </div>

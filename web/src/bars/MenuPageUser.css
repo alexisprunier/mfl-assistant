@@ -27,7 +27,13 @@
 }
 
 #MenuPageUser .nav-user {
+  color: #adb5bd !important;
   font-size: 28px !important;
+  cursor: default !important;
+}
+
+#MenuPageUser .nav-user span {
+  display: inline !important;
 }
 
 #MenuPageUser .LoadingSquare {

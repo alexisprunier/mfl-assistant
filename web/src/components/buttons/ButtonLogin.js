@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import * as fcl from "@onflow/fcl";
 import { shortenHex } from "utils/address.js";
 
@@ -11,30 +11,29 @@ interface ButtonLoginProps {
 }
 
 const ButtonLogin: React.FC < ButtonLoginProps > = (props) => {
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const logIn = () => {
     fcl.authenticate();
   };
 
-  const logOut = () => {
-    fcl.unauthenticate();
-    props.logout();
+  const goToMyHQ = () => {
+    navigate("/user/" + props.assistantUser.address);
   };
 
   return (
     <Link
-	    className={props.className}
-	    onClick={props.assistantUser ? logOut : logIn}
+	    className={props.className + (location.pathname.startsWith("/user/" + props.assistantUser?.address) ? " active" : "")}
+	    onClick={props.assistantUser ? undefined : logIn}
+	    to={props.assistantUser ? "/user/" + props.assistantUser.address : undefined}
 	  >
 	    <div className="px-1 py-md-2 px-md-0">
 	      {props.assistantUser
-	        ? <div
-	          className="Menu-logout d-inline-block align-items-center text-center"
-	          title="Logout"
-	        >
+	        ? <div className="Menu-hq d-inline-block align-items-center text-center">
 	          <div className="text-center">
 	            <i className="bi bi-person-fill lh-1 px-1"></i>
-	            <div className="d-block w-100 lh-1">{shortenHex(props.assistantUser.address)}</div>
+	            <div className="d-block w-100 lh-1">My HQ</div>
 	          </div>
 	        </div>
 	        : props.content

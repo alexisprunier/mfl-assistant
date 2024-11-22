@@ -1,29 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { flushSync } from 'react-dom';
-import { useSearchParams } from 'react-router-dom';
-import LoadingSquare from "components/loading/LoadingSquare";
-import ButtonMflPlayerInfo from "components/buttons/ButtonMflPlayerInfo.js";
-import ButtonMflPlayer from "components/buttons/ButtonMflPlayer.js";
-import { getPlayers, getUsers } from "services/api-assistant.js";
-import ItemRowPlayerAssist from "components/items/ItemRowPlayerAssist.js";
-import ItemRowClub from "components/items/ItemRowClub.js";
-import ItemRowUser from "components/items/ItemRowUser.js";
-import BoxMessage from "components/box/BoxMessage.js";
+import { Outlet } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import ButtonPlayerView from "components/buttons/ButtonPlayerView.js";
+import MenuPageUser from "bars/MenuPageUser.js";
+import { getUsers } from "services/api-assistant.js";
+import BoxScrollUp from "components/box/BoxScrollUp.js";
 
-interface PageUserProps {}
+interface PageUserProps {
+  yScrollPosition: number;
+  props: object;
+}
 
-const PageUser: React.FC < PageUserProps > = () => {
+const PageUser: React.FC < PageUserProps > = (props) => {
 
   const { address } = useParams();
   const [user, setUser] = useState(null);
-
-  const [players, setPlayers] = useState(null);
-  const [playerPage, setPlayerPage] = useState(0);
-  const [canLoadMorePlayers, setCanLoadMorePlayers] = useState(true);
-
-  const [playerView, setPlayerView] = useState(null);
 
   const fetchUser = () => {
     getUsers({
@@ -37,67 +27,27 @@ const PageUser: React.FC < PageUserProps > = () => {
     });
   }
 
-  const fetchPlayers = () => {
-    getPlayers({
-      handleSuccess: (d) => {
-        if (!players) {
-          setPlayers(d.data.getPlayers);
-        } else {
-          setPlayers(players.concat(d.data.getPlayers));
-        }
-
-        if (d.data.getPlayers.length < 500)
-          setCanLoadMorePlayers(false);
-
-        setPlayerPage(playerPage + 1)
-      },
-      handleError: (e) => console.log(e),
-      params: { owners: [user.id], skip: playerPage * 500 },
-    });
-  }
-
   useEffect(() => {
     fetchUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    if (user != null) {
-      fetchPlayers();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
-
   return (
-    <div id="PageUser">
-      <div className="container max-width-md px-4 py-5">
+    <div id="PageUser" className="w-100 h-100">
+      {props.yScrollPosition > 100
+        && <BoxScrollUp />
+      }
 
-        {user && players !== null
-          ? <div className="card d-flex mb-3 p-3 pt-2">
-            <div className="d-flex flex-column">
-              <div className="d-flex">
-                <div className="h4 flex-grow-1">
-                  User: {user.name}
-                </div>
-              </div>
-
-              <div className="d-flex justify-content-end mb-2">
-                <ButtonPlayerView
-                  selectedView={playerView}
-                  onChange={(v) => setPlayerView(v)}
-                />
-              </div>
-
-              {players.map((c) => (
-                <ItemRowPlayerAssist
-                  p={c}
-                  display={playerView}
-                />
-              ))}
-            </div>
-          </div>
-          : <LoadingSquare />
-        }
+      <div className="d-flex flex-column w-100 h-100">
+        <div className="flex-grow-0">
+          <MenuPageUser
+            user={user}
+            {...props}
+          />
+        </div>
+        <div className="flex-grow-1">
+          <Outlet context={user}/>
+        </div>
       </div>
     </div>
   );

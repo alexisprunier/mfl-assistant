@@ -29,12 +29,12 @@
 }
 
 #Menu .Menu-login i,
-#Menu .Menu-logout i {
+#Menu .Menu-hq i {
   font-size: 24px;
 }
 
 #Menu .Menu-login div,
-#Menu .Menu-logout div {
+#Menu .Menu-hq div {
   font-size: 8px;
 }
 
@@ -42,13 +42,9 @@
   color: #0dcaf0;
 }
 
-#Menu .Menu-logout {
-  color: #0dcaf0;
-}
-
-#Menu .Menu-logout:hover i,
-#Menu .Menu-logout:hover div {
-  color: #dc3545 !important;
+#Menu .Menu-hq:hover i,
+#Menu .Menu-hq:hover div {
+  color: #0dcaf0 !important;
 }
 
 @media (max-width: 768px) {
@@ -97,13 +93,15 @@
   }
 }
 
-#Menu a.active {
+#Menu a.active,
+#Menu a.active div {
   cursor: default;
   color: white !important;
 }
 
 
-#Menu a.active:hover i {
+#Menu a.active:hover i,
+#Menu a.active:hover div {
   color: white !important;
 }
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import "./Item.css";
 import ButtonMflClub from "components/buttons/ButtonMflClub.js";
+import ButtonMflManagerClub from "components/buttons/ButtonMflManagerClub.js";
 
 interface ItemRowClubProps {
   c: object;
@@ -30,6 +31,11 @@ const ItemRowClub: React.FC < ItemRowClubProps > = ({ c }) => {
           </div>
 
           <div className="d-flex flex-row flex-md-grow-0 justify-content-end">
+            <div className="me-1">
+              <ButtonMflManagerClub
+                clubId={c.id}
+              />
+            </div>
             <div>
               <ButtonMflClub
                 clubId={c.id}

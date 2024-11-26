@@ -12,9 +12,9 @@ import BoxMessage from "components/box/BoxMessage.js";
 import { useParams, useOutletContext } from 'react-router-dom';
 import ButtonPlayerView from "components/buttons/ButtonPlayerView.js";
 
-interface PagerUserPlayersProps {}
+interface PageUserPlayersProps {}
 
-const PagerUserPlayers: React.FC < PagerUserPlayersProps > = () => {
+const PageUserPlayers: React.FC < PageUserPlayersProps > = () => {
 
   const user = useOutletContext();
   const [players, setPlayers] = useState(null);
@@ -49,39 +49,56 @@ const PagerUserPlayers: React.FC < PagerUserPlayersProps > = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
+  useEffect(() => {
+    if (user !== null) {
+      fetchPlayers();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
-    <div id="PagerUserPlayers">
+    <div id="PageUserPlayers">
       <div className="container max-width-md px-4 py-5">
+        <div className="card d-flex mb-3 p-3 pt-2">
+          <div className="d-flex flex-column">
+            <div className="d-flex flex-column flex-md-row mb-3">
+              <div className="h4 flex-grow-1">
+                <i className="bi bi-person-badge-fill mx-1"/> Players
+              </div>
 
-        {user && players !== null
-          ? <div className="card d-flex mb-3 p-3 pt-2">
-            <div className="d-flex flex-column">
-              <div className="d-flex">
-                <div className="h4 flex-grow-1">
-                  Players
+              {user && players !== null
+                && <div className="d-flex justify-content-end">
+                  <ButtonPlayerView
+                    selectedView={playerView}
+                    onChange={(v) => setPlayerView(v)}
+                  />
                 </div>
-              </div>
-
-              <div className="d-flex justify-content-end mb-2">
-                <ButtonPlayerView
-                  selectedView={playerView}
-                  onChange={(v) => setPlayerView(v)}
-                />
-              </div>
-
-              {players.map((c) => (
-                <ItemRowPlayerAssist
-                  p={c}
-                  display={playerView}
-                />
-              ))}
+              }
             </div>
+
+            {user && players !== null
+              && <div>
+                {players.map((c) => (
+                  <ItemRowPlayerAssist
+                    p={c}
+                    display={playerView}
+                  />
+                ))}
+              </div>
+            }
+
+            {(!user || players === null)
+              && <div style={{ height: 300 }}>
+                <LoadingSquare
+                  height={300}
+                />
+              </div>
+            }
           </div>
-          : <LoadingSquare />
-        }
+        </div>
       </div>
     </div>
   );
 };
 
-export default PagerUserPlayers;
+export default PageUserPlayers;

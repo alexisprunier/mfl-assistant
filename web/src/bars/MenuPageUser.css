@@ -27,7 +27,8 @@
 }
 
 #MenuPageUser .nav-user {
-  color: #adb5bd !important;
+  background-color: #adb5bd;
+  color: #16191C !important;
   font-size: 28px !important;
   cursor: default !important;
 }

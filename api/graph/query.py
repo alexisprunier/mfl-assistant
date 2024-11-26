@@ -61,11 +61,16 @@ class Query(ObjectType):
 
         return notifications
 
-    get_clubs = List(ClubType, search=String(), skip=Int(), limit=Int(), sort=String(), order=Int())
+    get_clubs = List(ClubType, search=String(), owners=List(String), skip=Int(), limit=Int(), sort=String(), order=Int())
 
-    async def resolve_get_clubs(self, info, search=None, skip=0, limit=10, sort="_id", order=1):
+    async def resolve_get_clubs(self, info, search=None, owners=None, skip=0, limit=10, sort="_id", order=1):
 
         clubs = info.context["db"].clubs
+
+        filters = {}
+
+        if owners is not None:
+            filters["owner"] = {"$in": [ObjectId(o) for o in owners]}
 
         if search:
             words = [] if search is None else [w for w in search.split(" ") if len(w) > 1]
@@ -83,9 +88,15 @@ class Query(ObjectType):
                 ]
             }
 
-            clubs = clubs.find(regex_query)
+            filters = {
+                "$and": [
+                    filters,
+                    regex_query
+                ]
+            }
 
         clubs = await clubs \
+            .find(filters) \
             .sort(sort, -1 if order < 0 else 1) \
             .skip(skip) \
             .limit(limit) \

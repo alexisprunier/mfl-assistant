@@ -477,6 +477,7 @@ export const getPlayers = ({ handleSuccess = null, handleError = null, params })
           id,
           firstName,
           lastName,
+          age,
           overall,
           nationalities,
           positions,

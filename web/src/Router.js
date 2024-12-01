@@ -6,6 +6,8 @@ import PageHome from "pages/PageHome";
 import PageDash from "pages/PageDash";
 import PageTools from "pages/PageTools";
 import PageNotification from "pages/PageNotification.js";
+import PageNotificationMarketplace from "pages/pagenotification/PageNotificationMarketplace.js";
+import PageNotificationReport from "pages/pagenotification/PageNotificationReport.js";
 import PageUser from "pages/PageUser.js";
 import PageUserPlayers from "pages/pageuser/PageUserPlayers.js";
 import PageUserClubs from "pages/pageuser/PageUserClubs.js";
@@ -142,9 +144,29 @@ const Router: React.FC = (props) => {
             <Route
               path="notification"
               element={<PageNotification
+                yScrollPosition={yScrollPosition}
                 {...props}
               />}
-            />
+            >
+              <Route
+                index
+                element={<PageNotificationMarketplace
+                  {...props}
+                />}
+              />
+              {<Route
+                path="marketplace"
+                element={<PageNotificationMarketplace
+                  {...props}
+                />}
+              />}
+              <Route
+                path="report"
+                element={<PageNotificationReport
+                  {...props}
+                />}
+              />
+            </Route>
 
             {/* 404 */}
             <Route

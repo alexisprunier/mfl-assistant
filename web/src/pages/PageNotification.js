@@ -92,9 +92,9 @@ const PageNotification: React.FC < PageNotificationProps > = (props) => {
       {props.assistantUser && props.assistantUser.email && !props.assistantUser.isEmailConfirmed
         && <div className="d-flex h-100 justify-content-center align-items-center">
           <div className="fade-in">
-            <div className="card px-4 py-2">
+            <div className="card px-4 py-2" style={{ maxWidth: "400px" }}>
               <div className="my-1">
-                Please confirm your email address:
+                Please confirm your address by clicking the confirmation link received via email:
               </div>
 
               <div className="my-1">
@@ -104,6 +104,10 @@ const PageNotification: React.FC < PageNotificationProps > = (props) => {
                   value={props.assistantUser.email}
                   disabled={true}
                 />
+              </div>
+
+              <div className="my-3">
+                Once done, you can refresh this page.
               </div>
 
               <div className="d-flex justify-content-end my-1">

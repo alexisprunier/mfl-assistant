@@ -3,6 +3,7 @@ import "./Item.css";
 import ButtonMflPlayerInfo from "components/buttons/ButtonMflPlayerInfo.js";
 import ButtonMflPlayer from "components/buttons/ButtonMflPlayer.js";
 import MiscOverall from "components/misc/MiscOverall.js";
+import { dateToTimezonedString } from "utils/date.js";
 
 interface ItemSaleProps {
   s: object;
@@ -22,7 +23,7 @@ const ItemSale: React.FC < ItemSaleProps > = ({ s }) => {
           </div>
 
           <div className="d-flex flex-row flex-fill justify-content-end text-secondary">
-            {s.executionDate.replace('T', ' ')}
+            {dateToTimezonedString(s.executionDate)}
           </div>
         </div>
       </div>

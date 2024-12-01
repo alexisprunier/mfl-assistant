@@ -5,21 +5,31 @@ import { prettifyId } from "utils/graphql.js";
 
 interface ItemNotificationScopeProps {
   item: Object;
-  isSelected?: bool;
-  onSelect?: funct;
-  onDelete?: funct;
+  isSelected ? : bool;
+  onSelect ? : funct;
+  onDelete ? : funct;
 }
 
-const ItemNotificationScope: React.FC<ItemNotificationScopeProps> = ({ item, isSelected, onSelect, onDelete }) => {
+const ItemNotificationScope: React.FC < ItemNotificationScopeProps > = ({ item, isSelected, onSelect, onDelete }) => {
   const paramToIgnore = ["id", "type"];
 
-  const getParamCount = () => {
-    const c = Object.keys(item)
-      .filter((k) => paramToIgnore.indexOf(k) < 0)
-      .filter((k) => item[k])
-      .length;
+  const generateDescription = (criteria) => {
+    const descriptions = [];
 
-    return c + " parameter" + (c > 1 ? "s" : "");
+    for (const [key, value] of Object.entries(criteria)) {
+      if (value !== undefined && value !== null) {
+        // Extract the stat name (after "min" or "max") and convert to uppercase
+        const stat = key.slice(3).toUpperCase();
+
+        if (key.startsWith("min")) {
+          descriptions.push(`${stat} >= ${value}`);
+        } else if (key.startsWith("max")) {
+          descriptions.push(`${stat} <= ${value}`);
+        }
+      }
+    }
+
+    return descriptions.join(", ");
   }
 
   return (
@@ -31,19 +41,21 @@ const ItemNotificationScope: React.FC<ItemNotificationScopeProps> = ({ item, isS
       onClick={() => onSelect(item)}
     >
       <div className="d-flex flex-grow-0 px-1" style={{ width: 150 }}>
-        <i className="bi bi-square-fill pe-1"></i> {prettifyId(item.id)}
+        <i className="bi bi-alarm-fill pe-1"></i> {prettifyId(item.id)}
       </div>
-      <div className="d-flex flex-grow-0 px-1" style={{ width: 100 }}>
+      <div className="d-flex flex-grow-0 px-1" style={{ width: 150 }}>
         Type: {item.type}
       </div>
-      <div className="d-flex flex-grow-1 justify-content-md-center px-1">
-        {getParamCount()}
+      <div className="d-flex flex-grow-1 text-truncate px-1">
+        <div className="text-truncate">
+          {generateDescription(item)}
+        </div>
       </div>
       <div className="d-flex flex-grow-0 px-1 text-info">
         <PopupNotificationScope
           item={item}
           trigger={
-            <i className="bi bi-plus-circle-dotted"></i>
+            <i className="bi bi-pencil-square"/>
           }
           onDelete={onDelete}
         />

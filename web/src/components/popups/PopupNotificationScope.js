@@ -23,7 +23,7 @@ const PopupNotificationScope: React.FC < PopupNotificationScopeProps > = ({ trig
   const [positions, setPositions] = useState(undefined);
   const [nationalities, setNationalities] = useState(undefined);
 
-  const [minPrice, setMinPrice] = useState(item ?.minPrice? item.minPrice : undefined);
+  const [minPrice, setMinPrice] = useState(item?.minPrice ? item.minPrice : undefined);
   const [maxPrice, setMaxPrice] = useState(item?.maxPrice ? item.maxPrice : undefined);
   const [minAge, setMinAge] = useState(item?.minAge ? item.minAge : undefined);
   const [maxAge, setMaxAge] = useState(item?.maxAge ? item.maxAge : undefined);
@@ -56,7 +56,7 @@ const PopupNotificationScope: React.FC < PopupNotificationScopeProps > = ({ trig
         close();
       },
       params: {
-        user: assistantUser?.address,
+        user: assistantUser ? assistantUser.address : undefined,
         type,
         positions,
         nationalities,
@@ -127,7 +127,7 @@ const PopupNotificationScope: React.FC < PopupNotificationScopeProps > = ({ trig
 				className={"fade-in popup-md"}
 			>
 				{(close) => (
-					<div className="container bg-dark border border-info border-3 rounded-3 p-4">
+					<div className="container bg-dark overflow-auto border border-info border-3 rounded-3 p-4">
 						<div className="d-flex flex-row mb-3">
 							<div className="flex-grow-1">
 						  	<h2 className="text-white">
@@ -155,8 +155,7 @@ const PopupNotificationScope: React.FC < PopupNotificationScopeProps > = ({ trig
 									value={type}
 									onChange={(v) => setType(v.target.value)}
 								>
-									{typeValues
-										.map((v) => (
+									{typeValues.map((v) => (
 										<option value={v} key={v}>
 											{v.charAt(0).toUpperCase() + v.slice(1)}
 										</option>

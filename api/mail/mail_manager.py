@@ -94,6 +94,36 @@ async def send_sale_email(db, mail, notification, user, player_ids):
         raise
 
 
+async def sent_daily_progress_report_email(db, mail, user, data):
+    body = open("mail/templates/daily_progress_report.html", 'r').read()
+    body = body.format(
+        host=HOST,
+        data=data
+    )
+    body = _load_template(body)
+
+    message = MessageSchema(
+        subject="[MFL-A] Daily progress report",
+        recipients=[user["email"]],
+        subtype="html",
+        body=body,
+    )
+
+    try:
+        await mail.send_message(message)
+
+        update_data = {
+            "status": "sent",
+            "sending_date": datetime.datetime.now(),
+        }
+
+        await db.reports.insert_one(update_data)
+
+        return {"message": "Email sent successfully"}
+    except Exception:
+        raise
+
+
 def build_player_section(player_ids):
     player_section = "<div>"
 

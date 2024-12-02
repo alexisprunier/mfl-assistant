@@ -1,7 +1,7 @@
 from graphene import Mutation, ObjectType, String, Int, Field, ID, Boolean, List
 
 from decorator.require_token import require_token
-from graph.schema import UserType, NotificationScopeType, NotificationType, TeamType, TeamMemberType
+from graph.schema import UserType, NotificationScopeType, NotificationType, TeamType, TeamMemberType, ReportConfigurationType, ReportType
 import datetime
 import secrets
 from bson import ObjectId
@@ -83,18 +83,13 @@ class AddNotificationScope(Mutation):
 
     @require_token
     async def mutate(self, info, **kwargs):
-        user = await info.context["db"].users.find_one({"address": kwargs["user"]})
+        notification_scope = kwargs
+        notification_scope["status"] = "active"
+        notification_scope["user"] = info.context["user"]["_id"]
+        notification_scope["creation_date"] = datetime.datetime.now()
 
-        if user:
-            notification_scope = kwargs
-            notification_scope["status"] = "active"
-            notification_scope["user"] = user["_id"]
-            notification_scope["creation_date"] = datetime.datetime.now()
-
-            notification_scope = info.context["db"].notification_scopes.insert_one(notification_scope)
-            return AddNotificationScope(notification_scope=notification_scope)
-        else:
-            raise Exception("User not found")
+        notification_scope = info.context["db"].notification_scopes.insert_one(notification_scope)
+        return AddNotificationScope(notification_scope=notification_scope)
 
 
 class DeleteNotificationScope(Mutation):
@@ -105,9 +100,6 @@ class DeleteNotificationScope(Mutation):
 
     @require_token
     async def mutate(self, info, scope_id):
-        # user = await info.context["db"].users.find_one({"address": {"$eq": user_id}})
-
-        # if user:
         notification_scope = info.context["db"].notification_scopes.find_one({
             "_id": ObjectId(scope_id)
         })
@@ -117,8 +109,56 @@ class DeleteNotificationScope(Mutation):
             return DeleteNotificationScope(notification_scope=notification_scope)
         else:
             raise Exception("Scope not found")
-        # else:
-        #    raise Exception("User not found")
+
+
+class AddReportConfiguration(Mutation):
+    class Arguments:
+        type = String(required=True) # Enum.from_enum(ReportConfigurationTypeEnum)(required=True)
+        time = String(required=True)
+        
+    report_configuration = Field(lambda: ReportConfigurationType)
+
+    @require_token
+    async def mutate(self, info, **kwargs):
+        report_configuration = kwargs
+        report_configuration["status"] = "active"
+        report_configuration["user"] = info.context["user"]["_id"]
+        report_configuration["creation_date"] = datetime.datetime.now()
+
+        report_configuration = info.context["db"].report_configurations.insert_one(report_configuration)
+        return AddReportConfiguration(report_configuration=report_configuration)
+
+
+class UpdateReportConfiguration(Mutation):
+    class Arguments:
+        id = ID(required=True)
+        time = String()
+
+    status = Boolean()
+
+    @require_token
+    async def mutate(self, info, id, **kwargs):
+        await info.context["db"].report_configurations.update_one({"_id": ObjectId(id)}, {'$set': kwargs})
+        return UpdateReportConfiguration(status=True)
+
+
+class DeleteReportConfiguration(Mutation):
+    class Arguments:
+        id = String(required=True)
+
+    status = Boolean()
+
+    @require_token
+    async def mutate(self, info, id):
+        report_configuration = info.context["db"].report_configurations.find_one({
+            "_id": ObjectId(id)
+        })
+
+        if report_configuration:
+            info.context["db"].report_configurations.delete_one({'_id': ObjectId(id)})
+            return DeleteReportConfiguration(status=True)
+        else:
+            raise Exception("Report configuration not found")
 
 
 class AddNotification(Mutation):
@@ -279,3 +319,6 @@ class Mutation(ObjectType):
     add_team_members = AddTeamMembers.Field()
     update_team_member = UpdateTeamMember.Field()
     delete_team_member = DeleteTeamMember.Field()
+    add_report_configuration = AddReportConfiguration.Field()
+    update_report_configuration = UpdateReportConfiguration.Field()
+    delete_report_configuration = DeleteReportConfiguration.Field()

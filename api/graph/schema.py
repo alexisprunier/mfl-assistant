@@ -14,6 +14,10 @@ class NotificationScopeTypeEnum(enum.Enum):
     SALE = "sale"
 
 
+class ReportTypeEnum(enum.Enum):
+    DAILY_PROGRESS_REPORT = "daily_progress_report"
+
+
 class ClubStatusEnum(enum.Enum):
     FOUNDED = "FOUNDED"
     NOT_FOUNDED = "NOT_FOUNDED"
@@ -188,6 +192,36 @@ class NotificationType(ObjectType):
 
     async def resolve_notification_scope(self, info):
         return await info.context["db"].notification_scopes.find_one({"_id": self["notification_scope"]})
+
+
+class ReportConfigurationType(ObjectType):
+    id = ID(source='_id')
+    type = String() # Enum.from_enum(ReportConfigurationTypeEnum)
+    positions = List(lambda: String())
+    time = String()
+    creation_date = DateTime()
+    last_computation_date = DateTime()
+    user = Field(UserType)
+    reports = List(lambda: ReportType)
+
+    async def resolve_reports(self, info):
+        return await info.context["db"].reports \
+            .find({"report": ObjectId(str(self.id))}) \
+            .to_list(None)
+
+    async def resolve_user(self, info):
+        return await info.context["db"].users.find_one({"_id": self["user"]})
+
+
+class ReportType(ObjectType):
+    id = ID(source='_id')
+    status = String()
+    creation_date = DateTime()
+    sending_date = DateTime()
+    report_configuration = Field(ReportConfigurationType)
+
+    async def resolve_notification_scope(self, info):
+        return await info.context["db"].report_configurations.find_one({"_id": self["report_configuration"]})
 
 
 class NonceType(ObjectType):

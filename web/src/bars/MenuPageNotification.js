@@ -33,7 +33,7 @@ const MenuPageNotification: React.FC < MenuPageNotificationProps > = (props) => 
             </Link>
           </li>
 
-          {/*<li className="nav-item align-self-end lh-1 px-2">
+          <li className="nav-item align-self-end lh-1 px-2">
             <Link
               to="report"
               className={"nav-link"
@@ -42,7 +42,7 @@ const MenuPageNotification: React.FC < MenuPageNotificationProps > = (props) => 
               <i class="bi bi-calendar3 mx-1"></i>
               <span className="d-none d-md-inline ms-1">Daily report</span>
             </Link>
-          </li>*/}
+          </li>
 
           <Popup
             trigger={

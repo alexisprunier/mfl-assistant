@@ -203,6 +203,72 @@ export const deleteNotificationScope = ({ handleSuccess = null, handleError = nu
   (e) => defaultHandleError(handleError, e),
 );
 
+/* Report */
+
+export const getReportConfigurations = ({ handleSuccess = null, handleError = null }) => post(
+  getGraphQLEndpoint(),
+  JSON.stringify({
+    query: `{
+        getReportConfigurations {
+          id,
+          type,
+          time
+        }
+      }`,
+  }),
+  (v) => defaultHandleSuccess(handleSuccess, v),
+  (e) => defaultHandleError(handleError, e),
+);
+
+export const addReportConfiguration = ({ handleSuccess = null, handleError = null, params }) => post(
+  getGraphQLEndpoint(),
+  JSON.stringify({
+    query: `
+      mutation {
+        addReportConfiguration(${jsonToParams(params)}) {
+          reportConfiguration {
+            id,
+            type,
+            time
+          }
+        }
+      }
+    `,
+  }),
+  (v) => defaultHandleSuccess(handleSuccess, v),
+  (e) => defaultHandleError(handleError, e),
+);
+
+export const updateReportConfiguration = ({ handleSuccess = null, handleError = null, params }) => post(
+  getGraphQLEndpoint(),
+  JSON.stringify({
+    query: `
+      mutation {
+        updateReportConfiguration(${jsonToParams(params)}) {
+          status
+        }
+      }
+    `,
+  }),
+  (v) => defaultHandleSuccess(handleSuccess, v),
+  (e) => defaultHandleError(handleError, e),
+);
+
+export const deleteReportConfiguration = ({ handleSuccess = null, handleError = null, params }) => post(
+  getGraphQLEndpoint(),
+  JSON.stringify({
+    query: `
+      mutation {
+        deleteReportConfiguration(${jsonToParams(params)}) {
+          status
+        }
+      }
+    `,
+  }),
+  (v) => defaultHandleSuccess(handleSuccess, v),
+  (e) => defaultHandleError(handleError, e),
+);
+
 /* Clubs */
 
 export const getClubs = ({ handleSuccess = null, handleError = null, params }) => post(

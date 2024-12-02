@@ -9,331 +9,107 @@ import PopupNotificationScope from "components/popups/PopupNotificationScope.js"
 import ItemNotificationScope from "components/items/ItemNotificationScope.js";
 import ItemNotification from "components/items/ItemNotification.js";
 import ItemPlayer from "components/items/ItemPlayer.js";
-import {
-  getNotificationScopesAndNotifications,
-  getNotificationsOfNotificationScope,
-  sendConfirmationMail,
-} from "services/api-assistant.js";
+import { getReportConfigurations, addReportConfiguration, deleteReportConfiguration } from "services/api-assistant.js";
 import { validateEmail } from "utils/re.js";
 
 interface PageNotificationReportProps {}
 
 const PageNotificationReport: React.FC < PageNotificationReportProps > = (props) => {
-  const [notificationScopes, setNotificationScopes] = useState(null);
-  const [notifications, setNotifications] = useState(null);
-  const [selectedNotificationScope, setSelectedNotificationScope] = useState(null);
-  const [selectedNotification, setSelectedNotification] = useState(null);
-  const [emailValue, setEmailValue] = useState("");
+  const [reportConfigurations, setReportConfigurations] = useState(null);
 
-  const fetchNotificationScopesAndNotifications = () => {
-    getNotificationScopesAndNotifications({
+  const fetchReportConfigurations = () => {
+    getReportConfigurations({
       handleSuccess: (v) => {
-        setNotificationScopes(v.data.getNotificationScopes);
-        setNotifications(v.data.getNotifications);
+        setReportConfigurations(v.data.getReportConfigurations);
       },
     });
   }
 
-  const fetchNotificationsOfNotificationScope = () => {
-    if (selectedNotificationScope) {
-      getNotificationsOfNotificationScope({
+  const addOrDeleteReportConfiguration = (c) => {
+    if (!c) {
+      addReportConfiguration({
         handleSuccess: (v) => {
-          if (notifications) {
-            setNotifications(notifications.concat(v.data.getNotifications));
+          nm.info("The report has been activated");
+          fetchReportConfigurations();
+        },
+        params: {
+          type: "daily_progress_report",
+          time: "21:54",
+        },
+      });
+    } else {
+      deleteReportConfiguration({
+        handleSuccess: (v) => {
+          if (v.errors) {
+            nm.warning("Error while deactivating the report");
           } else {
-            setNotifications(v.data.getNotifications);
+            nm.info("The report has been deactivated");
+            fetchReportConfigurations();
           }
         },
         params: {
-          notificationScope: selectedNotificationScope.id,
-          skip: notifications ? notifications.length : 0,
-          limit: 10,
-          order: -1,
-        }
+          id: c.id,
+        },
       });
     }
   }
 
   useEffect(() => {
-    if (props.assistantUser && props.assistantUser.email) {
-      fetchNotificationScopesAndNotifications();
+    if (props.assistantUser) {
+      fetchReportConfigurations();
     }
   }, [props.assistantUser]);
 
   useEffect(() => {
-    setNotifications(null);
-    setSelectedNotification(null);
-  }, [selectedNotificationScope]);
-
-  useEffect(() => {
-    if (notifications === null) {
-      if (selectedNotificationScope && selectedNotificationScope.id) {
-        fetchNotificationsOfNotificationScope();
-      } else {
-        setNotifications([])
-      }
+    if (props.assistantUser) {
+      fetchReportConfigurations();
     }
-  }, [notifications]);
+  }, []);
 
-  const getContent = () => {
-    if (!props.assistantUser) {
-      return (
-        <div className="d-flex h-100 justify-content-center align-items-center">
-    <ButtonLogin
-      className="PageNotificationReport-ButtonLogin"
-      flowUser={props.flowUser}
-      assistantUser={props.assistantUser}
-      logout={props.logout}
-      content={<BoxLogin/>}
-    />
-        </div>
-      )
-    }
-
-    if (!props.assistantUser) {
-      return <div className="d-flex h-100">
-        <LoadingSquare />
-      </div>;
-    }
-
-    if (!props.assistantUser.email) {
-      return (
-        <div className="d-flex h-100 justify-content-center align-items-center">
-          <div className="fade-in">
-            <div className="card px-4 py-2">
-              <div className="my-1">
-                Please provide your email:
-              </div>
-
-              <div className="my-1">
-                <input
-                  type="email"
-                  className="form-control w-100 text-white"
-                  value={emailValue}
-                  onChange={(v) => setEmailValue(v.target.value)}
-                  placeholder={"email@example.com..."}
-                  autoFocus
-                />
-              </div>
-
-              <div className="d-flex justify-content-end my-1">
-                <button
-                  className="btn btn-info text-white"
-                  onClick={() => props.updateAssistantUser(emailValue)}
-                  disabled={!validateEmail(emailValue)}
-                >
-                  Confirm
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )
-    }
-
-    return (
-      <div className="d-flex flex-column h-100 w-100 fade-in">
-        <div className="d-flex flex-column flex-md-row flex-md-grow-0 flex-basis-300">
-          <div className="card c d-flex flex-column flex-md-grow-0 flex-basis-300 m-2 p-3 pt-2">
+  return (
+    <div id="PageNotificationReport" className="h-100 w-100">
+      <div className="container max-width-md h-100 px-2 px-md-4 py-4">
+        <div className="d-flex flex-column h-100 w-100 fade-in">
+          <div className="card d-flex flex-column flex-md-grow-0 m-2 p-3 pt-2">
             <div className="d-flex flex-row mb-2">
-              <h4 className="flex-grow-1">Email information</h4>
+              <h4 className="flex-grow-1">Daily report</h4>
             </div>
 
-            <div className="d-flex overflow-auto">
-              {props.assistantUser
+            <div className="d-flex">
+              {reportConfigurations !== null
                 ? <div>
-                  <div className="mb-2">
-                    <div className="lh-1">Address:</div>
-                    <div className="text-white">{props.assistantUser.email}</div>
-                  </div>
-                  <div className="mb-2">
-                    <div className="lh-1">Status:</div>
-                    <div className="text-white">
-                      {props.assistantUser.isEmailConfirmed
-                        ? <div className="text-info">Confirmed</div>
-                        : <div className="text-warning">Waiting for confirmation</div>
-                      }
-                    </div>
-                  </div>
-                  <div className="my-2">
-                    {!props.assistantUser.isEmailConfirmed
-                      && <button
-                        className="d-block btn btn-info btn-sm text-white mb-1"
-                        onClick={() => sendConfirmationMail({
-                          handleSuccess: (v) => nm.info("The confirmation link has been sent via email"),
-                          handleError: (v) => nm.error("Error while sending the email"),
-                          params: {
-                            address: props.assistantUser.address,
-                            email: props.assistantUser.email,
-                          }
-                        })}
-                      >
-                        <i className="bi bi-envelope-arrow-up-fill"></i> Send new confirmation link
-                      </button>
-                    }
-                    <button
-                      className="d-block btn btn-danger btn-sm text-white mb-1"
-                      onClick={() => props.updateAssistantUser(null)}
-                    >
-                      <i className="bi bi-trash3"></i> Delete email
-                    </button>
-                  </div>
-                </div>
-                : <LoadingSquare />
-              }
-            </div>
-          </div>
-
-          <div className="card d-flex flex-column flex-md-grow-1 m-2 p-3 pt-2 max-height-md-300">
-            <div className="d-flex flex-row mb-2">
-              <h4 className="flex-grow-1">Notification scopes</h4>
-
-              {notificationScopes?.length > 0
-                && <PopupNotificationScope
-                  trigger={
-                    <button className="btn btn-info btn-sm text-white">
-                      <i className="bi bi-plus"></i>
-                    </button>
-                  }
-                  assistantUser={props.assistantUser}
-                  onClose={fetchNotificationScopesAndNotifications}
-                />
-              }
-            </div>
-
-            <div className="d-flex flex-fill overflow-auto">
-              <UtilConditionalRender
-                value={notificationScopes}
-                renderUndefined={() => <LoadingSquare />}
-                renderEmpty={
-                  () => <BoxMessage
-                    content={
-                      <div>
-                        <div>No scope found</div>
-                        <PopupNotificationScope
-                          trigger={
-                            <button
-                              className="btn btn-info btn-sm text-white">
-                              <i className="bi bi-plus"></i> Add scope
-                            </button>
-                          }
-                          assistantUser={props.assistantUser}
-                          onClose={fetchNotificationScopesAndNotifications}
-                        />
-                      </div>
-                    }
+                  <input
+                    type="checkbox"
+                    className="me-1 mb-2"
+                    value={reportConfigurations.filter((c) => c.type === "daily_progress_report").length > 0}
+                    onClick={() => addOrDeleteReportConfiguration(
+                      reportConfigurations.filter((c) => c.type === "daily_progress_report").pop()
+                    )}
                   />
-                }
-                renderOk={
-                  () => <div className="w-100">
-                    {notificationScopes.map((s) => (
-                      <ItemNotificationScope
-                        key={s.id}
-                        item={s}
-                        isSelected={selectedNotificationScope?.id === s.id}
-                        onSelect={(s) => {
-                          setSelectedNotificationScope(
-                            selectedNotificationScope?.id !== s.id ? s : null
-                          );
-                        }}
-                        onDelete={() => {
-                          setNotificationScopes(null);
-                          setNotifications(null);
-                        }}
+                  <span className="text-info">
+                    <i class="bi bi-cone-striped me-1"></i>BETA:
+                  </span>
+                  &nbsp;Activate the 24H progression report
+                  {reportConfigurations.filter((c) => c.type === "daily_progress_report").length > 0
+                    && <div className="ms-4 fade-in">
+                      Choose time: <input
+                        type="time"
+                        className="form-control"
+                        value={reportConfigurations.filter((c) => c.type === "daily_progress_report").pop().time}
                       />
-                    ))}
-                  </div>
-                }
-              />
+                    </div>
+                  }
+                </div>
+                : <div className="w-100" style={{ height: "300px" }}>
+                  <LoadingSquare />
+                </div>
+              }
             </div>
           </div>
         </div>
-
-      <
-      div className = "d-flex flex-column flex-md-row flex-md-grow-1" >
-      <div className="card d-flex flex-column flex-md-grow-1 m-2 p-3 pt-2">
-            <div className="d-flex flex-row mb-2">
-              <h4 className="flex-grow-1">Notifications</h4>
-            </div>
-
-            <div className="d-flex flex-fill overflow-auto">
-              <UtilConditionalRender
-                value={notifications}
-                renderUndefined={() => <LoadingSquare />}
-                renderEmpty={() => <BoxMessage content={"No notification found"} />}
-                renderOk={
-                  () => <div className="d-flex flex-column flex-fill height-md-0">
-                    {notifications.map((n) => (
-                      <ItemNotification
-                        key={n.id}
-                        item={n}
-                        isSelected={selectedNotification?.id === n.id}
-                        onSelect={(n) => {
-                          setSelectedNotification(
-                            selectedNotification?.id !== n.id ? n : null
-                          );
-                        }}
-                      />
-                    ))}
-
-                    {selectedNotificationScope && notifications
-                      && <div
-                        className="d-flex justify-content-start"
-                      >
-                        <button
-                          className="btn btn-sm btn-link"
-                          onClick={fetchNotificationsOfNotificationScope}
-                        >
-                          Load more
-                        </button>
-                      </div>
-                    }
-                  </div>
-                }
-              />
-            </div>
-          </div>
-
-      <
-      div className = "card d-flex flex-column flex-md-grow-0 flex-basis-200 m-2 p-3 pt-2" >
-      <div className="d-flex flex-row mb-2">
-              <h4 className="flex-grow-1">Players</h4>
-            </div>
-
-      <
-      div className = "d-flex flex-fill overflow-auto justify-content-center" >
-      <UtilConditionalRender
-                value={selectedNotification?.playerIds}
-                renderUndefined={() => <BoxMessage content={"No notification selected"} />
-    }
-    renderEmpty = {
-      () => <BoxMessage content={"No player to display"} />
-    }
-    renderOk = {
-      () => <div className="d-flex flex-column height-md-0">
-                    {selectedNotification.playerIds.map((id) => (
-                      <ItemPlayer
-                        key={id}
-                        id={id}
-                      />
-                    ))}
-                  </div>
-    }
-    /> < /
-    div > <
-      /div> < /
-    div > <
-      /div>
-  );
-}
-
-return (
-  <div id="PageNotificationReport" className="h-100 w-100">
-      <div className="container-xl h-100 w-100 px-4 py-5">
-        {getContent()}
       </div>
     </div>
-);
+  );
 };
 
 export default PageNotificationReport;

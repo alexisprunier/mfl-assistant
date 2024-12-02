@@ -1,5 +1,5 @@
 from graphene import ObjectType, String, Int, Schema, Field, List, ID, Boolean, Date
-from graph.schema import UserType, SaleType, ContractType, NotificationScopeType, NotificationType, CountType, DataPointType, ClubType, TeamType, TeamMemberType, PlayerType
+from graph.schema import UserType, SaleType, ContractType, NotificationScopeType, NotificationType, CountType, DataPointType, ClubType, TeamType, TeamMemberType, PlayerType, ReportConfigurationType, ReportType
 from bson import ObjectId
 from decorator.require_token import require_token
 from decorator.add_token_if_exists import add_token_if_exists
@@ -60,6 +60,14 @@ class Query(ObjectType):
             .to_list(length=None)
 
         return notifications
+
+    get_report_configurations = List(ReportConfigurationType)
+
+    @require_token
+    async def resolve_get_report_configurations(self, info):
+        return await info.context["db"].report_configurations \
+            .find({"user": info.context["user"]["_id"]}) \
+            .to_list(length=None)
 
     get_clubs = List(ClubType, search=String(), owners=List(String), skip=Int(), limit=Int(), sort=String(), order=Int())
 

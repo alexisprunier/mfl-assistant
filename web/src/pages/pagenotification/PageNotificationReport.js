@@ -34,7 +34,7 @@ const PageNotificationReport: React.FC < PageNotificationReportProps > = (props)
         },
         params: {
           type: "daily_progress_report",
-          time: "21:54",
+          time: "22:30",
         },
       });
     } else {

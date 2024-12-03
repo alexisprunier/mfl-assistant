@@ -9,7 +9,7 @@ import PopupNotificationScope from "components/popups/PopupNotificationScope.js"
 import ItemNotificationScope from "components/items/ItemNotificationScope.js";
 import ItemNotification from "components/items/ItemNotification.js";
 import ItemPlayer from "components/items/ItemPlayer.js";
-import { getReportConfigurations, addReportConfiguration, deleteReportConfiguration } from "services/api-assistant.js";
+import { getReportConfigurations, addReportConfiguration, deleteReportConfiguration, updateReportConfiguration } from "services/api-assistant.js";
 import { validateEmail } from "utils/re.js";
 
 interface PageNotificationReportProps {}
@@ -54,6 +54,20 @@ const PageNotificationReport: React.FC < PageNotificationReportProps > = (props)
     }
   }
 
+  const modifyReportConfiguration = (id, params) => {
+    console.log(id, params);
+    updateReportConfiguration({
+      handleSuccess: (v) => {
+        nm.info("The report has been updated");
+        fetchReportConfigurations();
+      },
+      params: {
+        id: id,
+        ...params,
+      },
+    });
+  }
+
   useEffect(() => {
     if (props.assistantUser) {
       fetchReportConfigurations();
@@ -81,7 +95,7 @@ const PageNotificationReport: React.FC < PageNotificationReportProps > = (props)
                   <input
                     type="checkbox"
                     className="me-1 mb-2"
-                    value={reportConfigurations.filter((c) => c.type === "daily_progress_report").length > 0}
+                    defaultChecked={reportConfigurations.filter((c) => c.type === "daily_progress_report").length > 0}
                     onClick={() => addOrDeleteReportConfiguration(
                       reportConfigurations.filter((c) => c.type === "daily_progress_report").pop()
                     )}
@@ -92,10 +106,14 @@ const PageNotificationReport: React.FC < PageNotificationReportProps > = (props)
                   &nbsp;Activate the 24H progression report
                   {reportConfigurations.filter((c) => c.type === "daily_progress_report").length > 0
                     && <div className="ms-4 fade-in">
-                      Choose time: <input
+                      Choose time (UTC): <input
                         type="time"
                         className="form-control"
-                        value={reportConfigurations.filter((c) => c.type === "daily_progress_report").pop().time}
+                        defaultValue={reportConfigurations.filter((c) => c.type === "daily_progress_report").pop().time}
+                        onBlur={(v) => modifyReportConfiguration(
+                          reportConfigurations.filter((c) => c.type === "daily_progress_report").pop().id,
+                          { time: v.target.value }
+                        )}
                       />
                     </div>
                   }

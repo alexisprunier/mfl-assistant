@@ -50,6 +50,7 @@ async def main(db, mail):
             if len(user) > 0:
                 user = user.pop()
                 data = await _get_progress_data(db, user["address"])
+                data = {key: value for key, value in data.items() if value is not None}
                 await sent_daily_progress_report_email(db, mail, user, data)
 
     await upsert_vars(db, last_computation_var, new_computation_time)

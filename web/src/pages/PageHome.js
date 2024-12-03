@@ -119,7 +119,10 @@ const PageHome: React.FC < PageHomeProps > = ({ yScrollPosition }) => {
       link: "https://www.flowty.io/",
       countries: [],
     },
-
+    {
+      name: "MFL Flow Stats",
+      link: "https://flipsidecrypto.xyz/adriaparcerisas/mfl-stats-on-flow-r4GRp_",
+    },
   ];
 
   const initiatives = [{

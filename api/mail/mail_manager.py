@@ -98,7 +98,8 @@ async def sent_daily_progress_report_email(db, mail, user, data):
     body = open("mail/templates/daily_progress_report.html", 'r').read()
     body = body.format(
         host=HOST,
-        data=data
+        player_section=build_player_progress_section(data),
+        webapp_url=get_webapp_url()
     )
     body = _load_template(body)
 
@@ -125,15 +126,61 @@ async def sent_daily_progress_report_email(db, mail, user, data):
 
 
 def build_player_section(player_ids):
-    player_section = "<div>"
+    player_section = "<div style='font-family: Arial, sans-serif;'>"
 
     for i in player_ids:
-        player_section += f"<img" \
-                          f" src='https://d13e14gtps4iwl.cloudfront.net/players/{i}/card_512.png'" \
-                          f" style='width: 150px'" \
-                          f"/>" \
-                          f"<a href='https://app.playmfl.com/players/{i}' target='_blank'>See on MFL</button>" \
-                          f"<a href='https://mflplayer.info/player/{i}' target='_blank'>See on MFL Player Info</button>"
+        player_section += (
+            "<table style='width: 100%; border-spacing: 10px; margin-bottom: 20px;'>"
+            "<tr>"
+            f"<td style='vertical-align: top; width: 160px;'>"
+            f"<img src='https://d13e14gtps4iwl.cloudfront.net/players/{i}/card_512.png' "
+            f"style='width: 80px;' />"
+            "</td>"
+            "<td style='vertical-align: top;'>"
+            "<div>"
+            f"<a href='https://app.playmfl.com/players/{i}' target='_blank' "
+            f"style='text-decoration: none; color: #0dcaf0; font-weight: bold; margin-right: 10px;'>See on MFL</a>"
+            f"<br/><a href='https://mflplayer.info/player/{i}' target='_blank' "
+            f"style='text-decoration: none; color: #0dcaf0; font-weight: bold;'>See on MFL Player Info</a>"
+            "</div>"
+            "</td>"
+            "</tr>"
+            "</table>"
+            "<hr style='border: 0; border-top: 1px solid #555;' />"
+        )
+
+    player_section += "</div>"
+
+    return player_section
+
+def build_player_progress_section(data):
+    player_section = "<div style='font-family: Arial, sans-serif;'>"
+
+    for i, progress in data.items():
+        player_section += (
+            "<table style='width: 100%; border-spacing: 10px;'>"
+            "<tr>"
+            f"<td style='vertical-align: top; width: 110px;'>"
+            f"<img src='https://d13e14gtps4iwl.cloudfront.net/players/{i}/card_512.png' "
+            f"style='width: 80px;' />"
+            "</td>"
+            "<td style='vertical-align: top;'>"
+            "<div>"
+            f"<a href='https://app.playmfl.com/players/{i}' target='_blank' "
+            f"style='text-decoration: none; color: #0dcaf0; font-weight: bold; margin-right: 10px;'>See on MFL</a>"
+            f"<br/><a href='https://mflplayer.info/player/{i}' target='_blank' "
+            f"style='text-decoration: none; color: #0dcaf0; font-weight: bold;'>See on MFL Player Info</a>"
+            "</div>"
+            "<div style='margin-top: 10px;'>"
+        )
+
+        for attribute, value in progress.items():
+            if attribute == "overall":
+                player_section += f"<div style='font-size: 20px; font-weight: bold; color: red'>{attribute}: +{value}</div>"
+            else:
+                player_section += f"<div style='font-size: 14px;'>{attribute}: +{value}</div>"
+
+        player_section += "</div></td></tr></table><hr style='border: 0; border-top: 1px solid #555;' />"
 
     player_section += "</div>"
 

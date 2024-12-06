@@ -59,20 +59,33 @@ const PageUserClubs: React.FC < PageUserClubsProps > = () => {
       if (displayStandings) {
         setStandings({});
 
-        clubs.map((c) => {
-          getClubStandings({
-            handleSuccess: (v) => {
-              setStandings({
-                ...standings,
-                [c.id]: v
-              });
-            },
-            handleError: (e) => {
-              console.log(e);
-            },
-            params: { id: c.id }
-          });
-        })
+        const clubIds = clubs.map((c) => c.id);
+        let remainingIds = [...clubIds];
+
+        const fetchNextStanding = () => {
+          const nextId = remainingIds[0];
+          remainingIds = remainingIds.slice(1);
+
+          console.log(nextId);
+          if (nextId) {
+            getClubStandings({
+              handleSuccess: (v) => {
+                setStandings((prevStandings) => ({
+                  ...prevStandings,
+                  [nextId]: v,
+                }));
+                fetchNextStanding();
+              },
+              handleError: (e) => {
+                console.log(`Error fetching standings for club ID ${nextId}:`, e);
+                fetchNextStanding();
+              },
+              params: { id: nextId },
+            });
+          }
+        };
+
+        fetchNextStanding();
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [displayStandings]);

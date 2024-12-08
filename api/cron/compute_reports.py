@@ -16,15 +16,12 @@ logger.setLevel(logging.INFO)
 
 
 async def main(db, mail):
-    logger.warning("STAAAART")
     users = await _get_users(db)
     user_ids = [u["_id"] for u in users]
 
     last_computation = await db.vars.find_one({"var": last_computation_var})
     last_computation_time = last_computation.get("value") if last_computation else None
     new_computation_time = datetime.datetime.now()
-
-    logger.warning(f"TIIIMES {last_computation_time} {new_computation_time}")
 
     if last_computation_time is None or (new_computation_time - last_computation_time).total_seconds() > 600:
         logger.warning("Skipping computation as the difference is greater than 10 minutes.")
@@ -73,7 +70,7 @@ async def _get_daily_progress_report_configurations(db):
 
     configurations = await db.report_configurations.find(filters).to_list(length=None)
 
-    logger.warning(f"Number of active progress report: {len(configurations)}")
+    logger.warning(f"PROGRESS REPORT: Number of active progress report: {len(configurations)}")
     
     return configurations
 

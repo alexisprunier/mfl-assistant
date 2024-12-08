@@ -66,7 +66,6 @@ const PageUserClubs: React.FC < PageUserClubsProps > = () => {
           const nextId = remainingIds[0];
           remainingIds = remainingIds.slice(1);
 
-          console.log(nextId);
           if (nextId) {
             getClubStandings({
               handleSuccess: (v) => {

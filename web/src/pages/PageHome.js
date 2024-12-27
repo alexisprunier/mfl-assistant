@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import BoxScrollDown from "components/box/BoxScrollDown.js";
 import BoxScrollUp from "components/box/BoxScrollUp.js";
 import BoxSoonToCome from "components/box/BoxSoonToCome.js";
+import ControllerFlagCountry from "components/controllers/ControllerFlagCountry.js";
 import LoadingSquare from "components/loading/LoadingSquare.js";
 import MiscHorizontalScroll from "components/misc/MiscHorizontalScroll.js";
 import MiscFlag from "components/misc/MiscFlag.js";
@@ -20,6 +21,7 @@ const PageHome: React.FC < PageHomeProps > = ({ yScrollPosition }) => {
   const navigate = useNavigate();
 
   const [searchValue, setSearchValue] = useState("");
+  const [selectedCountries, setSelectedCountries] = useState([]);
 
   const contentCreators = [{
       name: "WenDirkCast",
@@ -90,6 +92,13 @@ const PageHome: React.FC < PageHomeProps > = ({ yScrollPosition }) => {
       link: "https://www.youtube.com/@CoachTimTV",
       countries: ["FRANCE"],
       platforms: ['youtube']
+    },
+    {
+      name: "frenchmystiq",
+      image: "https://pbs.twimg.com/profile_images/1651729224355442688/S-GAvtMq_400x400.jpg",
+      link: "https://linktr.ee/frenchmystiq",
+      countries: ["FRANCE"],
+      platforms: ['youtube', 'twitch']
     },
   ];
 
@@ -193,6 +202,21 @@ const PageHome: React.FC < PageHomeProps > = ({ yScrollPosition }) => {
     }
   };
 
+  const getUsedCountries = () => {
+    const dataArrays = [contentCreators, tools, initiatives, clubSocials];
+    const countriesSet = new Set();
+
+    dataArrays.forEach((array) => {
+      array.forEach((item) => {
+        if (item.countries && item.countries.length > 0) {
+          item.countries.forEach((country) => countriesSet.add(country));
+        }
+      });
+    });
+
+    return Array.from(countriesSet);
+  };
+
   return (
     <div id="PageHome" className="h-100">
       {window.innerWidth < 768 && yScrollPosition < 100
@@ -245,7 +269,7 @@ const PageHome: React.FC < PageHomeProps > = ({ yScrollPosition }) => {
                   </div>
 
                   <div className="media-mfl">
-                    <a className="h4" target="_blank" href="https://app.playmfl.com/users/0xdf26376de6cba19e">
+                    <a className="h4" target="_blank" href="https://app.playmfl.com/users/0xdf26376de6cba19e" rel="noreferrer">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 55.541065 17.780001"
@@ -263,13 +287,13 @@ const PageHome: React.FC < PageHomeProps > = ({ yScrollPosition }) => {
                   </div>
 
                   <div className="media-discord">
-                    <a className="h4" target="_blank" href="https://discord.com/users/_alexisp.">
+                    <a className="h4" target="_blank" href="https://discord.com/users/_alexisp." rel="noreferrer">
                       <i className="bi bi-discord text-info"></i>
                     </a>
                   </div>
 
                   <div className="media-x">
-                    <a className="text-white h5 ms-1" target="_blank" href="https://twitter.com/Alexis_MFL">
+                    <a className="text-white h5 ms-1" target="_blank" href="https://twitter.com/Alexis_MFL" rel="noreferrer">
                       <i className="bi bi-twitter-x text-info"></i>
                     </a>
                   </div>
@@ -369,14 +393,26 @@ const PageHome: React.FC < PageHomeProps > = ({ yScrollPosition }) => {
 
           <div className="d-flex flex-column flex-grow-1 flex-md-basis-50p py-md-3 pe-md-3" style={{ minWidth: "0" }}>
             <div className="d-flex flex-column card flex-grow-0 py-2 pb-3 px-3 m-2 m-md-0 mb-md-2" style={{ minWidth: "0" }}>
-            <BoxMflActivity/>
+              <BoxMflActivity/>
             </div>
 
-    <div className="d-flex flex-column card flex-grow-1 flex-fill py-2 px-3 m-2 mb-4 m-md-0 overflow-auto" style={{ minWidth: "0" }}>
-    <h4><i className="bi bi-person-hearts me-1"></i> Community</h4>
+            <div className="d-flex flex-column card flex-grow-1 flex-fill py-2 px-3 m-2 mb-4 m-md-0 overflow-auto" style={{ minWidth: "0" }}>
+              <div className="d-flex flex-column flex-md-row">
+                <div className="d-flex flex-grow-1">
+                  <h4><i className="bi bi-person-hearts me-1"></i> Community</h4>
+                </div>
 
-    <div className = "d-flex flex-column flex-fill" >
-    <div className="position-relative">
+                <div className="d-flex flex-grow-0 mb-1 mb-md-2 align-self-end justify-content-center">
+                  <ControllerFlagCountry
+                    countries={getUsedCountries()}
+                    selectedCountries={selectedCountries}
+                    onChange={(v) => setSelectedCountries(v)}
+                  />
+                </div>
+              </div>
+
+              <div className="d-flex flex-column flex-fill">
+                <div className="position-relative">
                 <div className="d-flex flex-column flex-grow-1 mb-1">
                   <div>
                     Content creators
@@ -386,17 +422,28 @@ const PageHome: React.FC < PageHomeProps > = ({ yScrollPosition }) => {
                     <MiscHorizontalScroll
                       content={
                         <div className="d-flex flex-row">
-                          {contentCreators.map((o) => (
-                            <div>
-                              <ItemCardCommunityMember
-                                name={o.name}
-                                link={o.link}
-                                countries={(o.countries)}
-                                image={o.image}
-                                platforms={o.platforms}
-                              />
-                            </div>
-                          ))}
+                          {contentCreators
+                            .filter(
+                              c => !c.countries
+                              || c.countries.length === 0
+                              || selectedCountries.length === 0
+                              || c.countries.find(country => selectedCountries.includes(country))
+                            )
+                            .map(value => ({ value, sortKey: Math.random() }))
+                            .sort((a, b) => a.sortKey - b.sortKey)
+                            .map(item => item.value)
+                            .map((o) => (
+                              <div>
+                                <ItemCardCommunityMember
+                                  name={o.name}
+                                  link={o.link}
+                                  countries={(o.countries)}
+                                  image={o.image}
+                                  platforms={o.platforms}
+                                />
+                              </div>
+                            ))
+                          }
                         </div>
                       }
                     />
@@ -411,7 +458,17 @@ const PageHome: React.FC < PageHomeProps > = ({ yScrollPosition }) => {
     <MiscHorizontalScroll
                       content={
                         <div className="d-flex flex-row">
-                          {tools.map((o) => (
+                          {tools
+                            .filter(
+                              tool => !tool.countries
+                              || tool.countries.length === 0
+                              || selectedCountries.length === 0
+                              || tool.countries.find(country => selectedCountries.includes(country))
+                            )
+                            .map(value => ({ value, sortKey: Math.random() }))
+                            .sort((a, b) => a.sortKey - b.sortKey)
+                            .map(item => item.value)
+                            .map((o) => (
                             <div>
                               <ItemCardCommunityMember
                                 name={o.name}
@@ -435,7 +492,17 @@ const PageHome: React.FC < PageHomeProps > = ({ yScrollPosition }) => {
   <MiscHorizontalScroll
                       content={
                         <div className="d-flex flex-row">
-                          {initiatives.map((o) => (
+                          {initiatives
+                            .filter(
+                              c => !c.countries
+                              || c.countries.length === 0
+                              || selectedCountries.length === 0
+                              || c.countries.find(country => selectedCountries.includes(country))
+                            )
+                            .map(value => ({ value, sortKey: Math.random() }))
+                            .sort((a, b) => a.sortKey - b.sortKey)
+                            .map(item => item.value)
+                            .map((o) => (
                             <div>
                               <ItemCardCommunityMember
                                 name={o.name}
@@ -460,7 +527,17 @@ const PageHome: React.FC < PageHomeProps > = ({ yScrollPosition }) => {
   <MiscHorizontalScroll
                       content={
                         <div className="d-flex flex-row">
-                          {clubSocials.map((o) => (
+                          {clubSocials
+                            .filter(
+                              c => !c.countries
+                              || c.countries.length === 0
+                              || selectedCountries.length === 0
+                              || c.countries.find(country => selectedCountries.includes(country))
+                            )
+                            .map(value => ({ value, sortKey: Math.random() }))
+                            .sort((a, b) => a.sortKey - b.sortKey)
+                            .map(item => item.value)
+                            .map((o) => (
                             <div>
                               <ItemCardCommunityMember
                                 name={o.name}

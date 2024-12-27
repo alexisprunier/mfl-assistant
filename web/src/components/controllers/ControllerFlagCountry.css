@@ -1,0 +1,7 @@
+.ControllerFlagCountry .disabled {
+  opacity: .4;
+}
+
+.ControllerFlagCountry div {
+  cursor: pointer;
+}

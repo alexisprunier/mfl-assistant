@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { getMatches } from "services/api-mfl.js";
 import ItemCardClub from "components/items/ItemCardClub.js";
 import ItemCardMatch from "components/items/ItemCardMatch.js";
+import PopupSelectClub from "components/popups/PopupSelectClub.js";
 
 interface PageToolsMatchObservatoryProps {}
 
@@ -11,7 +12,7 @@ const PageToolsMatchObservatory: React.FC<PageToolsMatchObservatoryProps> = (
   props
 ) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [clubId, setClubId] = useState(717);
+  const [club, setClub] = useState(null);
   const [matches, setMatches] = useState(null);
 
   const [opponentClubs, setOpponentClubs] = useState(null);
@@ -21,7 +22,7 @@ const PageToolsMatchObservatory: React.FC<PageToolsMatchObservatoryProps> = (
   const [selectedOpponentMatchIds, setSelectedOpponentMatchIds] = useState([]);
 
   const fetchMatches = (triggerLoading = true) => {
-    if (props.assistantUser) {
+    if (props.assistantUser && club) {
       if (triggerLoading) {
         setIsLoading(true);
       }
@@ -32,7 +33,7 @@ const PageToolsMatchObservatory: React.FC<PageToolsMatchObservatoryProps> = (
         },
         handleError: (e) => console.log(e),
         params: {
-          squadId: clubId,
+          squadId: club.id,
           limit: 15,
           past: true,
         },
@@ -48,15 +49,15 @@ const PageToolsMatchObservatory: React.FC<PageToolsMatchObservatoryProps> = (
     if (props.assistantUser) {
       fetchMatches();
     }
-  }, [props.assistantUser, clubId]);
+  }, [props.assistantUser, club]);
 
   useEffect(() => {
-    if (matches && clubId) {
+    if (matches && club) {
       const stats = {};
 
       matches.forEach((match) => {
-        const isHome = match.homeSquad?.id === clubId;
-        const isAway = match.awaySquad?.id === clubId;
+        const isHome = match.homeSquad?.id === club.id;
+        const isAway = match.awaySquad?.id === club.id;
 
         if (isHome || isAway) {
           const opponentClub = isHome
@@ -79,11 +80,10 @@ const PageToolsMatchObservatory: React.FC<PageToolsMatchObservatoryProps> = (
         Object.values(stats).sort((a, b) => b.playCount - a.playCount)
       );
     }
-  }, [matches, clubId]);
+  }, [matches, club]);
 
   useEffect(() => {
     if (selectedOpponentId && matches) {
-      console.log("dddd", selectedOpponentId, matches);
       setOpponentMatches(
         matches.filter(
           (match) =>
@@ -118,9 +118,14 @@ const PageToolsMatchObservatory: React.FC<PageToolsMatchObservatoryProps> = (
               </div>
 
               <div className="d-flex justify-content-center">
-                <button className="btn btn-info text-white">
-                  <i className="bi bi-check-lg" /> Select club
-                </button>
+                <PopupSelectClub
+                  trigger={
+                    <button className="btn btn-info text-white">
+                      <i className="bi bi-check-lg" /> Select club
+                    </button>
+                  }
+                  onConfirm={(c) => setClub(c)}
+                />
               </div>
             </div>
 

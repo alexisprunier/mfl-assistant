@@ -421,7 +421,7 @@ const PageHome: React.FC<PageHomeProps> = ({ yScrollPosition }) => {
                     </div>
                     <div className="d-flex card bg-black flex-grow-1 flex-shrink-1 flex-basis-0 min-width-0">
                       <Link
-                        to="/tools/team-builder"
+                        to="/tools/match-observatory"
                         className={"nav-link text-white p-1"}
                       >
                         <i className="bi bi-clipboard-data-fill mx-1"></i>

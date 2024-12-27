@@ -1,45 +1,51 @@
-import BoxMessage from "components/box/BoxMessage.js";
-import ItemRowPlayerAssist from "components/items/ItemRowPlayerAssist.js";
 import React, { useState } from "react";
 import Popup from "reactjs-popup";
+import ItemCardClub from "components/items/ItemCardClub.js";
+import LoadingSquare from "components/loading/LoadingSquare.js";
+import { getClubs } from "services/api-assistant.js";
+import { useOutletContext } from "react-router-dom";
 
-interface PopupSelectPlayerProps {
+interface PopupSelectClubProps {
   trigger: Object;
   onClose: func;
   onConfirm: func;
-  teamMembers: Object;
 }
 
-const PopupSelectPlayer: React.FC<PopupSelectPlayerProps> = ({
+const PopupSelectClub: React.FC<PopupSelectClubProps> = ({
   trigger,
   onClose,
   onConfirm,
-  teamMembers,
 }) => {
-  const [selectedTeamMember, setSelectedTeamMember] = useState(null);
+  const user = useOutletContext();
 
-  const confirm = (close) => {
-    if (onConfirm) {
-      onConfirm(selectedTeamMember);
-    }
+  const [clubs, setClubs] = useState(null);
+  const [selectedClub, setSelectedClub] = useState(null);
 
-    close();
+  const onOpen = () => {
+    getClubs({
+      handleSuccess: (d) => {
+        setClubs(d.data.getClubs);
+      },
+      handleError: (e) => console.log(e),
+      params: { owners: [user.id] },
+    });
   };
 
   return (
-    <div className="PopupSelectPlayer">
+    <div className="PopupSelectClub">
       <Popup
         trigger={trigger}
         modal
         closeOnDocumentClick
         onClose={onClose && onClose()}
+        onOpen={() => onOpen()}
         className={"fade-in popup-xl"}
       >
         {(close) => (
           <div className="container bg-dark d-flex flex-column border border-info border-3 rounded-3 p-4">
             <div className="d-flex flex-row flex-grow-0 mb-3">
               <div className="flex-grow-1">
-                <h2 className="text-white">Select team member</h2>
+                <h2 className="text-white">Select club</h2>
               </div>
               <div className="flex-grow-0">
                 <button className={"btn"} onClick={close}>
@@ -49,21 +55,17 @@ const PopupSelectPlayer: React.FC<PopupSelectPlayerProps> = ({
             </div>
 
             <div className="d-flex flex-grow-1 flex-column mb-3 overflow-auto">
-              {teamMembers ? (
-                teamMembers
-                  .filter((p) => p.player && !p.position)
-                  .map((p) => (
-                    <ItemRowPlayerAssist
-                      p={p.player}
-                      isSelected={
-                        selectedTeamMember &&
-                        selectedTeamMember.player.id === p.player.id
-                      }
-                      onSelect={() => setSelectedTeamMember(p)}
-                    />
-                  ))
+              {clubs ? (
+                clubs.map((p) => (
+                  <ItemCardClub
+                    id={p.id}
+                    name={p.name}
+                    onClick={() => setSelectedClub(p)}
+                    selected={selectedClub.id === p.id}
+                  />
+                ))
               ) : (
-                <BoxMessage content={"No team member found"} />
+                <LoadingSquare />
               )}
             </div>
 
@@ -71,8 +73,8 @@ const PopupSelectPlayer: React.FC<PopupSelectPlayerProps> = ({
               <div>
                 <button
                   className="btn btn-info text-white"
-                  disabled={!selectedTeamMember}
-                  onClick={() => confirm(close)}
+                  disabled={!selectedClub}
+                  onClick={() => onConfirm(close)}
                 >
                   Confirm
                 </button>
@@ -85,4 +87,4 @@ const PopupSelectPlayer: React.FC<PopupSelectPlayerProps> = ({
   );
 };
 
-export default PopupSelectPlayer;
+export default PopupSelectClub;

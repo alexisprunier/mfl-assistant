@@ -1,14 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { flushSync } from "react-dom";
-import { useSearchParams } from "react-router-dom";
-import LoadingSquare from "components/loading/LoadingSquare";
-import { getClubs, getUsers } from "services/api-assistant.js";
-import { getClubStandings } from "services/api-mfl.js";
-import ItemRowClub from "components/items/ItemRowClub.js";
-import ItemRowUser from "components/items/ItemRowUser.js";
 import ButtonMflCompetition from "components/buttons/ButtonMflCompetition.js";
-import BoxMessage from "components/box/BoxMessage.js";
-import { useParams, useOutletContext } from "react-router-dom";
+import ItemRowClub from "components/items/ItemRowClub.js";
+import LoadingSquare from "components/loading/LoadingSquare";
+import React, { useEffect, useState } from "react";
+import { useOutletContext } from "react-router-dom";
+import { getClubs } from "services/api-assistant.js";
+import { getClubStandings } from "services/api-mfl.js";
 
 interface PageUserClubsProps {}
 

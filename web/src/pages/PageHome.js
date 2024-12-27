@@ -348,10 +348,11 @@ const PageHome: React.FC<PageHomeProps> = ({ yScrollPosition }) => {
                 </div>
               </div>
 
-              <div className="d-flex flex-column card my-1 pt-1 pb-2 px-3 m-2 m-md-0">
-                <div className="d-flex flex-column my-1 pt-1">
-                  <div className="d-flex h4 pt-1 px-2">
-                    <i className="bi bi-clipboard-data-fill mx-1"></i> Dashboard
+              <div className="d-flex flex-column card my-1 pt-1 pb-1 px-3 m-2 m-md-0">
+                <div className="d-flex flex-column mt-1 pt-1">
+                  <div className="d-flex h5">
+                    <i className="bi bi-clipboard-data me-2"></i>
+                    Dashboard
                   </div>
 
                   <div className="d-flex flex-column flex-md-row">
@@ -382,9 +383,9 @@ const PageHome: React.FC<PageHomeProps> = ({ yScrollPosition }) => {
                   </div>
                 </div>
 
-                <div className="d-flex flex-column my-1 pt-1">
-                  <div className="d-flex h4 pt-1 px-2">
-                    <i className="bi bi-wrench-adjustable-circle-fill mx-1"></i>
+                <div className="d-flex flex-column mt-1 pt-1">
+                  <div className="d-flex h5">
+                    <i className="bi bi-wrench-adjustable-circle me-2"></i>
                     Tools
                   </div>
 
@@ -404,9 +405,11 @@ const PageHome: React.FC<PageHomeProps> = ({ yScrollPosition }) => {
                         className={"nav-link text-white p-1"}
                       >
                         <i className="bi bi bi-journal-bookmark-fill mx-1"></i>
-                        Contract eval.
+                        Contract evaluation
                       </Link>
                     </div>
+                  </div>
+                  <div className="d-flex flex-column flex-md-row max-height-md-200">
                     <div className="d-flex card bg-black flex-grow-1 flex-shrink-1 flex-basis-0 min-width-0">
                       <Link
                         to="/tools/team-builder"
@@ -416,25 +419,40 @@ const PageHome: React.FC<PageHomeProps> = ({ yScrollPosition }) => {
                         Team builder
                       </Link>
                     </div>
+                    <div className="d-flex card bg-black flex-grow-1 flex-shrink-1 flex-basis-0 min-width-0">
+                      <Link
+                        to="/tools/team-builder"
+                        className={"nav-link text-white p-1"}
+                      >
+                        <i className="bi bi-clipboard-data-fill mx-1"></i>
+                        Match observatory
+                      </Link>
+                    </div>
                   </div>
                 </div>
 
                 <div className="d-flex flex-column mt-1 py-2">
+                  <div className="d-flex h5">
+                    <i className="bi bi-alarm me-2"></i>
+                    Notification center
+                  </div>
+
                   <div className="d-flex flex-column flex-md-row">
                     <div className="d-flex card bg-black flex-grow-1 flex-shrink-1 flex-basis-0 min-width-0 justify-content-center p-1 me-0 me-md-1">
                       <Link
-                        to="/notification"
+                        to="/notification/marketplace"
                         className={"nav-link text-white"}
                       >
-                        <i className="bi bi-alarm-fill mx-1"></i> Notification
-                        center
+                        <i className="bi bi-shop mx-1"></i> Marketplace
                       </Link>
                     </div>
 
                     <div className="d-flex card bg-black flex-grow-1 flex-shrink-1 flex-basis-0 min-width-0 justify-content-center p-1">
-                      <Link className={"nav-link text-dark"}>
-                        <i className="bi bi-cone-striped mx-1"></i> Soon to
-                        come!
+                      <Link
+                        to="/notification/report"
+                        className={"nav-link text-white"}
+                      >
+                        <i className="bi bi-calendar3 mx-1"></i> Daily report
                       </Link>
                     </div>
                   </div>

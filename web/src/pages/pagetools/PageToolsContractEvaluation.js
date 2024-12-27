@@ -1,25 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { NotificationManager as nm } from "react-notifications";
-import FilterContainerPlayer from "components/filters/FilterContainerPlayer.js";
-import BoxWarning from "components/box/BoxWarning.js";
-import { getContracts } from "services/api-assistant.js";
-import BoxSoonToCome from "components/box/BoxSoonToCome.js";
 import BoxMessage from "components/box/BoxMessage.js";
-import Count from "components/counts/Count.js";
+import ChartScatterPlayerContracts from "components/charts/ChartScatterPlayerContracts.js";
 import ItemRowContract from "components/items/ItemRowContract.js";
 import LoadingSquare from "components/loading/LoadingSquare.js";
+import React, { useState } from "react";
+import { getContracts } from "services/api-assistant.js";
 import { positions, scarcity } from "utils/player.js";
-import ChartScatterPlayerContracts from "components/charts/ChartScatterPlayerContracts.js";
 
 interface PageToolsContractEvaluationProps {}
 
-const PageToolsContractEvaluation: React.FC < PageToolsContractEvaluationProps > = () => {
+const PageToolsContractEvaluation: React.FC<
+  PageToolsContractEvaluationProps
+> = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [overall, setOverall] = useState(undefined);
   const [position, setPosition] = useState(undefined);
-  const [rate, setRate] = useState(undefined);
 
   const [contracts, setContracts] = useState(null);
   const [hideZeros, setHideZeros] = useState(false);
@@ -34,12 +29,18 @@ const PageToolsContractEvaluation: React.FC < PageToolsContractEvaluationProps >
         setContracts(v.data.getContracts);
       },
       params: {
-        minOvr: scarcity.map((s) => s.overallMin).indexOf(overall) < 0 ? overall - 1 : overall,
-        maxOvr: scarcity.map((s) => s.overallMax).indexOf(overall) < 0 ? overall + 1 : overall,
+        minOvr:
+          scarcity.map((s) => s.overallMin).indexOf(overall) < 0
+            ? overall - 1
+            : overall,
+        maxOvr:
+          scarcity.map((s) => s.overallMax).indexOf(overall) < 0
+            ? overall + 1
+            : overall,
         positions: [position],
-      }
+      },
     });
-  }
+  };
 
   return (
     <div id="PageToolsContractEvaluation" className="h-100 w-100">
@@ -59,8 +60,10 @@ const PageToolsContractEvaluation: React.FC < PageToolsContractEvaluationProps >
                   step="1"
                   className="form-control w-100 mb-1"
                   value={overall}
-                  onChange={(v) => {setOverall(parseInt(v.target.value))}}
-                  placeholder={"OVR*"}
+                  onChange={(v) => {
+                    setOverall(parseInt(v.target.value));
+                  }}
+                  placeholder={"OVR"}
                   autoFocus
                 />
                 <select
@@ -69,7 +72,7 @@ const PageToolsContractEvaluation: React.FC < PageToolsContractEvaluationProps >
                   onChange={(v) => setPosition(v.target.value)}
                   placeholder={"Position*"}
                 >
-                  <option value={""} key={null}/>
+                  <option value={""} key={null} />
                   {positions.map((p) => (
                     <option value={p.name} key={p.name}>
                       {p.name}
@@ -86,7 +89,7 @@ const PageToolsContractEvaluation: React.FC < PageToolsContractEvaluationProps >
               </div>
             </div>
 
-            <div className="card d-flex flex-column flex-fill m-2 p-3 pt-2">
+            {/*<div className="card d-flex flex-column flex-fill m-2 p-3 pt-2">
               <div className="d-flex flex-row">
                 <div className="d-flex">
                   <h4 className="flex-grow-1">Advised rates</h4>
@@ -96,14 +99,16 @@ const PageToolsContractEvaluation: React.FC < PageToolsContractEvaluationProps >
               <div className="d-flex flex-fill overflow-hidden">
                 <BoxSoonToCome />
               </div>
-            </div>
+            </div>*/}
           </div>
 
           <div className="d-flex flex-column flex-md-column flex-md-grow-1">
             <div className="card d-flex flex-column flex-md-grow-1 flex-md-shrink-1 flex-md-basis-auto flex-basis-0 m-2 p-3 pt-2">
               <div className="d-flex flex-row">
                 <div className="d-flex">
-                  <h4 className="flex-grow-1">Similar players under contract</h4>
+                  <h4 className="flex-grow-1">
+                    Similar players under contract
+                  </h4>
                 </div>
 
                 <div className="d-flex flex-fill overflow-auto justify-content-end align-items-end">
@@ -120,13 +125,14 @@ const PageToolsContractEvaluation: React.FC < PageToolsContractEvaluationProps >
               </div>
 
               <div className="d-flex flex-fill overflow-hidden ratio-sm ratio-sm-4x3">
-                {!contracts && !isLoading
-                  ? <BoxMessage content="No criteria selected"/>
-                  : <ChartScatterPlayerContracts
+                {!contracts && !isLoading ? (
+                  <BoxMessage content="No criteria selected" />
+                ) : (
+                  <ChartScatterPlayerContracts
                     contracts={contracts}
                     hideZeros={hideZeros}
                   />
-                }
+                )}
               </div>
             </div>
 
@@ -138,23 +144,17 @@ const PageToolsContractEvaluation: React.FC < PageToolsContractEvaluationProps >
               </div>
 
               <div className="d-flex flex-fill flex-column overflow-auto">
-                {!contracts && !isLoading
-                  && <BoxMessage content="No criteria selected"/>
-                }
+                {!contracts && !isLoading && (
+                  <BoxMessage content="No criteria selected" />
+                )}
 
-                {isLoading
-                  && <LoadingSquare />
-                }
+                {isLoading && <LoadingSquare />}
 
-                {contracts && !isLoading
-                  && contracts
+                {contracts &&
+                  !isLoading &&
+                  contracts
                     .filter((c) => !hideZeros || c.revenueShare > 0)
-                    .map((c) => (
-                      <ItemRowContract
-                        c={c}
-                      />
-                    ))
-                }
+                    .map((c) => <ItemRowContract c={c} />)}
               </div>
             </div>
           </div>

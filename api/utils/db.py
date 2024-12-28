@@ -175,9 +175,13 @@ async def build_and_upsert_sale(db, mfl_sale, player=None, club=None):
 
     if player is not None:
         sale["player"] = player["_id"]
+        sale["overall"] = player["overall"]
+        sale["age"] = player["age"]
+        sale["positions"] = player["positions"]
 
     if club is not None:
         sale["club"] = club["_id"]
+        sale["division"] = club["division"]
     
     return await upsert_sale(db, sale)
 

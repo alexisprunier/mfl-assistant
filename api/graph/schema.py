@@ -103,6 +103,10 @@ class SaleType(ObjectType):
     execution_date = DateTime()
     player = Field(PlayerType)
     club = Field(ClubType)
+    overall = Int()
+    positions = List(String)
+    division = Int()
+    age = Int()
 
     async def resolve_player(self, info):
         return await info.context["db"].players.find_one({"_id": self["player"]})

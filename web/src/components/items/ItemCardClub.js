@@ -30,13 +30,13 @@ const ItemCardSale: React.FC<ItemCardSaleProps> = ({
           <img
             src={`https://d13e14gtps4iwl.cloudfront.net/u/clubs/${id}/logo.png?v=63c386597972f1fcbdcef019a7b453c8`}
             alt={`${name} logo`}
-            style={{ height: "50px" }}
+            style={{ height: "40px" }}
           />
         </div>
 
         <div className="d-flex flex-column flex-grow-1 ms-1">
-          <div className="h5 my-1 d-inline text-truncate">{name}</div>
-          <div>{text}</div>
+          <div className="h6 my-1 d-inline text-truncate">{name}</div>
+          <div className="small">{text}</div>
         </div>
       </div>
     </div>

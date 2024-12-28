@@ -351,3 +351,7 @@ button.btn-link:hover {
 .text-main {
   color: #0dcaf0 !important;
 }
+
+.text-small {
+  font-size: .875em !important;
+}

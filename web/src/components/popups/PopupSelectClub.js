@@ -1,23 +1,22 @@
-import React, { useState } from "react";
-import Popup from "reactjs-popup";
 import ItemCardClub from "components/items/ItemCardClub.js";
 import LoadingSquare from "components/loading/LoadingSquare.js";
+import React, { useState } from "react";
+import Popup from "reactjs-popup";
 import { getClubs } from "services/api-assistant.js";
-import { useOutletContext } from "react-router-dom";
 
 interface PopupSelectClubProps {
   trigger: Object;
   onClose: func;
   onConfirm: func;
+  userId: String;
 }
 
 const PopupSelectClub: React.FC<PopupSelectClubProps> = ({
   trigger,
   onClose,
   onConfirm,
+  userId,
 }) => {
-  const user = useOutletContext();
-
   const [clubs, setClubs] = useState(null);
   const [selectedClub, setSelectedClub] = useState(null);
 
@@ -27,8 +26,16 @@ const PopupSelectClub: React.FC<PopupSelectClubProps> = ({
         setClubs(d.data.getClubs);
       },
       handleError: (e) => console.log(e),
-      params: { owners: [user.id] },
+      params: { owners: [userId] },
     });
+  };
+
+  const onButtonConfirm = (close) => {
+    if (onConfirm) {
+      onConfirm(selectedClub);
+    }
+
+    close();
   };
 
   return (
@@ -61,11 +68,13 @@ const PopupSelectClub: React.FC<PopupSelectClubProps> = ({
                     id={p.id}
                     name={p.name}
                     onClick={() => setSelectedClub(p)}
-                    selected={selectedClub.id === p.id}
+                    selected={selectedClub && selectedClub.id === p.id}
                   />
                 ))
               ) : (
-                <LoadingSquare />
+                <div className="ratio ratio-16x9 w-100">
+                  <LoadingSquare />
+                </div>
               )}
             </div>
 
@@ -74,7 +83,7 @@ const PopupSelectClub: React.FC<PopupSelectClubProps> = ({
                 <button
                   className="btn btn-info text-white"
                   disabled={!selectedClub}
-                  onClick={() => onConfirm(close)}
+                  onClick={() => onButtonConfirm(close)}
                 >
                   Confirm
                 </button>

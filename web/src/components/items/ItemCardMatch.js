@@ -1,5 +1,5 @@
 import React from "react";
-import { unixTimestampToDayString } from "utils/date";
+import { unixTimestampToDateTimeString } from "utils/date";
 
 interface MatchData {
   id: number;
@@ -63,11 +63,11 @@ const ItemCardMatch: React.FC<ItemCardMatchProps> = ({
           />
         </div>
 
-        <div className="match-info text-center text-white">
-          <div className="score">
+        <div className="match-info text-center">
+          <div className="score text-white">
             {match.homeScore} - {match.awayScore}
           </div>
-          <div className="status">{match.status}</div>
+          <div className="status text-small">{match.status}</div>
         </div>
 
         <div
@@ -82,8 +82,8 @@ const ItemCardMatch: React.FC<ItemCardMatchProps> = ({
         </div>
       </div>
 
-      <div className="text-center time">
-        {unixTimestampToDayString(match.startDate)}
+      <div className="text-center text-small time">
+        {unixTimestampToDateTimeString(match.startDate)}
       </div>
     </div>
   );

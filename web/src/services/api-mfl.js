@@ -58,6 +58,9 @@ export const getPlayerSales = ({ handleSuccess, handleError, params }) =>
 
 /* CLUBS */
 
+export const getClub = ({ handleSuccess, handleError, id }) =>
+  get(getMflApiEndpoint() + "clubs/" + id, handleSuccess, handleError);
+
 export const getClubSales = (handleSuccess, handleError, params) =>
   get(
     getMflApiEndpoint() +

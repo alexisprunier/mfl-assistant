@@ -2,7 +2,7 @@ import Menu from "bars/Menu";
 import Page404 from "pages/Page404";
 import PageDash from "pages/PageDash";
 import PageDashClubs from "pages/pagedash/PageDashClubs.js";
-import PageDashMap from "pages/pagedash/PageDashMap.js";
+import PageUserMap from "pages/pageuser/PageUserMap.js";
 import PageDashMarketplace from "pages/pagedash/PageDashMarketplace.js";
 import PageDashPlayers from "pages/pagedash/PageDashPlayers.js";
 import PageHome from "pages/PageHome";
@@ -65,6 +65,7 @@ const Router: React.FC = (props) => {
               <Route index element={<PageUserPlayers />} />
               <Route path="players" element={<PageUserPlayers />} />
               <Route path="clubs" element={<PageUserClubs />} />
+              <Route path="map" element={<PageUserMap />} />
             </Route>
             <Route
               path="dash"
@@ -74,7 +75,6 @@ const Router: React.FC = (props) => {
               <Route path="marketplace" element={<PageDashMarketplace />} />
               <Route path="players" element={<PageDashPlayers />} />
               <Route path="clubs" element={<PageDashClubs />} />
-              <Route path="map" element={<PageDashMap />} />
             </Route>
             <Route
               path="tools"

@@ -1,21 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { flushSync } from 'react-dom';
-import { useSearchParams } from 'react-router-dom';
-import LoadingSquare from "components/loading/LoadingSquare";
-import ButtonMflPlayerInfo from "components/buttons/ButtonMflPlayerInfo.js";
-import ButtonMflPlayer from "components/buttons/ButtonMflPlayer.js";
-import { getPlayers, getUsers } from "services/api-assistant.js";
-import ItemRowPlayerAssist from "components/items/ItemRowPlayerAssist.js";
-import ItemRowClub from "components/items/ItemRowClub.js";
-import ItemRowUser from "components/items/ItemRowUser.js";
-import BoxMessage from "components/box/BoxMessage.js";
-import { useParams, useOutletContext } from 'react-router-dom';
 import ButtonPlayerView from "components/buttons/ButtonPlayerView.js";
+import ItemRowPlayerAssist from "components/items/ItemRowPlayerAssist.js";
+import LoadingSquare from "components/loading/LoadingSquare";
+import React, { useEffect, useState } from "react";
+import { useOutletContext } from "react-router-dom";
+import { getPlayers } from "services/api-assistant.js";
 
 interface PageUserPlayersProps {}
 
-const PageUserPlayers: React.FC < PageUserPlayersProps > = () => {
-
+const PageUserPlayers: React.FC<PageUserPlayersProps> = () => {
   const user = useOutletContext();
   const [players, setPlayers] = useState(null);
   const [playerPage, setPlayerPage] = useState(0);
@@ -32,15 +24,14 @@ const PageUserPlayers: React.FC < PageUserPlayersProps > = () => {
           setPlayers(players.concat(d.data.getPlayers));
         }
 
-        if (d.data.getPlayers.length < 500)
-          setCanLoadMorePlayers(false);
+        if (d.data.getPlayers.length < 500) setCanLoadMorePlayers(false);
 
-        setPlayerPage(playerPage + 1)
+        setPlayerPage(playerPage + 1);
       },
       handleError: (e) => console.log(e),
       params: { owners: [user.id], skip: playerPage * 500 },
     });
-  }
+  };
 
   useEffect(() => {
     if (user != null) {
@@ -63,37 +54,32 @@ const PageUserPlayers: React.FC < PageUserPlayersProps > = () => {
           <div className="d-flex flex-column">
             <div className="d-flex flex-column flex-md-row mb-3">
               <div className="h4 flex-grow-1">
-                <i className="bi bi-person-badge-fill mx-1"/> Players
+                <i className="bi bi-person-badge-fill mx-1" /> Players
               </div>
 
-              {user && players !== null
-                && <div className="d-flex justify-content-end">
+              {user && players !== null && (
+                <div className="d-flex justify-content-end">
                   <ButtonPlayerView
                     selectedView={playerView}
                     onChange={(v) => setPlayerView(v)}
                   />
                 </div>
-              }
+              )}
             </div>
 
-            {user && players !== null
-              && <div>
+            {user && players !== null && (
+              <div>
                 {players.map((c) => (
-                  <ItemRowPlayerAssist
-                    p={c}
-                    display={playerView}
-                  />
+                  <ItemRowPlayerAssist p={c} display={playerView} />
                 ))}
               </div>
-            }
+            )}
 
-            {(!user || players === null)
-              && <div style={{ height: 300 }}>
-                <LoadingSquare
-                  height={300}
-                />
+            {(!user || players === null) && (
+              <div style={{ height: 300 }}>
+                <LoadingSquare height={300} />
               </div>
-            }
+            )}
           </div>
         </div>
       </div>

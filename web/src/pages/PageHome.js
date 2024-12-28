@@ -108,6 +108,14 @@ const PageHome: React.FC<PageHomeProps> = ({ yScrollPosition }) => {
         countries: ["FRANCE"],
         platforms: ["youtube", "twitch"],
       },
+      {
+        name: "McBrideAce",
+        image:
+          "https://pbs.twimg.com/profile_images/1674870536906629140/OSOxCQRz_400x400.jpg",
+        link: "https://www.youtube.com/@McBrideAce",
+        countries: ["ENGLAND"],
+        platforms: ["youtube"],
+      },
     ];
     return c.sort(() => Math.random() - 0.5);
   });

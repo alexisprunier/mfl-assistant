@@ -1,0 +1,17 @@
+
+#PageUserMap .leaflet-container {
+    background-color: #262626 !important;
+}
+
+#PageUserMap .leaflet-control-zoom {
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
+#PageUserMap .FilterClub-wrapper {
+    z-index: 500;
+}
+
+#PageUserMap .Warning-wrapper {
+    z-index: 500;
+}

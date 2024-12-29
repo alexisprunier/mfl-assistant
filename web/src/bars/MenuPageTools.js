@@ -55,7 +55,7 @@ const MenuPageTools: React.FC<MenuPageToolsProps> = (props) => {
             <span className="d-none d-md-inline ms-1">Team builder</span>
           </Link>
         </li>
-        {/*<li className="nav-item align-self-end lh-1 px-2">
+        <li className="nav-item align-self-end lh-1 px-2">
           <Link
             to="match-observatory"
             className={
@@ -68,7 +68,7 @@ const MenuPageTools: React.FC<MenuPageToolsProps> = (props) => {
             <i className="bi bi-clipboard-data-fill mx-1"></i>
             <span className="d-none d-md-inline ms-1">Match observatory</span>
           </Link>
-        </li>*/}
+        </li>
       </ul>
     </nav>
   );

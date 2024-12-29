@@ -1,9 +1,10 @@
 import BoxLogin from "components/box/BoxLogin.js";
 import ButtonLogin from "components/buttons/ButtonLogin.js";
 import React, { useEffect, useState } from "react";
-import { getMatches, getClub } from "services/api-mfl.js";
+import { getMatches, getClub, getMatchReport } from "services/api-mfl.js";
 import ItemCardClub from "components/items/ItemCardClub.js";
 import ItemCardMatch from "components/items/ItemCardMatch.js";
+import ItemCardMatchReport from "components/items/ItemCardMatchReport.js";
 import LoadingSquare from "components/loading/LoadingSquare.js";
 import PopupSelectClub from "components/popups/PopupSelectClub.js";
 
@@ -22,7 +23,9 @@ const PageToolsMatchObservatory: React.FC<PageToolsMatchObservatoryProps> = (
   const [opponentMatches, setOpponentMatches] = useState(null);
   const [selectedOpponentMatchIds, setSelectedOpponentMatchIds] = useState([]);
 
-  const [matchStats, setMatchStats] = useState({});
+  const [matchReports, setMatchReports] = useState({});
+  const [currentAggregatedReport, setCurrentAggregatedReport] = useState({});
+  const [aggregatedReports, setAggregatedReports] = useState([]);
 
   const fetchMatches = () => {
     if (props.assistantUser && club) {
@@ -47,6 +50,86 @@ const PageToolsMatchObservatory: React.FC<PageToolsMatchObservatoryProps> = (
         id: club.id,
       });
     }
+  };
+
+  const fetchMatchReports = (ids) => {
+    if (ids) {
+      ids.forEach((id) => {
+        if (Object.keys(matchReports).indexOf(id) < 0) {
+          getMatchReport({
+            handleSuccess: (m) =>
+              setMatchReports({
+                ...matchReports,
+                ...{ [id]: m },
+              }),
+            handleError: (e) => console.log(e),
+            id,
+          });
+        }
+      });
+    }
+  };
+
+  const computeAggregatedReport = () => {
+    const aggregatedReport = {
+      myClub: {},
+      opponent: {},
+    };
+
+    selectedOpponentMatchIds.forEach((id) => {
+      const match = matches.filter((m) => m.id === id).pop();
+      const matchReport = matchReports[id];
+
+      if (match && matchReport) {
+        if (match.homeSquad.club.id === club.id) {
+          matchReport.home.playersStats.forEach((s) => {
+            aggregatedReport.myClub = addStats(aggregatedReport.myClub, s);
+          });
+          matchReport.away.playersStats.forEach((s) => {
+            aggregatedReport.opponent = addStats(aggregatedReport.opponent, s);
+          });
+        } else {
+          matchReport.home.playersStats.forEach((s) => {
+            aggregatedReport.opponent = addStats(aggregatedReport.opponent, s);
+          });
+          matchReport.away.playersStats.forEach((s) => {
+            aggregatedReport.myClub = addStats(aggregatedReport.myClub, s);
+          });
+        }
+      }
+    });
+
+    setCurrentAggregatedReport(aggregatedReport);
+  };
+
+  const addStats = (current, added) => {
+    const aggregated = {};
+
+    Object.keys(added).forEach((key) => {
+      if (typeof added[key] === "number") {
+        if (key === "rating") {
+          const totalRating =
+            (current.rating || 0) * (current.ratingCount || 0) + added[key];
+          const newRatingCount = (current.ratingCount || 0) + 1;
+          aggregated.rating = totalRating / newRatingCount;
+          aggregated.ratingCount = newRatingCount;
+        } else {
+          aggregated[key] = (current[key] || 0) + added[key];
+        }
+      }
+    });
+
+    Object.keys(current).forEach((key) => {
+      if (!(key in aggregated)) {
+        aggregated[key] = current[key];
+      }
+    });
+
+    return aggregated;
+  };
+
+  const saveCurrentAggregatedReport = () => {
+    setAggregatedReports([...[currentAggregatedReport], ...aggregatedReports]);
   };
 
   useEffect(() => {
@@ -100,8 +183,12 @@ const PageToolsMatchObservatory: React.FC<PageToolsMatchObservatoryProps> = (
   }, [matches, club]);
 
   useEffect(() => {
-    selectedOpponentMatchIds.forEach((id) => {});
+    fetchMatchReports(selectedOpponentMatchIds);
   }, [selectedOpponentMatchIds]);
+
+  useEffect(() => {
+    computeAggregatedReport();
+  }, [selectedOpponentMatchIds, matchReports]);
 
   useEffect(() => {
     if (selectedOpponentId && matches) {
@@ -235,16 +322,33 @@ const PageToolsMatchObservatory: React.FC<PageToolsMatchObservatoryProps> = (
             )}
           </div>
 
-          <div className="d-flex flex-column flex-md-column flex-md-column-reverse flex-md-grow-1">
-            {false && (
-              <div className="card d-flex flex-column flex-md-grow-1 flex-md-shrink-1 m-2 p-3 pt-2 fade-in">
-                <div className="d-flex flex-row">
-                  <h4 className="flex-grow-1">Analysis</h4>
-                </div>
+          <div className="d-flex flex-column">
+            {currentAggregatedReport?.myClub &&
+              Object.keys(currentAggregatedReport.myClub).length > 0 && (
+                <div className="d-flex flex-column">
+                  <ItemCardMatchReport
+                    report={currentAggregatedReport}
+                    title={"Current report"}
+                  />
 
-                <div className="d-flex flex-fill overflow-hidden ratio-sm ratio-sm-1x1"></div>
-              </div>
-            )}
+                  <div className="d-flex justify-content-end">
+                    <button
+                      className="d-block btn btn-info btn-sm text-white mb-1 me-2"
+                      onClick={() => saveCurrentAggregatedReport()}
+                    >
+                      <i className="bi bi-box-arrow-down"></i> Save report
+                    </button>
+                  </div>
+                </div>
+              )}
+
+            {aggregatedReports.map((r, i) => (
+              <ItemCardMatchReport
+                report={r}
+                title={"Saved report " + (aggregatedReports.length - i)}
+                key={i}
+              />
+            ))}
           </div>
         </div>
       </div>

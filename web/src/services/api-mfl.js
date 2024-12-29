@@ -105,3 +105,10 @@ export const getMatches = ({ handleSuccess, handleError, params }) =>
     handleSuccess,
     handleError
   );
+
+export const getMatchReport = ({ handleSuccess, handleError, id }) =>
+  get(
+    getMflApiEndpoint() + "matches/" + id + "/report",
+    handleSuccess,
+    handleError
+  );

@@ -116,6 +116,14 @@ const PageHome: React.FC<PageHomeProps> = ({ yScrollPosition }) => {
         countries: ["ENGLAND"],
         platforms: ["youtube"],
       },
+      {
+        name: "LeMatero",
+        image:
+          "https://pbs.twimg.com/profile_images/1794289034186854400/X5nVbcio_400x400.jpg",
+        link: "https://x.com/LeMatero",
+        countries: ["FRANCE"],
+        platforms: ["twitch"],
+      },
     ];
     return c.sort(() => Math.random() - 0.5);
   });
@@ -432,7 +440,7 @@ const PageHome: React.FC<PageHomeProps> = ({ yScrollPosition }) => {
                         Team builder
                       </Link>
                     </div>
-                    {/*<div className="d-flex card bg-black flex-grow-1 flex-shrink-1 flex-basis-0 min-width-0">
+                    <div className="d-flex card bg-black flex-grow-1 flex-shrink-1 flex-basis-0 min-width-0">
                       <Link
                         to="/tools/match-observatory"
                         className={"nav-link text-white p-1"}
@@ -440,7 +448,7 @@ const PageHome: React.FC<PageHomeProps> = ({ yScrollPosition }) => {
                         <i className="bi bi-clipboard-data-fill mx-1"></i>
                         Match observatory
                       </Link>
-                    </div>*/}
+                    </div>
                   </div>
                 </div>
 

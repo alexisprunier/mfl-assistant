@@ -46,7 +46,7 @@ const PopupSelectClub: React.FC<PopupSelectClubProps> = ({
         closeOnDocumentClick
         onClose={onClose && onClose()}
         onOpen={() => onOpen()}
-        className={"fade-in popup-xl"}
+        className={"fade-in popup-md"}
       >
         {(close) => (
           <div className="container bg-dark d-flex flex-column border border-info border-3 rounded-3 p-4">

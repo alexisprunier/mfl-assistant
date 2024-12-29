@@ -11,7 +11,7 @@ const PageUserPlayers: React.FC<PageUserPlayersProps> = () => {
   const user = useOutletContext();
   const [players, setPlayers] = useState(null);
   const [playerPage, setPlayerPage] = useState(0);
-  const [canLoadMorePlayers, setCanLoadMorePlayers] = useState(true);
+  const [canLoadMorePlayers, setCanLoadMorePlayers] = useState(false);
 
   const [playerView, setPlayerView] = useState(null);
 
@@ -24,27 +24,25 @@ const PageUserPlayers: React.FC<PageUserPlayersProps> = () => {
           setPlayers(players.concat(d.data.getPlayers));
         }
 
-        if (d.data.getPlayers.length < 500) setCanLoadMorePlayers(false);
+        setCanLoadMorePlayers(d.data.getPlayers.length === 500);
 
         setPlayerPage(playerPage + 1);
       },
       handleError: (e) => console.log(e),
-      params: { owners: [user.id], skip: playerPage * 500 },
+      params: { owners: [user.id], limit: 500, skip: playerPage * 500 },
     });
   };
 
   useEffect(() => {
-    if (user != null) {
+    if (user) {
       fetchPlayers();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   useEffect(() => {
-    if (user !== null) {
+    if (user) {
       fetchPlayers();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -73,6 +71,17 @@ const PageUserPlayers: React.FC<PageUserPlayersProps> = () => {
                   <ItemRowPlayerAssist p={c} display={playerView} />
                 ))}
               </div>
+            )}
+
+            {user && canLoadMorePlayers && (
+              <button
+                className="btn btn-sm btn-link align-self-start"
+                onClick={() => {
+                  fetchPlayers();
+                }}
+              >
+                Load more
+              </button>
             )}
 
             {(!user || players === null) && (

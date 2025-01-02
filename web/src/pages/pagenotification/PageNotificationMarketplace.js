@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { NotificationManager as nm } from "react-notifications";
 import ButtonLogin from "components/buttons/ButtonLogin.js";
 import BoxLogin from "components/box/BoxLogin.js";
@@ -17,10 +17,13 @@ import {
 
 interface PageNotificationMarketplaceProps {}
 
-const PageNotificationMarketplace: React.FC < PageNotificationMarketplaceProps > = (props) => {
+const PageNotificationMarketplace: React.FC<
+  PageNotificationMarketplaceProps
+> = (props) => {
   const [notificationScopes, setNotificationScopes] = useState(null);
   const [notifications, setNotifications] = useState(null);
-  const [selectedNotificationScope, setSelectedNotificationScope] = useState(null);
+  const [selectedNotificationScope, setSelectedNotificationScope] =
+    useState(null);
   const [selectedNotification, setSelectedNotification] = useState(null);
 
   const fetchNotificationScopesAndNotifications = () => {
@@ -30,7 +33,7 @@ const PageNotificationMarketplace: React.FC < PageNotificationMarketplaceProps >
         setNotifications(v.data.getNotifications);
       },
     });
-  }
+  };
 
   const fetchNotificationsOfNotificationScope = () => {
     if (selectedNotificationScope) {
@@ -47,10 +50,10 @@ const PageNotificationMarketplace: React.FC < PageNotificationMarketplaceProps >
           skip: notifications ? notifications.length : 0,
           limit: 10,
           order: -1,
-        }
+        },
       });
     }
-  }
+  };
 
   useEffect(() => {
     if (props.assistantUser && props.assistantUser.email) {
@@ -68,7 +71,7 @@ const PageNotificationMarketplace: React.FC < PageNotificationMarketplaceProps >
       if (selectedNotificationScope && selectedNotificationScope.id) {
         fetchNotificationsOfNotificationScope();
       } else {
-        setNotifications([])
+        setNotifications([]);
       }
     }
   }, [notifications]);
@@ -81,8 +84,8 @@ const PageNotificationMarketplace: React.FC < PageNotificationMarketplaceProps >
             <div className="d-flex flex-row mb-2">
               <h4 className="flex-grow-1">Notification scopes</h4>
 
-              {notificationScopes?.length > 0
-                && <PopupNotificationScope
+              {notificationScopes?.length > 0 && (
+                <PopupNotificationScope
                   trigger={
                     <button className="btn btn-info btn-sm text-white">
                       <i className="bi bi-plus"></i>
@@ -91,22 +94,21 @@ const PageNotificationMarketplace: React.FC < PageNotificationMarketplaceProps >
                   assistantUser={props.assistantUser}
                   onClose={fetchNotificationScopesAndNotifications}
                 />
-              }
+              )}
             </div>
 
             <div className="d-flex flex-fill overflow-auto">
               <UtilConditionalRender
                 value={notificationScopes}
                 renderUndefined={() => <LoadingSquare />}
-                renderEmpty={
-                  () => <BoxMessage
+                renderEmpty={() => (
+                  <BoxMessage
                     content={
                       <div>
                         <div>No scope found</div>
                         <PopupNotificationScope
                           trigger={
-                            <button
-                              className="btn btn-info btn-sm text-white">
+                            <button className="btn btn-info btn-sm text-white">
                               <i className="bi bi-plus"></i> Add scope
                             </button>
                           }
@@ -116,9 +118,9 @@ const PageNotificationMarketplace: React.FC < PageNotificationMarketplaceProps >
                       </div>
                     }
                   />
-                }
-                renderOk={
-                  () => <div className="w-100">
+                )}
+                renderOk={() => (
+                  <div className="w-100">
                     {notificationScopes.map((s) => (
                       <ItemNotificationScope
                         key={s.id}
@@ -130,13 +132,14 @@ const PageNotificationMarketplace: React.FC < PageNotificationMarketplaceProps >
                           );
                         }}
                         onDelete={() => {
-                          setNotificationScopes(null);
-                          setNotifications(null);
+                          fetchNotificationScopesAndNotifications();
+                          setSelectedNotificationScope(null);
+                          setSelectedNotification(null);
                         }}
                       />
                     ))}
                   </div>
-                }
+                )}
               />
             </div>
           </div>
@@ -150,9 +153,11 @@ const PageNotificationMarketplace: React.FC < PageNotificationMarketplaceProps >
               <UtilConditionalRender
                 value={notifications}
                 renderUndefined={() => <LoadingSquare />}
-                renderEmpty={() => <BoxMessage content={"No notification found"} />}
-                renderOk={
-                  () => <div className="d-flex flex-column flex-fill height-md-0">
+                renderEmpty={() => (
+                  <BoxMessage content={"No notification found"} />
+                )}
+                renderOk={() => (
+                  <div className="d-flex flex-column flex-fill height-md-0">
                     {notifications.map((n) => (
                       <ItemNotification
                         key={n.id}
@@ -166,10 +171,8 @@ const PageNotificationMarketplace: React.FC < PageNotificationMarketplaceProps >
                       />
                     ))}
 
-                    {selectedNotificationScope && notifications
-                      && <div
-                        className="d-flex justify-content-start"
-                      >
+                    {selectedNotificationScope && notifications && (
+                      <div className="d-flex justify-content-start">
                         <button
                           className="btn btn-sm btn-link"
                           onClick={fetchNotificationsOfNotificationScope}
@@ -177,15 +180,15 @@ const PageNotificationMarketplace: React.FC < PageNotificationMarketplaceProps >
                           Load more
                         </button>
                       </div>
-                    }
+                    )}
                   </div>
-                }
+                )}
               />
             </div>
           </div>
         </div>
-      </div> <
-    /div>
+      </div>{" "}
+    </div>
   );
 };
 

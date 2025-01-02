@@ -137,6 +137,14 @@ async def _filter_listings_per_scope(scope, listings):
         and ("max_def" not in scope or scope["max_def"] is None or scope["max_def"] >= l["player"]["metadata"]["defense"])
         and ("min_phy" not in scope or scope["min_phy"] is None or scope["min_phy"] <= l["player"]["metadata"]["physical"])
         and ("max_phy" not in scope or scope["max_phy"] is None or scope["max_phy"] >= l["player"]["metadata"]["physical"])
+        and ("nationalities" not in scope or scope["nationalities"] is None or len(scope["nationalities"]) == 0
+            or l["player"]["metadata"]["nationalities"][0] in scope["nationalities"])
+        and ("positions" not in scope or scope["positions"] is None or len(scope["positions"]) == 0 or (
+            l["player"]["metadata"]["positions"][0] in scope["nationalities"]
+                if "primary_position_only" in scope and scope["primary_position_only"]
+                else set(scope["positions"]) & set(l["player"]["metadata"]["positions"])
+            )
+        )
     ]
 
 

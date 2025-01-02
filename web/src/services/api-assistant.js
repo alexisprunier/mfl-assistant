@@ -7,7 +7,7 @@ const defaultHandleSuccess = (h, v) => {
   if (h) {
     h(v);
   }
-}
+};
 
 const defaultHandleError = (h, e) => {
   if (h) {
@@ -15,43 +15,49 @@ const defaultHandleError = (h, e) => {
   } else {
     nm.warning("An error happened while requesting the API");
   }
-}
+};
 
 /* login */
 
-export const login = ({ handleSuccess = null, handleError = null, body }) => loginPost(
-  getApiEndpoint() + "api/login",
-  body,
-  (v) => defaultHandleSuccess(handleSuccess, v),
-  (e) => defaultHandleError(handleError, e),
-  true,
-);
+export const login = ({ handleSuccess = null, handleError = null, body }) =>
+  loginPost(
+    getApiEndpoint() + "api/login",
+    body,
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e),
+    true
+  );
 
-export const logout = ({ handleSuccess = null, handleError = null }) => loginPost(
-  getApiEndpoint() + "api/logout",
-  null,
-  (v) => defaultHandleSuccess(handleSuccess, v),
-  (e) => defaultHandleError(handleError, e),
-  true,
-);
-
+export const logout = ({ handleSuccess = null, handleError = null }) =>
+  loginPost(
+    getApiEndpoint() + "api/logout",
+    null,
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e),
+    true
+  );
 
 /* NONCE */
 
-export const getGenerateNonce = ({ handleSuccess = null, handleError = null }) => get(
-  getApiEndpoint() + "api/generate_nonce",
-  (v) => defaultHandleSuccess(handleSuccess, v),
-  (e) => defaultHandleError(handleError, e),
-);
+export const getGenerateNonce = ({
+  handleSuccess = null,
+  handleError = null,
+}) =>
+  get(
+    getApiEndpoint() + "api/generate_nonce",
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );
 
 /* GRAPHQL */
 
 /* User */
 
-export const getLoggedUser = ({ handleSuccess = null, handleError = null }) => post(
-  getGraphQLEndpoint(),
-  JSON.stringify({
-    query: `
+export const getLoggedUser = ({ handleSuccess = null, handleError = null }) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `
       {
         getLoggedUser {
           id,
@@ -61,15 +67,20 @@ export const getLoggedUser = ({ handleSuccess = null, handleError = null }) => p
         }
       }
     `,
-  }),
-  (v) => defaultHandleSuccess(handleSuccess, v),
-  (e) => defaultHandleError(handleError, e),
-);
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );
 
-export const updateLoggedUserEmail = ({ handleSuccess = null, handleError = null, params }) => post(
-  getGraphQLEndpoint(),
-  JSON.stringify({
-    query: `
+export const updateLoggedUserEmail = ({
+  handleSuccess = null,
+  handleError = null,
+  params,
+}) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `
       mutation {
         updateLoggedUserEmail(email: "${params.email}") {
           user {
@@ -79,15 +90,20 @@ export const updateLoggedUserEmail = ({ handleSuccess = null, handleError = null
         }
       }
     `,
-  }),
-  (v) => defaultHandleSuccess(handleSuccess, v),
-  (e) => defaultHandleError(handleError, e),
-);
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );
 
-export const sendConfirmationMail = ({ handleSuccess = null, handleError = null, params }) => post(
-  getGraphQLEndpoint(),
-  JSON.stringify({
-    query: `
+export const sendConfirmationMail = ({
+  handleSuccess = null,
+  handleError = null,
+  params,
+}) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `
       mutation {
         sendConfirmationMail(address: "${params.address}", email: "${params.email}") {
           user {
@@ -97,21 +113,26 @@ export const sendConfirmationMail = ({ handleSuccess = null, handleError = null,
         }
       }
     `,
-  }),
-  (v) => defaultHandleSuccess(handleSuccess, v),
-  (e) => defaultHandleError(handleError, e),
-);
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );
 
 /* Notification */
 
-export const getNotificationScopesAndNotifications = ({ handleSuccess = null, handleError = null }) => post(
-  getGraphQLEndpoint(),
-  JSON.stringify({
-    query: `{
+export const getNotificationScopesAndNotifications = ({
+  handleSuccess = null,
+  handleError = null,
+}) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `{
         getNotificationScopes {
           id,
           type,
           positions,
+          primaryPositionOnly,
           nationalities,
           minPrice,
           maxPrice,
@@ -143,15 +164,20 @@ export const getNotificationScopesAndNotifications = ({ handleSuccess = null, ha
           }
         }
       }`,
-  }),
-  (v) => defaultHandleSuccess(handleSuccess, v),
-  (e) => defaultHandleError(handleError, e),
-);
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );
 
-export const getNotificationsOfNotificationScope = ({ handleSuccess = null, handleError = null, params }) => post(
-  getGraphQLEndpoint(),
-  JSON.stringify({
-    query: `{
+export const getNotificationsOfNotificationScope = ({
+  handleSuccess = null,
+  handleError = null,
+  params,
+}) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `{
         getNotifications(${jsonToParams(params)}) {
           id,
           status,
@@ -163,15 +189,20 @@ export const getNotificationsOfNotificationScope = ({ handleSuccess = null, hand
           }
         }
       }`,
-  }),
-  (v) => defaultHandleSuccess(handleSuccess, v),
-  (e) => defaultHandleError(handleError, e),
-);
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );
 
-export const addNotificationScope = ({ handleSuccess = null, handleError = null, params }) => post(
-  getGraphQLEndpoint(),
-  JSON.stringify({
-    query: `
+export const addNotificationScope = ({
+  handleSuccess = null,
+  handleError = null,
+  params,
+}) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `
       mutation {
         addNotificationScope(${jsonToParams(params)}) {
           notificationScope {
@@ -181,15 +212,20 @@ export const addNotificationScope = ({ handleSuccess = null, handleError = null,
         }
       }
     `,
-  }),
-  (v) => defaultHandleSuccess(handleSuccess, v),
-  (e) => defaultHandleError(handleError, e),
-);
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );
 
-export const deleteNotificationScope = ({ handleSuccess = null, handleError = null, params }) => post(
-  getGraphQLEndpoint(),
-  JSON.stringify({
-    query: `
+export const deleteNotificationScope = ({
+  handleSuccess = null,
+  handleError = null,
+  params,
+}) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `
       mutation {
         deleteNotificationScope(${jsonToParams(params)}) {
           notificationScope {
@@ -198,32 +234,41 @@ export const deleteNotificationScope = ({ handleSuccess = null, handleError = nu
         }
       }
     `,
-  }),
-  (v) => defaultHandleSuccess(handleSuccess, v),
-  (e) => defaultHandleError(handleError, e),
-);
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );
 
 /* Report */
 
-export const getReportConfigurations = ({ handleSuccess = null, handleError = null }) => post(
-  getGraphQLEndpoint(),
-  JSON.stringify({
-    query: `{
+export const getReportConfigurations = ({
+  handleSuccess = null,
+  handleError = null,
+}) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `{
         getReportConfigurations {
           id,
           type,
           time
         }
       }`,
-  }),
-  (v) => defaultHandleSuccess(handleSuccess, v),
-  (e) => defaultHandleError(handleError, e),
-);
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );
 
-export const addReportConfiguration = ({ handleSuccess = null, handleError = null, params }) => post(
-  getGraphQLEndpoint(),
-  JSON.stringify({
-    query: `
+export const addReportConfiguration = ({
+  handleSuccess = null,
+  handleError = null,
+  params,
+}) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `
       mutation {
         addReportConfiguration(${jsonToParams(params)}) {
           reportConfiguration {
@@ -234,47 +279,62 @@ export const addReportConfiguration = ({ handleSuccess = null, handleError = nul
         }
       }
     `,
-  }),
-  (v) => defaultHandleSuccess(handleSuccess, v),
-  (e) => defaultHandleError(handleError, e),
-);
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );
 
-export const updateReportConfiguration = ({ handleSuccess = null, handleError = null, params }) => post(
-  getGraphQLEndpoint(),
-  JSON.stringify({
-    query: `
+export const updateReportConfiguration = ({
+  handleSuccess = null,
+  handleError = null,
+  params,
+}) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `
       mutation {
         updateReportConfiguration(${jsonToParams(params)}) {
           status
         }
       }
     `,
-  }),
-  (v) => defaultHandleSuccess(handleSuccess, v),
-  (e) => defaultHandleError(handleError, e),
-);
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );
 
-export const deleteReportConfiguration = ({ handleSuccess = null, handleError = null, params }) => post(
-  getGraphQLEndpoint(),
-  JSON.stringify({
-    query: `
+export const deleteReportConfiguration = ({
+  handleSuccess = null,
+  handleError = null,
+  params,
+}) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `
       mutation {
         deleteReportConfiguration(${jsonToParams(params)}) {
           status
         }
       }
     `,
-  }),
-  (v) => defaultHandleSuccess(handleSuccess, v),
-  (e) => defaultHandleError(handleError, e),
-);
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );
 
 /* Clubs */
 
-export const getClubs = ({ handleSuccess = null, handleError = null, params }) => post(
-  getGraphQLEndpoint(),
-  JSON.stringify({
-    query: `{
+export const getClubs = ({
+  handleSuccess = null,
+  handleError = null,
+  params,
+}) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `{
         getClubs(${jsonToParams(params)}) {
           id,
           status,
@@ -284,15 +344,16 @@ export const getClubs = ({ handleSuccess = null, handleError = null, params }) =
           country
         }
       }`,
-  }),
-  (v) => defaultHandleSuccess(handleSuccess, v),
-  (e) => defaultHandleError(handleError, e),
-);
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );
 
-export const getClubData = ({ handleSuccess = null, handleError = null }) => post(
-  getGraphQLEndpoint(),
-  JSON.stringify({
-    query: `{
+export const getClubData = ({ handleSuccess = null, handleError = null }) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `{
         getClubCount,
         getAllClubCount: getClubCount(foundedOnly: false),
         getClubOwnerCount,
@@ -317,15 +378,20 @@ export const getClubData = ({ handleSuccess = null, handleError = null }) => pos
           value
         }
       }`,
-  }),
-  (v) => defaultHandleSuccess(handleSuccess, v),
-  (e) => defaultHandleError(handleError, e),
-);
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );
 
-export const getMarketplaceData = ({ handleSuccess = null, handleError = null, params }) => post(
-  getGraphQLEndpoint(),
-  JSON.stringify({
-    query: `{
+export const getMarketplaceData = ({
+  handleSuccess = null,
+  handleError = null,
+  params,
+}) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `{
         getPlayerSaleTotal: getDataPoints(property: "${params.playerSaleTotalProperty}") {
           date,
           value
@@ -343,42 +409,56 @@ export const getMarketplaceData = ({ handleSuccess = null, handleError = null, p
           }
         }
       }`,
-  }),
-  (v) => defaultHandleSuccess(handleSuccess, v),
-  (e) => defaultHandleError(handleError, e),
-);
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );
 
-export const getPlayerDashboardData = ({ handleSuccess = null, handleError = null, params }) => post(
-  getGraphQLEndpoint(),
-  JSON.stringify({
-    query: `{
+export const getPlayerDashboardData = ({
+  handleSuccess = null,
+  handleError = null,
+  params,
+}) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `{
         getPlayerCount(${jsonToParams(params)}),
-        NAT: getPlayerCountByCriteria(criteria: "NAT", ${jsonToParams(params)}) {
+        NAT: getPlayerCountByCriteria(criteria: "NAT", ${jsonToParams(
+          params
+        )}) {
           key,
           count
         },
-        AGE: getPlayerCountByCriteria(criteria: "AGE", ${jsonToParams(params)}) {
+        AGE: getPlayerCountByCriteria(criteria: "AGE", ${jsonToParams(
+          params
+        )}) {
           key,
           count
         },
-        OVR: getPlayerCountByCriteria(criteria: "OVR", ${jsonToParams(params)}) {
+        OVR: getPlayerCountByCriteria(criteria: "OVR", ${jsonToParams(
+          params
+        )}) {
           key,
           count
         },
-        POS: getPlayerCountByCriteria(criteria: "POS", ${jsonToParams(params)}) {
+        POS: getPlayerCountByCriteria(criteria: "POS", ${jsonToParams(
+          params
+        )}) {
           key,
           count
         }
       }`,
-  }),
-  (v) => defaultHandleSuccess(handleSuccess, v),
-  (e) => defaultHandleError(handleError, e),
-);
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );
 
-export const getTeams = ({ handleSuccess = null, handleError = null }) => post(
-  getGraphQLEndpoint(),
-  JSON.stringify({
-    query: `{
+export const getTeams = ({ handleSuccess = null, handleError = null }) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `{
         getTeams {
           id,
           name,
@@ -386,15 +466,20 @@ export const getTeams = ({ handleSuccess = null, handleError = null }) => post(
           isPublic
         }
       }`,
-  }),
-  (v) => defaultHandleSuccess(handleSuccess, v),
-  (e) => defaultHandleError(handleError, e),
-);
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );
 
-export const getTeamMembers = ({ handleSuccess = null, handleError = null, params }) => post(
-  getGraphQLEndpoint(),
-  JSON.stringify({
-    query: `{
+export const getTeamMembers = ({
+  handleSuccess = null,
+  handleError = null,
+  params,
+}) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `{
         getTeamMembers(${jsonToParams(params)}) {
           id,
           team {
@@ -420,15 +505,16 @@ export const getTeamMembers = ({ handleSuccess = null, handleError = null, param
           position
         }
       }`,
-  }),
-  (v) => defaultHandleSuccess(handleSuccess, v),
-  (e) => defaultHandleError(handleError, e),
-);
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );
 
-export const addTeam = ({ handleSuccess = null, handleError = null, params }) => post(
-  getGraphQLEndpoint(),
-  JSON.stringify({
-    query: `
+export const addTeam = ({ handleSuccess = null, handleError = null, params }) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `
       mutation {
         addTeam(${jsonToParams(params)}) {
           team {
@@ -440,45 +526,60 @@ export const addTeam = ({ handleSuccess = null, handleError = null, params }) =>
         }
       }
     `,
-  }),
-  (v) => defaultHandleSuccess(handleSuccess, v),
-  (e) => defaultHandleError(handleError, e),
-);
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );
 
-export const updateTeam = ({ handleSuccess = null, handleError = null, params }) => post(
-  getGraphQLEndpoint(),
-  JSON.stringify({
-    query: `
+export const updateTeam = ({
+  handleSuccess = null,
+  handleError = null,
+  params,
+}) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `
       mutation {
         updateTeam(${jsonToParams(params)}) {
           status
         }
       }
     `,
-  }),
-  (v) => defaultHandleSuccess(handleSuccess, v),
-  (e) => defaultHandleError(handleError, e),
-);
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );
 
-export const deleteTeam = ({ handleSuccess = null, handleError = null, params }) => post(
-  getGraphQLEndpoint(),
-  JSON.stringify({
-    query: `
+export const deleteTeam = ({
+  handleSuccess = null,
+  handleError = null,
+  params,
+}) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `
       mutation {
         deleteTeam(${jsonToParams(params)}) {
           status
         }
       }
     `,
-  }),
-  (v) => defaultHandleSuccess(handleSuccess, v),
-  (e) => defaultHandleError(handleError, e),
-);
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );
 
-export const addTeamMembers = ({ handleSuccess = null, handleError = null, params }) => post(
-  getGraphQLEndpoint(),
-  JSON.stringify({
-    query: `
+export const addTeamMembers = ({
+  handleSuccess = null,
+  handleError = null,
+  params,
+}) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `
       mutation {
         addTeamMembers(${jsonToParams(params)}) {
           teamMembers {
@@ -489,56 +590,75 @@ export const addTeamMembers = ({ handleSuccess = null, handleError = null, param
         }
       }
     `,
-  }),
-  (v) => defaultHandleSuccess(handleSuccess, v),
-  (e) => defaultHandleError(handleError, e),
-);
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );
 
-export const updateTeamMember = ({ handleSuccess = null, handleError = null, params }) => post(
-  getGraphQLEndpoint(),
-  JSON.stringify({
-    query: `
+export const updateTeamMember = ({
+  handleSuccess = null,
+  handleError = null,
+  params,
+}) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `
       mutation {
         updateTeamMember(${jsonToParams(params)}) {
           status
         }
       }
     `,
-  }),
-  (v) => defaultHandleSuccess(handleSuccess, v),
-  (e) => defaultHandleError(handleError, e),
-);
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );
 
-export const deleteTeamMember = ({ handleSuccess = null, handleError = null, params }) => post(
-  getGraphQLEndpoint(),
-  JSON.stringify({
-    query: `
+export const deleteTeamMember = ({
+  handleSuccess = null,
+  handleError = null,
+  params,
+}) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `
       mutation {
         deleteTeamMember(${jsonToParams(params)}) {
           status
         }
       }
     `,
-  }),
-  (v) => defaultHandleSuccess(handleSuccess, v),
-  (e) => defaultHandleError(handleError, e),
-);
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );
 
-export const getPlayerNationalities = ({ handleSuccess = null, handleError = null }) => post(
-  getGraphQLEndpoint(),
-  JSON.stringify({
-    query: `{
+export const getPlayerNationalities = ({
+  handleSuccess = null,
+  handleError = null,
+}) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `{
         getPlayerNationalities
       }`,
-  }),
-  (v) => defaultHandleSuccess(handleSuccess, v),
-  (e) => defaultHandleError(handleError, e),
-);
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );
 
-export const getPlayers = ({ handleSuccess = null, handleError = null, params }) => post(
-  getGraphQLEndpoint(),
-  JSON.stringify({
-    query: `{
+export const getPlayers = ({
+  handleSuccess = null,
+  handleError = null,
+  params,
+}) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `{
         getPlayers(${jsonToParams(params)}) {
           id,
           firstName,
@@ -557,30 +677,40 @@ export const getPlayers = ({ handleSuccess = null, handleError = null, params })
           resistance
         }
       }`,
-  }),
-  (v) => defaultHandleSuccess(handleSuccess, v),
-  (e) => defaultHandleError(handleError, e),
-);
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );
 
-export const getUsers = ({ handleSuccess = null, handleError = null, params }) => post(
-  getGraphQLEndpoint(),
-  JSON.stringify({
-    query: `{
+export const getUsers = ({
+  handleSuccess = null,
+  handleError = null,
+  params,
+}) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `{
         getUsers(${jsonToParams(params)}) {
           id,
           address,
           name
         }
       }`,
-  }),
-  (v) => defaultHandleSuccess(handleSuccess, v),
-  (e) => defaultHandleError(handleError, e),
-);
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );
 
-export const getContracts = ({ handleSuccess = null, handleError = null, params }) => post(
-  getGraphQLEndpoint(),
-  JSON.stringify({
-    query: `{
+export const getContracts = ({
+  handleSuccess = null,
+  handleError = null,
+  params,
+}) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `{
         getContracts(${jsonToParams(params)}) {
           id,
           status,
@@ -617,15 +747,20 @@ export const getContracts = ({ handleSuccess = null, handleError = null, params 
           }
         }
       }`,
-  }),
-  (v) => defaultHandleSuccess(handleSuccess, v),
-  (e) => defaultHandleError(handleError, e),
-);
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );
 
-export const getPlayerSales = ({ handleSuccess = null, handleError = null, params }) => post(
-  getGraphQLEndpoint(),
-  JSON.stringify({
-    query: `{
+export const getPlayerSales = ({
+  handleSuccess = null,
+  handleError = null,
+  params,
+}) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `{
         getPlayerSales: getSales(${jsonToParams(params)}) {
           executionDate,
           price,
@@ -648,7 +783,7 @@ export const getPlayerSales = ({ handleSuccess = null, handleError = null, param
           }
         }
       }`,
-  }),
-  (v) => defaultHandleSuccess(handleSuccess, v),
-  (e) => defaultHandleError(handleError, e),
-);
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );

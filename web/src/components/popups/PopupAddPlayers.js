@@ -1,23 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import { NotificationManager as nm } from "react-notifications";
-import Popup from "reactjs-popup";
-import { getPlayers, getPlayerNationalities } from "services/api-assistant.js";
-import { prettifyId } from "utils/graphql.js";
-import ItemRowPlayerAssist from "components/items/ItemRowPlayerAssist.js";
 import BoxMessage from "components/box/BoxMessage.js";
 import ButtonPlayerView from "components/buttons/ButtonPlayerView.js";
-import LoadingSquare from "components/loading/LoadingSquare.js";
 import FilterContainerPlayer from "components/filters/FilterContainerPlayer.js";
-
+import ItemRowPlayerAssist from "components/items/ItemRowPlayerAssist.js";
+import LoadingSquare from "components/loading/LoadingSquare.js";
+import React, { useEffect, useState } from "react";
+import Popup from "reactjs-popup";
+import { getPlayers } from "services/api-assistant.js";
 
 interface PopupAddPlayersProps {
   trigger: Object;
   onClose: func;
   onConfirm: func;
-  userId ? : string
+  userId?: string;
 }
 
-const PopupAddPlayers: React.FC < PopupAddPlayersProps > = ({ trigger, onClose, onConfirm, userId }) => {
+const PopupAddPlayers: React.FC<PopupAddPlayersProps> = ({
+  trigger,
+  onClose,
+  onConfirm,
+  userId,
+}) => {
   const [selectedTab, setSelectedTab] = useState("my-players");
 
   const [defaultFilters] = useState({
@@ -27,7 +29,7 @@ const PopupAddPlayers: React.FC < PopupAddPlayersProps > = ({ trigger, onClose, 
     maxAge: undefined,
     minOvr: undefined,
     maxOvr: undefined,
-  })
+  });
   const [filters, setFilters] = useState(defaultFilters);
 
   const [players, setPlayers] = useState(null);
@@ -46,7 +48,7 @@ const PopupAddPlayers: React.FC < PopupAddPlayersProps > = ({ trigger, onClose, 
 
     setSelectedPlayers([]);
     close();
-  }
+  };
 
   const fetchPlayers = (page = 1) => {
     setIsLoading(true);
@@ -60,7 +62,9 @@ const PopupAddPlayers: React.FC < PopupAddPlayersProps > = ({ trigger, onClose, 
         if (page === 1) {
           setPlayers(v.data.getPlayers);
         } else {
-          setPlayers(players ? players.concat(v.data.getPlayers) : v.data.getPlayers);
+          setPlayers(
+            players ? players.concat(v.data.getPlayers) : v.data.getPlayers
+          );
         }
 
         setIsLoading(false);
@@ -72,31 +76,35 @@ const PopupAddPlayers: React.FC < PopupAddPlayersProps > = ({ trigger, onClose, 
         ignorePlayersInTeams: hidePlayersInTeams,
         limit: 20,
         skip: 20 * (page - 1),
-      }
+      },
     });
-  }
+  };
 
   const loadMore = () => {
     fetchPlayers(Math.round(players.length / 20) + 1);
-  }
+  };
 
   const onPlayerSelection = (p) => {
-    if (selectedPlayers.map(p => p.id).indexOf(p.id) >= 0) {
-      setSelectedPlayers(selectedPlayers.filter(l => l.id !== p.id));
+    if (selectedPlayers.map((p) => p.id).indexOf(p.id) >= 0) {
+      setSelectedPlayers(selectedPlayers.filter((l) => l.id !== p.id));
     } else {
       setSelectedPlayers(selectedPlayers.concat(p));
     }
-  }
+  };
 
   const countFilters = (p) => {
     return Object.keys(filters).reduce((count, key) => {
-      if (key !== "search" && filters[key] != null && filters[key] !== '' &&
-        (!Array.isArray(filters[key]) || filters[key].length > 0)) {
+      if (
+        key !== "search" &&
+        filters[key] != null &&
+        filters[key] !== "" &&
+        (!Array.isArray(filters[key]) || filters[key].length > 0)
+      ) {
         return count + 1;
       }
       return count;
     }, 0);
-  }
+  };
 
   useEffect(() => {
     setPlayers(null);
@@ -120,14 +128,10 @@ const PopupAddPlayers: React.FC < PopupAddPlayersProps > = ({ trigger, onClose, 
           <div className="container bg-dark d-flex flex-column border border-info border-3 rounded-3 p-4">
             <div className="d-flex flex-row flex-grow-0 mb-3">
               <div className="flex-grow-1">
-                <h2 className="text-white">
-                  Add players
-                </h2>
+                <h2 className="text-white">Add players</h2>
               </div>
               <div className="flex-grow-0">
-                <button
-                  className={"btn"}
-                  onClick={close}>
+                <button className={"btn"} onClick={close}>
                   <i className="bi bi-x-lg"></i>
                 </button>
               </div>
@@ -139,14 +143,21 @@ const PopupAddPlayers: React.FC < PopupAddPlayersProps > = ({ trigger, onClose, 
                   type="text"
                   className="form-control me-1"
                   value={filters.search}
-                  onChange={(v) => setFilters({ ...filters, search: v.target.value})}
+                  onChange={(v) =>
+                    setFilters({ ...filters, search: v.target.value })
+                  }
                   placeholder={"Name"}
                   autoFocus
                 />
                 <FilterContainerPlayer
                   trigger={
                     <button className="d-flex flex-row btn btn-info text-white me-1">
-                      <i className="bi bi-filter-square-fill"/>{countFilters() > 0 ? <div className="ms-2">{countFilters()}</div> : ""}
+                      <i className="bi bi-filter-square-fill" />
+                      {countFilters() > 0 ? (
+                        <div className="ms-2">{countFilters()}</div>
+                      ) : (
+                        ""
+                      )}
                     </button>
                   }
                   filters={filters}
@@ -157,14 +168,14 @@ const PopupAddPlayers: React.FC < PopupAddPlayersProps > = ({ trigger, onClose, 
                   showAge={true}
                   deactivateNavigate={true}
                 />
-                {(countFilters() > 0 || filters.search)
-                  && <button
+                {(countFilters() > 0 || filters.search) && (
+                  <button
                     className="btn btn-warning text-white me-1"
                     onClick={() => setFilters(defaultFilters)}
                   >
                     <i className="bi bi-x-square-fill text-white"></i>
                   </button>
-                }
+                )}
                 <button
                   className="btn btn-info text-white"
                   onClick={() => fetchPlayers()}
@@ -201,62 +212,65 @@ const PopupAddPlayers: React.FC < PopupAddPlayersProps > = ({ trigger, onClose, 
               </div>
 
               <div className="d-flex flex-grow-1 flex-column overflow-auto">
-                
-                {players && players.length > 0
-                  && players.map((p) => <div><ItemRowPlayerAssist
-                      p={p}
-                      display={playerView}
-                      isSelected={selectedPlayers.map(p => p.id).indexOf(p.id) >= 0}
-                      onSelect={(p) => onPlayerSelection(p)}
-                    /></div>
-                  )
-                }
+                {players &&
+                  players.length > 0 &&
+                  players.map((p) => (
+                    <div>
+                      <ItemRowPlayerAssist
+                        p={p}
+                        display={playerView}
+                        isSelected={
+                          selectedPlayers.map((p) => p.id).indexOf(p.id) >= 0
+                        }
+                        onSelect={(p) => onPlayerSelection(p)}
+                      />
+                    </div>
+                  ))}
 
-                {players && players.length === 0
-                  && <BoxMessage content={"No player found"} />
-                }
+                {players && players.length === 0 && (
+                  <BoxMessage content={"No player found"} />
+                )}
 
-                {!players
-                  && <div style={{ height: "200px" }}>
+                {!players && (
+                  <div style={{ height: "200px" }}>
                     <LoadingSquare />
                   </div>
-                }
+                )}
 
-                {players && isLoading
-                  && <div style={{ height: "30px" }}>
+                {players && isLoading && (
+                  <div style={{ height: "30px" }}>
                     <LoadingSquare />
                   </div>
-                }
+                )}
 
-                {canLoadMore && !isLoading
-                  && <button
+                {canLoadMore && !isLoading && (
+                  <button
                     className="btn btn-sm btn-link align-self-start"
                     onClick={() => loadMore()}
                   >
                     Load more
                   </button>
-                }
+                )}
               </div>
             </div>
 
             <div className="d-flex flex-grow-0 flex-row justify-content-end mt-3">
               <div>
-                {selectedPlayers.length > 0
-                 && <button
+                {selectedPlayers.length > 0 && (
+                  <button
                     className="btn btn-warning text-white me-1"
                     onClick={() => setSelectedPlayers([])}
                   >
                     <i className="bi bi-x-square-fill text-white"></i>
                   </button>
-                }
+                )}
                 <button
                   className="btn btn-info text-white"
                   disabled={selectedPlayers.length <= 0}
                   onClick={() => confirm(close)}
                 >
-                  Confirm {selectedPlayers.length > 0
-                    && `(${selectedPlayers.length})`
-                  }
+                  Confirm{" "}
+                  {selectedPlayers.length > 0 && `(${selectedPlayers.length})`}
                 </button>
               </div>
             </div>

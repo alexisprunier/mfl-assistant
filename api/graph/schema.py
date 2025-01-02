@@ -10,8 +10,10 @@ class DefaultStatusEnum(enum.Enum):
 
 class NotificationScopeTypeEnum(enum.Enum):
     LISTING = "listing"
+    CLUB_LISTING = "club_listing"
     CONTRACT = "contract"
     SALE = "sale"
+    CLUB_SALE = "club_sale"
 
 
 class ReportTypeEnum(enum.Enum):
@@ -172,6 +174,9 @@ class NotificationScopeType(ObjectType):
     max_def = Int()
     min_phy = Int()
     max_phy = Int()
+    nationalities = List(String)
+    positions = List(String)
+    primary_position_only = Boolean()
     creation_date = DateTime()
     last_computation_date = DateTime()
     user = Field(UserType)

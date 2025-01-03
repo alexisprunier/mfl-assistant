@@ -34,14 +34,14 @@ const PopupNotificationScope: React.FC<PopupNotificationScopeProps> = ({
 
   const [positionList, setPositionList] = useState(pos.map((p) => p.name));
   const [positions, setPositions] = useState(
-    item?.positions ? item.positions : undefined
+    item?.positions ? item.positions : []
   );
   const [primaryPositionOnly, setPrimaryPositionOnly] = useState(
     item?.primaryPositionOnly ? item.primaryPositionOnly : undefined
   );
-  const [nationalityList, setNationalityList] = useState(null);
+  const [nationalityList, setNationalityList] = useState([]);
   const [nationalities, setNationalities] = useState(
-    item?.nationalities ? item.nationalities : undefined
+    item?.nationalities ? item.nationalities : []
   );
 
   const [minPrice, setMinPrice] = useState(
@@ -265,6 +265,20 @@ const PopupNotificationScope: React.FC<PopupNotificationScopeProps> = ({
                         </option>
                       ))}
                     </select>
+
+                    {positions.length > 0 && (
+                      <div className="d-flex justify-content-end text-align-middle">
+                        <small>{positions.length} selected</small>
+                        {!readOnly && (
+                          <button
+                            className="btn btn-small btn-warning text-white ms-1 my-1"
+                            onClick={() => setPositions([])}
+                          >
+                            <i className="bi bi-x-square-fill text-white"></i>
+                          </button>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="d-flex flex-row justify-content-end my-1">
@@ -304,6 +318,20 @@ const PopupNotificationScope: React.FC<PopupNotificationScopeProps> = ({
                         </option>
                       ))}
                     </select>
+
+                    {nationalities.length > 0 && (
+                      <div className="d-flex justify-content-end text-align-middle">
+                        <small>{nationalities.length} selected</small>
+                        {!readOnly && (
+                          <button
+                            className="btn btn-small btn-warning text-white ms-1 my-1"
+                            onClick={() => setNationalities([])}
+                          >
+                            <i className="bi bi-x-square-fill text-white"></i>
+                          </button>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

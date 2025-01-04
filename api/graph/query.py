@@ -196,20 +196,57 @@ class Query(ObjectType):
 
         return [c["count"] async for c in info.context["db"].clubs.aggregate(query)][0]
 
-    get_player_count = Int(exclude_mfl_players=Boolean(), min_ovr=Int(), max_ovr=Int(), min_age=Int(), max_age=Int(), nationalities=List(String), positions=List(String))
+    get_player_count = Int(
+        exclude_mfl_players=Boolean(),
+        min_ovr=Int(), max_ovr=Int(),
+        min_age=Int(), max_age=Int(),
+        min_pace=Int(), max_pace=Int(),
+        min_dribbling=Int(), max_dribbling=Int(),
+        min_passing=Int(), max_passing=Int(),
+        min_shooting=Int(), max_shooting=Int(),
+        min_defense=Int(), max_defense=Int(),
+        min_physical=Int(), max_physical=Int(),
+        min_height=Int(), max_height=Int(),
+        nationalities=List(String),
+        positions=List(String),
+        preferred_foot=List(String),
+        )
 
-    async def resolve_get_player_count(self, info, exclude_mfl_players=True, min_ovr=1, max_ovr=100, min_age=1, max_age=100, nationalities=None, positions=None):
+    async def resolve_get_player_count(self, info,
+        exclude_mfl_players=True,
+        min_ovr=1, max_ovr=100,
+        min_age=1, max_age=100,
+        min_height=1, max_height=300,
+        min_pace=1, max_pace=100,
+        min_dribbling=1, max_dribbling=100,
+        min_passing=1, max_passing=100,
+        min_shooting=1, max_shooting=100,
+        min_defense=1, max_defense=100,
+        min_physical=1, max_physical=100,
+        nationalities=None,
+        positions=None,
+        preferred_foot=None
+        ):
         query = []
 
         player_match = {"$match": {}}
 
         player_match["$match"]["overall"] = {"$gte": min_ovr, "$lte": max_ovr}
         player_match["$match"]["age"] = {"$gte": min_age, "$lte": max_age}
+        player_match["$match"]["height"] = {"$gte": min_height, "$lte": max_height}
+        player_match["$match"]["pace"] = {"$gte": min_pace, "$lte": max_pace}
+        player_match["$match"]["dribbling"] = {"$gte": min_dribbling, "$lte": max_dribbling}
+        player_match["$match"]["passing"] = {"$gte": min_passing, "$lte": max_passing}
+        player_match["$match"]["shooting"] = {"$gte": min_shooting, "$lte": max_shooting}
+        player_match["$match"]["defense"] = {"$gte": min_defense, "$lte": max_defense}
+        player_match["$match"]["physical"] = {"$gte": min_physical, "$lte": max_physical}
 
         if nationalities and len(nationalities) > 0:
             player_match["$match"]["nationalities"] = {"$in": nationalities}
         if positions and len(positions) > 0:
             player_match["$match"]["positions"] = {"$in": positions}
+        if preferred_foot:
+            player_match["$match"]["preferred_foot"] = {"$in": preferred_foot}
 
         query.append(player_match)
 
@@ -230,9 +267,39 @@ class Query(ObjectType):
 
         return [c["count"] async for c in info.context["db"].players.aggregate(query)][0]
 
-    get_player_count_by_criteria = List(CountType, criteria=String(), exclude_mfl_players=Boolean(), min_ovr=Int(), max_ovr=Int(), min_age=Int(), max_age=Int(), nationalities=List(String), positions=List(String))
+    get_player_count_by_criteria = List(CountType,
+        criteria=String(),
+        exclude_mfl_players=Boolean(),
+        min_ovr=Int(), max_ovr=Int(),
+        min_age=Int(), max_age=Int(),
+        min_height=Int(), max_height=Int(),
+        min_pace=Int(), max_pace=Int(),
+        min_dribbling=Int(), max_dribbling=Int(),
+        min_passing=Int(), max_passing=Int(),
+        min_shooting=Int(), max_shooting=Int(),
+        min_defense=Int(), max_defense=Int(),
+        min_physical=Int(), max_physical=Int(),
+        nationalities=List(String),
+        positions=List(String),
+        preferred_foot=List(String),
+        )
 
-    async def resolve_get_player_count_by_criteria(self, info, criteria=None, exclude_mfl_players=True, min_ovr=1, max_ovr=100, min_age=1, max_age=100, nationalities=None, positions=None):
+    async def resolve_get_player_count_by_criteria(self, info,
+        criteria=None,
+        exclude_mfl_players=True,
+        min_ovr=1, max_ovr=100,
+        min_age=1, max_age=100,
+        min_height=1, max_height=300,
+        min_pace=1, max_pace=100,
+        min_dribbling=1, max_dribbling=100,
+        min_passing=1, max_passing=100,
+        min_shooting=1, max_shooting=100,
+        min_defense=1, max_defense=100,
+        min_physical=1, max_physical=100,
+        nationalities=None,
+        positions=None,
+        preferred_foot=None
+        ):
         query = []
 
         match_stage = {"$match": {}}
@@ -250,11 +317,20 @@ class Query(ObjectType):
 
         match_stage["$match"]["overall"] = {"$gte": min_ovr, "$lte": max_ovr}
         match_stage["$match"]["age"] = {"$gte": min_age, "$lte": max_age}
+        match_stage["$match"]["height"] = {"$gte": min_height, "$lte": max_height}
+        match_stage["$match"]["pace"] = {"$gte": min_pace, "$lte": max_pace}
+        match_stage["$match"]["dribbling"] = {"$gte": min_dribbling, "$lte": max_dribbling}
+        match_stage["$match"]["passing"] = {"$gte": min_passing, "$lte": max_passing}
+        match_stage["$match"]["shooting"] = {"$gte": min_shooting, "$lte": max_shooting}
+        match_stage["$match"]["defense"] = {"$gte": min_defense, "$lte": max_defense}
+        match_stage["$match"]["physical"] = {"$gte": min_physical, "$lte": max_physical}
 
         if nationalities:
             match_stage["$match"]["nationalities"] = {"$in": nationalities}
         if positions:
             match_stage["$match"]["positions"] = {"$in": positions}
+        if preferred_foot:
+            match_stage["$match"]["preferred_foot"] = {"$in": preferred_foot}
 
         c = None
 
@@ -266,10 +342,26 @@ class Query(ObjectType):
             c = {"$arrayElemAt": ["$positions", 0]}
         elif criteria == "NAT":
             c = {"$arrayElemAt": ["$nationalities", 0]}
+        elif criteria == "FOOT":
+            c = "$preferred_foot"
+        elif criteria == "PAC":
+            c = "$pace"
+        elif criteria == "DRI":
+            c = "$dribbling"
+        elif criteria == "PAS":
+            c = "$passing"
+        elif criteria == "SHO":
+            c = "$shooting"
+        elif criteria == "DEF":
+            c = "$defense"
+        elif criteria == "PHY":
+            c = "$physical"
+        elif criteria == "HEI":
+            c = "$height"
         else:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Criteria parameter must be one of: OVR, AGE, POS, NAT",
+                detail="Criteria parameter must be one of: OVR, AGE, POS, NAT, FOOT, PAC, DRI, PAS, SHO, DEF, PHY, HEI",
             )
 
         query.append(match_stage)

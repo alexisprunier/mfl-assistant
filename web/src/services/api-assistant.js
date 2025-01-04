@@ -447,6 +447,54 @@ export const getPlayerDashboardData = ({
         )}) {
           key,
           count
+        },
+        FOOT: getPlayerCountByCriteria(criteria: "FOOT", ${jsonToParams(
+          params
+        )}) {
+          key,
+          count
+        },
+        HEI: getPlayerCountByCriteria(criteria: "HEI", ${jsonToParams(
+          params
+        )}) {
+          key,
+          count
+        },
+        PAC: getPlayerCountByCriteria(criteria: "PAC", ${jsonToParams(
+          params
+        )}) {
+          key,
+          count
+        },
+        DRI: getPlayerCountByCriteria(criteria: "DRI", ${jsonToParams(
+          params
+        )}) {
+          key,
+          count
+        },
+        PAS: getPlayerCountByCriteria(criteria: "PAS", ${jsonToParams(
+          params
+        )}) {
+          key,
+          count
+        },
+        SHO: getPlayerCountByCriteria(criteria: "SHO", ${jsonToParams(
+          params
+        )}) {
+          key,
+          count
+        },
+        DEF: getPlayerCountByCriteria(criteria: "DEF", ${jsonToParams(
+          params
+        )}) {
+          key,
+          count
+        },
+        PHY: getPlayerCountByCriteria(criteria: "PHY", ${jsonToParams(
+          params
+        )}) {
+          key,
+          count
         }
       }`,
     }),

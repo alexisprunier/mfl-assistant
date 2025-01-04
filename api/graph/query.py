@@ -465,21 +465,72 @@ class Query(ObjectType):
 
         return team_members
 
-    get_players = List(PlayerType, search=String(), owners=List(String), min_ovr=Int(), max_ovr=Int(), min_age=Int(), max_age=Int(), nationalities=List(String), positions=List(String), ignore_players_in_teams=Boolean(), skip=Int(), limit=Int(), sort=String(), order=Int())
+    get_players = List(PlayerType,
+        search=String(),
+        owners=List(String),
+        min_ovr=Int(), max_ovr=Int(),
+        min_age=Int(), max_age=Int(),
+        min_height=Int(), max_height=Int(),
+        min_pace=Int(), max_pace=Int(),
+        min_dribbling=Int(), max_dribbling=Int(),
+        min_passing=Int(), max_passing=Int(),
+        min_shooting=Int(), max_shooting=Int(),
+        min_defense=Int(), max_defense=Int(),
+        min_physical=Int(), max_physical=Int(),
+        nationalities=List(String),
+        positions=List(String),
+        preferred_foot=List(String),
+        ignore_players_in_teams=Boolean(),
+        skip=Int(), limit=Int(),
+        sort=String(), order=Int()
+        )
 
     @add_token_if_exists
-    async def resolve_get_players(self, info, search=None, owners=None, min_ovr=1, max_ovr=100, min_age=1, max_age=99, nationalities=None, positions=None, ignore_players_in_teams=False, skip=0, limit=500, sort="overall", order=-1):
+    async def resolve_get_players(self, info,
+        search=None,
+        owners=None,
+        min_ovr=1, max_ovr=100,
+        min_age=1, max_age=100,
+        min_height=1, max_height=300,
+        min_pace=1, max_pace=100,
+        min_dribbling=1, max_dribbling=100,
+        min_passing=1, max_passing=100,
+        min_shooting=1, max_shooting=100,
+        min_defense=1, max_defense=100,
+        min_physical=1, max_physical=100,
+        nationalities=None,
+        positions=None,
+        preferred_foot=None,
+        ignore_players_in_teams=False,
+        skip=0, limit=500,
+        sort="overall", order=-1):
 
         filters = {}
 
         if min_ovr != 1 or max_ovr != 100:
             filters["overall"] = {"$gte": min_ovr, "$lte": max_ovr}
-        if min_age != 1 or max_age != 99:
+        if min_age != 1 or max_age != 100:
             filters["age"] = {"$gte": min_age, "$lte": max_age}
-        if nationalities is not None:
+        if min_height != 1 or max_height != 300:
+            filters["height"] = {"$gte": min_height, "$lte": max_height}
+        if min_pace != 1 or max_pace != 100:
+            filters["pace"] = {"$gte": min_pace, "$lte": max_pace}
+        if min_dribbling != 1 or max_dribbling != 100:
+            filters["dribbling"] = {"$gte": min_dribbling, "$lte": max_dribbling}
+        if min_passing != 1 or max_passing != 100:
+            filters["passing"] = {"$gte": min_passing, "$lte": max_passing}
+        if min_shooting != 1 or max_shooting != 100:
+            filters["shooting"] = {"$gte": min_shooting, "$lte": max_shooting}
+        if min_defense != 1 or max_defense != 100:
+            filters["defense"] = {"$gte": min_defense, "$lte": max_defense}
+        if min_physical != 1 or max_physical != 100:
+            filters["physical"] = {"$gte": min_physical, "$lte": max_physical}
+        if nationalities is not None and len(nationalities) > 0:
             filters["nationalities"] = {"$in": nationalities}
-        if positions is not None:
+        if positions is not None and len(positions) > 0:
             filters["positions"] = {"$in": positions}
+        if preferred_foot is not None and len(preferred_foot) > 0:
+            filters["preferred_foot"] = {"$in": preferred_foot}
         if owners is not None:
             filters["owner"] = {"$in": [ObjectId(o) for o in owners]}
 

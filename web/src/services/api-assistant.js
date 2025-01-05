@@ -812,6 +812,9 @@ export const getPlayerSales = ({
         getPlayerSales: getSales(${jsonToParams(params)}) {
           executionDate,
           price,
+          age,
+          overall,
+          positions,
           player {
             id,
             firstName,

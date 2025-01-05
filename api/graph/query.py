@@ -119,21 +119,11 @@ class Query(ObjectType):
         sales = info.context["db"].sales
 
         if type == "PLAYER":
-            sales = sales.find({"player": {"$exists": True, "$ne": None}})
-
-            player_filters = {
-                "overall": {"$gte": min_ovr, "$lte": max_ovr},
-                "age": {"$gte": min_age, "$lte": max_age}
-            }
-
-            if positions is not None:
-                player_filters["positions"] = {"$in": positions}
-
-            matching_players = await info.context["db"].players.find(player_filters).to_list(None)
-            matching_player_ids = [player["_id"] for player in matching_players]
-
             filters = {
-                "player": {"$in": matching_player_ids},
+                "player": {"$exists": True, "$ne": None},
+                "overall": {"$gte": min_ovr, "$lte": max_ovr},
+                "age": {"$gte": min_age, "$lte": max_age},
+                "positions": {"$in": positions},
             }
 
             execution_date_filter = {}
@@ -146,7 +136,7 @@ class Query(ObjectType):
             if execution_date_filter:
                 filters["execution_date"] = execution_date_filter
 
-            sales = await info.context["db"].sales \
+            sales = await sales \
                 .find(filters) \
                 .to_list(None)
 

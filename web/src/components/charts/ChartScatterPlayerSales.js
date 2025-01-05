@@ -1,10 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 // eslint-disable-next-line no-unused-vars
-import { Chart as ChartJS } from 'chart.js/auto';
-import 'chartjs-adapter-date-fns';
-import { enUS } from 'date-fns/locale';
-import { Scatter } from 'react-chartjs-2';
-import { divisions, getDivisionColor, getDivisionName } from "utils/division.js";
+import { Chart as ChartJS } from "chart.js/auto";
+import "chartjs-adapter-date-fns";
+import { enUS } from "date-fns/locale";
+import { Scatter } from "react-chartjs-2";
+import {
+  divisions,
+  getDivisionColor,
+  getDivisionName,
+} from "utils/division.js";
 import LoadingSquare from "components/loading/LoadingSquare";
 import BoxMessage from "components/box/BoxMessage";
 import { computeLinearRegression } from "utils/chart.js";
@@ -20,7 +24,11 @@ interface ChartScatterPlayerSalesProps {
   hideOneAndLower: boolean;
 }
 
-const ChartScatterPlayerSales: React.FC < ChartScatterPlayerSalesProps > = ({ sales, timeUnit, hideOneAndLower }) => {
+const ChartScatterPlayerSales: React.FC<ChartScatterPlayerSalesProps> = ({
+  sales,
+  timeUnit,
+  hideOneAndLower,
+}) => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
@@ -42,25 +50,25 @@ const ChartScatterPlayerSales: React.FC < ChartScatterPlayerSalesProps > = ({ sa
     return {
       data,
     };
-  }
+  };
 
   const extendLeft = () => {
     setStartDate(substractDate(startDate, timeUnit));
-  }
+  };
 
   const extendRight = () => {
     setEndDate(addDate(endDate, timeUnit));
-  }
+  };
 
   const moveLeft = () => {
     setStartDate(substractDate(startDate, timeUnit));
     setEndDate(substractDate(endDate, timeUnit));
-  }
+  };
 
   const moveRight = () => {
     setStartDate(addDate(startDate, timeUnit));
     setEndDate(addDate(endDate, timeUnit));
-  }
+  };
 
   useEffect(() => {
     if (sales) {
@@ -74,16 +82,12 @@ const ChartScatterPlayerSales: React.FC < ChartScatterPlayerSalesProps > = ({ sa
 
   return (
     <div className="h-100 w-100 position-relative">
-      {!sales
-        && <LoadingSquare />
-      }
+      {!sales && <LoadingSquare />}
 
-      {sales && sales.length === 0
-        && <BoxMessage content="No sale found" />
-      }
+      {sales && sales.length === 0 && <BoxMessage content="No sale found" />}
 
-      {sales && sales.length > 0
-        && <div className="h-100 w-100">
+      {sales && sales.length > 0 && (
+        <div className="h-100 w-100">
           <div className="position-absolute top-0 start-0">
             <button className={"btn btn-small"} onClick={extendLeft}>
               <i className="bi bi-arrow-bar-left text-info"></i>
@@ -106,7 +110,7 @@ const ChartScatterPlayerSales: React.FC < ChartScatterPlayerSalesProps > = ({ sa
               datasets: [
                 {
                   ...computeData(),
-                  pointBackgroundColor:"#0dcaf0",
+                  pointBackgroundColor: "#0dcaf0",
                   pointBorderWidth: 0,
                   pointRadius: 5,
                   pointHoverRadius: 8,
@@ -115,7 +119,7 @@ const ChartScatterPlayerSales: React.FC < ChartScatterPlayerSalesProps > = ({ sa
             }}
             options={{
               animation: {
-                easing: "easeOutExpo"
+                easing: "easeOutExpo",
               },
               responsive: true,
               maintainAspectRatio: false,
@@ -125,14 +129,14 @@ const ChartScatterPlayerSales: React.FC < ChartScatterPlayerSalesProps > = ({ sa
                   time: {
                     unit: ["w", "m"].indexOf(timeUnit) >= 0 ? "day" : "month",
                   },
-                  adapters: { 
+                  adapters: {
                     date: {
-                      locale: enUS, 
+                      locale: enUS,
                     },
                   },
                   min: startDate,
                   max: endDate,
-                  position: 'bottom',
+                  position: "bottom",
                   title: {
                     display: false,
                   },
@@ -147,8 +151,8 @@ const ChartScatterPlayerSales: React.FC < ChartScatterPlayerSalesProps > = ({ sa
                       return getDivisionName(val);
                     },*/
                   },
-                  type: 'linear',
-                  position: 'left',
+                  type: "linear",
+                  position: "left",
                   beginAtZero: true,
                   title: {
                     display: false,
@@ -161,7 +165,7 @@ const ChartScatterPlayerSales: React.FC < ChartScatterPlayerSalesProps > = ({ sa
               layout: {
                 padding: {
                   top: 40,
-                }
+                },
               },
               plugins: {
                 legend: {
@@ -172,25 +176,29 @@ const ChartScatterPlayerSales: React.FC < ChartScatterPlayerSalesProps > = ({ sa
                 },
                 tooltip: {
                   callbacks: {
-                    label: function(point) {
-                      var label = []
+                    label: function (point) {
+                      var label = [];
                       label.push(`Price: ${point.raw.y}`);
                       label.push(`Date: ${point.raw.x}`);
                       label.push(``);
-                      label.push(`${point.raw.player.firstName} ${point.raw.player.lastName}`);
-                      label.push(`OVR: ${point.raw.player.overall} - Age: ${point.raw.player.age}`);
-                      label.push(`Positions: ${point.raw.player.positions.join(",")}`);
+                      label.push(
+                        `${point.raw.player.firstName} ${point.raw.player.lastName}`
+                      );
+                      label.push(
+                        `OVR: ${point.raw.overall} - Age: ${point.raw.age}`
+                      );
+                      label.push(`Positions: ${point.raw.positions.join(",")}`);
                       label.push(``);
-                      
+
                       return label;
-                    }
-                  }
-                }
+                    },
+                  },
+                },
               },
             }}
           />
         </div>
-      }
+      )}
     </div>
   );
 };

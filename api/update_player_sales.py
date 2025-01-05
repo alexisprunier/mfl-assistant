@@ -12,10 +12,11 @@ def update_sales_data(db):
             sale_id = int(row['id'])
             overall = int(row['Overall'])
             age = int(row['Age'])
+            positions = row['Postions'].split(",")
 
             # Update the document in the MongoDB collection
             sales_collection.update_one(
                 {"_id": sale_id},
-                {"$set": {"overall": overall, "age": age}}
+                {"$set": {"overall": overall, "age": age, "positions": positions}}
             )
-            print(f"Updated sale ID {sale_id} with Overall: {overall} and Age: {age}")
+            print(f"Updated sale ID {sale_id} with Overall: {overall} and Age: {age} and Positions: {positions}")

@@ -16,7 +16,11 @@ def update_sales_data(db):
 
             # Update the document in the MongoDB collection
             sales_collection.update_one(
-                {"_id": sale_id},
+                {
+                    "_id": sale_id,
+                    "overall": {"$exists": False},  # Update if 'overall' does not exist
+                    "age": {"$exists": False}      # Update if 'age' does not exist
+                },
                 {"$set": {"overall": overall, "age": age, "positions": positions}}
             )
             print(f"Updated sale ID {sale_id} with Overall: {overall} and Age: {age} and Positions: {positions}")

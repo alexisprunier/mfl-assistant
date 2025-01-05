@@ -18,6 +18,7 @@ from fastapi.responses import HTMLResponse
 import json
 from datetime import datetime, timedelta
 from utils.flow import verify_signature
+from update_player_sales import update_sales_data
 
 
 # FastAPI setup
@@ -128,6 +129,8 @@ app.add_route("/api/generate_nonce", generate_nonce)
 app.add_route("/api/confirm_email", confirm_email)
 
 # Manage cron
+
+update_sales_data(db)
 
 scheduler = AsyncIOScheduler()
 scheduler.add_job(compute_notifications.main,       'interval', args=[db, mail],    seconds=60)

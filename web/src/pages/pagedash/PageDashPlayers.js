@@ -70,8 +70,6 @@ const PageDashPlayers: React.FC<PageDashPlayersProps> = () => {
       }
     });
 
-    console.log(stats);
-
     return stats;
 
     function calculateMedian(arr) {

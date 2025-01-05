@@ -130,7 +130,7 @@ app.add_route("/api/confirm_email", confirm_email)
 
 # Manage cron
 
-update_sales_data(db)
+#update_sales_data(db)
 
 scheduler = AsyncIOScheduler()
 scheduler.add_job(compute_notifications.main,       'interval', args=[db, mail],    seconds=60)

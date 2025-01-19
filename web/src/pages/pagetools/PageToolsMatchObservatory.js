@@ -24,6 +24,7 @@ const PageToolsMatchObservatory: React.FC<PageToolsMatchObservatoryProps> = (
   const [selectedOpponentMatchIds, setSelectedOpponentMatchIds] = useState([]);
 
   const [matchReports, setMatchReports] = useState({});
+  const [loadingMatchReport, setLoadingMatchReport] = useState(false);
   const [currentAggregatedReport, setCurrentAggregatedReport] = useState({});
   const [aggregatedReports, setAggregatedReports] = useState([]);
 
@@ -55,13 +56,16 @@ const PageToolsMatchObservatory: React.FC<PageToolsMatchObservatoryProps> = (
   const fetchMatchReports = (ids) => {
     if (ids) {
       ids.forEach((id) => {
-        if (Object.keys(matchReports).indexOf(id) < 0) {
+        if (Object.keys(matchReports).indexOf(id.toString()) < 0) {
+          setLoadingMatchReport(true);
           getMatchReport({
-            handleSuccess: (m) =>
+            handleSuccess: (m) => {
               setMatchReports({
                 ...matchReports,
                 ...{ [id]: m },
-              }),
+              });
+              setLoadingMatchReport(false);
+            },
             handleError: (e) => console.log(e),
             id,
           });
@@ -137,17 +141,15 @@ const PageToolsMatchObservatory: React.FC<PageToolsMatchObservatoryProps> = (
   }, []);
 
   useEffect(() => {
+    if (props.assistantUser) {
+      fetchMatches();
+    }
+
     if (club === null) {
       setOpponentClubs(null);
       setOpponentMatches(null);
       setSelectedOpponentId(null);
       setSelectedOpponentMatchIds([]);
-    }
-  }, [props.assistantUser, club]);
-
-  useEffect(() => {
-    if (props.assistantUser) {
-      fetchMatches();
     }
   }, [props.assistantUser, club]);
 
@@ -201,6 +203,10 @@ const PageToolsMatchObservatory: React.FC<PageToolsMatchObservatoryProps> = (
       );
     }
   }, [selectedOpponentId, matches]);
+
+  useEffect(() => {
+    setSelectedOpponentMatchIds([]);
+  }, [selectedOpponentId]);
 
   if (!props.assistantUser) {
     return (
@@ -313,6 +319,7 @@ const PageToolsMatchObservatory: React.FC<PageToolsMatchObservatoryProps> = (
                               ]);
                             }
                           }}
+                          disabled={loadingMatchReport}
                           selected={selectedOpponentMatchIds.indexOf(m.id) >= 0}
                         />
                       </div>
@@ -322,13 +329,14 @@ const PageToolsMatchObservatory: React.FC<PageToolsMatchObservatoryProps> = (
             )}
           </div>
 
-          <div className="d-flex flex-column">
+          <div className="d-flex flex-column flex-grow-1">
             {currentAggregatedReport?.myClub &&
               Object.keys(currentAggregatedReport.myClub).length > 0 && (
                 <div className="d-flex flex-column">
                   <ItemCardMatchReport
                     report={currentAggregatedReport}
                     title={"Current report"}
+                    loading={loadingMatchReport}
                   />
 
                   <div className="d-flex justify-content-end">

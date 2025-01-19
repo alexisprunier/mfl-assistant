@@ -35,21 +35,24 @@ interface ItemCardMatchProps {
   match: MatchData;
   onClick?: func;
   selected: Boolean;
+  disabled: Boolean;
 }
 
 const ItemCardMatch: React.FC<ItemCardMatchProps> = ({
   match,
   onClick,
   selected,
+  disabled,
 }) => {
   return (
     <div
       className={
         "ItemCardMatch card bg-black py-1 px-2 " +
         (selected ? "selected " : "") +
-        (onClick ? "selectable" : "")
+        (onClick ? "selectable " : "") +
+        (disabled ? "disabled" : "")
       }
-      onClick={() => onClick && onClick(match.id)}
+      onClick={() => !disabled && onClick && onClick(match.id)}
     >
       <div className="d-flex justify-content-between align-items-center">
         <div

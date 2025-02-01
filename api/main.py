@@ -10,7 +10,7 @@ from graph.query import Query
 from graph.mutation import Mutation
 import config
 from cron import compute_notifications, compute_reports, collect_clubs, collect_sales, collect_players, \
-    compute_club_count_per_day, compute_sale_total
+    compute_club_count_per_day, compute_sale_total, compute_raw_player_pricings, compute_player_pricings
 from endpoint.generate_nonce import generate_nonce
 from utils.jwt import create_access_token
 from utils.cookie import set_cookie
@@ -19,7 +19,6 @@ import json
 from datetime import datetime, timedelta
 from utils.flow import verify_signature
 from update_player_sales import update_sales_data
-
 
 # FastAPI setup
 
@@ -130,16 +129,16 @@ app.add_route("/api/confirm_email", confirm_email)
 
 # Manage cron
 
-#update_sales_data(db)
-
 scheduler = AsyncIOScheduler()
-scheduler.add_job(compute_notifications.main,       'interval', args=[db, mail],    seconds=60)
+"""scheduler.add_job(compute_notifications.main,       'interval', args=[db, mail],    seconds=60)
 scheduler.add_job(compute_club_count_per_day.main,  'interval', args=[db],          seconds=60)
 scheduler.add_job(compute_sale_total.main,          'interval', args=[db],          seconds=30)
 scheduler.add_job(compute_reports.main,             'interval', args=[db, mail],    seconds=5)
 scheduler.add_job(collect_clubs.main,               'interval', args=[db],          seconds=60)
 scheduler.add_job(collect_sales.main,               'interval', args=[db],          seconds=30)
 scheduler.add_job(collect_players.main,             'interval', args=[db],          seconds=30)
+scheduler.add_job(compute_raw_player_pricings.main, 'interval', args=[db],          seconds=30)"""
+scheduler.add_job(compute_player_pricings.main,     'interval', args=[db],          seconds=30)
 scheduler.start()
 
 

@@ -237,3 +237,25 @@ class NonceType(ObjectType):
     id = ID(source='_id')
     address = String()
     nonce = String()
+
+
+class RawPlayerPricingType(ObjectType):
+    id = Int(source='_id')
+    price = Float()
+    overall = Int()
+    position = String()
+    age = Int()
+    date = DateTime()
+    sale = Field(SaleType)
+
+    async def resolve_user(self, info):
+        return await info.context["db"].sales.find_one({"_id": self["sale"]})
+
+class PlayerPricingType(ObjectType):
+    price = Int()
+    overall = Int()
+    position = String()
+    age = Int()
+
+    def resolve_id(self, info):
+        return f"{self.overall}-{self.position}-{self.age}"

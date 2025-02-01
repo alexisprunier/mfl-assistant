@@ -634,3 +634,11 @@ class Query(ObjectType):
             .to_list(length=None)
 
         return users
+
+    get_player_pricings = List(TeamType)
+
+    @require_token
+    async def resolve_get_player_pricings(self, info):
+        return await info.context["db"].player_pricings \
+            .find() \
+            .to_list(length=None)

@@ -101,8 +101,11 @@ def exponential_smoothing(prices_dates, half_life_days=15):
     
     for price, date in prices_dates:
         age_days = (now - date).days
-        weight = exp(-age_days / half_life_days)
+        weight = exp(-age_days / half_life_days) 
         weights.append(weight)
         weighted_prices.append(price * weight)
     
-    return sum(weighted_prices) / sum(weights) if weights else 0
+    if weights:
+        return sum(weighted_prices) / sum(weights)
+    else:
+        return None

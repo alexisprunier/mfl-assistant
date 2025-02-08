@@ -35,6 +35,9 @@ async def main(db):
         .to_list(length=None)
 
     for s in sales:
+        if "overall" not in s:
+            continue
+
         price = await calculate_price_from_sale(db, s)
 
         if price is None:

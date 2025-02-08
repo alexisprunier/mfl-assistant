@@ -40,7 +40,6 @@ async def main(db, mail):
         for scope in listing_scopes:
             filtered_listings = await _filter_listings_per_scope(scope, listings)
             player_ids = [listing["player"]["id"] for listing in filtered_listings]
-            logger.critical(f"{len(player_ids)} - {len(filtered_listings)}")
 
             if len(player_ids) > 0:
                 user = [u for u in users if u["_id"] == scope["user"]]

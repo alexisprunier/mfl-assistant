@@ -65,7 +65,7 @@ async def main(db):
             db.raw_player_pricings.insert_one(data_point)
 
 
-async def calculate_price_from_sale(db, sale, alpha=0.7, lookback_days=30):
+async def calculate_price_from_sale(db, sale, lookback_days=30):
     target_date = sale["execution_date"]
     lookback_date = target_date - timedelta(days=lookback_days)
     
@@ -91,7 +91,7 @@ async def calculate_price_from_sale(db, sale, alpha=0.7, lookback_days=30):
     if not relevant_prices_dates:
         return None
     
-    return exponential_smoothing(relevant_prices_dates, alpha)
+    return exponential_smoothing(relevant_prices_dates)
 
 
 def exponential_smoothing(prices_dates, half_life_days=15):
@@ -101,7 +101,7 @@ def exponential_smoothing(prices_dates, half_life_days=15):
     
     for price, date in prices_dates:
         age_days = (now - date).days
-        weight = exp(-age_days / half_life_days)  # Exponential decay
+        weight = exp(-age_days / half_life_days)
         weights.append(weight)
         weighted_prices.append(price * weight)
     

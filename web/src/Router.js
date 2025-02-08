@@ -16,6 +16,7 @@ import PageToolsMatchObservatory from "pages/pagetools/PageToolsMatchObservatory
 import PageToolsPlayerPricing from "pages/pagetools/PageToolsPlayerPricing.js";
 import PageToolsTeamBuilder from "pages/pagetools/PageToolsTeamBuilder.js";
 import PageUser from "pages/PageUser.js";
+import PagePricing from "pages/PagePricing.js";
 import PageUserClubs from "pages/pageuser/PageUserClubs.js";
 import PageUserPlayers from "pages/pageuser/PageUserPlayers.js";
 import React, { useState } from "react";
@@ -56,6 +57,7 @@ const Router: React.FC = (props) => {
               element={<PageHome yScrollPosition={yScrollPosition} />}
             />
             <Route path="/search" element={<PageSearch />} />
+            <Route path="/pricing" element={<PagePricing />} />
             <Route
               path="user/:address"
               element={

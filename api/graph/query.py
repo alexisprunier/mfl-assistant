@@ -1,9 +1,10 @@
 from graphene import ObjectType, String, Int, Schema, Field, List, ID, Boolean, Date
-from graph.schema import UserType, SaleType, ContractType, NotificationScopeType, NotificationType, CountType, DataPointType, ClubType, TeamType, TeamMemberType, PlayerType, ReportConfigurationType, ReportType
+from graph.schema import RawPlayerPricingType, PlayerPricingType, UserType, SaleType, ContractType, NotificationScopeType, NotificationType, CountType, DataPointType, ClubType, TeamType, TeamMemberType, PlayerType, ReportConfigurationType, ReportType
 from bson import ObjectId
 from decorator.require_token import require_token
 from decorator.add_token_if_exists import add_token_if_exists
 from fastapi import HTTPException, status
+from datetime import datetime, timedelta
 
 
 class Query(ObjectType):
@@ -635,10 +636,43 @@ class Query(ObjectType):
 
         return users
 
-    get_player_pricings = List(TeamType)
+    get_player_pricings = List(PlayerPricingType)
 
-    @require_token
     async def resolve_get_player_pricings(self, info):
         return await info.context["db"].player_pricings \
             .find() \
             .to_list(length=None)
+
+    get_raw_player_pricings = List(RawPlayerPricingType)
+
+    async def resolve_get_raw_player_pricings(self, info):
+        lookback_date = datetime.now() - timedelta(days=30)
+
+        pipeline = [
+            {"$match": {
+                "date": {"$gte": lookback_date, "$lte": datetime.now()}
+            }},
+            {"$sort": {"date": -1}},
+            {"$group": {
+                "_id": {"age": "$age", "overall": "$overall", "position": "$position"},
+                "price": {"$first": "$price"},
+                "date": {"$first": "$date"},
+            }},
+        ]
+
+        raw_results = await info.context["db"] \
+        .raw_player_pricings.aggregate(pipeline) \
+        .to_list(length=None)
+
+        flattened_results = [
+            {
+                "age": doc["_id"]["age"],
+                "overall": doc["_id"]["overall"],
+                "position": doc["_id"]["position"],
+                "price": doc["price"],
+                "date": doc["date"],
+            }
+            for doc in raw_results
+        ]
+
+        return flattened_results

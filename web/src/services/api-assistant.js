@@ -838,3 +838,44 @@ export const getPlayerSales = ({
     (v) => defaultHandleSuccess(handleSuccess, v),
     (e) => defaultHandleError(handleError, e)
   );
+
+export const getPlayerPricings = ({
+  handleSuccess = null,
+  handleError = null,
+}) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `{
+        getPlayerPricings {
+          overall,
+          age,
+          price,
+          position
+        }
+      }`,
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );
+
+export const getRawPlayerPricings = ({
+  handleSuccess = null,
+  handleError = null,
+}) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `{
+        getRawPlayerPricings {
+          overall,
+          age,
+          price,
+          position,
+          date
+        }
+      }`,
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );

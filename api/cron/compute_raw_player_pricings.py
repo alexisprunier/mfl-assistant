@@ -24,7 +24,8 @@ async def main(db):
         },
         {
             "$match": {
-                "matching_sales": {"$size": 0}
+                "matching_sales": {"$size": 0},
+                "club": {"$exists": False}
             }
         }
     ]
@@ -34,12 +35,7 @@ async def main(db):
         .to_list(length=None)
 
     for s in sales:
-        logger.critical(s)
-        logger.critical("TREAT SALE")
-        logger.critical(json.dumps(s, sort_keys=True, indent=2, default=str))
-
         price = await calculate_price_from_sale(db, s)
-        logger.warning(f"PRICE: {price}")
 
         if price is None:
             continue
@@ -61,13 +57,11 @@ async def main(db):
         })
         
         if existing_entry:
-            logger.warning(f"EXISTING DATAPOINT: {data_point}")
             await db.raw_player_pricings.update_one(
                 {"_id": existing_entry["_id"]},
                 {"$set": {"price": price}}
             )
         else:
-            logger.warning(f"DATAPOINT: {data_point}")
             db.raw_player_pricings.insert_one(data_point)
 
 
@@ -75,15 +69,22 @@ async def calculate_price_from_sale(db, sale, alpha=0.7, lookback_days=30):
     target_date = sale["execution_date"]
     lookback_date = target_date - timedelta(days=lookback_days)
     
+    threshold_mapping = {65: (65, 66), 75: (75, 76), 85: (85, 86),
+                     64: (63, 64), 74: (73, 74), 84: (83, 84)}
+
+    if sale["overall"] in threshold_mapping:
+        overall_range = threshold_mapping[sale["overall"]]
+    else:
+        overall_range = (sale["overall"] - 1, sale["overall"] + 1)
+
+    age_range = (sale["age"] - 1, sale["age"] + 1)
+
     sales = await db.sales.find({
         "execution_date": {"$gte": lookback_date, "$lte": sale["execution_date"]},
-        "overall": sale["overall"],
-        "age": sale["age"],
-        "positions": sale["positions"][0]
+        "overall": {"$gte": overall_range[0], "$lte": overall_range[1]},
+        "age": {"$gte": age_range[0], "$lte": age_range[1]},
+        "positions.0": sale["positions"][0]
     }).to_list(length=None)
-
-    logger.warning("RELATED SALES")
-    logger.warning(json.dumps(sales, sort_keys=True, indent=2, default=str))
     
     relevant_prices_dates = [(sale["price"], sale["execution_date"]) for sale in sales]
     
@@ -93,17 +94,15 @@ async def calculate_price_from_sale(db, sale, alpha=0.7, lookback_days=30):
     return exponential_smoothing(relevant_prices_dates, alpha)
 
 
-def exponential_smoothing(prices_dates, alpha=0.7, beta=0.1):
-    if not prices_dates:
-        return None
+def exponential_smoothing(prices_dates, half_life_days=15):
+    now = datetime.now()
+    weights = []
+    weighted_prices = []
     
-    prices_dates.sort(key=lambda x: x[1])
-    now = datetime.utcnow()
-    smoothed_price = prices_dates[0][0]
+    for price, date in prices_dates:
+        age_days = (now - date).days
+        weight = exp(-age_days / half_life_days)  # Exponential decay
+        weights.append(weight)
+        weighted_prices.append(price * weight)
     
-    for price, date in prices_dates[1:]:
-        days_diff = (now - date).days + 1
-        weight = exp(-beta * days_diff)
-        smoothed_price = alpha * price * weight + (1 - alpha) * smoothed_price
-    
-    return smoothed_price
+    return sum(weighted_prices) / sum(weights) if weights else 0

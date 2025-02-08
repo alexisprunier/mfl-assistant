@@ -3,7 +3,7 @@ import ItemRowPlayerAssist from "components/items/ItemRowPlayerAssist.js";
 import LoadingSquare from "components/loading/LoadingSquare";
 import React, { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
-import { getPlayers } from "services/api-assistant.js";
+import { getPlayers, getPlayerPricings } from "services/api-assistant.js";
 
 interface PageUserPlayersProps {}
 
@@ -12,6 +12,7 @@ const PageUserPlayers: React.FC<PageUserPlayersProps> = () => {
   const [players, setPlayers] = useState(null);
   const [playerPage, setPlayerPage] = useState(0);
   const [canLoadMorePlayers, setCanLoadMorePlayers] = useState(false);
+  const [pricings, setPricings] = useState([]);
 
   const [playerView, setPlayerView] = useState(null);
 
@@ -33,6 +34,41 @@ const PageUserPlayers: React.FC<PageUserPlayersProps> = () => {
     });
   };
 
+  const fetchPricings = () => {
+    getPlayerPricings({
+      handleSuccess: (d) => {
+        if (d.data.getPlayerPricings) {
+          setPricings(d.data.getPlayerPricings);
+        }
+      },
+      handleError: (e) => console.log(e),
+    });
+  };
+
+  const getPricing = (player) => {
+    return pricings
+      .filter((p) => p.overall === player.overall && p.age === player.age)
+      .map((p) => p.price)
+      .pop();
+  };
+
+  const calculateTotalPricing = (players) => {
+    let total = 0;
+    let allValid = true;
+
+    for (const player of players) {
+      const price = getPricing(player);
+
+      if (price === undefined || price === null) {
+        allValid = false;
+      } else {
+        total += price;
+      }
+    }
+
+    return { total, complete: allValid };
+  };
+
   useEffect(() => {
     if (user) {
       fetchPlayers();
@@ -43,6 +79,8 @@ const PageUserPlayers: React.FC<PageUserPlayersProps> = () => {
     if (user) {
       fetchPlayers();
     }
+
+    fetchPricings();
   }, []);
 
   return (
@@ -60,15 +98,37 @@ const PageUserPlayers: React.FC<PageUserPlayersProps> = () => {
                   <ButtonPlayerView
                     selectedView={playerView}
                     onChange={(v) => setPlayerView(v)}
+                    displayPricing={true}
                   />
                 </div>
               )}
             </div>
 
+            {playerView == "pricing" && (
+              <div class="d-flex justify-content-end w-100 mb-3">
+                <div class="me-1">
+                  <span className="text-warning">
+                    <i class="bi bi-cone-striped me-1"></i>ALPHA:&nbsp;
+                  </span>
+                  Est. gallery value:{" "}
+                  <span class="text-info">
+                    ${calculateTotalPricing(players).total}
+                  </span>
+                </div>
+                {!calculateTotalPricing(players).complete && (
+                  <div>Pricing is missing for some players</div>
+                )}
+              </div>
+            )}
+
             {user && players !== null && (
               <div>
                 {players.map((c) => (
-                  <ItemRowPlayerAssist p={c} display={playerView} />
+                  <ItemRowPlayerAssist
+                    p={c}
+                    display={playerView}
+                    pricing={getPricing(c)}
+                  />
                 ))}
               </div>
             )}

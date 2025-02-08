@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { NotificationManager as nm } from "react-notifications";
 import ButtonLogin from "components/buttons/ButtonLogin.js";
 import BoxLogin from "components/box/BoxLogin.js";
@@ -9,12 +9,19 @@ import PopupNotificationScope from "components/popups/PopupNotificationScope.js"
 import ItemNotificationScope from "components/items/ItemNotificationScope.js";
 import ItemNotification from "components/items/ItemNotification.js";
 import ItemPlayer from "components/items/ItemPlayer.js";
-import { getReportConfigurations, addReportConfiguration, deleteReportConfiguration, updateReportConfiguration } from "services/api-assistant.js";
+import {
+  getReportConfigurations,
+  addReportConfiguration,
+  deleteReportConfiguration,
+  updateReportConfiguration,
+} from "services/api-assistant.js";
 import { validateEmail } from "utils/re.js";
 
 interface PageNotificationReportProps {}
 
-const PageNotificationReport: React.FC < PageNotificationReportProps > = (props) => {
+const PageNotificationReport: React.FC<PageNotificationReportProps> = (
+  props
+) => {
   const [reportConfigurations, setReportConfigurations] = useState(null);
 
   const fetchReportConfigurations = () => {
@@ -23,7 +30,7 @@ const PageNotificationReport: React.FC < PageNotificationReportProps > = (props)
         setReportConfigurations(v.data.getReportConfigurations);
       },
     });
-  }
+  };
 
   const addOrDeleteReportConfiguration = (c) => {
     if (!c) {
@@ -52,7 +59,7 @@ const PageNotificationReport: React.FC < PageNotificationReportProps > = (props)
         },
       });
     }
-  }
+  };
 
   const modifyReportConfiguration = (id, params) => {
     console.log(id, params);
@@ -66,7 +73,7 @@ const PageNotificationReport: React.FC < PageNotificationReportProps > = (props)
         ...params,
       },
     });
-  }
+  };
 
   useEffect(() => {
     if (props.assistantUser) {
@@ -90,38 +97,55 @@ const PageNotificationReport: React.FC < PageNotificationReportProps > = (props)
             </div>
 
             <div className="d-flex">
-              {reportConfigurations !== null
-                ? <div>
+              {reportConfigurations !== null ? (
+                <div>
                   <input
                     type="checkbox"
                     className="me-1 mb-2"
-                    defaultChecked={reportConfigurations.filter((c) => c.type === "daily_progress_report").length > 0}
-                    onClick={() => addOrDeleteReportConfiguration(
-                      reportConfigurations.filter((c) => c.type === "daily_progress_report").pop()
-                    )}
+                    defaultChecked={
+                      reportConfigurations.filter(
+                        (c) => c.type === "daily_progress_report"
+                      ).length > 0
+                    }
+                    onClick={() =>
+                      addOrDeleteReportConfiguration(
+                        reportConfigurations
+                          .filter((c) => c.type === "daily_progress_report")
+                          .pop()
+                      )
+                    }
                   />
-                  <span className="text-info">
-                    <i class="bi bi-cone-striped me-1"></i>BETA:
-                  </span>
                   &nbsp;Activate the 24H progression report
-                  {reportConfigurations.filter((c) => c.type === "daily_progress_report").length > 0
-                    && <div className="ms-4 fade-in">
-                      Choose time (UTC): <input
+                  {reportConfigurations.filter(
+                    (c) => c.type === "daily_progress_report"
+                  ).length > 0 && (
+                    <div className="ms-4 fade-in">
+                      Choose time (UTC):{" "}
+                      <input
                         type="time"
                         className="form-control"
-                        defaultValue={reportConfigurations.filter((c) => c.type === "daily_progress_report").pop().time}
-                        onBlur={(v) => modifyReportConfiguration(
-                          reportConfigurations.filter((c) => c.type === "daily_progress_report").pop().id,
-                          { time: v.target.value }
-                        )}
+                        defaultValue={
+                          reportConfigurations
+                            .filter((c) => c.type === "daily_progress_report")
+                            .pop().time
+                        }
+                        onBlur={(v) =>
+                          modifyReportConfiguration(
+                            reportConfigurations
+                              .filter((c) => c.type === "daily_progress_report")
+                              .pop().id,
+                            { time: v.target.value }
+                          )
+                        }
                       />
                     </div>
-                  }
+                  )}
                 </div>
-                : <div className="w-100" style={{ height: "300px" }}>
+              ) : (
+                <div className="w-100" style={{ height: "300px" }}>
                   <LoadingSquare />
                 </div>
-              }
+              )}
             </div>
           </div>
         </div>

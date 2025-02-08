@@ -493,7 +493,7 @@ class Query(ObjectType):
         positions=None,
         preferred_foot=None,
         ignore_players_in_teams=False,
-        skip=0, limit=500,
+        skip=0, limit=50000,
         sort="overall", order=-1):
 
         filters = {}

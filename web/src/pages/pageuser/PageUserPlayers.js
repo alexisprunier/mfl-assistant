@@ -30,7 +30,7 @@ const PageUserPlayers: React.FC<PageUserPlayersProps> = () => {
         setPlayerPage(playerPage + 1);
       },
       handleError: (e) => console.log(e),
-      params: { owners: [user.id], limit: 500, skip: playerPage * 500 },
+      params: { owners: [user.id], limit: 50000, skip: playerPage * 50000 },
     });
   };
 
@@ -47,7 +47,12 @@ const PageUserPlayers: React.FC<PageUserPlayersProps> = () => {
 
   const getPricing = (player) => {
     return pricings
-      .filter((p) => p.overall === player.overall && p.age === player.age)
+      .filter(
+        (p) =>
+          p.overall === player.overall &&
+          p.age === player.age &&
+          p.position === player.positions[0]
+      )
       .map((p) => p.price)
       .pop();
   };

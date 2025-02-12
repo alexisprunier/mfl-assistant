@@ -39,14 +39,12 @@ const PageUserClubs: React.FC<PageUserClubsProps> = () => {
     if (user !== null) {
       fetchClubs();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   useEffect(() => {
     if (user !== null) {
       fetchClubs();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -80,7 +78,6 @@ const PageUserClubs: React.FC<PageUserClubsProps> = () => {
 
       fetchNextStanding();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [displayStandings]);
 
   const getStandingsBlock = (data) => {
@@ -123,13 +120,7 @@ const PageUserClubs: React.FC<PageUserClubsProps> = () => {
               className="d-flex justify-content-end"
               style={{ minWidth: 30 }}
             >
-              Pt
-            </div>
-            <div
-              className="d-flex justify-content-end"
-              style={{ minWidth: 30 }}
-            >
-              GA
+              Pts
             </div>
           </div>{" "}
           {data.standings.map((standing, index) => (
@@ -192,12 +183,6 @@ const PageUserClubs: React.FC<PageUserClubsProps> = () => {
                 style={{ minWidth: 30 }}
               >
                 {standing.points}
-              </div>
-              <div
-                className="d-flex justify-content-end"
-                style={{ minWidth: 30 }}
-              >
-                {standing.goalsAgainst}
               </div>
             </div>
           ))}{" "}

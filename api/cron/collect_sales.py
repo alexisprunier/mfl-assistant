@@ -1,7 +1,7 @@
 import datetime
 import requests
 import logging
-from utils.db import get_var_value, upsert_vars, build_and_upsert_player, build_and_upsert_club, build_and_upsert_sale 
+from utils.db import get_var_value, upsert_vars, build_and_upsert_player, build_and_upsert_club, build_and_upsert_sale, build_and_upsert_user
 from utils.date import convert_unix_to_datetime
 
 
@@ -67,6 +67,7 @@ async def main(db):
 
 
 async def _treat_sale(db, mfl_sale):
-    player = await build_and_upsert_player(db, mfl_sale["player"]) if "player" in mfl_sale else None
+    user = await build_and_upsert_user(db, mfl_sale["player"]["ownedBy"]) if "player" in mfl_sale and "ownedBy" in mfl_sale["player"] else None
+    player = await build_and_upsert_player(db, mfl_sale["player"], user) if "player" in mfl_sale else None
     club = await build_and_upsert_club(db, mfl_sale["club"]) if "club" in mfl_sale else None
     return await build_and_upsert_sale(db, mfl_sale, player, club)

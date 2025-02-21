@@ -2,26 +2,45 @@ import BoxMessage from "components/box/BoxMessage.js";
 import ChartScatterPlayerContracts from "components/charts/ChartScatterPlayerContracts.js";
 import ItemRowContract from "components/items/ItemRowContract.js";
 import LoadingSquare from "components/loading/LoadingSquare.js";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { getContracts } from "services/api-assistant.js";
 import { positions, scarcity } from "utils/player.js";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { convertDictToUrlParams } from "utils/url.js";
+import { copyTextToClipboard } from "utils/clipboard.js";
 
 interface PageToolsContractEvaluationProps {}
 
 const PageToolsContractEvaluation: React.FC<
   PageToolsContractEvaluationProps
 > = () => {
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+
   const [isLoading, setIsLoading] = useState(false);
 
-  const [overall, setOverall] = useState(undefined);
-  const [position, setPosition] = useState(undefined);
+  const [overall, setOverall] = useState(
+    searchParams.get("overall") ? parseInt(searchParams.get("overall")) : null
+  );
+  const [position, setPosition] = useState(
+    searchParams.get("position") ? searchParams.get("position") : null
+  );
 
   const [contracts, setContracts] = useState(null);
-  const [hideZeros, setHideZeros] = useState(false);
+  const [hideZeros, setHideZeros] = useState(true);
 
-  const getData = (pursue, beforeListingId) => {
+  const getData = () => {
     setIsLoading(true);
     setContracts(null);
+
+    navigate({
+      search:
+        "?" +
+        convertDictToUrlParams({
+          overall,
+          position,
+        }),
+    });
 
     getContracts({
       handleSuccess: (v) => {
@@ -42,6 +61,12 @@ const PageToolsContractEvaluation: React.FC<
     });
   };
 
+  useEffect(() => {
+    if (overall && position) {
+      getData();
+    }
+  }, []);
+
   return (
     <div id="PageToolsContractEvaluation" className="h-100 w-100">
       <div className="container-xl h-100 px-2 px-md-4 py-4">
@@ -49,7 +74,18 @@ const PageToolsContractEvaluation: React.FC<
           <div className="d-flex flex-column flex-md-grow-0 flex-basis-300">
             <div className="card d-flex flex-column flex-md-grow-0 m-2 p-3 pt-2">
               <div className="d-flex flex-row flex-md-grow-1">
-                <h4 className="flex-grow-1">Contract information</h4>
+                <h4 className="flex-grow-1">Contract details</h4>
+
+                {contracts && (
+                  <div className="flex-glow-0">
+                    <button
+                      className="btn btn-sm btn-link align-self-start"
+                      onClick={() => copyTextToClipboard(window.location.href)}
+                    >
+                      <i className="bi bi-share-fill" />
+                    </button>
+                  </div>
+                )}
               </div>
 
               <div className="d-flex flex-fill flex-column">
@@ -88,27 +124,13 @@ const PageToolsContractEvaluation: React.FC<
                 </button>
               </div>
             </div>
-
-            {/*<div className="card d-flex flex-column flex-fill m-2 p-3 pt-2">
-              <div className="d-flex flex-row">
-                <div className="d-flex">
-                  <h4 className="flex-grow-1">Advised rates</h4>
-                </div>
-              </div>
-
-              <div className="d-flex flex-fill overflow-hidden">
-                <BoxSoonToCome />
-              </div>
-            </div>*/}
           </div>
 
           <div className="d-flex flex-column flex-md-column flex-md-grow-1">
             <div className="card d-flex flex-column flex-md-grow-1 flex-md-shrink-1 flex-md-basis-auto flex-basis-0 m-2 p-3 pt-2">
               <div className="d-flex flex-row">
                 <div className="d-flex">
-                  <h4 className="flex-grow-1">
-                    Similar players under contract
-                  </h4>
+                  <h4 className="flex-grow-1">Distribution per division</h4>
                 </div>
 
                 <div className="d-flex flex-fill overflow-auto justify-content-end align-items-end">
@@ -117,7 +139,7 @@ const PageToolsContractEvaluation: React.FC<
                     <input
                       type="checkbox"
                       className="ms-1"
-                      value={hideZeros}
+                      checked={hideZeros}
                       onChange={() => setHideZeros(!hideZeros)}
                     />
                   </small>
@@ -139,7 +161,7 @@ const PageToolsContractEvaluation: React.FC<
             <div className="card d-flex flex-column flex-md-grow-1 flex-md-shrink-1 flex-md-basis-auto flex-basis-0 m-2 p-3 pt-2 max-height-md-300">
               <div className="d-flex flex-row">
                 <div className="d-flex">
-                  <h4 className="flex-grow-1">Contract details</h4>
+                  <h4 className="flex-grow-1">Contract list</h4>
                 </div>
               </div>
 

@@ -574,7 +574,7 @@ class Query(ObjectType):
     async def resolve_get_contracts(self, info, min_ovr=1, max_ovr=100, nationalities=None, positions=None):
 
         player_filters = {
-            "overall": {"$gt": min_ovr, "$lt": max_ovr}
+            "overall": {"$gte": min_ovr, "$lte": max_ovr}
         }
 
         if nationalities is not None:

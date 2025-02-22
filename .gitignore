@@ -3,6 +3,11 @@
 # docker
 /.docker/api.prod.env
 /.docker/mongodb.prod.env
+/.docker-data/
+!/.docker-data/mariadb/
+!/.docker-data/mariadb/.gitkeep
+!/.docker-data/mongodb/
+!/.docker-data/mongodb/.gitkeep
 
 # dependencies
 /web/node_modules

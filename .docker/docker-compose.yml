@@ -9,6 +9,8 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: password
       MONGO_INITDB_DATABASE: mfl-assistant
+    volumes:
+      - ../.docker-data/mongodb:/data/db:Z
     ports:
       - "27017:27017"
     expose:
@@ -16,12 +18,14 @@ services:
 
   smtp:
     image: reachfive/fake-smtp-server
+    container_name: smtp
     ports:
       - "1025:1025"
       - "1080:1080"
 
   api:
     image: mfl-assistant_api:local
+    container_name: api
     build:
       context: ../api
       dockerfile: Dockerfile
@@ -49,6 +53,7 @@ services:
 
   web:
     image: mfl-assistant_web:local
+    container_name: web
     build:
       context: ../web
       dockerfile: Dockerfile
@@ -63,6 +68,37 @@ services:
       - "3000:3000"
     expose:
       - "3000"
+
+  mariadb:
+    image: mariadb:10.11
+    container_name: mariadb
+    command: --max-allowed-packet=64MB
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=matomo
+      - MARIADB_AUTO_UPGRADE=1
+      - MARIADB_DISABLE_UPGRADE_BACKUP=1
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    volumes:
+      - ../.docker-data/mariadb:/var/lib/mysql:Z
+    env_file:
+      - ./mariadb.env
+
+  matomo:
+    image: matomo
+    container_name: matomo
+    restart: always
+    environment:
+      - MATOMO_DATABASE_HOST=mariadb
+    env_file:
+      - ./mariadb.env
+    ports:
+      - "8080:80"
+    depends_on:
+      - mariadb
 
 networks:
   default:

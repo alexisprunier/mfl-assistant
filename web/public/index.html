@@ -16,7 +16,9 @@
   _paq.push(['trackPageView']);
   _paq.push(['enableLinkTracking']);
   (function() {
-    var u = "//127.0.0.1:8080/";
+    var isLocal = window.location.hostname === "127.0.0.1" || window.location.hostname === "localhost";
+    var domain = window.location.hostname;
+    var u = isLocal ? "//127.0.0.1:8080/" : `//analytics.${domain}/`;
     _paq.push(['setTrackerUrl', u + 'matomo.php']);
     _paq.push(['setSiteId', '1']);
     var d = document,

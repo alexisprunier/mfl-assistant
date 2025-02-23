@@ -48,7 +48,7 @@ services:
     image: certbot/certbot
     container_name: certbot
     ports:
-      - "80:80"
+      - "8081:80"
     volumes: 
       - /var/www/mfl-assistant/mail/letsencrypt:/etc/letsencrypt
       - /var/www/mfl-assistant/certbot/logs:/var/log/letsencrypt/
@@ -97,6 +97,36 @@ services:
       target: production
     ports:
       - "3000:80"
+
+  mariadb:
+    image: mariadb:10.11
+    container_name: mariadb
+    command: --max-allowed-packet=64MB
+    restart: always
+    environment:
+      - MARIADB_AUTO_UPGRADE=1
+      - MARIADB_DISABLE_UPGRADE_BACKUP=1
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    volumes:
+      - /var/www/mfl-assistant/database/mariadb:/var/lib/mysql:Z
+    env_file:
+      - ./mariadb.prod.env
+
+  matomo:
+    image: matomo
+    container_name: matomo
+    restart: always
+    environment:
+      - MATOMO_DATABASE_HOST=mariadb
+    env_file:
+      - ./mariadb.env
+    ports:
+      - "8082:80"
+    depends_on:
+      - mariadb
 
 networks:
   default:

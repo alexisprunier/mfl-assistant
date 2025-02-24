@@ -502,6 +502,25 @@ export const getPlayerDashboardData = ({
     (e) => defaultHandleError(handleError, e)
   );
 
+export const getPlayerCountPerCountry = ({
+  handleSuccess = null,
+  handleError = null,
+  params,
+}) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `{
+          getPlayerCountPerCountry(${jsonToParams(params)}) {
+            key,
+            count
+          },
+        }`,
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );
+
 export const getTeams = ({ handleSuccess = null, handleError = null }) =>
   post(
     getGraphQLEndpoint(),

@@ -1,10 +1,17 @@
 import L from "leaflet";
 import React, { useEffect, useState } from "react";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import {
+  MapContainer,
+  Marker,
+  Popup,
+  TileLayer,
+  CircleMarker,
+} from "react-leaflet";
 import "statics/leaflet.css";
 import "./PageUserMap.css";
 import { useOutletContext } from "react-router-dom";
-import { getClubs } from "services/api-assistant.js";
+import { getClubs, getPlayerCountPerCountry } from "services/api-assistant.js";
+import { countries, cities } from "utils/geography.js";
 
 interface PageUserMapProps {}
 
@@ -12,12 +19,23 @@ const PageUserMap: React.FC<PageUserMapProps> = () => {
   const user = useOutletContext();
 
   const [clubs, setClubs] = useState(null);
+  const [playerCountPerCountry, setPlayerCountPerCountry] = useState(null);
   const [markers, setMarkers] = useState(null);
 
   const fetchClubs = () => {
     getClubs({
       handleSuccess: (d) => {
         setClubs(d.data.getClubs);
+      },
+      handleError: (e) => console.log(e),
+      params: { owners: [user.id] },
+    });
+  };
+
+  const fetchPlayerCountPerCountry = () => {
+    getPlayerCountPerCountry({
+      handleSuccess: (d) => {
+        setPlayerCountPerCountry(d.data.getPlayerCountPerCountry);
       },
       handleError: (e) => console.log(e),
       params: { owners: [user.id] },
@@ -31,45 +49,21 @@ const PageUserMap: React.FC<PageUserMapProps> = () => {
 
   useEffect(() => {
     if (clubs) {
-      const geocodeCities = async () => {
-        const markerPositions = [];
+      const markerPositions = [];
 
-        // Using the Nominatim Geocoding API via fetch
-        for (const club of clubs) {
-          const query = `${club.city}, ${club.country}`;
-
-          try {
-            const response = await fetch(
-              `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
-                query
-              )}&format=json`
-            );
-            const results = await response.json();
-
-            if (results && results.length > 0) {
-              const { lat, lon } = results[0];
-              markerPositions.push({
-                id: club.id,
-                city: club.city,
-                position: [lat, lon],
-              });
-            } else {
-              console.log(`No geocoding results found for ${query}`);
-            }
-          } catch (error) {
-            console.error(`Error geocoding ${query}:`, error);
-          }
-        }
-
-        // After all clubs are processed, set the markers
-        if (markerPositions.length > 0) {
-          setMarkers(markerPositions);
+      clubs.map((club) => {
+        if (club.city in cities) {
+          markerPositions.push({
+            id: club.id,
+            city: club.city,
+            position: cities[club.city],
+          });
         } else {
-          setMarkers(null); // No valid markers found
+          console.log("lat/long not found for : " + club.city);
         }
-      };
+      });
 
-      geocodeCities();
+      setMarkers(markerPositions);
     } else {
       setMarkers(null);
     }
@@ -78,12 +72,14 @@ const PageUserMap: React.FC<PageUserMapProps> = () => {
   useEffect(() => {
     if (user) {
       fetchClubs();
+      fetchPlayerCountPerCountry();
     }
   }, []);
 
   useEffect(() => {
     if (user) {
       fetchClubs();
+      fetchPlayerCountPerCountry();
     }
   }, [user]);
 
@@ -112,6 +108,28 @@ const PageUserMap: React.FC<PageUserMapProps> = () => {
             </Marker>
           );
         })}
+
+        {playerCountPerCountry &&
+          playerCountPerCountry.map(({ key, count }) => {
+            const coords = countries[key];
+            if (!coords) return null;
+
+            return (
+              <CircleMarker
+                key={key}
+                center={coords}
+                radius={Math.log(count + 1) * 5}
+                color="#0dcaf0"
+                fillColor="#0dcaf0"
+                fillOpacity={0.5}
+              >
+                <Popup>
+                  <strong>{key.replace("_", " ")}</strong> <br />
+                  Player(s): {count}
+                </Popup>
+              </CircleMarker>
+            );
+          })}
       </MapContainer>
     </div>
   );

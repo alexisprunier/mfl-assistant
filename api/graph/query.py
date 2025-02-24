@@ -365,6 +365,26 @@ class Query(ObjectType):
 
         return [CountType(key=c["_id"], count=c["count"]) async for c in info.context["db"].players.aggregate(query)]
 
+    get_player_count_per_country = List(CountType, owners=List(String))
+
+    async def resolve_get_player_count_per_country(self, info, owners=None):
+        filters = {}
+
+        if owners is not None:
+            filters["owner"] = {"$in": [ObjectId(o) for o in owners]}
+
+        pipeline = [
+            {"$match": filters},
+            {"$unwind": "$nationalities"},
+            {"$group": {"_id": "$nationalities", "count": {"$sum": 1}}},
+        ]
+
+        results = await info.context["db"].players \
+            .aggregate(pipeline) \
+            .to_list(length=None)
+    
+        return [CountType(key=res["_id"], count=res["count"]) for res in results]
+
     get_club_division_counts = List(CountType, founded_only=Boolean())
 
     async def resolve_get_club_division_counts(self, info, founded_only=True):

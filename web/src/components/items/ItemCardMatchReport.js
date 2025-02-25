@@ -82,14 +82,12 @@ const ItemCardMatchReport: React.FC<ItemCardMatchReportProps> = ({
               Creation
             </div>
 
-            <div className="col-4">Dribbling (success)</div>
+            <div className="col-4">Successful dribbles</div>
             <div className="col-4 text-center">
-              {report?.myClub?.dribbledPast} ({report?.myClub?.dribblingSuccess}
-              )
+              {report?.myClub?.dribblingSuccess}
             </div>
             <div className="col-4 text-center">
-              {report?.opponent?.dribbledPast} (
-              {report?.opponent?.dribblingSuccess})
+              {report?.opponent?.dribblingSuccess}
             </div>
 
             <div className="col-4">Crosses (accurate)</div>

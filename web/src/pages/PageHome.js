@@ -69,6 +69,14 @@ const PageHome: React.FC<PageHomeProps> = ({ yScrollPosition }) => {
         platforms: ["youtube", "tiktok"],
       },
       {
+        name: "SorareAndy00fficial",
+        image:
+          "https://pbs.twimg.com/profile_images/1872138822042939392/VQVRDsIR_400x400.jpg",
+        link: "https://https://linktr.ee/andy00fficial",
+        countries: ["ENGLAND"],
+        platforms: ["twitch", "tiktok"],
+      },
+      {
         name: "Alex Benito",
         image:
           "https://pbs.twimg.com/profile_images/1831668492203880449/opZQi38n_400x400.jpg",

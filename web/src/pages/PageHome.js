@@ -69,7 +69,7 @@ const PageHome: React.FC<PageHomeProps> = ({ yScrollPosition }) => {
         platforms: ["youtube", "tiktok"],
       },
       {
-        name: "SorareAndy00fficial",
+        name: "Andy00fficial",
         image:
           "https://pbs.twimg.com/profile_images/1872138822042939392/VQVRDsIR_400x400.jpg",
         link: "https://https://linktr.ee/andy00fficial",

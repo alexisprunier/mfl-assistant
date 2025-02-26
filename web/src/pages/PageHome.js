@@ -73,7 +73,7 @@ const PageHome: React.FC<PageHomeProps> = ({ yScrollPosition }) => {
         image:
           "https://pbs.twimg.com/profile_images/1872138822042939392/VQVRDsIR_400x400.jpg",
         link: "https://www.linktr.ee/andy00fficial",
-        countries: ["ENGLAND"],
+        countries: ["ENGLAND", "FRANCE"],
         platforms: ["twitch", "tiktok"],
       },
       {
@@ -317,8 +317,14 @@ const PageHome: React.FC<PageHomeProps> = ({ yScrollPosition }) => {
                   />
 
                   <div className="text-center">
-                    <span>Tighten your shoelaces thanks to the</span>
-                    <h1 className="text-white">MFL Assistant.</h1>
+                    <a
+                      href="https://www.buymeacoffee.com/mflassistant"
+                      target="_blank"
+                    >
+                      <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a beer&emoji=🍺&slug=mflassistant&button_colour=FFDD00&font_colour=000000&font_family=Lato&outline_colour=000000&coffee_colour=ffffff" />
+                    </a>
+                    {/*<span>Tighten your shoelaces thanks to the</span>
+                    <h1 className="text-white">MFL Assistant.</h1>*/}
                   </div>
 
                   <div className="media-mfl">

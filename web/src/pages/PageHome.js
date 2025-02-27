@@ -321,7 +321,7 @@ const PageHome: React.FC<PageHomeProps> = ({ yScrollPosition }) => {
                       href="https://www.buymeacoffee.com/mflassistant"
                       target="_blank"
                     >
-                      <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a beer&emoji=🍺&slug=mflassistant&button_colour=FFDD00&font_colour=000000&font_family=Lato&outline_colour=000000&coffee_colour=ffffff" />
+                      <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a beer&emoji=🍺&slug=mflassistant&button_colour=0dcaf0&font_colour=FFFFFF&font_family=Bree&outline_colour=000000&coffee_colour=FFDD00" />
                     </a>
                     {/*<span>Tighten your shoelaces thanks to the</span>
                     <h1 className="text-white">MFL Assistant.</h1>*/}

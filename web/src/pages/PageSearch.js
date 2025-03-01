@@ -11,7 +11,7 @@ import { getClubs, getPlayers, getUsers } from "services/api-assistant.js";
 
 interface PageSearchProps {}
 
-const PageSearch: React.FC<PageSearchProps> = () => {
+const PageSearch: React.FC < PageSearchProps > = () => {
   const navigate = useNavigate();
 
   const [searchParams] = useSearchParams();
@@ -81,7 +81,7 @@ const PageSearch: React.FC<PageSearchProps> = () => {
           console.error(e);
           reject(e);
         },
-        params: { search: searchValue, skip: clubPage * 10 },
+        params: { search: searchValue, limit: 10, skip: clubPage * 10 },
       });
     });
   };
@@ -203,11 +203,12 @@ const PageSearch: React.FC<PageSearchProps> = () => {
                 </button>
               </div>
             </div>
-          }
-        />
+  }
+  />
 
-        {(isLoading || (users && users.length > 0)) && (
-          <BoxCard
+  {
+    (isLoading || (users && users.length > 0)) && (
+      <BoxCard
             className="mb-3"
             title="Users"
             content={
@@ -219,10 +220,12 @@ const PageSearch: React.FC<PageSearchProps> = () => {
                 <div class="w-100">
                   {users.map((c) => (
                     <ItemRowUser c={c} />
-                  ))}
+    ))
+}
 
-                  {canLoadMoreUsers && (
-                    <button
+{
+  canLoadMoreUsers && (
+    <button
                       className="btn btn-sm btn-link align-self-start"
                       onClick={() => {
                         fetchUsers();
@@ -230,15 +233,18 @@ const PageSearch: React.FC<PageSearchProps> = () => {
                     >
                       Load more
                     </button>
-                  )}
-                </div>
-              )
-            }
-          />
-        )}
+  )
+} <
+/div>
+)
+}
+/>
+)
+}
 
-        {(isLoading || (clubs && clubs.length > 0)) && (
-          <BoxCard
+{
+  (isLoading || (clubs && clubs.length > 0)) && (
+    <BoxCard
             className="mb-3"
             title="Clubs"
             content={
@@ -250,10 +256,12 @@ const PageSearch: React.FC<PageSearchProps> = () => {
                 <div class="w-100">
                   {clubs.map((c) => (
                     <ItemRowClub c={c} />
-                  ))}
+  ))
+}
 
-                  {canLoadMoreClubs && (
-                    <button
+{
+  canLoadMoreClubs && (
+    <button
                       className="btn btn-sm btn-link align-self-start"
                       onClick={() => {
                         fetchClubs();
@@ -261,15 +269,18 @@ const PageSearch: React.FC<PageSearchProps> = () => {
                     >
                       Load more
                     </button>
-                  )}
-                </div>
-              )
-            }
-          />
-        )}
+  )
+} <
+/div>
+)
+}
+/>
+)
+}
 
-        {(isLoading || (players && players.length > 0)) && (
-          <BoxCard
+{
+  (isLoading || (players && players.length > 0)) && (
+    <BoxCard
             className="mb-3"
             title="Players"
             content={
@@ -281,10 +292,12 @@ const PageSearch: React.FC<PageSearchProps> = () => {
                 <div class="w-100">
                   {players.map((c) => (
                     <ItemRowPlayerAssist p={c} />
-                  ))}
+  ))
+}
 
-                  {canLoadMorePlayers && (
-                    <button
+{
+  canLoadMorePlayers && (
+    <button
                       className="btn btn-sm btn-link align-self-start"
                       onClick={() => {
                         fetchPlayers();
@@ -292,28 +305,33 @@ const PageSearch: React.FC<PageSearchProps> = () => {
                     >
                       Load more
                     </button>
-                  )}
-                </div>
-              )
-            }
-          />
-        )}
+  )
+} <
+/div>
+)
+}
+/>
+)
+}
 
-        {!isLoading &&
-          clubs &&
-          clubs.length === 0 &&
-          players &&
-          players.length === 0 &&
-          users &&
-          users.length === 0 && (
-            <BoxCard
+{
+  !isLoading &&
+    clubs &&
+    clubs.length === 0 &&
+    players &&
+    players.length === 0 &&
+    users &&
+    users.length === 0 && (
+      <BoxCard
               contentClassName="py-5"
-              content={<BoxMessage content={"No result found"} />}
-            />
-          )}
-      </div>
-    </div>
-  );
+              content={<BoxMessage content={"No result found"} />
+    }
+  />
+)
+} <
+/div> <
+/div>
+);
 };
 
 export default PageSearch;

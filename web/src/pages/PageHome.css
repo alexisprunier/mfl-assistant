@@ -2,7 +2,7 @@
   font-family: Impact, sans-serif !important;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 992px) {
   #PageHome .BoxScrollDown {
     position: fixed;
     bottom: 120px;
@@ -20,7 +20,7 @@
   }
 }
 
-@media (min-width: 768px) {
+@media (min-width: 992px) {
   #PageHome .BoxScrollDown {
     position: fixed;
     bottom: 100px;

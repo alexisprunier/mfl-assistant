@@ -40,12 +40,12 @@ const Router: React.FC = (props) => {
   }, [location.pathname]);
 
   return (
-    <div id="Router" className="d-flex flex-column flex-md-row h-100">
-      <div id="AppMenu" className="order-2 order-md-1">
+    <div id="Router" className="d-flex flex-column flex-lg-row h-100">
+      <div id="AppMenu" className="order-2 order-lg-1">
         <Menu {...props} />
       </div>
 
-      <div id="AppContent" className="order-1 order-md-2 flex-fill">
+      <div id="AppContent" className="order-1 order-lg-2 flex-fill">
         <div
           id="AppContent-content"
           className="position-relative h-100 w-100"
@@ -54,7 +54,16 @@ const Router: React.FC = (props) => {
           <Routes>
             <Route
               path="/"
-              element={<PageHome yScrollPosition={yScrollPosition} />}
+              element={
+                <PageHome
+                  flowUser={props.flowUser}
+                  assistantUser={props.assistantUser}
+                  updateAssistantUser={props.updateAssistantUser}
+                  logout={props.logout}
+                  yScrollPosition={yScrollPosition}
+                  {...props}
+                />
+              }
             />
             <Route path="/search" element={<PageSearch />} />
             <Route path="/pricing" element={<PagePricing />} />

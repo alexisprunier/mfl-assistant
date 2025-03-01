@@ -10,7 +10,7 @@ const ItemSale: React.FC<ItemSaleProps> = ({ s }) => {
   return (
     <div className={"Item no-hover flex-fill"}>
       <div className="d-flex flex-column flex-md-row flex-fill pb-1 pb-md-0">
-        <div className="d-flex flex-row flex-basis-300">
+        <div className="d-flex flex-row flex-md-basis-300">
           <i className="bi bi-currency-dollar text-main" />
 
           <div className="d-flex flex-fill text-main">

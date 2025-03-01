@@ -50,9 +50,9 @@ const PageDashMarketplace: React.FC<PageDashMarketplaceProps> = ({}) => {
     <div id="PageDashMarketplace" className="h-100 w-100">
       <div className="container container-xl h-100 w-100 px-2 px-md-4 py-4">
         <div className="d-flex flex-column h-100 w-100 fade-in">
-          <div className="d-flex flex-column flex-md-row flex-basis-300">
+          <div className="d-flex flex-column flex-md-row flex-md-basis-300">
             <div
-              className="card d-flex flex-column flex-basis-300 m-2 p-3 pt-2"
+              className="card d-flex flex-column flex-md-basis-300 m-2 p-3 pt-2"
               style={{ minWidth: "280px" }}
             >
               <div className="d-flex flex-row flex-md-grow-1">

@@ -170,7 +170,7 @@ const PageToolsTeamBuilder: React.FC<PageToolsTeamBuilderProps> = (props) => {
     <div id="PageToolsTeamBuilder" className="h-100 w-100">
       <div className="container-xl h-100 px-2 px-md-4 py-4">
         <div className="d-flex flex-column flex-md-row h-100 w-100 fade-in">
-          <div className="d-flex flex-column flex-md-grow-0 flex-basis-300">
+          <div className="d-flex flex-column flex-md-grow-0 flex-md-basis-300">
             <div className="card d-flex flex-column flex-md-grow-1 m-2 p-3 pt-2">
               <div className="d-flex flex-row flex-md-grow-0">
                 <h4 className="flex-grow-1">My teams</h4>

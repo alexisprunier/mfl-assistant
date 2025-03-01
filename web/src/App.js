@@ -8,13 +8,19 @@ import "react-notifications/lib/notifications.css";
 import { BrowserRouter } from "react-router-dom";
 import Router from "Router";
 import * as fcl from "@onflow/fcl";
-import { login, logout, getLoggedUser, addLoggedUser, updateLoggedUserEmail } from "services/api-assistant.js";
+import {
+  login,
+  logout,
+  getLoggedUser,
+  addLoggedUser,
+  updateLoggedUserEmail,
+} from "services/api-assistant.js";
 import { getApiEndpoint } from "utils/env.js";
 import { verifyServiceData } from "utils/flow.js";
 
 interface AppProps {}
 
-const App: React.FC < AppProps > = (props) => {
+const App: React.FC<AppProps> = (props) => {
   const [flowUser, setFlowUser] = useState();
   const [assistantUser, setAssistantUser] = useState();
 
@@ -30,7 +36,9 @@ const App: React.FC < AppProps > = (props) => {
 
   const getToken = () => {
     if (flowUser && flowUser.loggedIn) {
-      let service = flowUser.services.filter((s) => s.type === "account-proof").pop();
+      let service = flowUser.services
+        .filter((s) => s.type === "account-proof")
+        .pop();
 
       if (!service) {
         nm.error("Wallet service not found");
@@ -39,14 +47,18 @@ const App: React.FC < AppProps > = (props) => {
           nm.error(verifyServiceData(service));
         } else {
           login({
-            handleSuccess: (v) => { getAssistantUser() },
-            handleError: () => { fcl.unauthenticate(); },
+            handleSuccess: (v) => {
+              getAssistantUser();
+            },
+            handleError: () => {
+              fcl.unauthenticate();
+            },
             body: JSON.stringify(service.data),
           });
         }
       }
     }
-  }
+  };
 
   const getAssistantUser = () => {
     getLoggedUser({
@@ -58,9 +70,11 @@ const App: React.FC < AppProps > = (props) => {
           setAssistantUser(v.data.getLoggedUser);
         }
       },
-      handleError: (v) => { return; },
+      handleError: (v) => {
+        return;
+      },
     });
-  }
+  };
 
   const updateAssistantUser = (email) => {
     updateLoggedUserEmail({
@@ -70,18 +84,20 @@ const App: React.FC < AppProps > = (props) => {
       },
       params: {
         email,
-      }
+      },
     });
-  }
+  };
 
   const clearUsers = () => {
     setFlowUser(null);
     setAssistantUser(null);
 
     logout({
-      handleSuccess: (v) => { nm.info("You have been logged out with success") },
+      handleSuccess: (v) => {
+        nm.info("You have been logged out with success");
+      },
     });
-  }
+  };
 
   useEffect(() => {
     fcl.currentUser().subscribe(setFlowUser);

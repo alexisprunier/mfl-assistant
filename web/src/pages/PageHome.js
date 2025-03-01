@@ -6,13 +6,26 @@ import ItemCardCommunityMember from "components/items/ItemCardCommunityMember.js
 import MiscHorizontalScroll from "components/misc/MiscHorizontalScroll.js";
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import ButtonLogin from "components/buttons/ButtonLogin.js";
 import "./PageHome.css";
 
 interface PageHomeProps {
+  props: object;
+  flowUser: Object;
+  assistantUser: Object;
+  updateAssistantUser: Object;
+  logout: Object;
   yScrollPosition: number;
 }
 
-const PageHome: React.FC<PageHomeProps> = ({ yScrollPosition }) => {
+const PageHome: React.FC<PageHomeProps> = ({
+  props,
+  flowUser,
+  assistantUser,
+  updateAssistantUser,
+  logout,
+  yScrollPosition,
+}) => {
   const navigate = useNavigate();
 
   const [searchValue, setSearchValue] = useState("");
@@ -273,17 +286,17 @@ const PageHome: React.FC<PageHomeProps> = ({ yScrollPosition }) => {
     <div id="PageHome" className="h-100">
       {window.innerWidth < 768 && yScrollPosition < 100 && <BoxScrollDown />}
       {window.innerWidth < 768 && yScrollPosition >= 100 && <BoxScrollUp />}
-      <div className="h-md-100 w-100">
-        <div className="d-flex h-md-100 w-100 flex-column flex-md-row flex-nowrap">
+      <div className="h-lg-100 w-100">
+        <div className="d-flex h-lg-100 w-100 flex-column flex-lg-row flex-nowrap">
           <div
-            className="d-flex flex-column flex-md-grow-1 flex-md-basis-50p h-100 pe-md-3 pb-md-3"
+            className="d-flex flex-column flex-lg-grow-1 flex-lg-basis-50p h-100 pe-lg-3 pb-lg-3"
             style={{ minWidth: "0" }}
           >
             <div
-              className="searchBar d-flex py-2 px-md-2"
+              className="searchBar d-flex py-2 px-lg-2"
               style={{ borderBottomRightRadius: "10px" }}
             >
-              <div className="d-flex flex-grow-1 ps-3 ps-md-1 pe-2">
+              <div className="d-flex flex-grow-1 ps-3 ps-lg-1 pe-2">
                 <input
                   type="text"
                   className="form-control w-100"
@@ -297,7 +310,7 @@ const PageHome: React.FC<PageHomeProps> = ({ yScrollPosition }) => {
               <div className="d-flex flex-grow-0">
                 <button
                   type="text"
-                  className="btn btn-link w-100 me-2 me-md-0"
+                  className="btn btn-link w-100 me-2 me-lg-0"
                   onClick={() => navigate("/search?q=" + searchValue)}
                   disabled={searchValue.length < 2}
                 >
@@ -306,8 +319,8 @@ const PageHome: React.FC<PageHomeProps> = ({ yScrollPosition }) => {
               </div>
             </div>
 
-            <div className="d-flex flex-column flex-md-fill ps-md-3">
-              <div className="main-view d-flex flex-column flex-md-row flex-md-fill justify-content-center">
+            <div className="d-flex flex-column flex-lg-fill ps-lg-3">
+              <div className="main-view d-flex flex-column flex-lg-row flex-lg-fill justify-content-center">
                 <div className="d-flex flex-column align-self-center position-relative">
                   <img
                     width="auto"
@@ -383,112 +396,156 @@ const PageHome: React.FC<PageHomeProps> = ({ yScrollPosition }) => {
                 </div>
               </div>
 
-              <div className="d-flex flex-column card my-1 pt-1 pb-1 px-3 m-2 m-md-0">
-                <div className="d-flex flex-column mt-1 pt-1">
-                  <div className="d-flex h5">
-                    <i className="bi bi-clipboard-data me-2"></i>
-                    Dashboard
+              <div className="d-flex flex-column card my-1 pt-1 pb-1 px-3 ps-1 m-2 m-lg-0">
+                <div className="d-flex flex-column flex-lg-row mt-1 pt-1">
+                  <div className="d-flex flex-basis-100 justify-content-center align-items-center">
+                    <div className="text-center">
+                      <i className="bi bi-clipboard-data h4"></i>
+                      <br />
+                      Dashboard
+                    </div>
                   </div>
 
-                  <div className="d-flex flex-column flex-md-row">
-                    <div className="d-flex card bg-black flex-grow-1 flex-shrink-1 flex-basis-0 min-width-0 me-0 me-md-1">
-                      <Link
-                        to="/dash/marketplace"
-                        className={"nav-link text-white p-1"}
-                      >
-                        <i className="bi bi-shop mx-1"></i>Marketplace
-                      </Link>
+                  <div className="d-flex flex-column flex-fill">
+                    <div className="d-flex flex-column flex-lg-row flex-fill">
+                      <div className="d-flex card bg-black flex-grow-1 flex-shrink-1 flex-basis-0 min-width-0 me-0 me-lg-1">
+                        <Link
+                          to="/dash/marketplace"
+                          className={"nav-link text-white p-1"}
+                        >
+                          <i className="bi bi-shop mx-1"></i>Marketplace
+                        </Link>
+                      </div>
+                      <div className="d-flex card bg-black flex-grow-1 flex-shrink-1 flex-basis-0 min-width-0 min-width-0 me-0 me-lg-1">
+                        <Link
+                          to="/dash/players"
+                          className={"nav-link text-white p-1"}
+                        >
+                          <i className="bi bi-person-badge mx-1"></i> Players
+                        </Link>
+                      </div>
                     </div>
-                    <div className="d-flex card bg-black flex-grow-1 flex-shrink-1 flex-basis-0 min-width-0 me-0 me-md-1">
-                      <Link
-                        to="/dash/clubs"
-                        className={"nav-link text-white p-1"}
-                      >
-                        <i className="bi bi-buildings mx-1"></i> Clubs
-                      </Link>
-                    </div>
-                    <div className="d-flex card bg-black flex-grow-1 flex-shrink-1 flex-basis-0 min-width-0 me-0 me-md-1">
-                      <Link
-                        to="/dash/players"
-                        className={"nav-link text-white p-1"}
-                      >
-                        <i className="bi bi-person-badge mx-1"></i> Players
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="d-flex flex-column mt-1 pt-1">
-                  <div className="d-flex h5">
-                    <i className="bi bi-wrench-adjustable-circle me-2"></i>
-                    Tools
-                  </div>
-
-                  <div className="d-flex flex-column flex-md-row max-height-md-200">
-                    <div className="d-flex card bg-black flex-grow-1 flex-shrink-1 flex-basis-0 min-width-0 me-0 me-md-1">
-                      <Link
-                        to="/tools/player-pricing"
-                        className={"nav-link text-white p-1"}
-                      >
-                        <i className="bi bi-currency-exchange mx-1"></i> Player
-                        pricing
-                      </Link>
-                    </div>
-                    <div className="d-flex card bg-black flex-grow-1 flex-shrink-1 flex-basis-0 min-width-0 me-0 me-md-1">
-                      <Link
-                        to="/tools/contract-evaluation"
-                        className={"nav-link text-white p-1"}
-                      >
-                        <i className="bi bi bi-journal-bookmark-fill mx-1"></i>
-                        Contract evaluation
-                      </Link>
-                    </div>
-                  </div>
-                  <div className="d-flex flex-column flex-md-row max-height-md-200">
-                    <div className="d-flex card bg-black flex-grow-1 flex-shrink-1 flex-basis-0 min-width-0">
-                      <Link
-                        to="/tools/team-builder"
-                        className={"nav-link text-white p-1"}
-                      >
-                        <i className="bi bi-clipboard2-check-fill mx-1"></i>
-                        Team builder
-                      </Link>
-                    </div>
-                    <div className="d-flex card bg-black flex-grow-1 flex-shrink-1 flex-basis-0 min-width-0">
-                      <Link
-                        to="/tools/match-observatory"
-                        className={"nav-link text-white p-1"}
-                      >
-                        <i className="bi bi-clipboard-data-fill mx-1"></i>
-                        Match observatory
-                      </Link>
+                    <div className="d-flex flex-column flex-lg-row flex-fill">
+                      <div className="d-flex card bg-black flex-grow-1 flex-shrink-1 flex-basis-0 min-width-0 me-0 me-lg-1">
+                        <Link
+                          to="/dash/clubs"
+                          className={"nav-link text-white p-1"}
+                        >
+                          <i className="bi bi-buildings mx-1"></i> Clubs
+                        </Link>
+                      </div>
+                      <div className="d-flex card bg-black flex-grow-1 flex-shrink-1 flex-basis-0 min-width-0 min-width-0 me-0 me-lg-1">
+                        <Link className={"nav-link p-1"}>
+                          <i className="bi bi-cone-striped mx-1"></i> Soon to
+                          come
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="d-flex flex-column mt-1 py-2">
-                  <div className="d-flex h5">
-                    <i className="bi bi-alarm me-2"></i>
-                    Notification center
+                <div className="d-flex flex-column flex-lg-row mt-1 pt-1">
+                  <div className="d-flex flex-basis-100 justify-content-center align-items-center">
+                    <div className="text-center">
+                      <i className="bi bi-wrench-adjustable-circle h4"></i>
+                      <br />
+                      Tools
+                    </div>
                   </div>
 
-                  <div className="d-flex flex-column flex-md-row">
-                    <div className="d-flex card bg-black flex-grow-1 flex-shrink-1 flex-basis-0 min-width-0 justify-content-center p-1 me-0 me-md-1">
-                      <Link
-                        to="/notification/marketplace"
-                        className={"nav-link text-white"}
-                      >
-                        <i className="bi bi-shop mx-1"></i> Marketplace
-                      </Link>
-                    </div>
+                  <div className="d-flex flex-column flex-fill">
+                    <div className="d-flex flex-column flex-lg-row flex-fill">
+                      <div className="d-flex card bg-black flex-grow-1 flex-basis-0 min-width-0 min-width-0 me-0 me-lg-1">
+                        <Link
+                          to="/tools/player-pricing"
+                          className={"nav-link text-white p-1"}
+                        >
+                          <i className="bi bi-currency-exchange mx-1"></i>{" "}
+                          Player pricing
+                        </Link>
+                      </div>
 
-                    <div className="d-flex card bg-black flex-grow-1 flex-shrink-1 flex-basis-0 min-width-0 justify-content-center p-1">
-                      <Link
-                        to="/notification/report"
-                        className={"nav-link text-white"}
-                      >
-                        <i className="bi bi-calendar3 mx-1"></i> Daily report
-                      </Link>
+                      <div className="d-flex card bg-black flex-grow-1 flex-basis-0 min-width-0 min-width-0 me-0 me-lg-1">
+                        <Link
+                          to="/tools/team-builder"
+                          className={"nav-link text-white p-1"}
+                        >
+                          <i className="bi bi-clipboard2-check-fill mx-1"></i>
+                          Team builder
+                        </Link>
+                      </div>
+                    </div>
+                    <div className="d-flex flex-column flex-lg-row flex-fill">
+                      <div className="d-flex card bg-black flex-grow-1 flex-basis-0 min-width-0 min-width-0 me-0 me-lg-1">
+                        <Link
+                          to="/tools/contract-evaluation"
+                          className={"nav-link text-white p-1"}
+                        >
+                          <i className="bi bi bi-journal-bookmark-fill mx-1"></i>
+                          Contract evaluation
+                        </Link>
+                      </div>
+                      <div className="d-flex card bg-black flex-grow-1 flex-basis-0 min-width-0 min-width-0 me-0 me-lg-1">
+                        <Link
+                          to="/tools/match-observatory"
+                          className={"nav-link text-white p-1"}
+                        >
+                          <i className="bi bi-clipboard-data-fill mx-1"></i>
+                          Match observatory
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="d-flex flex-column flex-lg-row mt-1 py-2">
+                  <div className="d-flex flex-basis-100 justify-content-center align-items-center">
+                    <div className="text-center">
+                      <i className="bi bi-alarm h4"></i>
+                      <br />
+                      Notification
+                    </div>
+                  </div>
+
+                  <div className="d-flex flex-column flex-lg-row flex-fill">
+                    <div className="d-flex flex-column flex-grow-1 flex-shrink-1 flex-basis-0 min-width-0">
+                      <div className="d-flex card bg-black flex-grow-1 flex-shrink-1 flex-basis-0 min-width-0 justify-content-center p-1 me-0 me-lg-1">
+                        <Link
+                          to="/notification/marketplace"
+                          className={"nav-link text-white"}
+                        >
+                          <i className="bi bi-shop mx-1"></i> Marketplace
+                        </Link>
+                      </div>
+
+                      <div className="d-flex card bg-black flex-grow-1 flex-shrink-1 flex-basis-0 min-width-0 justify-content-center p-1 me-0 me-lg-1">
+                        <Link
+                          to="/notification/report"
+                          className={"nav-link text-white"}
+                        >
+                          <i className="bi bi-calendar3 mx-1"></i> Daily report
+                        </Link>
+                      </div>
+                    </div>
+                    <div className="d-flex flex-column flex-lg-row flex-grow-1 flex-shrink-1 flex-basis-0 min-width-0">
+                      <div className="d-flex card bg-black flex-grow-1 justify-content-center p-1 me-0 mx-lg-4 mt-4 mt-lg-0">
+                        <ButtonLogin
+                          className={
+                            "nav-link nav-link-login ps-2 ps-md-0 ms-md-0 text-white text-center flex-fill"
+                          }
+                          flowUser={flowUser}
+                          assistantUser={assistantUser}
+                          logout={logout}
+                          content={
+                            <Link className="nav-link text-white">
+                              <i className="bi bi-person-fill h5"></i>
+                              <br />
+                              My HQ
+                            </Link>
+                          }
+                          redirectToHq={true}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -497,27 +554,27 @@ const PageHome: React.FC<PageHomeProps> = ({ yScrollPosition }) => {
           </div>
 
           <div
-            className="d-flex flex-column flex-grow-1 flex-md-basis-50p py-md-3 pe-md-3"
+            className="d-flex flex-column flex-grow-1 flex-lg-basis-50p py-lg-3 pe-lg-3"
             style={{ minWidth: "0" }}
           >
             <div
-              className="d-flex flex-column card flex-grow-0 py-2 pb-3 px-3 m-2 m-md-0 mb-md-2"
+              className="d-flex flex-column card flex-grow-0 py-2 pb-3 px-3 m-2 m-lg-0 mb-lg-2"
               style={{ minWidth: "0" }}
             >
               <BoxMflActivity />
             </div>
             <div
-              className="d-flex flex-column card flex-grow-1 flex-fill py-2 px-3 m-2 mb-4 m-md-0 overflow-auto"
+              className="d-flex flex-column card flex-grow-1 flex-fill py-2 px-3 m-2 mb-4 m-lg-0 overflow-auto"
               style={{ minWidth: "0" }}
             >
-              <div className="d-flex flex-column flex-md-row">
+              <div className="d-flex flex-column flex-lg-row">
                 <div className="d-flex flex-grow-1">
                   <h4>
                     <i className="bi bi-person-hearts me-1"></i> Community
                   </h4>
                 </div>
 
-                <div className="d-flex flex-grow-0 mb-1 mb-md-2 align-self-end justify-content-center">
+                <div className="d-flex flex-grow-0 mb-1 mb-lg-2 align-self-end justify-content-center">
                   <ControllerFlagCountry
                     countries={getUsedCountries()}
                     selectedCountries={selectedCountries}

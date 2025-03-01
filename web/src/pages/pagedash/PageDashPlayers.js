@@ -97,8 +97,8 @@ const PageDashPlayers: React.FC<PageDashPlayersProps> = () => {
     <div id="PageDashPlayers" className="h-100 w-100">
       <div className="container container-xl h-100 w-100 px-2 px-md-4 py-4">
         <div className="d-flex flex-column h-100 w-100 fade-in">
-          <div className="d-flex flex-column flex-md-row flex-md-grow-0 flex-basis-300">
-            <div className="card d-flex flex-column flex-md-grow-0 flex-basis-300 m-2 p-3 pt-2">
+          <div className="d-flex flex-column flex-md-row flex-md-grow-0 flex-md-basis-300">
+            <div className="card d-flex flex-column flex-md-grow-0 flex-md-basis-300 m-2 p-3 pt-2">
               <div className="d-flex flex-column flex-md-grow-1">
                 <div className="d-flex flex-row flex-grow-0 flex-basis-0 justify-content-end pb-4 py-md-0">
                   {Object.keys(filters).filter((k) =>
@@ -176,7 +176,7 @@ const PageDashPlayers: React.FC<PageDashPlayersProps> = () => {
               </div>
             </div>
 
-            <div className="card d-flex flex-md-grow-1 flex-md-shrink-1 m-2 p-3 pt-2 flex-basis-300">
+            <div className="card d-flex flex-md-grow-1 flex-md-shrink-1 m-2 p-3 pt-2 flex-md-basis-300">
               <div className="d-flex flex-fill overflow-hidden ratio-sm ratio-sm-4x3">
                 <BoxSoonToCome />
               </div>

@@ -72,7 +72,7 @@ class Query(ObjectType):
 
     get_clubs = List(ClubType, search=String(), owners=List(String), skip=Int(), limit=Int(), sort=String(), order=Int())
 
-    async def resolve_get_clubs(self, info, search=None, owners=None, skip=0, limit=10, sort="_id", order=1):
+    async def resolve_get_clubs(self, info, search=None, owners=None, skip=0, limit=500, sort="_id", order=1):
 
         clubs = info.context["db"].clubs
 

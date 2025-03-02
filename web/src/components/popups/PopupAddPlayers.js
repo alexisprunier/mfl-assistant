@@ -24,6 +24,7 @@ const PopupAddPlayers: React.FC<PopupAddPlayersProps> = ({
 
   const [defaultFilters] = useState({
     search: "",
+    firstPositionOnly: false,
     positions: undefined,
     minAge: undefined,
     maxAge: undefined,
@@ -97,6 +98,7 @@ const PopupAddPlayers: React.FC<PopupAddPlayersProps> = ({
       if (
         key !== "search" &&
         filters[key] != null &&
+        filters[key] != false &&
         filters[key] !== "" &&
         (!Array.isArray(filters[key]) || filters[key].length > 0)
       ) {

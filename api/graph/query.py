@@ -113,9 +113,9 @@ class Query(ObjectType):
 
         return clubs
 
-    get_sales = List(SaleType, type=String(), min_date=Date(), max_date=Date(), min_ovr=Int(), max_ovr=Int(), positions=List(String), min_age=Int(), max_age=Int(), skip=Int(), limit=Int(), sort=String(), order=Int())
+    get_sales = List(SaleType, type=String(), min_date=Date(), max_date=Date(), min_ovr=Int(), max_ovr=Int(), positions=List(String), first_position_only=Boolean(), min_age=Int(), max_age=Int(), skip=Int(), limit=Int(), sort=String(), order=Int())
 
-    async def resolve_get_sales(self, info, type=None, min_date=None, max_date=None, min_ovr=0, max_ovr=99, positions=None, min_age=0, max_age=99, skip=0, limit=10, sort="execution_date", order=-1):
+    async def resolve_get_sales(self, info, type=None, min_date=None, max_date=None, min_ovr=0, max_ovr=99, positions=None, first_position_only=False, min_age=0, max_age=99, skip=0, limit=10, sort="execution_date", order=-1):
 
         sales = info.context["db"].sales
 
@@ -124,7 +124,8 @@ class Query(ObjectType):
                 "player": {"$exists": True, "$ne": None},
                 "overall": {"$gte": min_ovr, "$lte": max_ovr},
                 "age": {"$gte": min_age, "$lte": max_age},
-                "positions": {"$in": positions},
+                "positions": None if first_position_only else {"$in": positions},
+                "positions.0": {"$in": positions} if first_position_only else None,
             }
 
             execution_date_filter = {}
@@ -200,6 +201,7 @@ class Query(ObjectType):
         min_height=Int(), max_height=Int(),
         nationalities=List(String),
         positions=List(String),
+        first_position_only=Boolean(),
         preferred_foot=List(String),
         )
 
@@ -216,6 +218,7 @@ class Query(ObjectType):
         min_physical=1, max_physical=100,
         nationalities=None,
         positions=None,
+        first_position_only=False,
         preferred_foot=None
         ):
         query = []
@@ -235,7 +238,10 @@ class Query(ObjectType):
         if nationalities and len(nationalities) > 0:
             player_match["$match"]["nationalities"] = {"$in": nationalities}
         if positions and len(positions) > 0:
-            player_match["$match"]["positions"] = {"$in": positions}
+            if first_position_only:
+                player_match["$match"]["positions.0"] = {"$in": positions}
+            else:
+                player_match["$match"]["positions"] = {"$in": positions}
         if preferred_foot:
             player_match["$match"]["preferred_foot"] = {"$in": preferred_foot}
 
@@ -272,6 +278,7 @@ class Query(ObjectType):
         min_physical=Int(), max_physical=Int(),
         nationalities=List(String),
         positions=List(String),
+        first_position_only=Boolean(),
         preferred_foot=List(String),
         )
 
@@ -289,6 +296,7 @@ class Query(ObjectType):
         min_physical=1, max_physical=100,
         nationalities=None,
         positions=None,
+        first_position_only=False,
         preferred_foot=None
         ):
         query = []
@@ -319,7 +327,10 @@ class Query(ObjectType):
         if nationalities:
             match_stage["$match"]["nationalities"] = {"$in": nationalities}
         if positions:
-            match_stage["$match"]["positions"] = {"$in": positions}
+            if first_position_only:
+                match_stage["$match"]["positions.0"] = {"$in": positions}
+            else:
+                match_stage["$match"]["positions"] = {"$in": positions}
         if preferred_foot:
             match_stage["$match"]["preferred_foot"] = {"$in": preferred_foot}
 
@@ -497,6 +508,7 @@ class Query(ObjectType):
         min_physical=Int(), max_physical=Int(),
         nationalities=List(String),
         positions=List(String),
+        first_position_only=Boolean(),
         preferred_foot=List(String),
         ignore_players_in_teams=Boolean(),
         skip=Int(), limit=Int(),
@@ -518,6 +530,7 @@ class Query(ObjectType):
         min_physical=1, max_physical=100,
         nationalities=None,
         positions=None,
+        first_position_only=False,
         preferred_foot=None,
         ignore_players_in_teams=False,
         skip=0, limit=50000,
@@ -546,7 +559,10 @@ class Query(ObjectType):
         if nationalities is not None and len(nationalities) > 0:
             filters["nationalities"] = {"$in": nationalities}
         if positions is not None and len(positions) > 0:
-            filters["positions"] = {"$in": positions}
+            if first_position_only:
+                filters["positions.0"] = {"$in": positions}
+            else:
+                filters["positions"] = {"$in": positions}
         if preferred_foot is not None and len(preferred_foot) > 0:
             filters["preferred_foot"] = {"$in": preferred_foot}
         if owners is not None:
@@ -596,9 +612,9 @@ class Query(ObjectType):
 
         return players
 
-    get_contracts = List(ContractType, min_ovr=Int(), max_ovr=Int(), nationalities=List(String), positions=List(String))
+    get_contracts = List(ContractType, min_ovr=Int(), max_ovr=Int(), nationalities=List(String), positions=List(String), first_position_only=Boolean())
 
-    async def resolve_get_contracts(self, info, min_ovr=1, max_ovr=100, nationalities=None, positions=None):
+    async def resolve_get_contracts(self, info, min_ovr=1, max_ovr=100, nationalities=None, positions=None, first_position_only=False):
 
         player_filters = {
             "overall": {"$gte": min_ovr, "$lte": max_ovr}
@@ -607,7 +623,10 @@ class Query(ObjectType):
         if nationalities is not None:
             player_filters["nationalities"] = {"$in": nationalities}
         if positions is not None:
-            player_filters["positions"] = {"$in": positions}
+            if first_position_only:
+                player_filters["positions.0"] = {"$in": positions}
+            else:
+                player_filters["positions"] = {"$in": positions}
 
         matching_players = await info.context["db"].players.find(player_filters).to_list(None)
         matching_player_ids = [player["_id"] for player in matching_players]

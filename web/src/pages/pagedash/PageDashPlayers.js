@@ -16,6 +16,7 @@ const PageDashPlayers: React.FC<PageDashPlayersProps> = () => {
   const [data, setData] = useState(null);
   const [selectedCriteria, setSelectedCriteria] = useState("OVR");
   const [filters, setFilters] = useState({
+    firstPositionOnly: false,
     positions: searchParams.get("positions")
       ? searchParams.get("positions").split(",")
       : [],

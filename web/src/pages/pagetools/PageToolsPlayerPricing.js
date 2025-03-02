@@ -27,6 +27,11 @@ const PageToolsPlayerPricing: React.FC<PageToolsPlayerPricingProps> = () => {
   const [age, setAge] = useState(
     searchParams.get("age") ? parseInt(searchParams.get("age")) : null
   );
+  const [firstPositionOnly, setFirstPositionOnly] = useState(
+    searchParams.get("firstPositionOnly")
+      ? searchParams.get("firstPositionOnly") === "true"
+      : false
+  );
 
   const [sales, setSales] = useState(null);
   const [hideOneAndLower, setHideOneAndLower] = useState(false);
@@ -43,6 +48,7 @@ const PageToolsPlayerPricing: React.FC<PageToolsPlayerPricingProps> = () => {
           overall,
           position,
           age,
+          firstPositionOnly,
         }),
     });
 
@@ -65,6 +71,7 @@ const PageToolsPlayerPricing: React.FC<PageToolsPlayerPricingProps> = () => {
         positions: [position],
         minAge: age - 1,
         maxAge: age + 1,
+        firstPositionOnly,
       },
     });
   };
@@ -131,6 +138,17 @@ const PageToolsPlayerPricing: React.FC<PageToolsPlayerPricingProps> = () => {
                   onChange={(v) => setAge(parseInt(v.target.value))}
                   placeholder={"Age"}
                 />
+                <div className="d-flex flex-fill justify-content-end align-items-end mb-1">
+                  <small>
+                    First position only
+                    <input
+                      type="checkbox"
+                      className="ms-1"
+                      checked={firstPositionOnly}
+                      onChange={(p) => setFirstPositionOnly(!firstPositionOnly)}
+                    />
+                  </small>
+                </div>
                 <button
                   className="btn btn-info text-white align-self-end"
                   onClick={getData}

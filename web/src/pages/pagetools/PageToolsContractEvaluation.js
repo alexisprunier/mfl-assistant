@@ -25,6 +25,11 @@ const PageToolsContractEvaluation: React.FC<
   const [position, setPosition] = useState(
     searchParams.get("position") ? searchParams.get("position") : null
   );
+  const [firstPositionOnly, setFirstPositionOnly] = useState(
+    searchParams.get("firstPositionOnly")
+      ? searchParams.get("firstPositionOnly") === "true"
+      : false
+  );
 
   const [contracts, setContracts] = useState(null);
   const [hideZeros, setHideZeros] = useState(true);
@@ -39,6 +44,7 @@ const PageToolsContractEvaluation: React.FC<
         convertDictToUrlParams({
           overall,
           position,
+          firstPositionOnly,
         }),
     });
 
@@ -57,6 +63,7 @@ const PageToolsContractEvaluation: React.FC<
             ? overall + 1
             : overall,
         positions: [position],
+        firstPositionOnly,
       },
     });
   };
@@ -115,6 +122,17 @@ const PageToolsContractEvaluation: React.FC<
                     </option>
                   ))}
                 </select>
+                <div className="d-flex flex-fill justify-content-end align-items-end mb-1">
+                  <small>
+                    First position only
+                    <input
+                      type="checkbox"
+                      className="ms-1"
+                      checked={firstPositionOnly}
+                      onChange={(p) => setFirstPositionOnly(!firstPositionOnly)}
+                    />
+                  </small>
+                </div>
                 <button
                   className="btn btn-info text-white align-self-end"
                   onClick={() => getData()}

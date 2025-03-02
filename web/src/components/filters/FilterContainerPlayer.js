@@ -200,6 +200,23 @@ const FilterContainerPlayer: React.FC<FilterContainerPlayerProps> = ({
                     }
                   />
                 )}
+
+                <div className="d-flex flex-fill justify-content-end align-items-end">
+                  <small>
+                    First position only
+                    <input
+                      type="checkbox"
+                      className="ms-1"
+                      checked={filters.firstPositionOnly}
+                      onChange={(p) =>
+                        onChange({
+                          ...filters,
+                          firstPositionOnly: !filters.firstPositionOnly,
+                        })
+                      }
+                    />
+                  </small>
+                </div>
               </div>
 
               <div className="col-md-12 mb-3">

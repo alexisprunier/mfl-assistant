@@ -628,7 +628,7 @@ const PageHome: React.FC<PageHomeProps> = ({
                 <div className="position-relative">
                   <div className="d-flex flex-column flex-grow-1 mb-1">
                     <div>Content creators</div>
-                    <div className="d-flex flex-row flex-wrap w-100 justify-content-center">
+                    <div className="d-flex flex-row flex-wrap w-100">
                       {contentCreators
                         .filter(
                           (c) =>
@@ -654,7 +654,7 @@ const PageHome: React.FC<PageHomeProps> = ({
                   </div>
                   <div className="d-flex flex-column flex-grow-1 mb-1">
                     <div>Initiatives</div>
-                    <div className="d-flex flex-row flex-wrap w-100 justify-content-center">
+                    <div className="d-flex flex-row flex-wrap w-100">
                       {initiatives
                         .filter(
                           (c) =>

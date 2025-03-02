@@ -385,6 +385,13 @@ class Query(ObjectType):
     
         return [CountType(key=res["_id"], count=res["count"]) for res in results]
 
+    get_player_owner_count = Int()
+
+    async def resolve_get_player_owner_count(self, info):
+        return len(await info.context["db"].players.distinct('owner')) - 1
+
+    get_clubs_per_owner_counts = List(CountType, founded_only=Boolean())
+
     get_club_division_counts = List(CountType, founded_only=Boolean())
 
     async def resolve_get_club_division_counts(self, info, founded_only=True):

@@ -424,6 +424,7 @@ export const getPlayerDashboardData = ({
     JSON.stringify({
       query: `{
         getPlayerCount(${jsonToParams(params)}),
+        getPlayerOwnerCount,
         NAT: getPlayerCountByCriteria(criteria: "NAT", ${jsonToParams(
           params
         )}) {

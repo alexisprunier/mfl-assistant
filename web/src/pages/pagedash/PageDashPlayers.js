@@ -138,6 +138,13 @@ const PageDashPlayers: React.FC<PageDashPlayersProps> = () => {
                     count={data ? data.getPlayerCount : null}
                   />
                 </div>
+
+                <div className="d-flex flex-column flex-grow-1 flex-basis-0 align-items-center justify-content-center py-4 py-md-0">
+                  <Count
+                    label="Owners"
+                    count={data ? data.getPlayerOwnerCount : null}
+                  />
+                </div>
               </div>
             </div>
 

@@ -3,36 +3,11 @@
 }
 
 @media (max-width: 992px) {
-  #PageHome .BoxScrollDown {
-    position: fixed;
-    bottom: 120px;
-    right: 50px;
-  }
-
-  #PageHome .BoxScrollUp {
-    position: fixed;
-    bottom: 120px;
-    right: 50px;
-  }
-
   #PageHome .main-view {
     height: calc(100vh - 100px);
   }
 }
 
-@media (min-width: 992px) {
-  #PageHome .BoxScrollDown {
-    position: fixed;
-    bottom: 100px;
-    right: 100px;
-  }
-
-  #PageHome .BoxScrollUp {
-    position: fixed;
-    bottom: 100px;
-    right: 100px;
-  }
-}
 
 #PageHome .nav-link:hover {
   color: #0dcaf0 !important;

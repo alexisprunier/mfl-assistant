@@ -108,7 +108,7 @@ const PageHome: React.FC<PageHomeProps> = ({
       {
         name: "Quinny",
         image:
-          "https://pbs.twimg.com/profile_images/1638215583534555141/qnvlrbC0_400x400.jpg",
+          "https://pbs.twimg.com/profile_images/1894766043559604224/Lv4yVNzy_400x400.jpg",
         link: "https://www.youtube.com/@Quinny3001",
         countries: ["ENGLAND"],
         platforms: ["youtube"],
@@ -196,7 +196,7 @@ const PageHome: React.FC<PageHomeProps> = ({
       {
         name: "K-Socios",
         image:
-          "https://pbs.twimg.com/profile_images/1791564818417082368/pc2FH3vq_400x400.jpg",
+          "https://pbs.twimg.com/profile_images/1874941714101608448/aPxojvER_400x400.jpg",
         link: "https://x.com/K_Socios_MFL",
         countries: ["FRANCE"],
         platforms: ["discord"],
@@ -209,13 +209,13 @@ const PageHome: React.FC<PageHomeProps> = ({
         countries: ["FRANCE"],
         platforms: ["discord"],
       },
-      {
+      /*{
         name: "Twitter club list",
         image:
           "https://pbs.twimg.com/profile_images/1609671494187249665/YehoRvrC_400x400.png",
         link: "https://x.com/i/lists/1644128469939552256",
         platforms: ["twitter"],
-      },
+      },*/
     ];
     return c.sort(() => Math.random() - 0.5);
   });
@@ -396,7 +396,7 @@ const PageHome: React.FC<PageHomeProps> = ({
                 </div>
               </div>
 
-              <div className="d-flex flex-column card my-1 pt-1 pb-1 px-3 ps-1 m-2 m-lg-0">
+              <div className="d-flex flex-column card my-1 py-1 px-3 px-lg-2 mb-4 m-2 m-lg-0">
                 <div className="d-flex flex-column flex-lg-row mt-1 pt-1">
                   <div className="d-flex flex-basis-100 justify-content-center align-items-center">
                     <div className="text-center">
@@ -528,7 +528,7 @@ const PageHome: React.FC<PageHomeProps> = ({
                       </div>
                     </div>
                     <div className="d-flex flex-column flex-lg-row flex-grow-1 flex-shrink-1 flex-basis-0 min-width-0">
-                      <div className="d-flex card bg-black flex-grow-1 justify-content-center p-1 me-0 mx-lg-4 mt-4 mt-lg-0">
+                      <div className="d-flex card bg-black flex-grow-1 justify-content-center mb-2 mb-lg-0 p-1 mx-4 mt-4 mt-lg-0">
                         <ButtonLogin
                           className={
                             "nav-link nav-link-login ps-2 ps-md-0 ms-md-0 text-white text-center flex-fill"
@@ -558,11 +558,53 @@ const PageHome: React.FC<PageHomeProps> = ({
             style={{ minWidth: "0" }}
           >
             <div
-              className="d-flex flex-column card flex-grow-0 py-2 pb-3 px-3 m-2 m-lg-0 mb-lg-2"
+              className="d-flex flex-column card flex-grow-0 py-2 pb-3 px-3 m-2 m-lg-0 mb-4 mb-lg-2"
               style={{ minWidth: "0" }}
             >
               <BoxMflActivity />
             </div>
+
+            <div
+              className="d-flex flex-column card flex-grow-0 py-2 pb-3 px-3 m-2 m-lg-0 mb-4 mb-lg-2"
+              style={{ minWidth: "0" }}
+            >
+              <div className="d-flex flex-grow-1">
+                <h4>
+                  <i className="bi bi-wrench-adjustable me-1"></i> Tools
+                </h4>
+              </div>
+
+              <div className="d-flex flex-row flex-fill">
+                <MiscHorizontalScroll
+                  content={
+                    <div className="d-flex flex-row">
+                      {tools
+                        .filter(
+                          (tool) =>
+                            !tool.countries ||
+                            tool.countries.length === 0 ||
+                            selectedCountries.length === 0 ||
+                            tool.countries.find((country) =>
+                              selectedCountries.includes(country)
+                            )
+                        )
+                        .map((o) => (
+                          <div>
+                            <ItemCardCommunityMember
+                              name={o.name}
+                              link={o.link}
+                              countries={o.countries}
+                              image={o.image}
+                              platforms={o.platforms}
+                            />
+                          </div>
+                        ))}
+                    </div>
+                  }
+                />
+              </div>
+            </div>
+
             <div
               className="d-flex flex-column card flex-grow-1 flex-fill py-2 px-3 m-2 mb-4 m-lg-0 overflow-auto"
               style={{ minWidth: "0" }}
@@ -586,101 +628,57 @@ const PageHome: React.FC<PageHomeProps> = ({
                 <div className="position-relative">
                   <div className="d-flex flex-column flex-grow-1 mb-1">
                     <div>Content creators</div>
-                    <div className="d-flex flex-row flex-fill">
-                      <MiscHorizontalScroll
-                        content={
-                          <div className="d-flex flex-row">
-                            {contentCreators
-                              .filter(
-                                (c) =>
-                                  !c.countries ||
-                                  c.countries.length === 0 ||
-                                  selectedCountries.length === 0 ||
-                                  c.countries.find((country) =>
-                                    selectedCountries.includes(country)
-                                  )
-                              )
-                              .map((o) => (
-                                <div>
-                                  <ItemCardCommunityMember
-                                    name={o.name}
-                                    link={o.link}
-                                    countries={o.countries}
-                                    image={o.image}
-                                    platforms={o.platforms}
-                                  />
-                                </div>
-                              ))}
+                    <div className="d-flex flex-row flex-wrap w-100 justify-content-center">
+                      {contentCreators
+                        .filter(
+                          (c) =>
+                            !c.countries ||
+                            c.countries.length === 0 ||
+                            selectedCountries.length === 0 ||
+                            c.countries.find((country) =>
+                              selectedCountries.includes(country)
+                            )
+                        )
+                        .map((o) => (
+                          <div>
+                            <ItemCardCommunityMember
+                              name={o.name}
+                              link={o.link}
+                              countries={o.countries}
+                              image={o.image}
+                              platforms={o.platforms}
+                            />
                           </div>
-                        }
-                      />
-                    </div>
-                  </div>
-                  <div className="d-flex flex-column flex-grow-1 mb-1">
-                    <div>Tools</div>
-                    <div className="d-flex flex-row flex-fill">
-                      <MiscHorizontalScroll
-                        content={
-                          <div className="d-flex flex-row">
-                            {tools
-                              .filter(
-                                (tool) =>
-                                  !tool.countries ||
-                                  tool.countries.length === 0 ||
-                                  selectedCountries.length === 0 ||
-                                  tool.countries.find((country) =>
-                                    selectedCountries.includes(country)
-                                  )
-                              )
-                              .map((o) => (
-                                <div>
-                                  <ItemCardCommunityMember
-                                    name={o.name}
-                                    link={o.link}
-                                    countries={o.countries}
-                                    image={o.image}
-                                    platforms={o.platforms}
-                                  />
-                                </div>
-                              ))}
-                          </div>
-                        }
-                      />
+                        ))}
                     </div>
                   </div>
                   <div className="d-flex flex-column flex-grow-1 mb-1">
                     <div>Initiatives</div>
-                    <div className="d-flex flex-row flex-fill">
-                      <MiscHorizontalScroll
-                        content={
-                          <div className="d-flex flex-row">
-                            {initiatives
-                              .filter(
-                                (c) =>
-                                  !c.countries ||
-                                  c.countries.length === 0 ||
-                                  selectedCountries.length === 0 ||
-                                  c.countries.find((country) =>
-                                    selectedCountries.includes(country)
-                                  )
-                              )
-                              .map((o) => (
-                                <div>
-                                  <ItemCardCommunityMember
-                                    name={o.name}
-                                    link={o.link}
-                                    countries={o.countries}
-                                    image={o.image}
-                                    platforms={o.platforms}
-                                  />
-                                </div>
-                              ))}
+                    <div className="d-flex flex-row flex-wrap w-100 justify-content-center">
+                      {initiatives
+                        .filter(
+                          (c) =>
+                            !c.countries ||
+                            c.countries.length === 0 ||
+                            selectedCountries.length === 0 ||
+                            c.countries.find((country) =>
+                              selectedCountries.includes(country)
+                            )
+                        )
+                        .map((o) => (
+                          <div>
+                            <ItemCardCommunityMember
+                              name={o.name}
+                              link={o.link}
+                              countries={o.countries}
+                              image={o.image}
+                              platforms={o.platforms}
+                            />
                           </div>
-                        }
-                      />
+                        ))}
                     </div>
                   </div>
-                  <div className="d-flex flex-column flex-grow-1 mb-1">
+                  {/*<div className="d-flex flex-column flex-grow-1 mb-1">
                     <div>Club socials</div>
                     <div className="d-flex flex-row flex-fill">
                       <MiscHorizontalScroll
@@ -711,7 +709,7 @@ const PageHome: React.FC<PageHomeProps> = ({
                         }
                       />
                     </div>
-                  </div>
+                  </div>*/}
                 </div>
               </div>
             </div>

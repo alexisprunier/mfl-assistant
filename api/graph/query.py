@@ -120,13 +120,20 @@ class Query(ObjectType):
         sales = info.context["db"].sales
 
         if type == "PLAYER":
-            filters = {
-                "player": {"$exists": True, "$ne": None},
-                "overall": {"$gte": min_ovr, "$lte": max_ovr},
-                "age": {"$gte": min_age, "$lte": max_age},
-                "positions": None if first_position_only else {"$in": positions},
-                "positions.0": {"$in": positions} if first_position_only else None,
-            }
+            if first_position_only:
+                filters = {
+                    "player": {"$exists": True, "$ne": None},
+                    "overall": {"$gte": min_ovr, "$lte": max_ovr},
+                    "age": {"$gte": min_age, "$lte": max_age},
+                    "positions.0": {"$in": positions}
+                }
+            else:
+                filters = {
+                    "player": {"$exists": True, "$ne": None},
+                    "overall": {"$gte": min_ovr, "$lte": max_ovr},
+                    "age": {"$gte": min_age, "$lte": max_age},
+                    "positions": {"$in": positions},
+                }
 
             execution_date_filter = {}
 

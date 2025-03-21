@@ -1,4 +1,6 @@
 import ButtonMflCompetition from "components/buttons/ButtonMflCompetition.js";
+import ButtonMflManagerProjection from "components/buttons/ButtonMflManagerProjection.js";
+import ButtonMflManagerClub from "components/buttons/ButtonMflManagerClub.js";
 import ItemRowClub from "components/items/ItemRowClub.js";
 import LoadingSquare from "components/loading/LoadingSquare";
 import React, { useEffect, useState } from "react";
@@ -8,7 +10,7 @@ import { getClubStandings } from "services/api-mfl.js";
 
 interface PageUserClubsProps {}
 
-const PageUserClubs: React.FC<PageUserClubsProps> = () => {
+const PageUserClubs: React.FC < PageUserClubsProps > = () => {
   const user = useOutletContext();
   const [clubs, setClubs] = useState(null);
   const [clubPage, setClubPage] = useState(0);
@@ -86,7 +88,8 @@ const PageUserClubs: React.FC<PageUserClubsProps> = () => {
         <div className="d-flex flex-grow-1 flex-column flex-md-row">
           <div className="d-flex flex-grow-1 h5 mb-0">{data.name}</div>
           <div className="d-flex flex-grow-0 justify-content-end">
-            <ButtonMflCompetition id={data.id} />
+            <div className="me-1"><ButtonMflManagerProjection name={data.name} /> </div>
+            <div><ButtonMflCompetition id={data.id} /></div>
           </div>
         </div>
         <div>

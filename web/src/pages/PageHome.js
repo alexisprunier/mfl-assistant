@@ -18,7 +18,7 @@ interface PageHomeProps {
   yScrollPosition: number;
 }
 
-const PageHome: React.FC<PageHomeProps> = ({
+const PageHome: React.FC < PageHomeProps > = ({
   props,
   flowUser,
   assistantUser,
@@ -32,134 +32,124 @@ const PageHome: React.FC<PageHomeProps> = ({
   const [selectedCountries, setSelectedCountries] = useState([]);
 
   const [contentCreators] = useState(() => {
-    var c = [
-      {
+    var c = [{
         name: "WenDirkCast",
-        image:
-          "https://pbs.twimg.com/profile_images/1699478704479461376/FpyRcFYv_400x400.jpg",
+        image: "https://pbs.twimg.com/profile_images/1699478704479461376/FpyRcFYv_400x400.jpg",
         link: "https://linktr.ee/WenDirkCast",
         countries: ["ENGLAND"],
         platforms: ["twitch", "spotify"],
       },
       {
         name: "Calvinator",
-        image:
-          "https://pbs.twimg.com/profile_images/1731981717341151232/SskrGRnU_400x400.jpg",
+        image: "https://pbs.twimg.com/profile_images/1731981717341151232/SskrGRnU_400x400.jpg",
         link: "https://www.youtube.com/channel/UCEOcyeQQ5cv2eAsD1NnWR6w",
         countries: ["ENGLAND"],
         platforms: ["youtube"],
       },
       {
         name: "SRMonkey",
-        image:
-          "https://pbs.twimg.com/profile_images/1514224760036675584/MfTVLKVa_400x400.jpg",
+        image: "https://pbs.twimg.com/profile_images/1514224760036675584/MfTVLKVa_400x400.jpg",
         link: "https://open.spotify.com/show/4q8ZvGFlcIp9q1GQWNhRX7?si=WVDfzW9RR3KYP-xGbn3_OA&nd=1&dlsi=9afeee4459194df6",
         countries: ["ENGLAND"],
         platforms: ["spotify"],
       },
       {
         name: "Sorare Deke",
-        image:
-          "https://pbs.twimg.com/profile_images/1797465950544965632/tDy3uUIz_400x400.jpg",
+        image: "https://pbs.twimg.com/profile_images/1797465950544965632/tDy3uUIz_400x400.jpg",
         link: "https://www.youtube.com/@soraredeke",
         countries: ["ENGLAND"],
         platforms: ["youtube"],
       },
       {
         name: "DomyDigital",
-        image:
-          "https://pbs.twimg.com/profile_images/1785241500822966272/lTac2y6D_400x400.jpg",
+        image: "https://pbs.twimg.com/profile_images/1785241500822966272/lTac2y6D_400x400.jpg",
         link: "https://www.youtube.com/@DomyDigital",
         countries: ["ITALY"],
         platforms: ["youtube"],
       },
       {
         name: "Val2Play",
-        image:
-          "https://pbs.twimg.com/profile_images/1827083517269786624/_O5v4Lxg_400x400.jpg",
+        image: "https://pbs.twimg.com/profile_images/1827083517269786624/_O5v4Lxg_400x400.jpg",
         link: "https://www.youtube.com/@Val2Play",
         countries: ["FRANCE"],
         platforms: ["youtube", "tiktok"],
       },
       {
         name: "Andy00fficial",
-        image:
-          "https://pbs.twimg.com/profile_images/1872138822042939392/VQVRDsIR_400x400.jpg",
+        image: "https://pbs.twimg.com/profile_images/1872138822042939392/VQVRDsIR_400x400.jpg",
         link: "https://www.linktr.ee/andy00fficial",
         countries: ["ENGLAND", "FRANCE"],
         platforms: ["twitch", "tiktok"],
       },
       {
         name: "Alex Benito",
-        image:
-          "https://pbs.twimg.com/profile_images/1831668492203880449/opZQi38n_400x400.jpg",
+        image: "https://pbs.twimg.com/profile_images/1831668492203880449/opZQi38n_400x400.jpg",
         link: "https://www.youtube.com/@AlexBenito",
         countries: ["FRANCE"],
         platforms: ["youtube"],
       },
       {
         name: "scoreadvise",
-        image:
-          "https://pbs.twimg.com/profile_images/1633883637304180736/L4zykxAZ_400x400.jpg",
+        image: "https://pbs.twimg.com/profile_images/1633883637304180736/L4zykxAZ_400x400.jpg",
         link: "https://www.youtube.com/@scoreadvise_official",
         countries: ["GERMANY"],
         platforms: ["youtube"],
       },
       {
         name: "Quinny",
-        image:
-          "https://pbs.twimg.com/profile_images/1894766043559604224/Lv4yVNzy_400x400.jpg",
+        image: "https://pbs.twimg.com/profile_images/1894766043559604224/Lv4yVNzy_400x400.jpg",
         link: "https://www.youtube.com/@Quinny3001",
         countries: ["ENGLAND"],
         platforms: ["youtube"],
       },
       {
         name: "Tim Lanew",
-        image:
-          "https://pbs.twimg.com/profile_images/1849863273769992192/rRZK1ZM7_400x400.jpg",
+        image: "https://pbs.twimg.com/profile_images/1849863273769992192/rRZK1ZM7_400x400.jpg",
         link: "https://www.youtube.com/@CoachTimTV",
         countries: ["FRANCE"],
         platforms: ["youtube"],
       },
       {
         name: "frenchmystiq",
-        image:
-          "https://pbs.twimg.com/profile_images/1651729224355442688/S-GAvtMq_400x400.jpg",
+        image: "https://pbs.twimg.com/profile_images/1651729224355442688/S-GAvtMq_400x400.jpg",
         link: "https://linktr.ee/frenchmystiq",
         countries: ["FRANCE"],
         platforms: ["youtube", "twitch"],
       },
       {
         name: "McBrideAce",
-        image:
-          "https://pbs.twimg.com/profile_images/1674870536906629140/OSOxCQRz_400x400.jpg",
+        image: "https://pbs.twimg.com/profile_images/1674870536906629140/OSOxCQRz_400x400.jpg",
         link: "https://www.youtube.com/@McBrideAce",
         countries: ["ENGLAND"],
         platforms: ["youtube"],
       },
       {
         name: "LeMatero",
-        image:
-          "https://pbs.twimg.com/profile_images/1794289034186854400/X5nVbcio_400x400.jpg",
+        image: "https://pbs.twimg.com/profile_images/1794289034186854400/X5nVbcio_400x400.jpg",
         link: "https://x.com/LeMatero",
         countries: ["FRANCE"],
         platforms: ["twitch"],
+      },
+      {
+        name: "Zlataneur_89",
+        image: "https://pbs.twimg.com/profile_images/1359944317469679621/Gl2vxD8Z_400x400.jpg",
+        link: "https://www.youtube.com/channel/UCWMYhHuZBAQFIIBMM19xCyw",
+        countries: ["FRANCE"],
+        platforms: ["youtube"],
       },
     ];
     return c.sort(() => Math.random() - 0.5);
   });
 
   const [tools] = useState(() => {
-    var c = [
-      {
+    var c = [{
         name: "MFL Player Info",
         link: "https://mflplayer.info/",
         countries: [],
       },
       {
         name: "MFL Manager",
-        image:
-          "https://pbs.twimg.com/profile_images/1721134227213750272/VsG_pArI_400x400.png",
+        image: "https://pbs.twimg.com/profile_images/1721134227213750272/VsG_pArI_400x400.png",
         link: "https://mflmanager.fr/",
         countries: [],
       },
@@ -170,8 +160,7 @@ const PageHome: React.FC<PageHomeProps> = ({
       },
       {
         name: "Flowty",
-        image:
-          "https://pbs.twimg.com/profile_images/1839328859818524672/NOH1yET3_400x400.jpg",
+        image: "https://pbs.twimg.com/profile_images/1839328859818524672/NOH1yET3_400x400.jpg",
         link: "https://www.flowty.io/",
         countries: [],
       },
@@ -184,27 +173,23 @@ const PageHome: React.FC<PageHomeProps> = ({
   });
 
   const [initiatives] = useState(() => {
-    var c = [
-      {
+    var c = [{
         name: "MFL Manager",
-        image:
-          "https://pbs.twimg.com/profile_images/1721134227213750272/VsG_pArI_400x400.png",
+        image: "https://pbs.twimg.com/profile_images/1721134227213750272/VsG_pArI_400x400.png",
         link: "https://discord.gg/GMuRDJsq",
         countries: ["FRANCE"],
         platforms: ["discord"],
       },
       {
         name: "K-Socios",
-        image:
-          "https://pbs.twimg.com/profile_images/1874941714101608448/aPxojvER_400x400.jpg",
+        image: "https://pbs.twimg.com/profile_images/1874941714101608448/aPxojvER_400x400.jpg",
         link: "https://x.com/K_Socios_MFL",
         countries: ["FRANCE"],
         platforms: ["discord"],
       },
       {
         name: "Vulrak Académ.",
-        image:
-          "https://cdn.discordapp.com/icons/1276645403600883835/7114a539a9ad1feddab234f46ef6a89a.webp?size=128",
+        image: "https://cdn.discordapp.com/icons/1276645403600883835/7114a539a9ad1feddab234f46ef6a89a.webp?size=128",
         link: "https://discord.gg/yzsqv92c",
         countries: ["FRANCE"],
         platforms: ["discord"],
@@ -221,35 +206,30 @@ const PageHome: React.FC<PageHomeProps> = ({
   });
 
   const [clubSocials] = useState(() => {
-    var c = [
-      {
+    var c = [{
         name: "Sambre Hearts",
-        image:
-          "https://pbs.twimg.com/profile_images/1792928428770942976/H_WfZk8c_400x400.jpg",
+        image: "https://pbs.twimg.com/profile_images/1792928428770942976/H_WfZk8c_400x400.jpg",
         link: "https://x.com/SambreHearts",
         countries: ["ENGLAND"],
         platforms: ["twitter"],
       },
       {
         name: "Apollo Sports Gr.",
-        image:
-          "https://pbs.twimg.com/profile_images/1409242215990300682/8Yd96nWf_400x400.jpg",
+        image: "https://pbs.twimg.com/profile_images/1409242215990300682/8Yd96nWf_400x400.jpg",
         link: "https://x.com/apollo11collect",
         countries: ["ENGLAND"],
         platforms: ["twitter"],
       },
       {
         name: "Sunfire Jaguars",
-        image:
-          "https://pbs.twimg.com/profile_images/1791094944779714561/hFiIp9ZX_400x400.jpg",
+        image: "https://pbs.twimg.com/profile_images/1791094944779714561/hFiIp9ZX_400x400.jpg",
         link: "https://x.com/Sunfire_Jaguars",
         countries: ["ENGLAND"],
         platforms: ["twitter"],
       },
       {
         name: "Porto Vermelho",
-        image:
-          "https://pbs.twimg.com/profile_images/1835804772512792576/OXKPiYTl_400x400.jpg",
+        image: "https://pbs.twimg.com/profile_images/1835804772512792576/OXKPiYTl_400x400.jpg",
         link: "https://x.com/Porto_Vermelho",
         countries: ["ENGLAND"],
         platforms: ["twitter"],
@@ -712,11 +692,11 @@ const PageHome: React.FC<PageHomeProps> = ({
                   </div>*/}
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+            </div> <
+    /div> <
+    /div> <
+    /div> <
+    /div>
   );
 };
 

@@ -259,3 +259,53 @@ class PlayerPricingType(ObjectType):
 
     def resolve_id(self, info):
         return f"{self.overall}-{self.position}-{self.age}"
+
+class PlayerStatsType(ObjectType):
+    overall = Int()
+    pace = Int()
+    shooting = Int()
+    passing = Int()
+    dribbling = Int()
+    defending = Int()
+    physical = Int()
+    position = String()
+    positions = List(String)
+
+class ModifierValueType(ObjectType):
+    type = String()
+    value = Float()
+    field = String()
+
+class ModifierTargetType(ObjectType):
+    type = String()
+    ids = List(Int)
+
+class ModifierType(ObjectType):
+    target = Field(ModifierTargetType)
+    values = List(Field(ModifierValueType))
+
+class PositionType(ObjectType):
+    index = Int()
+    player = Int()
+
+class MatchType(ObjectType):
+    id = ID(source='_id')
+    last_computation_date = DateTime()
+    type = String()
+    competitionId = String()
+    competitionName = String()
+    engine = String()
+    modifiers = List(Field(ModifierType))
+    players = List(Field(PlayerStatsType))
+    startDate = DateTime()
+    creation_date = DateTime()
+    homeScore = Int()
+    homeFormation = String()
+    homePositions = List(Field(PositionType))
+    awayScore = Int()
+    awayFormation = String()
+    awayPositions = List(Field(PositionType))
+    homeUser = Field(UserType)
+    awayUser = Field(UserType)
+    homeClub = Field(ClubType)
+    awayClub = Field(ClubType)

@@ -137,7 +137,7 @@ scheduler.add_job(compute_reports.main,             'interval', args=[db, mail],
 scheduler.add_job(collect_clubs.main,               'interval', args=[db],          seconds=60)
 scheduler.add_job(collect_sales.main,               'interval', args=[db],          seconds=30)
 scheduler.add_job(collect_players.main,             'interval', args=[db],          seconds=30)
-scheduler.add_job(collect_matches.main,             'interval', args=[db],          seconds=60 * 3)
+"""scheduler.add_job(collect_matches.main,             'interval', args=[db],          seconds=60 * 3)"""
 scheduler.add_job(compute_raw_player_pricings.main, 'interval', args=[db],          seconds=60 * 5)
 scheduler.add_job(compute_player_pricings.main,     'interval', args=[db],          seconds=60 * 60)
 scheduler.start()

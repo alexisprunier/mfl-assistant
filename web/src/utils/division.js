@@ -7,16 +7,13 @@ export const divisions = [
   { number: 6, name: "Iron", color: "rgb(134, 94, 63)" },
   { number: 7, name: "Stone", color: "rgb(183, 176, 156)" },
   { number: 8, name: "Ice", color: "rgb(176, 204, 225)" },
+  { number: 9, name: "Spark", color: "rgb(255, 177, 54)" },
 ];
 
 export const getDivisionColor = (division) => {
-  return divisions
-    .filter((d) => d.number === division)
-    .pop()?.color;
+  return divisions.filter((d) => d.number === division).pop()?.color;
 };
 
 export const getDivisionName = (division) => {
-  return divisions
-    .filter((d) => d.number === division)
-    .pop()?.name;
+  return divisions.filter((d) => d.number === division).pop()?.name;
 };

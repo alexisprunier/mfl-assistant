@@ -138,7 +138,7 @@ scheduler.add_job(collect_clubs.main,               'interval', args=[db],      
 scheduler.add_job(collect_sales.main,               'interval', args=[db],          seconds=30)
 scheduler.add_job(collect_players.main,             'interval', args=[db],          seconds=30)
 scheduler.add_job(collect_matches.main,             'interval', args=[db],          seconds=30)
-scheduler.add_job(collect_users.main,               'interval', args=[db],          seconds=60)
+scheduler.add_job(collect_users.main,               'interval', args=[db],          seconds=60 * 3)
 
 scheduler.add_job(compute_club_count_per_day.main,  'interval', args=[db],          seconds=60)
 scheduler.add_job(compute_sale_total.main,          'interval', args=[db],          seconds=30)

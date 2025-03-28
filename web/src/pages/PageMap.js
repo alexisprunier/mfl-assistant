@@ -57,13 +57,12 @@ const PageMap: React.FC = () => {
   const handleMoveEnd = useCallback(() => {
     if (mapRef.current && markers) {
       const map = mapRef.current;
-      const bounds = map.getBounds(); // Get map's visible area
+      const bounds = map.getBounds();
       const visibleMarkers = markers.filter(({ position }) =>
         bounds.contains(position)
       );
 
       setFilteredMarkers((prevMarkers) => {
-        // Only update if the markers have changed
         if (
           JSON.stringify(prevMarkers) !==
           JSON.stringify(visibleMarkers.slice(0, MAX_MARKERS))
@@ -83,7 +82,7 @@ const PageMap: React.FC = () => {
     useEffect(() => {
       mapRef.current = map;
       if (markers) {
-        handleMoveEnd(); // Trigger moveend logic on initialization
+        handleMoveEnd();
       }
     }, [markers, handleMoveEnd]);
 
@@ -125,9 +124,9 @@ const PageMap: React.FC = () => {
                 </div>
               </div>
             `,
-              iconSize: [20, 40], // Adjusted size to accommodate both city and count labels
-              iconAnchor: [10, 40], // Anchor at the center bottom of the icon
-              popupAnchor: [0, -40], // Popup position
+              iconSize: [20, 40],
+              iconAnchor: [10, 40],
+              popupAnchor: [0, -40],
             });
 
             return (

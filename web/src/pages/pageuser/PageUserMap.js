@@ -11,7 +11,7 @@ import "statics/leaflet.css";
 import "./PageUserMap.css";
 import { useOutletContext } from "react-router-dom";
 import { getClubs, getPlayerCountPerCountry } from "services/api-assistant.js";
-import { countries, cities } from "utils/geography.js";
+import { countries } from "utils/geography.js";
 
 interface PageUserMapProps {}
 
@@ -42,24 +42,19 @@ const PageUserMap: React.FC<PageUserMapProps> = () => {
     });
   };
 
-  var markerIcon = L.icon({
-    iconUrl: "/media/images/buildings-blue.svg",
-    iconSize: [20, 20],
-  });
-
   useEffect(() => {
     if (clubs) {
       const markerPositions = [];
 
       clubs.map((club) => {
-        if (club.city in cities) {
+        if (club.geolocation?.latitude && club.geolocation?.longitude) {
           markerPositions.push({
             id: club.id,
             city: club.city,
-            position: cities[club.city],
+            position: [club.geolocation.latitude, club.geolocation.longitude],
           });
         } else {
-          console.log("lat/long not found for : " + club.city);
+          console.log("lat/long not found for : " + club.id);
         }
       });
 

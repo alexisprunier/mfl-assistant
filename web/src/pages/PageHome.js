@@ -97,7 +97,7 @@ const PageHome: React.FC < PageHomeProps > = ({
       },
       {
         name: "Quinny",
-        image: "https://pbs.twimg.com/profile_images/1894766043559604224/Lv4yVNzy_400x400.jpg",
+        image: "https://pbs.twimg.com/profile_images/1897341620233682944/fkON3ANq_400x400.jpg",
         link: "https://www.youtube.com/@Quinny3001",
         countries: ["ENGLAND"],
         platforms: ["youtube"],
@@ -160,7 +160,7 @@ const PageHome: React.FC < PageHomeProps > = ({
       },
       {
         name: "Flowty",
-        image: "https://pbs.twimg.com/profile_images/1839328859818524672/NOH1yET3_400x400.jpg",
+        image: "https://pbs.twimg.com/profile_images/1899276983907069952/dUuP0Bxf_400x400.jpg",
         link: "https://www.flowty.io/",
         countries: [],
       },
@@ -508,7 +508,14 @@ const PageHome: React.FC < PageHomeProps > = ({
                       </div>
                     </div>
                     <div className="d-flex flex-column flex-lg-row flex-grow-1 flex-shrink-1 flex-basis-0 min-width-0">
-                      <div className="d-flex card bg-black flex-grow-1 justify-content-center mb-2 mb-lg-0 p-1 mx-4 mt-4 mt-lg-0">
+                      <div className="d-flex card bg-black flex-grow-1 justify-content-center mb-2 mb-lg-0 p-1 mx-2 mt-4 mt-lg-0">
+                        <Link to="map" className="nav-link text-white text-center">
+                            <i className="bi bi-globe-americas h5"></i>
+                            <br />
+                            Map
+                          </Link>
+                      </div>
+                      <div className="d-flex card bg-black flex-grow-1 justify-content-center mb-2 mb-lg-0 p-1 mx-2 mt-4 mt-lg-0">
                         <ButtonLogin
                           className={
                             "nav-link nav-link-login ps-2 ps-md-0 ms-md-0 text-white text-center flex-fill"
@@ -693,10 +700,10 @@ const PageHome: React.FC < PageHomeProps > = ({
                 </div>
               </div>
             </div> <
-    /div> <
-    /div> <
-    /div> <
-    /div>
+    /div> < /
+    div > <
+    /div> < /
+    div >
   );
 };
 

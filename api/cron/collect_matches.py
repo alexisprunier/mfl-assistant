@@ -9,9 +9,8 @@ import time
 last_matches_url = "https://z519wdyajg.execute-api.us-east-1.amazonaws.com/prod/matches?live=true&past=true&limit=12"
 base_url = "https://z519wdyajg.execute-api.us-east-1.amazonaws.com/prod/matches/"
 
-min_match_id_to_treat_var = "min_match_id_to_treat"
-min_match_id_stepping = 2
-max_match_id_stepping = 5
+min_match_id_stepping = 1
+max_match_id_stepping = 1
 
 logger = logging.getLogger("collect_matches")
 logger.setLevel(logging.INFO)
@@ -59,16 +58,13 @@ async def main(db):
 
     # Treat the old ones
 
-    min_match_id_to_treat = await get_var_value(db, min_match_id_to_treat_var)
     min_stored_match_id = await db.matches.find_one(sort=[('_id', 1)])
+    treated = 0
 
     if min_stored_match_id is not None:
         min_stored_match_id = min_stored_match_id["_id"] - 1
 
-        if min_match_id_to_treat is None:
-            min_match_id_to_treat = min_stored_match_id
-
-        while min_match_id_to_treat < min_stored_match_id:
+        while treated < min_match_id_stepping:
             logger.critical("collect_matches: Treat old match number: " + str(min_stored_match_id))
             response = requests.get(
                 url=base_url + str(min_stored_match_id) + "?withFormations=true"
@@ -80,10 +76,10 @@ async def main(db):
 
                 if raw_match_data["status"] == "ENDED":
                     await _treat_match(db, raw_match_data)
+                    treated += 1
+
 
             min_stored_match_id = min_stored_match_id - 1
-
-        await upsert_vars(db, min_match_id_to_treat_var, min_match_id_to_treat - min_match_id_stepping)
 
 
 async def _treat_match(db, mfl_match):

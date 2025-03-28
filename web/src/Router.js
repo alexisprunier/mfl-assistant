@@ -17,6 +17,7 @@ import PageToolsPlayerPricing from "pages/pagetools/PageToolsPlayerPricing.js";
 import PageToolsTeamBuilder from "pages/pagetools/PageToolsTeamBuilder.js";
 import PageUser from "pages/PageUser.js";
 import PagePricing from "pages/PagePricing.js";
+import PageMap from "pages/PageMap.js";
 import PageUserClubs from "pages/pageuser/PageUserClubs.js";
 import PageUserPlayers from "pages/pageuser/PageUserPlayers.js";
 import React, { useState } from "react";
@@ -135,6 +136,7 @@ const Router: React.FC = (props) => {
                 element={<PageNotificationReport {...props} />}
               />
             </Route>
+            <Route path="/map" element={<PageMap {...props} />} />
 
             {/* 404 */}
             <Route element={<Page404 />} />

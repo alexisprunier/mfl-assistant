@@ -2,6 +2,7 @@ from bson import ObjectId
 from pymongo import ReturnDocument
 import datetime
 from utils.date import convert_unix_to_datetime
+from utils.geolocation import get_geolocation
 
 
 async def upsert_vars(db, var, value):
@@ -84,6 +85,19 @@ async def build_and_upsert_user(db, mfl_user):
         user["address"] = mfl_user["walletAddress"]
     if "name" in mfl_user:
         user["name"] = mfl_user["name"]
+    if "country" in mfl_user:
+        user["country"] = mfl_user["country"]
+    if "city" in mfl_user:
+        user["city"] = mfl_user["city"]
+    if "nbMflPoints" in mfl_user:
+        user["nbMflPoints"] = mfl_user["nbMflPoints"]
+    if "nbMflPointsLastSeason" in mfl_user:
+        user["nbMflPointsLastSeason"] = mfl_user["nbMflPointsLastSeason"]
+    if "country" in mfl_user:
+        geolocation = await get_geolocation(db, mfl_user["country"], mfl_user["city"])
+
+        if geolocation is not None:
+            user["geolocation"] = geolocation["_id"]
 
     return await upsert_user(db, user)
 
@@ -159,7 +173,11 @@ async def build_and_upsert_club(db, mfl_club, owner=None):
         club["foundation_date"] = convert_unix_to_datetime(mfl_club["foundationDate"]) \
             if "foundationDate" in mfl_club else None
     if "country" in mfl_club:
-        club["country"] = mfl_club["country"]
+        geolocation = await get_geolocation(db, mfl_club["country"], mfl_club["city"])
+        
+        if geolocation is not None:
+            club["geolocation"] = geolocation["_id"]
+        
 
     if owner and "_id" in owner:
         club["owner"] = owner["_id"]

@@ -10,7 +10,7 @@ from graph.query import Query
 from graph.mutation import Mutation
 import config
 from cron import compute_notifications, compute_reports, collect_matches, collect_clubs, collect_sales, collect_players, \
-    compute_club_count_per_day, compute_sale_total, compute_raw_player_pricings, compute_player_pricings
+    compute_club_count_per_day, compute_sale_total, compute_raw_player_pricings, compute_player_pricings, collect_users
 from endpoint.generate_nonce import generate_nonce
 from utils.jwt import create_access_token
 from utils.cookie import set_cookie
@@ -130,14 +130,18 @@ app.add_route("/api/confirm_email", confirm_email)
 # Manage cron
 
 scheduler = AsyncIOScheduler()
+
 scheduler.add_job(compute_notifications.main,       'interval', args=[db, mail],    seconds=60)
-scheduler.add_job(compute_club_count_per_day.main,  'interval', args=[db],          seconds=60)
-scheduler.add_job(compute_sale_total.main,          'interval', args=[db],          seconds=30)
 scheduler.add_job(compute_reports.main,             'interval', args=[db, mail],    seconds=30)
+
 scheduler.add_job(collect_clubs.main,               'interval', args=[db],          seconds=60)
 scheduler.add_job(collect_sales.main,               'interval', args=[db],          seconds=30)
 scheduler.add_job(collect_players.main,             'interval', args=[db],          seconds=30)
-"""scheduler.add_job(collect_matches.main,             'interval', args=[db],          seconds=60 * 3)"""
+scheduler.add_job(collect_matches.main,             'interval', args=[db],          seconds=30)
+scheduler.add_job(collect_users.main,               'interval', args=[db],          seconds=60)
+
+scheduler.add_job(compute_club_count_per_day.main,  'interval', args=[db],          seconds=60)
+scheduler.add_job(compute_sale_total.main,          'interval', args=[db],          seconds=30)
 scheduler.add_job(compute_raw_player_pricings.main, 'interval', args=[db],          seconds=60 * 5)
 scheduler.add_job(compute_player_pricings.main,     'interval', args=[db],          seconds=60 * 60)
 scheduler.start()

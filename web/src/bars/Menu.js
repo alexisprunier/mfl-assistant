@@ -5,7 +5,7 @@ import ButtonLogin from "components/buttons/ButtonLogin.js";
 
 interface MenuProps {}
 
-const Menu: React.FC<MenuProps> = (props) => {
+const Menu: React.FC < MenuProps > = (props) => {
   const location = useLocation();
 
   const getMenuLabel = (text, cl) => {
@@ -116,6 +116,27 @@ const Menu: React.FC<MenuProps> = (props) => {
               </div>
               {location.pathname.startsWith("/notification") &&
                 getMenuLabel("Notification", "d-inline d-lg-none")}
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link
+              to="/map"
+              className={
+                "nav-link" +
+                (location.pathname.startsWith("/map") ? " active" : "")
+              }
+            >
+              {location.pathname.startsWith("/map") &&
+                getMenuLabel("Map", "d-none d-lg-inline")}
+              <div className="px-2 px-lg-0">
+                {location.pathname.startsWith("/map") ? (
+                  <i className="bi bi-globe-asia-australia"></i>
+                ) : (
+                  <i className="bi bi-globe-americas"></i>
+                )}
+              </div>
+              {location.pathname.startsWith("/notification") &&
+                getMenuLabel("Map", "d-inline d-lg-none")}
             </Link>
           </li>
         </ul>

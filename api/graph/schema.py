@@ -37,13 +37,29 @@ class PlayerCriteriaTypeEnum(enum.Enum):
     NAT = "NAT"
 
 
+class GeolocationType(ObjectType):
+    id = Int(source='_id')
+    city = String()
+    country = String()
+    latitude = Float()
+    longitude = Float()
+
+
 class UserType(ObjectType):
     id = ID(source='_id')
     address = String()
     email = String()
     name = String()
+    city = String()
+    country = String()
+    nbMflPoints = Int()
+    nbMflPointsLastSeason = Int()
     confirmation_code = String()
     is_email_confirmed = Boolean()
+    geolocation = Field(GeolocationType)
+
+    async def resolve_geolocation(self, info):
+        return await info.context["db"].geolocations.find_one({"_id": self["geolocation"]})
 
 
 class PlayerType(ObjectType):
@@ -65,6 +81,7 @@ class PlayerType(ObjectType):
     goalkeeping = Int()
     resistance = Int()
     owner = Field(UserType)
+    geolocation = Field(GeolocationType)
 
 
 class ClubType(ObjectType):
@@ -77,6 +94,10 @@ class ClubType(ObjectType):
     foundation_date = DateTime()
     last_computation_date = DateTime()
     owner = Field(UserType)
+    geolocation = Field(GeolocationType)
+
+    async def resolve_geolocation(self, info):
+        return await info.context["db"].geolocations.find_one({"_id": self["geolocation"]})
 
 
 class ContractType(ObjectType):

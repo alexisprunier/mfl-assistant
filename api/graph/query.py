@@ -1,5 +1,5 @@
 from graphene import ObjectType, String, Int, Schema, Field, List, ID, Boolean, Date
-from graph.schema import RawPlayerPricingType, PlayerPricingType, UserType, SaleType, ContractType, NotificationScopeType, NotificationType, CountType, DataPointType, ClubType, TeamType, TeamMemberType, PlayerType, ReportConfigurationType, ReportType
+from graph.schema import RawPlayerPricingType, PlayerPricingType, UserType, GeolocationType, SaleType, ContractType, NotificationScopeType, NotificationType, CountType, DataPointType, ClubType, TeamType, TeamMemberType, PlayerType, ReportConfigurationType, ReportType
 from bson import ObjectId
 from decorator.require_token import require_token
 from decorator.add_token_if_exists import add_token_if_exists
@@ -194,6 +194,57 @@ class Query(ObjectType):
             query.insert(0, {"$match": {"status": "FOUNDED"}})
 
         return [c["count"] async for c in info.context["db"].clubs.aggregate(query)][0]
+
+    class ClubCountPerGeolocationType(ObjectType):
+        count = Int()
+        geolocation = Field(GeolocationType)
+
+    get_club_count_per_geolocation = List(ClubCountPerGeolocationType, founded_only=Boolean())
+
+    async def resolve_get_club_count_per_geolocation(self, info, founded_only=True):
+        db = info.context["db"]
+
+        # Build the aggregation pipeline
+        query = [
+            {
+                "$lookup": {
+                    "from": "users",
+                    "localField": "owner",
+                    "foreignField": "_id",
+                    "as": "owner_info"
+                }
+            },
+            {"$match": {"owner_info.address": {"$ne": "0xf45dfaa6233fae44"}}},
+            {
+                "$group": {
+                    "_id": "$geolocation",
+                    "count": {"$sum": 1}
+                }
+            },
+            {
+                "$lookup": {
+                    "from": "geolocations",
+                    "localField": "_id",
+                    "foreignField": "_id",
+                    "as": "geolocation_info"
+                }
+            },
+            {"$unwind": "$geolocation_info"}
+        ]
+
+        if founded_only:
+            query.insert(0, {"$match": {"status": "FOUNDED"}})
+
+        # Execute the aggregation query
+        results = [doc async for doc in db.clubs.aggregate(query)]
+
+        return [
+            {
+                "geolocation": doc["geolocation_info"],
+                "count": doc["count"]
+            }
+            for doc in results
+        ]
 
     get_player_count = Int(
         exclude_mfl_players=Boolean(),

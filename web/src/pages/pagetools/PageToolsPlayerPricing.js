@@ -6,6 +6,7 @@ import LoadingSquare from "components/loading/LoadingSquare.js";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { getPlayerSales } from "services/api-assistant.js";
+import { getPlayerListings } from "services/api-mfl.js";
 import { copyTextToClipboard } from "utils/clipboard.js";
 import { positions, scarcity } from "utils/player.js";
 import { convertDictToUrlParams } from "utils/url.js";
@@ -35,7 +36,8 @@ const PageToolsPlayerPricing: React.FC<PageToolsPlayerPricingProps> = () => {
 
   const [sales, setSales] = useState(null);
   const [hideOneAndLower, setHideOneAndLower] = useState(false);
-  const [timeUnit, setTimeUnit] = useState("m");
+  const [timeUnit, setTimeUnit] = useState("q");
+  const [playerListings, setPlayerListings] = useState(null);
 
   const getData = (pursue, beforeListingId) => {
     setIsLoading(true);
@@ -72,6 +74,29 @@ const PageToolsPlayerPricing: React.FC<PageToolsPlayerPricingProps> = () => {
         minAge: age - 1,
         maxAge: age + 1,
         firstPositionOnly,
+      },
+    });
+
+    fetchPlayerListings();
+  };
+
+  const fetchPlayerListings = () => {
+    setPlayerListings(null);
+
+    getPlayerListings({
+      handleSuccess: (v) => {
+        setPlayerListings(v);
+      },
+      handleError: (e) => {
+        console.log(e);
+      },
+      params: {
+        sorts: "listing.price",
+        sortsOrders: "ASC",
+        ageMax: age,
+        overallMin: overall,
+        positions: position,
+        onlyPrimaryPosition: firstPositionOnly,
       },
     });
   };
@@ -179,7 +204,7 @@ const PageToolsPlayerPricing: React.FC<PageToolsPlayerPricingProps> = () => {
                   <h4 className="flex-grow-1">Player sales</h4>
                 </div>
 
-                <div className="d-flex flex-fill overflow-auto justify-content-end align-items-end">
+                <div className="d-flex flex-fill overflow-auto justify-content-end align-items-center">
                   <small className="me-md-3">
                     Hide 1$ and lower
                     <input
@@ -219,12 +244,31 @@ const PageToolsPlayerPricing: React.FC<PageToolsPlayerPricingProps> = () => {
                   </button>
                   <button
                     className={
-                      "btn btn-small" +
+                      "btn btn-small me-2" +
                       (timeUnit === "y" ? " btn-info text-white" : " text-info")
                     }
                     onClick={() => setTimeUnit("y")}
                   >
                     Y
+                  </button>
+                  <button
+                    className="btn btn-info btn-small text-white"
+                    onClick={() => {
+                      const params = {
+                        "metadata.age": ":" + age,
+                        "metadata.overall": overall + ":",
+                        "positions.name": position,
+                        onlyPrimaryPosition: firstPositionOnly,
+                      };
+                      const url =
+                        "https://app.playmfl.com/marketplace?" +
+                        convertDictToUrlParams(params);
+                      window.open(url, "_blank");
+                    }}
+                    disabled={!overall || !position || !age}
+                  >
+                    Marketplace{" "}
+                    <i class="bi bi-caret-right-fill text-white"></i>
                   </button>
                 </div>
               </div>
@@ -238,6 +282,7 @@ const PageToolsPlayerPricing: React.FC<PageToolsPlayerPricingProps> = () => {
                       sales={sales}
                       timeUnit={timeUnit}
                       hideOneAndLower={hideOneAndLower}
+                      floor={playerListings?.[0]?.price}
                     />
                   )}
                 </div>

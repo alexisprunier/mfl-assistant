@@ -1,3 +1,7 @@
+#PageMap {
+  background-color: #090909 !important;
+}
+
 #PageMap .leaflet-container {
   background-color: #262626 !important;
 }

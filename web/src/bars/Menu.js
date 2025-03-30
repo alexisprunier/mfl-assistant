@@ -5,7 +5,7 @@ import ButtonLogin from "components/buttons/ButtonLogin.js";
 
 interface MenuProps {}
 
-const Menu: React.FC < MenuProps > = (props) => {
+const Menu: React.FC<MenuProps> = (props) => {
   const location = useLocation();
 
   const getMenuLabel = (text, cl) => {
@@ -135,7 +135,7 @@ const Menu: React.FC < MenuProps > = (props) => {
                   <i className="bi bi-globe-americas"></i>
                 )}
               </div>
-              {location.pathname.startsWith("/notification") &&
+              {location.pathname.startsWith("/map") &&
                 getMenuLabel("Map", "d-inline d-lg-none")}
             </Link>
           </li>

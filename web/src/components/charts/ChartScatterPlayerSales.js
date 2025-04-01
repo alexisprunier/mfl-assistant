@@ -159,15 +159,15 @@ const ChartScatterPlayerSales: React.FC<ChartScatterPlayerSalesProps> = ({
                           borderWidth: 2,
                           borderDash: [6, 6],
                           label: {
-                            display: true, // Fix: Ensure label is shown
+                            display: true,
                             content: "Floor price",
-                            position: "start", // Change position for better visibility
-                            color: "#ffffff", // White text for contrast
+                            position: "start",
+                            color: "#ffffff",
                             font: {
                               weight: "bold",
                               size: 9,
                             },
-                            backgroundColor: "#0dcaf0", // Ensure visibility
+                            backgroundColor: "#0dcaf0",
                             padding: { top: 2, bottom: 2, left: 4, right: 4 },
                           },
                         },

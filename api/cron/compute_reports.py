@@ -48,6 +48,7 @@ async def main(db, mail):
                 user = user.pop()
                 data = await _get_progress_data(db, user["address"])
                 data = {key: value for key, value in data.items() if value is not None}
+                data = dict(sorted(data.items(), key=lambda item: ('overall' not in item[1], item[0])))
                 await sent_daily_progress_report_email(db, mail, user, data)
 
     await upsert_vars(db, last_computation_var, new_computation_time)

@@ -165,20 +165,23 @@ def build_player_progress_section(data):
             f"style='width: 80px;' />"
             "</td>"
             "<td style='vertical-align: top;'>"
-            "<div>"
-            f"<a href='https://app.playmfl.com/players/{i}' target='_blank' "
-            f"style='text-decoration: none; color: #0dcaf0; font-weight: bold; margin-right: 10px;'>See on MFL</a>"
-            f"<br/><a href='https://mflplayer.info/player/{i}' target='_blank' "
-            f"style='text-decoration: none; color: #0dcaf0; font-weight: bold;'>See on MFL Player Info</a>"
-            "</div>"
-            "<div style='margin-top: 10px;'>"
         )
 
         for attribute, value in progress.items():
             if attribute == "overall":
-                player_section += f"<div style='font-size: 20px; font-weight: bold; color: red'>{attribute}: +{value}</div>"
+                player_section += f"<div style='font-size: 20px; font-weight: bold; color: #0dcaf0'>{attribute}: +{value}</div>"
             else:
-                player_section += f"<div style='font-size: 14px;'>{attribute}: +{value}</div>"
+                player_section += f"<div style='font-size: 14px; color: white;'>{attribute}: +{value}</div>"
+
+        player_section += (
+            "<div style='margin-top: 16px;'>"
+            "<div>"
+            f"<div><a href='https://app.playmfl.com/players/{i}' target='_blank' "
+            f"style='font-size: 10px; color: #adb5bd; font-weight: bold; margin-right: 10px;'>View on MFL</a>"
+            f"</div><div><a href='https://mflplayer.info/player/{i}' target='_blank' "
+            f"style='font-size: 10px; color: #adb5bd; font-weight: bold;'>View on MFL Player</a>"
+            "</div></div>"
+        )
 
         player_section += "</div></td></tr></table><hr style='border: 0; border-top: 1px solid #555;' />"
 

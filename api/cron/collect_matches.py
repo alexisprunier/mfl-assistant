@@ -74,9 +74,9 @@ async def main(db):
                 raw_match_data = response.json()
                 raw_match_data["id"] = min_stored_match_id
 
-                if raw_match_data["status"] == "ENDED":
-                    await _treat_match(db, raw_match_data)
-                    treated += 1
+                #if raw_match_data["status"] == "ENDED":
+                await _treat_match(db, raw_match_data)
+                treated += 1
 
 
             min_stored_match_id = min_stored_match_id - 1

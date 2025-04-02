@@ -59,7 +59,11 @@ class UserType(ObjectType):
     geolocation = Field(GeolocationType)
 
     async def resolve_geolocation(self, info):
-        return await info.context["db"].geolocations.find_one({"_id": self["geolocation"]})
+        geolocation_id = self.get("geolocation") 
+        if not geolocation_id:
+            return None
+
+        return await info.context["db"].geolocations.find_one({"_id": geolocation_id})
 
 
 class PlayerType(ObjectType):

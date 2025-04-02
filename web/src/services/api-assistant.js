@@ -792,7 +792,15 @@ export const getUsers = ({
         getUsers(${jsonToParams(params)}) {
           id,
           address,
-          name
+          name,
+          country,
+          city,
+          geolocation {
+            country,
+            city,
+            latitude,
+            longitude
+          }
         }
       }`,
     }),

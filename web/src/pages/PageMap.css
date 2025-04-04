@@ -15,3 +15,13 @@
   background-color: rgba(0, 0, 0, 0) !important;
   border: none !important;
 }
+
+#PageMap .map-selector {
+  z-index: 1000;
+  top: 20px;
+  right: 20px;
+}
+
+#PageMap .map-select {
+  width: 100px;
+}

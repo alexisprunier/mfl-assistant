@@ -199,13 +199,23 @@ class Query(ObjectType):
         count = Int()
         geolocation = Field(GeolocationType)
 
-    get_club_count_per_geolocation = List(ClubCountPerGeolocationType, founded_only=Boolean())
+    get_club_count_per_geolocation = List(ClubCountPerGeolocationType, founded_only=Boolean(), geographic=String())
 
-    async def resolve_get_club_count_per_geolocation(self, info, founded_only=True):
+    async def resolve_get_club_count_per_geolocation(self, info, founded_only=True, geographic="city"):
         db = info.context["db"]
 
-        # Build the aggregation pipeline
-        query = [
+        # Validate geographic argument
+        if geographic not in ("city", "country"):
+            raise ValueError("Invalid geographic argument. Must be 'city' or 'country'.")
+
+        query = []
+
+        # Optionally filter by status
+        if founded_only:
+            query.append({"$match": {"status": "FOUNDED"}})
+
+        # Join with users to exclude specific owners
+        query += [
             {
                 "$lookup": {
                     "from": "users",
@@ -214,36 +224,45 @@ class Query(ObjectType):
                     "as": "owner_info"
                 }
             },
-            {"$match": {"owner_info.address": {"$ne": "0xf45dfaa6233fae44"}}},
-            {
-                "$group": {
-                    "_id": "$geolocation",
-                    "count": {"$sum": 1}
-                }
-            },
+            {"$match": {"owner_info.address": {"$ne": "0xf45dfaa6233fae44"}}}
+        ]
+
+        # Join with geolocations so we can group by city/country
+        query += [
             {
                 "$lookup": {
                     "from": "geolocations",
-                    "localField": "_id",
+                    "localField": "geolocation",
                     "foreignField": "_id",
                     "as": "geolocation_info"
                 }
             },
-            {"$unwind": "$geolocation_info"}
+            {"$unwind": "$geolocation_info"},
+            {
+                "$group": {
+                    "_id": f"$geolocation_info.{geographic}",
+                    "count": {"$sum": 1},
+                    "sample_geo": {"$first": "$geolocation_info"}  # Pick one for metadata
+                }
+            },
+            {"$sort": {"count": -1}}
         ]
 
-        if founded_only:
-            query.insert(0, {"$match": {"status": "FOUNDED"}})
-
-        # Execute the aggregation query
+        # Run the query
         results = [doc async for doc in db.clubs.aggregate(query)]
 
+        # Build response
         return [
             {
-                "geolocation": doc["geolocation_info"],
+                "geolocation": {
+                    "city": doc["sample_geo"].get("city"),
+                    "country": doc["sample_geo"].get("country"),
+                    "latitude": doc["sample_geo"].get("latitude"),
+                    "longitude": doc["sample_geo"].get("longitude"),
+                },
                 "count": doc["count"]
             }
-            for doc in results
+            for doc in results if doc["_id"]  # skip null group keys
         ]
 
     get_player_count = Int(

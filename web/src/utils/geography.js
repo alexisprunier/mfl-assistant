@@ -55,4 +55,7 @@ export const countries = {
   SWITZERLAND: [46.8182, 8.2275],
   TUNISIA: [33.8869, 9.5375],
   TURKEY: [38.9637, 35.2433],
+  COTE_D_IVOIRE: [7.54, -5.5471],
+  PARAGUAY: [-23.4425, -58.4438],
+  SAUDI_ARABIA: [23.8859, 45.0792],
 };

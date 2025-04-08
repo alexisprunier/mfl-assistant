@@ -552,6 +552,30 @@ export const getClubCountPerGeolocation = ({
     (e) => defaultHandleError(handleError, e)
   );
 
+export const getUserCountPerGeolocation = ({
+  handleSuccess = null,
+  handleError = null,
+  params,
+}) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `{
+          getUserCountPerGeolocation(${jsonToParams(params)}) {
+            count,
+            geolocation {
+              country,
+              city,
+              latitude,
+              longitude
+            }
+          },
+        }`,
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );
+
 export const getTeams = ({ handleSuccess = null, handleError = null }) =>
   post(
     getGraphQLEndpoint(),

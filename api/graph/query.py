@@ -195,11 +195,11 @@ class Query(ObjectType):
 
         return [c["count"] async for c in info.context["db"].clubs.aggregate(query)][0]
 
-    class ClubCountPerGeolocationType(ObjectType):
+    class CountPerGeolocationType(ObjectType):
         count = Int()
         geolocation = Field(GeolocationType)
 
-    get_club_count_per_geolocation = List(ClubCountPerGeolocationType, founded_only=Boolean(), geographic=String())
+    get_club_count_per_geolocation = List(CountPerGeolocationType, founded_only=Boolean(), geographic=String())
 
     async def resolve_get_club_count_per_geolocation(self, info, founded_only=True, geographic="city"):
         db = info.context["db"]
@@ -263,6 +263,69 @@ class Query(ObjectType):
                 "count": doc["count"]
             }
             for doc in results if doc["_id"]  # skip null group keys
+        ]
+
+    get_user_count_per_geolocation = List(CountPerGeolocationType, geographic=String(), has_club=Boolean())
+
+    async def resolve_get_user_count_per_geolocation(self, info, geographic="city", has_club=False):
+        db = info.context["db"]
+
+        # Validate geographic argument
+        if geographic not in ("city", "country"):
+            raise ValueError("Invalid geographic argument. Must be 'city' or 'country'.")
+
+        query = []
+
+        if has_club:
+            # Only include users who are owners of at least one club
+            query.append({
+                "$lookup": {
+                    "from": "clubs",
+                    "localField": "_id",
+                    "foreignField": "owner",
+                    "as": "owned_clubs"
+                }
+            })
+            query.append({
+                "$match": {
+                    "owned_clubs.0": {"$exists": True}  # user owns at least 1 club
+                }
+            })
+
+        # Join with geolocations
+        query += [
+            {
+                "$lookup": {
+                    "from": "geolocations",
+                    "localField": "geolocation",
+                    "foreignField": "_id",
+                    "as": "geolocation_info"
+                }
+            },
+            {"$unwind": "$geolocation_info"},
+            {
+                "$group": {
+                    "_id": f"$geolocation_info.{geographic}",
+                    "count": {"$sum": 1},
+                    "sample_geo": {"$first": "$geolocation_info"}
+                }
+            },
+            {"$sort": {"count": -1}}
+        ]
+
+        results = [doc async for doc in db.users.aggregate(query)]
+
+        return [
+            {
+                "geolocation": {
+                    "city": doc["sample_geo"].get("city"),
+                    "country": doc["sample_geo"].get("country"),
+                    "latitude": doc["sample_geo"].get("latitude"),
+                    "longitude": doc["sample_geo"].get("longitude"),
+                },
+                "count": doc["count"]
+            }
+            for doc in results if doc["_id"]
         ]
 
     get_player_count = Int(

@@ -87,6 +87,13 @@ class PlayerType(ObjectType):
     owner = Field(UserType)
     geolocation = Field(GeolocationType)
 
+    async def resolve_geolocation(self, info):
+        geolocation_id = self.get("geolocation") 
+        if not geolocation_id:
+            return None
+
+        return await info.context["db"].geolocations.find_one({"_id": geolocation_id})
+
 
 class ClubType(ObjectType):
     id = Int(source='_id')
@@ -101,7 +108,11 @@ class ClubType(ObjectType):
     geolocation = Field(GeolocationType)
 
     async def resolve_geolocation(self, info):
-        return await info.context["db"].geolocations.find_one({"_id": self["geolocation"]})
+        geolocation_id = self.get("geolocation") 
+        if not geolocation_id:
+            return None
+
+        return await info.context["db"].geolocations.find_one({"_id": geolocation_id})
 
 
 class ContractType(ObjectType):

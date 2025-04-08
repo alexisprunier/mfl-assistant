@@ -15,14 +15,17 @@ import {
 } from "react-leaflet";
 import "statics/leaflet.css";
 import "./PageMap.css";
-import { getClubCountPerGeolocation } from "services/api-assistant.js";
+import {
+  getClubCountPerGeolocation,
+  getUserCountPerGeolocation,
+} from "services/api-assistant.js";
 import LoadingSquare from "components/loading/LoadingSquare.js";
 import { countries } from "utils/geography.js";
 
 const MAX_MARKERS = 50;
 
 const PageMap: React.FC = () => {
-  const [clubCount, setClubCount] = useState(null);
+  const [counts, setCounts] = useState(null);
   const [markers, setMarkers] = useState(null);
   const [filteredMarkers, setFilteredMarkers] = useState([]);
   const mapRef = useRef(null);
@@ -32,26 +35,37 @@ const PageMap: React.FC = () => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const fetchClubCountPerGeolocation = useCallback(() => {
+  const fetchData = useCallback(() => {
     setIsLoading(true);
 
-    getClubCountPerGeolocation({
-      handleSuccess: (d) => {
-        setClubCount(d.data.getClubCountPerGeolocation);
-        setIsLoading(false);
-      },
-      handleError: (e) => console.log(e),
-      params: { foundedOnly: false, geographic: mapGeographic },
-    });
-  }, [mapGeographic]);
+    if (mapType === "clubs") {
+      getClubCountPerGeolocation({
+        handleSuccess: (d) => {
+          setCounts(d.data.getClubCountPerGeolocation);
+          setIsLoading(false);
+        },
+        handleError: (e) => console.log(e),
+        params: { foundedOnly: false, geographic: mapGeographic },
+      });
+    } else {
+      getUserCountPerGeolocation({
+        handleSuccess: (d) => {
+          setCounts(d.data.getUserCountPerGeolocation);
+          setIsLoading(false);
+        },
+        handleError: (e) => console.log(e),
+        params: { hasClub: true, geographic: mapGeographic },
+      });
+    }
+  }, [mapGeographic, mapType]);
 
   useEffect(() => {
-    fetchClubCountPerGeolocation();
-  }, [fetchClubCountPerGeolocation, mapType, mapGeographic]);
+    fetchData();
+  }, [fetchData, mapType, mapGeographic]);
 
   const markerPositions = useMemo(() => {
-    if (clubCount) {
-      return clubCount.map((count, i) => ({
+    if (counts) {
+      return counts.map((count, i) => ({
         id:
           mapGeographic === "city"
             ? `${count.geolocation.country}, ${count.geolocation.city}`
@@ -68,7 +82,7 @@ const PageMap: React.FC = () => {
       }));
     }
     return [];
-  }, [clubCount, countries]);
+  }, [counts, countries]);
 
   useEffect(() => {
     setMarkers(markerPositions);
@@ -111,7 +125,7 @@ const PageMap: React.FC = () => {
 
   return (
     <div id="PageMap" className="position-relative w-100 h-100">
-      {markers === null || clubCount === null || isLoading ? (
+      {markers === null || counts === null || isLoading ? (
         <LoadingSquare />
       ) : (
         <MapContainer
@@ -158,14 +172,14 @@ const PageMap: React.FC = () => {
         </MapContainer>
       )}
 
-      <div className="map-selector position-absolute">
+      <div className="map-selector position-absolute d-flex flex-column align-items-end">
         <div className="map-select d-flex flex-row ms-md-2 border rounded-2 mb-1">
           <button
             className={
               "d-flex flex-grow-1 btn btn-small" +
               (mapType === "clubs" ? " btn-info text-white" : " text-info")
             }
-            disabled={true}
+            disabled={isLoading}
             onClick={() => setMapType("clubs")}
           >
             Clubs
@@ -175,7 +189,7 @@ const PageMap: React.FC = () => {
               "d-flex flex-grow-1 btn btn-small" +
               (mapType === "users" ? " btn-info text-white" : " text-info")
             }
-            disabled={true}
+            disabled={isLoading}
             onClick={() => setMapType("users")}
           >
             Users
@@ -206,6 +220,12 @@ const PageMap: React.FC = () => {
             Country
           </button>
         </div>
+
+        {mapType === "clubs" ? (
+          <div class="small mt-1">Established clubs*</div>
+        ) : (
+          <div class="small mt-1">Users owning a club*</div>
+        )}
       </div>
     </div>
   );

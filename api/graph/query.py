@@ -270,14 +270,12 @@ class Query(ObjectType):
     async def resolve_get_user_count_per_geolocation(self, info, geographic="city", has_club=False):
         db = info.context["db"]
 
-        # Validate geographic argument
         if geographic not in ("city", "country"):
             raise ValueError("Invalid geographic argument. Must be 'city' or 'country'.")
 
         query = []
 
         if has_club:
-            # Only include users who are owners of at least one club
             query.append({
                 "$lookup": {
                     "from": "clubs",
@@ -288,11 +286,10 @@ class Query(ObjectType):
             })
             query.append({
                 "$match": {
-                    "owned_clubs.0": {"$exists": True}  # user owns at least 1 club
+                    "owned_clubs.0": {"$exists": True}
                 }
             })
 
-        # Join with geolocations
         query += [
             {
                 "$lookup": {

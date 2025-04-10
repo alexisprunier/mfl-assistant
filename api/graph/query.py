@@ -399,7 +399,8 @@ class Query(ObjectType):
 
         query.append({"$count": "count"})
 
-        return [c["count"] async for c in info.context["db"].players.aggregate(query)][0]
+        result = [c["count"] async for c in info.context["db"].players.aggregate(query)]
+        return result[0] if result else 0
 
     get_player_count_by_criteria = List(CountType,
         criteria=String(),

@@ -1,24 +1,23 @@
-import ItemCardClub from "components/items/ItemCardClub.js";
+import ItemRowClub from "components/items/ItemRowClub.js";
 import LoadingSquare from "components/loading/LoadingSquare.js";
 import React, { useState } from "react";
 import Popup from "reactjs-popup";
 import { getClubs } from "services/api-assistant.js";
 
-interface PopupSelectClubProps {
-  trigger: Object;
+interface PopupClubListPerGeographyProps {
   onClose: func;
-  onConfirm: func;
-  userId: String;
+  country: String;
+  city: String;
+  open: Boolean;
 }
 
-const PopupSelectClub: React.FC < PopupSelectClubProps > = ({
-  trigger,
+const PopupClubListPerGeography: React.FC<PopupClubListPerGeographyProps> = ({
   onClose,
-  onConfirm,
-  userId,
+  country,
+  city,
+  open,
 }) => {
   const [clubs, setClubs] = useState(null);
-  const [selectedClub, setSelectedClub] = useState(null);
 
   const onOpen = () => {
     getClubs({
@@ -26,33 +25,25 @@ const PopupSelectClub: React.FC < PopupSelectClubProps > = ({
         setClubs(d.data.getClubs);
       },
       handleError: (e) => console.log(e),
-      params: { owners: [userId] },
+      params: { city, country },
     });
   };
 
-  const onButtonConfirm = (close) => {
-    if (onConfirm) {
-      onConfirm(selectedClub);
-    }
-
-    close();
-  };
-
   return (
-    <div className="PopupSelectClub">
+    <div className="PopupClubListPerGeography">
       <Popup
-        trigger={trigger}
+        open={open}
         modal
         closeOnDocumentClick
         onClose={onClose && onClose()}
         onOpen={() => onOpen()}
-        className={"fade-in popup-md"}
+        className={"fade-in popup-lg"}
       >
         {(close) => (
           <div className="container bg-dark d-flex flex-column border border-info border-3 rounded-3 p-4">
             <div className="d-flex flex-row flex-grow-0 mb-3">
               <div className="flex-grow-1">
-                <h2 className="text-white">Select club</h2>
+                <h2 className="text-white">Clubs</h2>
               </div>
               <div className="flex-grow-0">
                 <button className={"btn"} onClick={close}>
@@ -63,31 +54,12 @@ const PopupSelectClub: React.FC < PopupSelectClubProps > = ({
 
             <div className="d-flex flex-grow-1 flex-column mb-3 overflow-auto">
               {clubs ? (
-                clubs.map((p) => (
-                  <ItemCardClub
-                    id={p.id}
-                    name={p.name}
-                    onClick={() => setSelectedClub(p)}
-                    selected={selectedClub && selectedClub.id === p.id}
-                  />
-                ))
+                clubs.map((p) => <ItemRowClub c={p} />)
               ) : (
                 <div className="ratio ratio-16x9 w-100">
                   <LoadingSquare />
                 </div>
               )}
-            </div>
-
-            <div className="d-flex flex-grow-0 flex-row justify-content-end mt-3">
-              <div>
-                <button
-                  className="btn btn-info text-white"
-                  disabled={!selectedClub}
-                  onClick={() => onButtonConfirm(close)}
-                >
-                  Confirm
-                </button>
-              </div>
             </div>
           </div>
         )}
@@ -96,4 +68,4 @@ const PopupSelectClub: React.FC < PopupSelectClubProps > = ({
   );
 };
 
-export default PopupSelectClub;
+export default PopupClubListPerGeography;

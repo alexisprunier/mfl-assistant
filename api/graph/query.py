@@ -70,16 +70,32 @@ class Query(ObjectType):
             .find({"user": info.context["user"]["_id"]}) \
             .to_list(length=None)
 
-    get_clubs = List(ClubType, search=String(), owners=List(String), skip=Int(), limit=Int(), sort=String(), order=Int())
+    get_clubs = List(
+        ClubType,
+        search=String(),
+        owners=List(String),
+        city=String(),
+        country=String(),
+        skip=Int(),
+        limit=Int(),
+        sort=String(),
+        order=Int()
+    )
 
-    async def resolve_get_clubs(self, info, search=None, owners=None, skip=0, limit=500, sort="_id", order=1):
-
+    async def resolve_get_clubs(self, info, search=None, owners=None, city=None, country=None, skip=0, limit=500, sort="_id", order=1):
+        
         clubs = info.context["db"].clubs
-
+        
         filters = {}
 
         if owners is not None:
             filters["owner"] = {"$in": [ObjectId(o) for o in owners]}
+
+        if city is not None:
+            filters["city"] = city  # exact match
+
+        if country is not None:
+            filters["country"] = country  # exact match
 
         if search:
             words = [] if search is None else [w for w in search.split(" ") if len(w) > 1]
@@ -365,12 +381,13 @@ class Query(ObjectType):
         player_match["$match"]["overall"] = {"$gte": min_ovr, "$lte": max_ovr}
         player_match["$match"]["age"] = {"$gte": min_age, "$lte": max_age}
         player_match["$match"]["height"] = {"$gte": min_height, "$lte": max_height}
-        player_match["$match"]["pace"] = {"$gte": min_pace, "$lte": max_pace}
-        player_match["$match"]["dribbling"] = {"$gte": min_dribbling, "$lte": max_dribbling}
-        player_match["$match"]["passing"] = {"$gte": min_passing, "$lte": max_passing}
-        player_match["$match"]["shooting"] = {"$gte": min_shooting, "$lte": max_shooting}
-        player_match["$match"]["defense"] = {"$gte": min_defense, "$lte": max_defense}
-        player_match["$match"]["physical"] = {"$gte": min_physical, "$lte": max_physical}
+        if positions is None or "GK" not in positions:
+            player_match["$match"]["pace"] = {"$gte": min_pace, "$lte": max_pace}
+            player_match["$match"]["dribbling"] = {"$gte": min_dribbling, "$lte": max_dribbling}
+            player_match["$match"]["passing"] = {"$gte": min_passing, "$lte": max_passing}
+            player_match["$match"]["shooting"] = {"$gte": min_shooting, "$lte": max_shooting}
+            player_match["$match"]["defense"] = {"$gte": min_defense, "$lte": max_defense}
+            player_match["$match"]["physical"] = {"$gte": min_physical, "$lte": max_physical}
 
         if nationalities and len(nationalities) > 0:
             player_match["$match"]["nationalities"] = {"$in": nationalities}
@@ -397,10 +414,12 @@ class Query(ObjectType):
                 "$match": {"owner_info.address": {"$ne": "0xf45dfaa6233fae44"}}
             })
 
+
         query.append({"$count": "count"})
 
-        result = [c["count"] async for c in info.context["db"].players.aggregate(query)]
-        return result[0] if result else 0
+        print(info.context["db"].players.aggregate(query))
+
+        return [c["count"] async for c in info.context["db"].players.aggregate(query)][0]
 
     get_player_count_by_criteria = List(CountType,
         criteria=String(),
@@ -455,12 +474,13 @@ class Query(ObjectType):
         match_stage["$match"]["overall"] = {"$gte": min_ovr, "$lte": max_ovr}
         match_stage["$match"]["age"] = {"$gte": min_age, "$lte": max_age}
         match_stage["$match"]["height"] = {"$gte": min_height, "$lte": max_height}
-        match_stage["$match"]["pace"] = {"$gte": min_pace, "$lte": max_pace}
-        match_stage["$match"]["dribbling"] = {"$gte": min_dribbling, "$lte": max_dribbling}
-        match_stage["$match"]["passing"] = {"$gte": min_passing, "$lte": max_passing}
-        match_stage["$match"]["shooting"] = {"$gte": min_shooting, "$lte": max_shooting}
-        match_stage["$match"]["defense"] = {"$gte": min_defense, "$lte": max_defense}
-        match_stage["$match"]["physical"] = {"$gte": min_physical, "$lte": max_physical}
+        if positions is None or "GK" not in positions:
+            match_stage["$match"]["pace"] = {"$gte": min_pace, "$lte": max_pace}
+            match_stage["$match"]["dribbling"] = {"$gte": min_dribbling, "$lte": max_dribbling}
+            match_stage["$match"]["passing"] = {"$gte": min_passing, "$lte": max_passing}
+            match_stage["$match"]["shooting"] = {"$gte": min_shooting, "$lte": max_shooting}
+            match_stage["$match"]["defense"] = {"$gte": min_defense, "$lte": max_defense}
+            match_stage["$match"]["physical"] = {"$gte": min_physical, "$lte": max_physical}
 
         if nationalities:
             match_stage["$match"]["nationalities"] = {"$in": nationalities}
@@ -789,29 +809,49 @@ class Query(ObjectType):
 
         return [doc["_id"] async for doc in result]
 
-    get_users = List(UserType, search=String(), skip=Int(), limit=Int(), sort=String(), order=Int())
+    get_users = List(UserType, search=String(), country=String(), city=String(), has_club=Boolean(), skip=Int(), limit=Int(), sort=String(), order=Int())
 
-    async def resolve_get_users(self, info, search=None, skip=0, limit=10, sort="_id", order=1):
-
+    async def resolve_get_users(self, info, search=None, country=None, city=None, has_club=None, skip=0, limit=10, sort="_id", order=1):
         users = info.context["db"].users
+        clubs = info.context["db"].clubs  # Reference to the clubs collection
 
+        query_conditions = []
+
+        # Handle search filtering
         if search:
             words = [] if search is None else [w for w in search.split(" ") if len(w) > 1]
 
-            regex_query = {
-                "$and": [
-                    {
-                        "$or": [
-                            {"address": {"$regex": word, "$options": "i"}},
-                            {"name": {"$regex": word, "$options": "i"}},
-                        ]
-                    }
-                    for word in words
+            query_conditions.append({
+                "$or": [
+                    {"address": {"$in": words}},
+                    {"name": {"$in": words}}
                 ]
-            }
+            })
 
-            users = users.find(regex_query)
+        # Handle city filtering
+        if city:
+            query_conditions.append({"city": city})
 
+        # Handle country filtering
+        if country:
+            query_conditions.append({"country": country})
+
+        # Handle has_club filtering
+        if has_club is not None:
+            if has_club:  # If true, find users who are owners of at least one club
+                # Query for users who are owners of any club
+                owner_query = clubs.find({"owner": {"$ne": None}})
+                owner_user_ids = [club['owner'] for club in await owner_query.to_list(length=None)]
+                query_conditions.append({"_id": {"$in": owner_user_ids}})
+            else:
+                # Users who are NOT owners of any club (assuming that no owner is `None`)
+                query_conditions.append({"_id": {"$nin": []}})  # You can adjust this as needed for the logic
+
+        # Apply all conditions if any are provided
+        if query_conditions:
+            users = users.find({"$and": query_conditions})
+
+        # Sort, skip, and limit the results
         users = await users \
             .sort(sort, -1 if order < 0 else 1) \
             .skip(skip) \

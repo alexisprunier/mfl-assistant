@@ -20,6 +20,8 @@ import {
   getUserCountPerGeolocation,
 } from "services/api-assistant.js";
 import LoadingSquare from "components/loading/LoadingSquare.js";
+import PopupClubListPerGeography from "components/popups/PopupClubListPerGeography.js";
+import PopupUserListPerGeography from "components/popups/PopupUserListPerGeography.js";
 import { countries } from "utils/geography.js";
 
 const MAX_MARKERS = 50;
@@ -32,6 +34,12 @@ const PageMap: React.FC = () => {
 
   const [mapType, setMapType] = useState("clubs");
   const [mapGeographic, setMapGeographic] = useState("city");
+
+  const [isClubPopupOpen, setIsClubPopupOpen] = useState(false);
+  const [isUserPopupOpen, setIsUserPopupOpen] = useState(false);
+
+  const [selectedCountry, setSelectedCountry] = useState(null);
+  const [selectedCity, setSelectedCity] = useState(null);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -79,6 +87,8 @@ const PageMap: React.FC = () => {
           mapGeographic === "city"
             ? [count.geolocation.latitude, count.geolocation.longitude]
             : countries[count.geolocation.country],
+        country: count.geolocation.country,
+        city: mapGeographic === "city" ? count.geolocation.city : null,
       }));
     }
     return [];
@@ -141,32 +151,56 @@ const PageMap: React.FC = () => {
           <MapBoundsTracker />
 
           {filteredMarkers.map((c) => {
+            const iconHtml =
+              mapType === "clubs"
+                ? `<i class="bi bi-buildings-fill" style="font-size: 26px; color: #0dcaf0;"></i>`
+                : `<i class="bi bi-person-fill" style="font-size: 30px; color: #0dcaf0;"></i>`;
+
             const markerIcon = L.divIcon({
               html: `
               <div style="position: relative; text-align: center; background-color: rgba(0,0,0,0);">
                 <!-- Building Icon -->
-                <img src="/media/images/buildings-blue.svg" width="20" height="20" />
+                ${iconHtml}
 
                 <!-- Number on the left middle of the building image -->
-                <span style="position: absolute; top: 60%; right: 24px; transform: translateY(-50%); font-size: 14px; font-weight: bold; color: #0dcaf0;">
+                <span style="position: absolute; top: ${
+                  mapType === "clubs" ? "25px" : "28px"
+                }; right: ${
+                mapType === "clubs" ? "24px" : "21px"
+              }; transform: translateY(-50%); font-size: 14px; font-weight: bold; color: #0dcaf0;">
                   ${c.count}
                 </span>
 
                 <!-- City name centered below the building image, no word wrapping -->
-                <div style="position: absolute; bottom: -18px; left: 50%; transform: translateX(-50%); font-size: 12px; font-weight: bold; color: rgb(173, 181, 189); white-space: nowrap;">
+                <div style="position: absolute; bottom: ${
+                  mapType === "clubs" ? "-12px" : "-9px"
+                }; left: 50%; transform: translateX(-50%); font-size: 12px; font-weight: bold; color: rgb(173, 181, 189); white-space: nowrap;">
                   ${c.label}
                 </div>
               </div>
-            `,
+        `,
               iconSize: [20, 40],
               iconAnchor: [10, 40],
               popupAnchor: [0, -40],
             });
 
             return (
-              <Marker key={c.id} icon={markerIcon} position={c.position}>
-                <Popup>{c.label}</Popup>
-              </Marker>
+              <Marker
+                key={c.id}
+                icon={markerIcon}
+                position={c.position}
+                eventHandlers={{
+                  click: () => {
+                    setSelectedCountry(c.country);
+                    setSelectedCity(c.city);
+                    if (mapType === "users") {
+                      setIsUserPopupOpen(true);
+                    } else {
+                      setIsClubPopupOpen(true);
+                    }
+                  },
+                }}
+              ></Marker>
             );
           })}
         </MapContainer>
@@ -227,6 +261,28 @@ const PageMap: React.FC = () => {
           <div class="small mt-1">Users owning a club*</div>
         )}
       </div>
+
+      <PopupClubListPerGeography
+        open={isClubPopupOpen}
+        country={selectedCountry}
+        city={selectedCity}
+        onClose={() => {
+          setIsClubPopupOpen(false);
+          setSelectedCountry(null);
+          setSelectedCity(null);
+        }}
+      />
+
+      <PopupUserListPerGeography
+        open={isUserPopupOpen}
+        country={selectedCountry}
+        city={selectedCity}
+        onClose={() => {
+          setIsUserPopupOpen(false);
+          setSelectedCountry(null);
+          setSelectedCity(null);
+        }}
+      />
     </div>
   );
 };

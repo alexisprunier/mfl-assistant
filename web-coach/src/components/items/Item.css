@@ -1,0 +1,39 @@
+.Item {
+  font-size: 14px;
+  padding: 1px 4px;
+}
+
+.Item.no-hover:hover {
+  background-color: unset !important;
+  color: unset !important;
+  cursor: unset !important;
+}
+
+.Item:hover {
+  background-color: rgba(13, 202, 240, .2) !important;
+  color: white;
+  cursor: pointer;
+}
+
+.Item.selected {
+  background-color: rgba(13, 202, 240, .7) !important;
+  color: white;
+}
+
+.Item:nth-child(even) {
+  background-color: rgba(11, 12, 13, .4);
+}
+
+.ItemCardCommunityMember img {
+  max-height: 60px;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.ItemCardCommunityMember:hover {
+  background-color: unset !important;
+}
+
+.ItemCardCommunityMember:hover .card {
+  border-color: rgb(13, 202, 240);
+}

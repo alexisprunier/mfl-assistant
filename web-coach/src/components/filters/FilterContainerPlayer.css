@@ -1,0 +1,26 @@
+
+.FilterContainerPlayer-content {
+	position: fixed;
+	right: -520px;
+	top: 25px;
+    max-height: calc(100% - 50px) !important;
+    width: 300px !important;
+    max-width: 100% !important;
+    overflow-y: auto;
+    border-right: none !important;
+	border-top-right-radius: 0px !important;
+	border-bottom-right-radius: 0px !important;
+	border-right: none !important;
+	border-top-right-radius: 0px !important;
+	border-bottom-right-radius: 0px !important;
+	animation: slide-in 0.5s forwards;
+    -webkit-animation: slide-in 0.5s forwards;
+}
+
+@keyframes slide-in {
+    100% { transform: translateX(-520px); }
+}
+
+@-webkit-keyframes slide-in {
+    100% { -webkit-transform: translateX(-510px); }
+}

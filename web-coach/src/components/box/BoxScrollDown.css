@@ -1,0 +1,40 @@
+.BoxScrollDown div {
+  position: relative;
+  z-index: 300;
+}
+
+.BoxScrollDown div i {
+  position: absolute;
+  animation: move-effect 1s ease infinite;
+  -webkit-animation: move-effect 1s ease infinite;
+}
+
+@keyframes move-effect {
+  0% {
+    top: 0px;
+  }
+
+  50% {
+    top: 10px;
+  }
+
+  100% {
+    top: 0px;
+  }
+}
+
+@media (max-width: 768px) {
+  .BoxScrollDown {
+    position: fixed;
+    bottom: 120px;
+    right: 70px;
+  }
+}
+
+@media (min-width: 768px) {
+  .BoxScrollDown {
+    position: fixed;
+    bottom: 100px;
+    right: 100px;
+  }
+}

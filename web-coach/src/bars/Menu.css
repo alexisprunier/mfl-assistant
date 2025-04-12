@@ -1,0 +1,137 @@
+#Menu {
+  background-color: #0B0C0D;
+  font-family: Impact, sans-serif !important;
+}
+
+#Menu .nav-link span {
+  color: #0000;
+  background:
+    linear-gradient(white 0 0) no-repeat,
+    linear-gradient(white 0 0) no-repeat;
+  background-size: 0% 100%;
+  -webkit-background-clip: padding-box, text;
+  background-clip: padding-box, text;
+  animation:
+    in-out 2s,
+    t .3s .2s both,
+    b .3s .3s both;
+  transform: rotate(-180deg);
+}
+
+#Menu .nav-link-search {
+  font-size: 16px;
+  background-color: #0B0C0D;
+  border-bottom-right-radius: 10px;
+  z-index: 200;
+}
+
+#Menu .nav-link-search:hover {
+  color: #0dcaf0;
+}
+
+#Menu .Menu-login i,
+#Menu .Menu-hq i {
+  font-size: 24px;
+}
+
+#Menu .Menu-login div,
+#Menu .Menu-hq div {
+  font-size: 8px;
+}
+
+#Menu .Menu-login:hover {
+  color: #0dcaf0;
+}
+
+#Menu .Menu-hq:hover i,
+#Menu .Menu-hq:hover div {
+  color: #0dcaf0 !important;
+}
+
+@media (max-width: 992px) {
+  #Menu {
+    height: auto;
+    width: 100%;
+  }
+
+  #Menu .nav-link div {
+    display: inline;
+  }
+
+  #Menu .nav-link span {
+    transform: none;
+  }
+
+  #Menu .nav-link-search {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+  }
+
+  #Menu .nav-link-login {
+    border-left: 2px solid #adb5bd;
+  }
+}
+
+@media (min-width: 992px) {
+  #Menu {
+    height: 100%;
+    width: auto;
+  }
+
+  #Menu .nav-link span {
+    writing-mode: vertical-rl;
+  }
+
+  #Menu .nav-link-search {
+    position: fixed;
+    top: 0px;
+    left: 64px;
+  }
+
+  #Menu .nav-link-login {
+    border-top: 2px solid #adb5bd;
+  }
+}
+
+#Menu a.active,
+#Menu a.active div {
+  cursor: default;
+  color: white !important;
+}
+
+
+#Menu a.active:hover i,
+#Menu a.active:hover div {
+  color: white !important;
+}
+
+#Menu a.nav-link:hover i {
+  color: #0dcaf0;
+}
+
+@keyframes in-out {
+  0% {
+    max-height: 0;
+  }
+
+  20% {
+    max-height: 50vh;
+  }
+
+  100% {
+    max-height: 100vh;
+  }
+}
+
+@keyframes t {
+  to {
+    background-size: 150% 100%
+  }
+}
+
+@keyframes b {
+  to {
+    background-position: -200% 0, 0 0
+  }
+}

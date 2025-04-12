@@ -1,0 +1,433 @@
+@font-face {
+  font-family: Impact;
+  src: url(/public/fonts/impact.ttf);
+}
+
+html,
+body,
+#root,
+#App {
+  width: 100%;
+  height: 100%;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: Impact, sans-serif !important;
+}
+
+#App {
+  overflow-y: hidden;
+  overflow-x: hidden;
+  background-image: repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.07) 1px, transparent 1px, transparent 6px);
+  background-size: 4px 4px;
+}
+
+#AppMenu {}
+
+#AppContent {
+  overflow-y: auto !important;
+  overflow-x: hidden;
+}
+
+@media (min-width: 768px) {
+  #AppContent {
+    height: 100%;
+  }
+}
+
+#AppContent-content {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#AppContent-content:has(#PageMap) {
+  overflow-y: hidden;
+  padding: 0px !important;
+}
+
+/* CARDS */
+
+.card {
+  transition: border-width 0.1s ease-in-out;
+  border-width: 2px !important;
+  background-color: #16191C !important;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);
+}
+
+a .card:hover {
+  border-color: #0dcaf0 !important;
+  border-width: 3px !important;
+}
+
+@media (max-width: 768px) {
+  .card>img {
+    width: 50%;
+    margin: auto
+  }
+}
+
+.card.selected {
+  border-color: #0dcaf0 !important;
+  border-width: 3px !important;
+}
+
+.card.selectable:hover {
+  border-color: #0dcaf0 !important;
+  cursor: pointer;
+}
+
+/* GLOBAL */
+
+.bg-black {
+  background-color: #0B0C0D;
+}
+
+.bg-soft-black {
+  background-color: #16191c;
+}
+
+/* POPUP */
+
+.popup-overlay {
+  background-color: rgba(0, 0, 0, .8);
+  z-index: 8000;
+}
+
+.popup-content {
+  max-height: 100%;
+}
+
+.popup-content>.container {
+  max-height: 95vh;
+}
+
+.popup-xl-content {
+  width: 900px;
+  max-width: 100%;
+}
+
+.popup-lg-content {
+  width: 700px;
+  max-width: 100%;
+}
+
+.popup-md-content {
+  width: 500px;
+  max-width: 100%;
+}
+
+/* GANTT */
+
+svg .calendar rect,
+svg .grid rect {
+  fill: rgba(0, 0, 0, 0) !important;
+  stroke: #333 !important;
+}
+
+svg .calendar line,
+svg .grid line {
+  stroke: #333 !important;
+}
+
+svg .calendar text {
+  fill: #6c757d !important;
+}
+
+svg .content .bar text {
+  fill: #adb5bd !important;
+}
+
+/* FLEX */
+
+.min-width-0 {
+  min-width: 0;
+}
+
+.flex-basis-0 {
+  flex-basis: 0;
+}
+
+.flex-basis-40 {
+  flex-basis: 40px;
+}
+
+.flex-basis-80 {
+  flex-basis: 80px;
+}
+
+.flex-basis-100 {
+  flex-basis: 100px;
+}
+
+.flex-basis-140 {
+  flex-basis: 140px;
+}
+
+@media (min-width: 768px) {
+  .flex-md-basis-50p {
+    flex-basis: 50%;
+  }
+
+  .flex-md-basis-200 {
+    flex-basis: 200px;
+  }
+
+  .flex-md-basis-300 {
+    flex-basis: 300px;
+  }
+
+  .flex-md-basis-400 {
+    flex-basis: 400px;
+  }
+
+  .flex-md-basis-500 {
+    flex-basis: 500px;
+  }
+}
+
+@media (min-width: 992px) {
+  .flex-lg-basis-50p {
+    flex-basis: 50%;
+  }
+
+  .flex-lg-basis-200 {
+    flex-basis: 200px;
+  }
+
+  .flex-lg-basis-300 {
+    flex-basis: 300px;
+  }
+
+  .flex-lg-basis-400 {
+    flex-basis: 400px;
+  }
+
+  .flex-lg-basis-500 {
+    flex-basis: 500px;
+  }
+}
+
+/* MAX WIDTH */
+
+.max-width-sm {
+  max-width: 576px !important;
+}
+
+.max-width-md {
+  max-width: 768px !important;
+}
+
+.max-width-lg {
+  max-width: 992px !important;
+}
+
+/* EFFECTS */
+
+.fade-in {
+  animation: fadeIn 1s;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+/* OTHERS */
+
+.football-field {
+  background: repeating-linear-gradient(#B0EBB4, #B0EBB4 40px, #BFF6C3 40px, #BFF6C3 80px);
+}
+
+canvas {
+  width: 100% !important;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+.table>:not(caption)>*>* {
+  background-color: transparent !important
+}
+
+input,
+select {
+  color: white !important;
+}
+
+input[type='range'] {
+  accent-color: #0dcaf0;
+}
+
+input::placeholder {
+  opacity: .4 !important;
+}
+
+input:focus,
+select:focus {
+  border-color: #0dcaf0 !important;
+}
+
+.ratio-1x1 {
+  --bs-aspect-ratio: 100%;
+}
+
+.ratio-4x3 {
+  --bs-aspect-ratio: calc(3 / 4 * 100%);
+}
+
+.ratio-16x9 {
+  --bs-aspect-ratio: calc(9 / 16 * 100%);
+}
+
+.ratio-21x9 {
+  --bs-aspect-ratio: calc(9 / 21 * 100%);
+}
+
+@media (min-width: 768px) {
+  .h-md-100 {
+    height: 100%;
+  }
+
+  .max-height-md-300 {
+    max-height: 300px;
+  }
+
+  .max-height-md-200 {
+    max-height: 200px;
+  }
+
+  .height-md-0 {
+    height: 0px;
+  }
+
+  .ratio-md-1x1 {
+    --bs-aspect-ratio: 100%;
+  }
+
+  .ratio-md-4x3 {
+    --bs-aspect-ratio: calc(3 / 4 * 100%);
+  }
+
+  .ratio-md-16x9 {
+    --bs-aspect-ratio: calc(9 / 16 * 100%);
+  }
+
+  .ratio-md-21x9 {
+    --bs-aspect-ratio: calc(9 / 21 * 100%);
+  }
+}
+
+@media (min-width: 992px) {
+  .h-lg-100 {
+    height: 100%;
+  }
+
+  .max-height-lg-300 {
+    max-height: 300px;
+  }
+
+  .max-height-lg-200 {
+    max-height: 200px;
+  }
+
+  .height-lg-0 {
+    height: 0px;
+  }
+
+  .ratio-lg-1x1 {
+    --bs-aspect-ratio: 100%;
+  }
+
+  .ratio-lg-4x3 {
+    --bs-aspect-ratio: calc(3 / 4 * 100%);
+  }
+
+  .ratio-lg-16x9 {
+    --bs-aspect-ratio: calc(9 / 16 * 100%);
+  }
+
+  .ratio-lg-21x9 {
+    --bs-aspect-ratio: calc(9 / 21 * 100%);
+  }
+}
+
+@media (max-width: 768px) {
+  .ratio-sm {
+    position: relative;
+    width: 100%;
+  }
+
+  .ratio-sm::before {
+    display: block;
+    padding-top: var(--bs-aspect-ratio);
+    content: "";
+  }
+
+  .ratio-sm>* {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .ratio-sm-1x1 {
+    --bs-aspect-ratio: 100%;
+  }
+
+  .ratio-sm-4x3 {
+    --bs-aspect-ratio: calc(3 / 4 * 100%);
+  }
+
+  .ratio-sm-16x9 {
+    --bs-aspect-ratio: calc(9 / 16 * 100%);
+  }
+
+  .ratio-sm-21x9 {
+    --bs-aspect-ratio: calc(9 / 21 * 100%);
+  }
+
+
+  .transform-scale-sm-80 {
+    transform: scale(0.8);
+  }
+}
+
+button.btn-small {
+  font-size: .8rem;
+  padding: 0px 6px;
+}
+
+button.btn-xs {
+  font-size: 0.5rem;
+  padding: .02rem .12rem !important;
+}
+
+button.btn-link {
+  color: #0dcaf0 !important;
+  text-decoration: none;
+}
+
+button.btn-link:hover {
+  color: #0dcaf0 !important;
+  text-decoration: underline !important;
+}
+
+.nav-tabs button:not(.printable) {
+  color: #0dcaf0;
+}
+
+.text-main {
+  color: #0dcaf0 !important;
+}
+
+.text-small {
+  font-size: .875em !important;
+}

@@ -1,0 +1,29 @@
+
+.BoxScrollUp {
+  cursor: pointer;
+}
+
+.BoxScrollUp div {
+  position: relative;
+}
+
+.BoxScrollUp div i {
+  position: absolute;
+}
+
+
+@media (max-width: 768px) {
+	.BoxScrollUp {
+		position: fixed;
+		bottom: 120px;
+		right: 70px;
+	}
+}
+
+@media (min-width: 768px) {
+	.BoxScrollUp {
+		position: fixed;
+		bottom: 100px;
+		right: 100px;
+	}
+}

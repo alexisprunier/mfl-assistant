@@ -1,11 +1,10 @@
 from bson import ObjectId
 import datetime
-import requests
 import logging
+import httpx  # Using httpx instead of aiohttp
 from utils.db import upsert_vars
 from utils.date import convert_unix_to_datetime
 from mail.mail_manager import sent_daily_progress_report_email
-
 
 base_url = "https://z519wdyajg.execute-api.us-east-1.amazonaws.com/prod/players/progressions?interval=24H&ownerWalletAddress="
 
@@ -23,6 +22,7 @@ async def main(db, mail):
     last_computation_time = last_computation.get("value") if last_computation else None
     new_computation_time = datetime.datetime.now()
 
+    # Skip computation if the last computation was more than 10 minutes ago
     if last_computation_time is None or (new_computation_time - last_computation_time).total_seconds() > 600:
         logger.warning("Skipping computation as the difference is greater than 10 minutes.")
         await upsert_vars(db, last_computation_var, new_computation_time)
@@ -37,6 +37,7 @@ async def main(db, mail):
             logger.warning(f"Invalid time format in configuration: {config['time']}")
             continue
 
+        # Check if the time interval is within the expected range
         if (
             last_computation_time.time() <= config_time <= new_computation_time.time()
             or (last_computation_time.time() > new_computation_time.time() and (
@@ -46,11 +47,15 @@ async def main(db, mail):
 
             if len(user) > 0:
                 user = user.pop()
-                data = await _get_progress_data(db, user["address"])
+                # Fetch progress data asynchronously
+                data = await _get_progress_data(user["address"])
+                # Filter out None values and sort the data
                 data = {key: value for key, value in data.items() if value is not None}
                 data = dict(sorted(data.items(), key=lambda item: ('overall' not in item[1], item[0])))
+                # Send daily progress report via email
                 await sent_daily_progress_report_email(db, mail, user, data)
 
+    # Update the last computation time in the database
     await upsert_vars(db, last_computation_var, new_computation_time)
 
 
@@ -71,12 +76,14 @@ async def _get_daily_progress_report_configurations(db):
 
     configurations = await db.report_configurations.find(filters).to_list(length=None)
 
-    logger.warning(f"PROGRESS REPORT: Number of active progress report: {len(configurations)}")
+    logger.warning(f"PROGRESS REPORT: Number of active progress reports: {len(configurations)}")
     
     return configurations
 
 
-async def _get_progress_data(db, address):
-    data = requests.get(url=base_url + address).json()
-
+# Use httpx to asynchronously fetch progress data from the external API
+async def _get_progress_data(address):
+    async with httpx.AsyncClient() as client:
+        response = await client.get(base_url + address)
+        data = response.json()
     return data

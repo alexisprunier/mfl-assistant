@@ -9,42 +9,51 @@ data_property = "founded_club_count"
 
 async def main(db):
 
-	pipeline = [
-	    {"$match": {"foundation_date": {"$ne": None}, "status": "FOUNDED"}},
-	    {"$project": {"date": {"$toDate": {"$toLong": "$foundation_date"}}}},
-	    {"$group": {"_id": {"$dateToString": {"format": "%Y-%m-%d", "date": "$date"}}, "count": {"$sum": 1}}},
-	    {"$sort": {"_id": 1}}
-	]
+    # MongoDB aggregation pipeline to compute founded clubs per day
+    pipeline = [
+        {"$match": {"foundation_date": {"$ne": None}, "status": "FOUNDED"}},
+        {"$project": {"date": {"$toDate": {"$toLong": "$foundation_date"}}}},
+        {"$group": {"_id": {"$dateToString": {"format": "%Y-%m-%d", "date": "$date"}}, "count": {"$sum": 1}}},
+        {"$sort": {"_id": 1}}
+    ]
 
-	cursor = db.clubs.aggregate(pipeline)
+    # Asynchronously fetch the cursor
+    cursor = db.clubs.aggregate(pipeline)
 
-	foundation_per_day = [c async for c in cursor]
-	
-	if len(foundation_per_day) == 0:
-		log.critical("No clubs with foundation dates found.")
-		exit()
+    # Asynchronously iterate through the cursor
+    foundation_per_day = [c async for c in cursor]
 
-	first_day = foundation_per_day[0]["_id"]
-	foundation_per_day = {c["_id"]: c["count"] for c in foundation_per_day}
+    if len(foundation_per_day) == 0:
+        logger.critical("No clubs with foundation dates found.")
+        return
 
-	start_date = datetime.datetime.strptime(first_day, "%Y-%m-%d").date()
-	end_date = datetime.datetime.now().date()
-	current_date = start_date
-	current_date_str = current_date.strftime("%Y-%m-%d")
+    # Convert the list into a dictionary with date as the key
+    first_day = foundation_per_day[0]["_id"]
+    foundation_per_day = {c["_id"]: c["count"] for c in foundation_per_day}
 
-	founded_clubs_per_day = {
-		(current_date - datetime.timedelta(days=1)).strftime("%Y-%m-%d"): 0
-	}
+    start_date = datetime.datetime.strptime(first_day, "%Y-%m-%d").date()
+    end_date = datetime.datetime.now().date()
+    current_date = start_date
+    current_date_str = current_date.strftime("%Y-%m-%d")
 
-	while current_date <= end_date:
-	    founded_clubs_per_day[current_date_str] = \
-	    	founded_clubs_per_day[(current_date - datetime.timedelta(days=1)).strftime("%Y-%m-%d")] \
-	    	+ (foundation_per_day[current_date_str] if current_date_str in foundation_per_day else 0)
-	    current_date += datetime.timedelta(days=1)
-	    current_date_str = current_date.strftime("%Y-%m-%d")
+    founded_clubs_per_day = {
+        (current_date - datetime.timedelta(days=1)).strftime("%Y-%m-%d"): 0
+    }
 
-	data_points = [{"property": data_property, "date": date, "value": count} 
-		for date, count in founded_clubs_per_day.items()]
+    # Compute the total clubs founded up to each date
+    while current_date <= end_date:
+        founded_clubs_per_day[current_date_str] = \
+            founded_clubs_per_day[(current_date - datetime.timedelta(days=1)).strftime("%Y-%m-%d")] \
+            + (foundation_per_day.get(current_date_str, 0))
+        current_date += datetime.timedelta(days=1)
+        current_date_str = current_date.strftime("%Y-%m-%d")
 
-	await db.data_points.delete_many({"property": "founded_club_count"})
-	await db.data_points.insert_many(data_points)
+    # Prepare the data points to be inserted
+    data_points = [{"property": data_property, "date": date, "value": count}
+                   for date, count in founded_clubs_per_day.items()]
+
+    # Delete existing data points and insert new ones asynchronously
+    await db.data_points.delete_many({"property": data_property})
+    await db.data_points.insert_many(data_points)
+
+    logger.info(f"Successfully updated founded club counts per day from {start_date} to {end_date}.")

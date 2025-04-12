@@ -1,9 +1,6 @@
 from collections import defaultdict
 from datetime import datetime, timedelta
 from math import exp
-from pymongo import MongoClient
-import json
-import time
 import logging
 from bson import ObjectId
 
@@ -30,9 +27,7 @@ async def main(db):
         }
     ]
 
-    sales = await db.sales \
-        .aggregate(pipeline) \
-        .to_list(length=None)
+    sales = await db.sales.aggregate(pipeline).to_list(length=None)
 
     for s in sales:
         if "overall" not in s:
@@ -65,7 +60,7 @@ async def main(db):
                 {"$set": {"price": price}}
             )
         else:
-            db.raw_player_pricings.insert_one(data_point)
+            await db.raw_player_pricings.insert_one(data_point)
 
 
 async def calculate_price_from_sale(db, sale, lookback_days=30):
@@ -73,7 +68,7 @@ async def calculate_price_from_sale(db, sale, lookback_days=30):
     lookback_date = target_date - timedelta(days=lookback_days)
     
     threshold_mapping = {65: (65, 66), 75: (75, 76), 85: (85, 86),
-                     64: (63, 64), 74: (73, 74), 84: (83, 84)}
+                         64: (63, 64), 74: (73, 74), 84: (83, 84)}
 
     if sale["overall"] in threshold_mapping:
         overall_range = threshold_mapping[sale["overall"]]
@@ -94,10 +89,10 @@ async def calculate_price_from_sale(db, sale, lookback_days=30):
     if not relevant_prices_dates:
         return None
     
-    return exponential_smoothing(relevant_prices_dates)
+    return await exponential_smoothing(relevant_prices_dates)
 
 
-def exponential_smoothing(prices_dates, half_life_days=15):
+async def exponential_smoothing(prices_dates, half_life_days=15):
     now = datetime.now()
     weights = []
     weighted_prices = []

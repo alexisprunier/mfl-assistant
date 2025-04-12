@@ -10,7 +10,7 @@ base_url = "https://z519wdyajg.execute-api.us-east-1.amazonaws.com/prod/players/
 
 last_computation_var = "last_daily_progress_report_computation"
 
-logger = logging.getLogger("compute_notification")
+logger = logging.getLogger("compute_reports")
 logger.setLevel(logging.INFO)
 
 

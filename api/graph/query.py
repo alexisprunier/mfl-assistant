@@ -819,14 +819,20 @@ class Query(ObjectType):
 
         # Handle search filtering
         if search:
-            words = [] if search is None else [w for w in search.split(" ") if len(w) > 1]
+            words = [w for w in search.split(" ") if len(w) > 1]
 
-            query_conditions.append({
-                "$or": [
-                    {"address": {"$in": words}},
-                    {"name": {"$in": words}}
-                ]
-            })
+            if words:
+                regex_query = {
+                    "$and": [
+                        {
+                            "$or": [
+                                {"address": {"$regex": word, "$options": "i"}},
+                                {"name": {"$regex": word, "$options": "i"}},
+                            ]
+                        } for word in words
+                    ]
+                }
+                query_conditions.append(regex_query)
 
         # Handle city filtering
         if city:

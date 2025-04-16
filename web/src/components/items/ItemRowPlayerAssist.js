@@ -15,10 +15,10 @@ interface ItemRowPlayerAssistProps {
   display: string;
   isSelected: boolean;
   onSelect: func;
-  pricing?: Number;
+  pricing ? : Number;
 }
 
-const ItemRowPlayerAssist: React.FC<ItemRowPlayerAssistProps> = ({
+const ItemRowPlayerAssist: React.FC < ItemRowPlayerAssistProps > = ({
   p,
   display,
   isSelected,
@@ -134,6 +134,17 @@ const ItemRowPlayerAssist: React.FC<ItemRowPlayerAssistProps> = ({
                   </div>
                 </div>
               ))}
+            </div>
+          )}
+
+          {display === "owner" && (
+            <div className="d-flex flex-grow-1">
+              <div className={"me-1"}>
+                <div className={"d-inline-block"}>
+                  <i class="bi bi-person-fill me-1"></i>
+                  {p.owner?.name || "???"}
+                </div>
+              </div>
             </div>
           )}
 

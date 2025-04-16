@@ -26,7 +26,7 @@ import { formations } from "utils/formation.js";
 
 interface PageToolsTeamBuilderProps {}
 
-const PageToolsTeamBuilder: React.FC<PageToolsTeamBuilderProps> = (props) => {
+const PageToolsTeamBuilder: React.FC < PageToolsTeamBuilderProps > = (props) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [teams, setTeams] = useState(null);
@@ -607,6 +607,7 @@ const PageToolsTeamBuilder: React.FC<PageToolsTeamBuilderProps> = (props) => {
                       <ButtonPlayerView
                         selectedView={playerView}
                         onChange={(v) => setPlayerView(v)}
+                        displayOwner={true}
                       />
                     </div>
 

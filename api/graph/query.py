@@ -85,7 +85,7 @@ class Query(ObjectType):
     )
 
     async def resolve_get_clubs(self, info, search=None, include_mfl=False, owners=None, city=None, country=None, founded_only=False, skip=0, limit=500, sort="_id", order=1):
-        print(include_mfl)
+
         clubs = info.context["db"].clubs
         
         filters = {}
@@ -95,7 +95,7 @@ class Query(ObjectType):
                 {"address": "0xf45dfaa6233fae44"},
                 {"_id": 1}
             )
-            print(excluded_user)
+
             if excluded_user:
                 filters["owner"] = {"$ne": excluded_user["_id"]}
 
@@ -248,7 +248,6 @@ class Query(ObjectType):
         # Optional filter based on address
 
         if not include_mfl:
-            print(include_mfl)
             query.append({
                 "$match": {"owner_info.address": {"$ne": "0xf45dfaa6233fae44"}}
             })
@@ -424,8 +423,6 @@ class Query(ObjectType):
 
 
         query.append({"$count": "count"})
-
-        print(info.context["db"].players.aggregate(query))
 
         return [c["count"] async for c in info.context["db"].players.aggregate(query)][0]
 

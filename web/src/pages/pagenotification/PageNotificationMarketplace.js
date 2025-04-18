@@ -69,16 +69,6 @@ const PageNotificationMarketplace: React.FC<
     }
   }, [skip]);
 
-  /*useEffect(() => {
-    if (notifications === null) {
-      if (selectedNotificationScope && selectedNotificationScope.id) {
-        
-      } else {
-        setNotifications([]);
-      }
-    }
-  }, [notifications]);*/
-
   return (
     <div id="PageNotificationMarketplace" className="h-100 w-100">
       <div className="container max-width-md h-100 px-2 px-md-4 py-4">

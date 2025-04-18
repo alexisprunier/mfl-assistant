@@ -133,61 +133,47 @@ class Query(ObjectType):
 
     async def resolve_get_sales(self, info, type=None, min_date=None, max_date=None, min_ovr=0, max_ovr=99, positions=None, first_position_only=False, min_age=0, max_age=99, skip=0, limit=10, sort="execution_date", order=-1):
 
-        sales = info.context["db"].sales
+        sales_collection = info.context["db"].sales
+        
+        filters = {}
 
         if type == "PLAYER":
-            if first_position_only:
-                filters = {
-                    "player": {"$exists": True, "$ne": None},
-                    "overall": {"$gte": min_ovr, "$lte": max_ovr},
-                    "age": {"$gte": min_age, "$lte": max_age},
-                    "positions.0": {"$in": positions}
-                }
-            else:
-                filters = {
-                    "player": {"$exists": True, "$ne": None},
-                    "overall": {"$gte": min_ovr, "$lte": max_ovr},
-                    "age": {"$gte": min_age, "$lte": max_age},
-                    "positions": {"$in": positions},
-                }
+            filters = {
+                "player": {"$exists": True, "$ne": None},
+                "overall": {"$gte": min_ovr, "$lte": max_ovr},
+                "age": {"$gte": min_age, "$lte": max_age},
+            }
 
-            execution_date_filter = {}
+            if positions:
+                if first_position_only:
+                    filters["positions.0"] = {"$in": positions}
+                else:
+                    filters["positions"] = {"$in": positions}
 
-            if min_date:
-                execution_date_filter["$gte"] = min_date
-            if max_date:
-                execution_date_filter["$lte"] = max_date
-
-            if execution_date_filter:
-                filters["execution_date"] = execution_date_filter
-
-            sales = await sales \
-                .find(filters) \
-                .to_list(None)
-
-            return sales
         elif type == "CLUB":
             filters = {
                 "club": {"$exists": True, "$ne": None},
             }
 
-            execution_date_filter = {}
+        # Add execution_date filters if any
+        execution_date_filter = {}
+        if min_date:
+            execution_date_filter["$gte"] = min_date
+        if max_date:
+            execution_date_filter["$lte"] = max_date
+        if execution_date_filter:
+            filters["execution_date"] = execution_date_filter
 
-            if min_date:
-                execution_date_filter["$gte"] = min_date
-            if max_date:
-                execution_date_filter["$lte"] = max_date
+        # Build the cursor
+        cursor = (
+            sales_collection
+            .find(filters)
+            .sort(sort, order)
+            .skip(skip)
+            .limit(limit)
+        )
 
-            if execution_date_filter:
-                filters["execution_date"] = execution_date_filter
-
-            sales = sales.find(filters)
-
-        sales = await sales \
-            .skip(skip) \
-            .limit(limit) \
-            .to_list(length=None)
-
+        sales = await cursor.to_list(length=None)
         return sales
 
     get_club_count = Int(founded_only=Boolean())

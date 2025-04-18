@@ -169,6 +169,14 @@ const PageHome: React.FC<PageHomeProps> = ({
         countries: ["SPAIN"],
         platforms: ["youtube", "twitch"],
       },
+      {
+        name: "Jakob",
+        image:
+          "https://pbs.twimg.com/profile_images/1778737519892295680/bIq17WyG_400x400.jpg",
+        link: "https://www.youtube.com/@MrFutlovers",
+        countries: ["GERMANY"],
+        platforms: ["youtube"],
+      },
     ];
     return c.sort(() => Math.random() - 0.5);
   });

@@ -41,6 +41,8 @@ const PageMap: React.FC = () => {
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [selectedCity, setSelectedCity] = useState(null);
 
+  const [includeMfl, setIncludeMfl] = useState(false);
+
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchData = useCallback(() => {
@@ -53,7 +55,7 @@ const PageMap: React.FC = () => {
           setIsLoading(false);
         },
         handleError: (e) => console.log(e),
-        params: { foundedOnly: false, geographic: mapGeographic },
+        params: { includeMfl: includeMfl, geographic: mapGeographic },
       });
     } else {
       getUserCountPerGeolocation({
@@ -65,11 +67,11 @@ const PageMap: React.FC = () => {
         params: { hasClub: true, geographic: mapGeographic },
       });
     }
-  }, [mapGeographic, mapType]);
+  }, [mapGeographic, mapType, includeMfl]);
 
   useEffect(() => {
     fetchData();
-  }, [fetchData, mapType, mapGeographic]);
+  }, [fetchData, mapType, mapGeographic, includeMfl]);
 
   const markerPositions = useMemo(() => {
     if (counts) {
@@ -256,7 +258,19 @@ const PageMap: React.FC = () => {
         </div>
 
         {mapType === "clubs" ? (
-          <div class="small mt-1">Established clubs*</div>
+          <>
+            <div className="mt-1">
+              <small>
+                Include MFL licenses
+                <input
+                  type="checkbox"
+                  className="ms-1"
+                  checked={includeMfl}
+                  onChange={(p) => setIncludeMfl(!includeMfl)}
+                />
+              </small>
+            </div>
+          </>
         ) : (
           <div class="small mt-1">Users owning a club*</div>
         )}
@@ -266,6 +280,7 @@ const PageMap: React.FC = () => {
         open={isClubPopupOpen}
         country={selectedCountry}
         city={selectedCity}
+        includeMfl={includeMfl}
         onClose={() => {
           setIsClubPopupOpen(false);
           setSelectedCountry(null);

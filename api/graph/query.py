@@ -73,20 +73,31 @@ class Query(ObjectType):
     get_clubs = List(
         ClubType,
         search=String(),
+        include_mfl=Boolean(),
         owners=List(String),
         city=String(),
         country=String(),
+        founded_only=Boolean(),
         skip=Int(),
         limit=Int(),
         sort=String(),
         order=Int()
     )
 
-    async def resolve_get_clubs(self, info, search=None, owners=None, city=None, country=None, skip=0, limit=500, sort="_id", order=1):
-        
+    async def resolve_get_clubs(self, info, search=None, include_mfl=False, owners=None, city=None, country=None, founded_only=False, skip=0, limit=500, sort="_id", order=1):
+        print(include_mfl)
         clubs = info.context["db"].clubs
         
         filters = {}
+
+        if not include_mfl:
+            excluded_user = await info.context["db"].users.find_one(
+                {"address": "0xf45dfaa6233fae44"},
+                {"_id": 1}
+            )
+            print(excluded_user)
+            if excluded_user:
+                filters["owner"] = {"$ne": excluded_user["_id"]}
 
         if owners is not None:
             filters["owner"] = {"$in": [ObjectId(o) for o in owners]}
@@ -96,6 +107,9 @@ class Query(ObjectType):
 
         if country is not None:
             filters["country"] = country  # exact match
+
+        if founded_only:
+            filters["status"] = "FOUNDED"
 
         if search:
             words = [] if search is None else [w for w in search.split(" ") if len(w) > 1]
@@ -134,7 +148,7 @@ class Query(ObjectType):
     async def resolve_get_sales(self, info, type=None, min_date=None, max_date=None, min_ovr=0, max_ovr=99, positions=None, first_position_only=False, min_age=0, max_age=99, skip=0, limit=10, sort="execution_date", order=-1):
 
         sales_collection = info.context["db"].sales
-        
+
         filters = {}
 
         if type == "PLAYER":
@@ -176,9 +190,12 @@ class Query(ObjectType):
         sales = await cursor.to_list(length=None)
         return sales
 
-    get_club_count = Int(founded_only=Boolean())
+    get_club_count = Int(
+        founded_only=Boolean(),
+        include_mfl=Boolean()
+    )
 
-    async def resolve_get_club_count(self, info, founded_only=True):
+    async def resolve_get_club_count(self, info, founded_only=False, include_mfl=False):
         query = [
             {
                 "$lookup": {
@@ -187,49 +204,56 @@ class Query(ObjectType):
                     "foreignField": "_id",
                     "as": "owner_info"
                 }
-            },
-            {"$match": {"owner_info.address": {"$ne": "0xf45dfaa6233fae44"}}},
-            {"$count": "count"}
+            }
         ]
 
         if founded_only:
-            query.insert(0, {"$match": {"status": "FOUNDED"}})
+            query.append({"$match": {"status": "FOUNDED"}})
 
-        return [c["count"] async for c in info.context["db"].clubs.aggregate(query)][0]
+        if not include_mfl:
+            query.append({"$match": {"owner_info.address": {"$ne": "0xf45dfaa6233fae44"}}})
+
+        query.append({"$count": "count"})
+
+        result = [c["count"] async for c in info.context["db"].clubs.aggregate(query)]
+        return result[0] if result else 0
 
     class CountPerGeolocationType(ObjectType):
         count = Int()
         geolocation = Field(GeolocationType)
 
-    get_club_count_per_geolocation = List(CountPerGeolocationType, founded_only=Boolean(), geographic=String())
+    get_club_count_per_geolocation = List(CountPerGeolocationType, founded_only=Boolean(), geographic=String(), include_mfl=Boolean())
 
-    async def resolve_get_club_count_per_geolocation(self, info, founded_only=True, geographic="city"):
+    async def resolve_get_club_count_per_geolocation(self, info, founded_only=False, geographic="city", include_mfl=False):
         db = info.context["db"]
 
-        # Validate geographic argument
         if geographic not in ("city", "country"):
             raise ValueError("Invalid geographic argument. Must be 'city' or 'country'.")
 
         query = []
 
-        # Optionally filter by status
         if founded_only:
             query.append({"$match": {"status": "FOUNDED"}})
 
-        # Join with users to exclude specific owners
-        query += [
-            {
-                "$lookup": {
-                    "from": "users",
-                    "localField": "owner",
-                    "foreignField": "_id",
-                    "as": "owner_info"
-                }
-            },
-            {"$match": {"owner_info.address": {"$ne": "0xf45dfaa6233fae44"}}}
-        ]
+        # Lookup user info
+        query.append({
+            "$lookup": {
+                "from": "users",
+                "localField": "owner",
+                "foreignField": "_id",
+                "as": "owner_info"
+            }
+        })
 
-        # Join with geolocations so we can group by city/country
+        # Optional filter based on address
+
+        if not include_mfl:
+            print(include_mfl)
+            query.append({
+                "$match": {"owner_info.address": {"$ne": "0xf45dfaa6233fae44"}}
+            })
+
+        # Lookup geolocation info and group
         query += [
             {
                 "$lookup": {
@@ -244,16 +268,14 @@ class Query(ObjectType):
                 "$group": {
                     "_id": f"$geolocation_info.{geographic}",
                     "count": {"$sum": 1},
-                    "sample_geo": {"$first": "$geolocation_info"}  # Pick one for metadata
+                    "sample_geo": {"$first": "$geolocation_info"}
                 }
             },
             {"$sort": {"count": -1}}
         ]
 
-        # Run the query
         results = [doc async for doc in db.clubs.aggregate(query)]
 
-        # Build response
         return [
             {
                 "geolocation": {
@@ -264,7 +286,7 @@ class Query(ObjectType):
                 },
                 "count": doc["count"]
             }
-            for doc in results if doc["_id"]  # skip null group keys
+            for doc in results if doc["_id"]
         ]
 
     get_user_count_per_geolocation = List(CountPerGeolocationType, geographic=String(), has_club=Boolean())
@@ -549,7 +571,7 @@ class Query(ObjectType):
 
     get_club_division_counts = List(CountType, founded_only=Boolean())
 
-    async def resolve_get_club_division_counts(self, info, founded_only=True):
+    async def resolve_get_club_division_counts(self, info, founded_only=False):
         query = [
             {
                 "$lookup": {
@@ -577,7 +599,7 @@ class Query(ObjectType):
 
     get_clubs_per_owner_counts = List(CountType, founded_only=Boolean())
 
-    async def resolve_get_clubs_per_owner_counts(self, info, founded_only=True):
+    async def resolve_get_clubs_per_owner_counts(self, info, founded_only=False):
         query = [
             {
                 "$lookup": {

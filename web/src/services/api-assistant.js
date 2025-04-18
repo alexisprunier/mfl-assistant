@@ -360,10 +360,10 @@ export const getClubData = ({ handleSuccess = null, handleError = null }) =>
     getGraphQLEndpoint(),
     JSON.stringify({
       query: `{
-        getClubCount,
+        getClubCount(foundedOnly: true),
         getAllClubCount: getClubCount(foundedOnly: false),
         getClubOwnerCount,
-        getClubsPerOwnerCounts {
+        getClubsPerOwnerCounts(foundedOnly: true) {
           key,
           count
         },
@@ -371,7 +371,7 @@ export const getClubData = ({ handleSuccess = null, handleError = null }) =>
           key,
           count
         },
-        getClubDivisionCounts {
+        getClubDivisionCounts(foundedOnly: true) {
           key,
           count
         },

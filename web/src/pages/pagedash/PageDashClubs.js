@@ -8,13 +8,13 @@ import ChartAreaClubsPerDay from "components/charts/ChartAreaClubsPerDay.js";
 
 interface PageDashClubsProps {}
 
-const PageDashClubs: React.FC<PageDashClubsProps> = ({}) => {
+const PageDashClubs: React.FC < PageDashClubsProps > = ({}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [clubData, setClubData] = useState(null);
   const [foundedClubOnlyForOwners, setFoundedClubOnlyForOwners] =
-    useState(false);
+  useState(false);
   const [foundedClubOnlyForDivisions, setFoundedClubOnlyForDivisions] =
-    useState(false);
+  useState(false);
 
   const getData = (pursue, beforeListingId) => {
     setIsLoading(true);

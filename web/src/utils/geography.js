@@ -142,5 +142,5 @@ export const countries = {
   ZAMBIA: [-13.1339, 27.8493],
   ZIMBABWE: [-19.0154, 29.1549],
   NEW_ZEALAND: [-40.9006, 174.886],
-  CHINA: [35.8617, 104.1954],
+  CHINA_PR: [35.8617, 104.1954],
 };

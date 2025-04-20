@@ -1,14 +1,17 @@
 from bson import ObjectId
 import datetime
+import httpx  # Use httpx for asynchronous HTTP requests
 import logging
-import httpx  # Using httpx instead of aiohttp
 from utils.db import upsert_vars
 from utils.date import convert_unix_to_datetime
-from mail.mail_manager import sent_daily_progress_report_email
+from mail.mail_manager import send_listing_email, send_sale_email
 
-base_url = "https://z519wdyajg.execute-api.us-east-1.amazonaws.com/prod/players/progressions?interval=24H&ownerWalletAddress="
+base_url = "https://z519wdyajg.execute-api.us-east-1.amazonaws.com/prod/"
+list_url = base_url + "listings?limit=25&type=PLAYER&status=AVAILABLE"
+sale_url = base_url + "listings?limit=25&type=PLAYER&status=BOUGHT&sorts=listing.purchaseDateTime&sortsOrders=DESC"
 
-last_computation_var = "last_daily_progress_report_computation"
+last_list_var = "last_treated_listing_datetime"
+last_sale_var = "last_treated_sale_datetime"
 
 logger = logging.getLogger("compute_notification")
 logger.setLevel(logging.INFO)
@@ -17,73 +20,140 @@ logger.setLevel(logging.INFO)
 async def main(db, mail):
     users = await _get_users(db)
     user_ids = [u["_id"] for u in users]
+    logger.critical(f"Number of users to treat: {len(user_ids)}")
 
-    last_computation = await db.vars.find_one({"var": last_computation_var})
-    last_computation_time = last_computation.get("value") if last_computation else None
-    new_computation_time = datetime.datetime.now()
+    scopes = await _get_notification_scopes(db, user_ids)
+    listing_scopes = [s for s in scopes if s["type"] == "listing"]
+    sale_scopes = [s for s in scopes if s["type"] == "sale"]
+    logger.critical(f"Number of listing scopes to treat: {len(listing_scopes)}")
+    logger.critical(f"Number of sale scopes to treat: {len(sale_scopes)}")
 
-    # Skip computation if the last computation was more than 10 minutes ago
-    if last_computation_time is None or (new_computation_time - last_computation_time).total_seconds() > 600:
-        logger.warning("Skipping computation as the difference is greater than 10 minutes.")
-        await upsert_vars(db, last_computation_var, new_computation_time)
-        return
+    # Treat listing scopes
+    listings = await _get_listings_to_treat(db)
+    logger.critical(f"Number of listings to treat: {len(listings)}")
 
-    configurations = await _get_daily_progress_report_configurations(db)
+    if len(listings) > 0:
+        await upsert_vars(db, last_list_var, convert_unix_to_datetime(listings[0]["createdDateTime"]))
 
-    for config in configurations:
-        try:
-            config_time = datetime.datetime.strptime(config["time"], "%H:%M").time()
-        except ValueError:
-            logger.warning(f"Invalid time format in configuration: {config['time']}")
-            continue
+        for scope in listing_scopes:
+            filtered_listings = await _filter_listings_per_scope(scope, listings)
+            player_ids = [listing["player"]["id"] for listing in filtered_listings]
 
-        # Check if the time interval is within the expected range
-        if (
-            last_computation_time.time() <= config_time <= new_computation_time.time()
-            or (last_computation_time.time() > new_computation_time.time() and (
-                config_time >= last_computation_time.time() or config_time <= new_computation_time.time()))
-        ):
-            user = [u for u in users if u["_id"] == config["user"]]
+            if len(player_ids) > 0:
+                user = [u for u in users if u["_id"] == scope["user"]]
+                logger.critical(f"{len(user)}")
 
-            if len(user) > 0:
-                user = user.pop()
-                # Fetch progress data asynchronously
-                data = await _get_progress_data(user["address"])
-                # Filter out None values and sort the data
-                data = {key: value for key, value in data.items() if value is not None}
-                data = dict(sorted(data.items(), key=lambda item: ('overall' not in item[1], item[0])))
-                # Send daily progress report via email
-                await sent_daily_progress_report_email(db, mail, user, data)
+                if len(user) > 0:
+                    logger.critical(f"Listing notification to send with {len(player_ids)} players")
+                    user = user.pop()
+                    notification = await _add_notification_in_db(db, scope["_id"], player_ids)
+                    await send_listing_email(db, mail, notification, user, player_ids)
 
-    # Update the last computation time in the database
-    await upsert_vars(db, last_computation_var, new_computation_time)
+    # Treat sale scopes
+    sales = await _get_sales_to_treat(db)
+    logger.critical(f"Number of sales to treat: {len(sales)}")
+
+    if len(sales) > 0:
+        await upsert_vars(db, last_sale_var, convert_unix_to_datetime(sales[0]["createdDateTime"]))
+
+        for scope in sale_scopes:
+            filtered_sales = await _filter_listings_per_scope(scope, sales)
+            player_ids = [sale["player"]["id"] for sale in filtered_sales]
+
+            if len(player_ids) > 0:
+                user = [u for u in users if u["_id"] == scope["user"]]
+
+                if len(user) > 0:
+                    logger.critical(f"Sale notification to send with {len(player_ids)} players")
+                    user = user.pop()
+                    notification = await _add_notification_in_db(db, scope["_id"], player_ids)
+                    await send_sale_email(db, mail, notification, user, player_ids)
 
 
 async def _get_users(db):
     filters = {
-        "email": {"$regex": r'^[a-zA-Z0-9_.+-]+@[a-zA0-9-]+\.[a-zA-Z0-9-.]+$'},
+        "email": {"$regex": r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'},
         "is_email_confirmed": True,
     }
     
     return await db.users.find(filters).to_list(length=None)
 
 
-async def _get_daily_progress_report_configurations(db):
+async def _get_notification_scopes(db, user_ids):
     filters = {
-        "type": "daily_progress_report",
-        "time": {"$ne": None},
+        "user": {"$in": user_ids},
+        "status": "active",
+    }
+    
+    return await db.notification_scopes.find(filters).to_list(length=None)
+
+
+async def _get_listings_to_treat(db):
+    async with httpx.AsyncClient() as client:  # Use httpx for async requests
+        response = await client.get(list_url)
+        listings = response.json()
+
+    last_listing_var_record = await db.vars.find_one({"var": last_list_var})
+
+    if last_listing_var_record:
+        listings = [listing for listing in listings
+                    if convert_unix_to_datetime(listing["createdDateTime"]) > last_listing_var_record["value"]]
+
+    return listings
+
+
+async def _get_sales_to_treat(db):
+    async with httpx.AsyncClient() as client:  # Use httpx for async requests
+        response = await client.get(sale_url)
+        sales = response.json()
+
+    last_sale_var_record = await db.vars.find_one({"var": last_sale_var})
+
+    if last_sale_var_record:
+        sales = [sale for sale in sales
+                 if convert_unix_to_datetime(sale["createdDateTime"]) > last_sale_var_record["value"]]
+
+    return sales
+
+
+async def _filter_listings_per_scope(scope, listings):
+    return [
+        l for l in listings
+        if ("min_price" not in scope or scope["min_price"] is None or scope["min_price"] <= l["price"])
+        and ("max_price" not in scope or scope["max_price"] is None or scope["max_price"] >= l["price"])
+        and ("min_age" not in scope or scope["min_age"] is None or scope["min_age"] <= l["player"]["metadata"]["age"])
+        and ("max_age" not in scope or scope["max_age"] is None or scope["max_age"] >= l["player"]["metadata"]["age"])
+        and ("min_ovr" not in scope or scope["min_ovr"] is None or scope["min_ovr"] <= l["player"]["metadata"]["overall"])
+        and ("max_ovr" not in scope or scope["max_ovr"] is None or scope["max_ovr"] >= l["player"]["metadata"]["overall"])
+        and ("min_pac" not in scope or scope["min_pac"] is None or scope["min_pac"] <= l["player"]["metadata"]["pace"])
+        and ("max_pac" not in scope or scope["max_pac"] is None or scope["max_pac"] >= l["player"]["metadata"]["pace"])
+        and ("min_dri" not in scope or scope["min_dri"] is None or scope["min_dri"] <= l["player"]["metadata"]["dribbling"])
+        and ("max_dri" not in scope or scope["max_dri"] is None or scope["max_dri"] >= l["player"]["metadata"]["dribbling"])
+        and ("min_pas" not in scope or scope["min_pas"] is None or scope["min_pas"] <= l["player"]["metadata"]["passing"])
+        and ("max_pas" not in scope or scope["max_pas"] is None or scope["max_pas"] >= l["player"]["metadata"]["passing"])
+        and ("min_sho" not in scope or scope["min_sho"] is None or scope["min_sho"] <= l["player"]["metadata"]["shooting"])
+        and ("max_sho" not in scope or scope["max_sho"] is None or scope["max_sho"] >= l["player"]["metadata"]["shooting"])
+        and ("min_def" not in scope or scope["min_def"] is None or scope["min_def"] <= l["player"]["metadata"]["defense"])
+        and ("max_def" not in scope or scope["max_def"] is None or scope["max_def"] >= l["player"]["metadata"]["defense"])
+        and ("min_phy" not in scope or scope["min_phy"] is None or scope["min_phy"] <= l["player"]["metadata"]["physical"])
+        and ("max_phy" not in scope or scope["max_phy"] is None or scope["max_phy"] >= l["player"]["metadata"]["physical"])
+        and ("nationalities" not in scope or scope["nationalities"] is None or len(scope["nationalities"]) == 0
+            or l["player"]["metadata"]["nationalities"][0] in scope["nationalities"])
+        and ("positions" not in scope or scope["positions"] is None or len(scope["positions"]) == 0 or (
+            l["player"]["metadata"]["positions"][0] in scope["nationalities"]
+                if "primary_position_only" in scope and scope["primary_position_only"]
+                else set(scope["positions"]) & set(l["player"]["metadata"]["positions"])
+            )
+        )
+    ]
+
+
+async def _add_notification_in_db(db, notification_scope_id, player_ids):
+    notification = {
+        "status": "await",
+        "player_ids": player_ids,
+        "creation_date": datetime.datetime.now(),
+        "notification_scope": notification_scope_id,
     }
 
-    configurations = await db.report_configurations.find(filters).to_list(length=None)
-
-    logger.warning(f"PROGRESS REPORT: Number of active progress reports: {len(configurations)}")
-    
-    return configurations
-
-
-# Use httpx to asynchronously fetch progress data from the external API
-async def _get_progress_data(address):
-    async with httpx.AsyncClient() as client:
-        response = await client.get(base_url + address)
-        data = response.json()
-    return data
+    return await db.notifications.insert_one(notification)

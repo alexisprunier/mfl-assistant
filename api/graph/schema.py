@@ -94,6 +94,13 @@ class PlayerType(ObjectType):
 
         return await info.context["db"].geolocations.find_one({"_id": geolocation_id})
 
+    async def resolve_owner(self, info):
+        owner_id = self.get("owner") 
+        if not owner_id:
+            return None
+
+        return await info.context["db"].users.find_one({"_id": owner_id})
+
 
 class ClubType(ObjectType):
     id = Int(source='_id')

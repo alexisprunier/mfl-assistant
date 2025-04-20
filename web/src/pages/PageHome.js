@@ -18,7 +18,7 @@ interface PageHomeProps {
   yScrollPosition: number;
 }
 
-const PageHome: React.FC < PageHomeProps > = ({
+const PageHome: React.FC<PageHomeProps> = ({
   props,
   flowUser,
   assistantUser,
@@ -32,109 +32,149 @@ const PageHome: React.FC < PageHomeProps > = ({
   const [selectedCountries, setSelectedCountries] = useState([]);
 
   const [contentCreators] = useState(() => {
-    var c = [{
+    var c = [
+      {
         name: "WenDirkCast",
-        image: "https://pbs.twimg.com/profile_images/1699478704479461376/FpyRcFYv_400x400.jpg",
+        image:
+          "https://pbs.twimg.com/profile_images/1699478704479461376/FpyRcFYv_400x400.jpg",
         link: "https://linktr.ee/WenDirkCast",
         countries: ["ENGLAND"],
         platforms: ["twitch", "spotify"],
       },
       {
         name: "Calvinator",
-        image: "https://pbs.twimg.com/profile_images/1731981717341151232/SskrGRnU_400x400.jpg",
+        image:
+          "https://pbs.twimg.com/profile_images/1731981717341151232/SskrGRnU_400x400.jpg",
         link: "https://www.youtube.com/channel/UCEOcyeQQ5cv2eAsD1NnWR6w",
         countries: ["ENGLAND"],
         platforms: ["youtube"],
       },
       {
         name: "SRMonkey",
-        image: "https://pbs.twimg.com/profile_images/1514224760036675584/MfTVLKVa_400x400.jpg",
+        image:
+          "https://pbs.twimg.com/profile_images/1514224760036675584/MfTVLKVa_400x400.jpg",
         link: "https://open.spotify.com/show/4q8ZvGFlcIp9q1GQWNhRX7?si=WVDfzW9RR3KYP-xGbn3_OA&nd=1&dlsi=9afeee4459194df6",
         countries: ["ENGLAND"],
         platforms: ["spotify"],
       },
       {
         name: "Sorare Deke",
-        image: "https://pbs.twimg.com/profile_images/1797465950544965632/tDy3uUIz_400x400.jpg",
+        image:
+          "https://pbs.twimg.com/profile_images/1797465950544965632/tDy3uUIz_400x400.jpg",
         link: "https://www.youtube.com/@soraredeke",
         countries: ["ENGLAND"],
         platforms: ["youtube"],
       },
       {
         name: "DomyDigital",
-        image: "https://pbs.twimg.com/profile_images/1785241500822966272/lTac2y6D_400x400.jpg",
+        image:
+          "https://pbs.twimg.com/profile_images/1785241500822966272/lTac2y6D_400x400.jpg",
         link: "https://www.youtube.com/@DomyDigital",
         countries: ["ITALY"],
         platforms: ["youtube"],
       },
       {
         name: "Val2Play",
-        image: "https://pbs.twimg.com/profile_images/1827083517269786624/_O5v4Lxg_400x400.jpg",
+        image:
+          "https://pbs.twimg.com/profile_images/1827083517269786624/_O5v4Lxg_400x400.jpg",
         link: "https://www.youtube.com/@Val2Play",
         countries: ["FRANCE"],
         platforms: ["youtube", "tiktok"],
       },
       {
         name: "Andy00fficial",
-        image: "https://pbs.twimg.com/profile_images/1872138822042939392/VQVRDsIR_400x400.jpg",
+        image:
+          "https://pbs.twimg.com/profile_images/1872138822042939392/VQVRDsIR_400x400.jpg",
         link: "https://www.linktr.ee/andy00fficial",
         countries: ["ENGLAND", "FRANCE"],
         platforms: ["twitch", "tiktok"],
       },
       {
         name: "Alex Benito",
-        image: "https://pbs.twimg.com/profile_images/1831668492203880449/opZQi38n_400x400.jpg",
+        image:
+          "https://pbs.twimg.com/profile_images/1831668492203880449/opZQi38n_400x400.jpg",
         link: "https://www.youtube.com/@AlexBenito",
         countries: ["FRANCE"],
         platforms: ["youtube"],
       },
       {
         name: "scoreadvise",
-        image: "https://pbs.twimg.com/profile_images/1633883637304180736/L4zykxAZ_400x400.jpg",
+        image:
+          "https://pbs.twimg.com/profile_images/1633883637304180736/L4zykxAZ_400x400.jpg",
         link: "https://www.youtube.com/@scoreadvise_official",
         countries: ["GERMANY"],
         platforms: ["youtube"],
       },
       {
         name: "Quinny",
-        image: "https://pbs.twimg.com/profile_images/1897341620233682944/fkON3ANq_400x400.jpg",
+        image:
+          "https://pbs.twimg.com/profile_images/1897341620233682944/fkON3ANq_400x400.jpg",
         link: "https://www.youtube.com/@Quinny3001",
         countries: ["ENGLAND"],
         platforms: ["youtube"],
       },
       {
         name: "Tim Lanew",
-        image: "https://pbs.twimg.com/profile_images/1849863273769992192/rRZK1ZM7_400x400.jpg",
+        image:
+          "https://pbs.twimg.com/profile_images/1849863273769992192/rRZK1ZM7_400x400.jpg",
         link: "https://www.youtube.com/@CoachTimTV",
         countries: ["FRANCE"],
         platforms: ["youtube"],
       },
       {
-        name: "frenchmystiq",
-        image: "https://pbs.twimg.com/profile_images/1651729224355442688/S-GAvtMq_400x400.jpg",
-        link: "https://linktr.ee/frenchmystiq",
-        countries: ["FRANCE"],
-        platforms: ["youtube", "twitch"],
-      },
-      {
         name: "McBrideAce",
-        image: "https://pbs.twimg.com/profile_images/1674870536906629140/OSOxCQRz_400x400.jpg",
+        image:
+          "https://pbs.twimg.com/profile_images/1674870536906629140/OSOxCQRz_400x400.jpg",
         link: "https://www.youtube.com/@McBrideAce",
         countries: ["ENGLAND"],
         platforms: ["youtube"],
       },
       {
         name: "LeMatero",
-        image: "https://pbs.twimg.com/profile_images/1794289034186854400/X5nVbcio_400x400.jpg",
+        image:
+          "https://pbs.twimg.com/profile_images/1905863386279133184/J80f4qmb_400x400.jpg",
         link: "https://x.com/LeMatero",
         countries: ["FRANCE"],
         platforms: ["twitch"],
       },
       {
         name: "Zlataneur_89",
-        image: "https://pbs.twimg.com/profile_images/1359944317469679621/Gl2vxD8Z_400x400.jpg",
+        image:
+          "https://pbs.twimg.com/profile_images/1359944317469679621/Gl2vxD8Z_400x400.jpg",
         link: "https://www.youtube.com/channel/UCWMYhHuZBAQFIIBMM19xCyw",
         countries: ["FRANCE"],
+        platforms: ["youtube"],
+      },
+      {
+        name: "Josalde",
+        image:
+          "https://pbs.twimg.com/profile_images/1667163482930675714/oiwn_Ibx_400x400.jpg",
+        link: "https://www.youtube.com/@SorareJosalde",
+        countries: ["ENGLAND"],
+        platforms: ["youtube"],
+      },
+      {
+        name: "fabmizz.eth",
+        image:
+          "https://pbs.twimg.com/profile_images/1642253926257893376/vHqFOG-B_400x400.jpg",
+        link: "https://fabmizz.de/allsocials",
+        countries: ["ENGLAND"],
+        platforms: ["youtube", "twitch"],
+      },
+      {
+        name: "Willy Alba",
+        image:
+          "https://pbs.twimg.com/profile_images/1820254851541893120/ENBDeK15_400x400.jpg",
+        link: "https://linktr.ee/willyalba",
+        countries: ["SPAIN"],
+        platforms: ["youtube", "twitch"],
+      },
+      {
+        name: "Jakob",
+        image:
+          "https://pbs.twimg.com/profile_images/1778737519892295680/bIq17WyG_400x400.jpg",
+        link: "https://www.youtube.com/@MrFutlovers",
+        countries: ["GERMANY"],
         platforms: ["youtube"],
       },
     ];
@@ -142,15 +182,30 @@ const PageHome: React.FC < PageHomeProps > = ({
   });
 
   const [tools] = useState(() => {
-    var c = [{
+    var c = [
+      {
         name: "MFL Player Info",
         link: "https://mflplayer.info/",
         countries: [],
       },
       {
         name: "MFL Manager",
-        image: "https://pbs.twimg.com/profile_images/1721134227213750272/VsG_pArI_400x400.png",
+        image:
+          "https://pbs.twimg.com/profile_images/1721134227213750272/VsG_pArI_400x400.png",
         link: "https://mflmanager.fr/",
+        countries: [],
+      },
+      {
+        name: "MetaFixerLab",
+        image: "https://metafixerlab.com/mfl-logo.png",
+        link: "https://metafixerlab.com/",
+        countries: [],
+      },
+      {
+        name: "Flowty",
+        image:
+          "https://pbs.twimg.com/profile_images/1899276983907069952/dUuP0Bxf_400x400.jpg",
+        link: "https://www.flowty.io/",
         countries: [],
       },
       {
@@ -159,37 +214,35 @@ const PageHome: React.FC < PageHomeProps > = ({
         countries: [],
       },
       {
-        name: "Flowty",
-        image: "https://pbs.twimg.com/profile_images/1899276983907069952/dUuP0Bxf_400x400.jpg",
-        link: "https://www.flowty.io/",
-        countries: [],
-      },
-      {
         name: "MFL Flow Stats",
         link: "https://flipsidecrypto.xyz/adriaparcerisas/mfl-stats-on-flow-r4GRp_",
       },
     ];
-    return c.sort(() => Math.random() - 0.5);
+    return c; //.sort(() => Math.random() - 0.5);
   });
 
   const [initiatives] = useState(() => {
-    var c = [{
+    var c = [
+      {
         name: "MFL Manager",
-        image: "https://pbs.twimg.com/profile_images/1721134227213750272/VsG_pArI_400x400.png",
+        image:
+          "https://pbs.twimg.com/profile_images/1721134227213750272/VsG_pArI_400x400.png",
         link: "https://discord.gg/GMuRDJsq",
         countries: ["FRANCE"],
         platforms: ["discord"],
       },
       {
         name: "K-Socios",
-        image: "https://pbs.twimg.com/profile_images/1874941714101608448/aPxojvER_400x400.jpg",
+        image:
+          "https://pbs.twimg.com/profile_images/1874941714101608448/aPxojvER_400x400.jpg",
         link: "https://x.com/K_Socios_MFL",
         countries: ["FRANCE"],
         platforms: ["discord"],
       },
       {
         name: "Vulrak Académ.",
-        image: "https://cdn.discordapp.com/icons/1276645403600883835/7114a539a9ad1feddab234f46ef6a89a.webp?size=128",
+        image:
+          "https://cdn.discordapp.com/icons/1276645403600883835/7114a539a9ad1feddab234f46ef6a89a.webp?size=128",
         link: "https://discord.gg/yzsqv92c",
         countries: ["FRANCE"],
         platforms: ["discord"],
@@ -206,30 +259,35 @@ const PageHome: React.FC < PageHomeProps > = ({
   });
 
   const [clubSocials] = useState(() => {
-    var c = [{
+    var c = [
+      {
         name: "Sambre Hearts",
-        image: "https://pbs.twimg.com/profile_images/1792928428770942976/H_WfZk8c_400x400.jpg",
+        image:
+          "https://pbs.twimg.com/profile_images/1792928428770942976/H_WfZk8c_400x400.jpg",
         link: "https://x.com/SambreHearts",
         countries: ["ENGLAND"],
         platforms: ["twitter"],
       },
       {
         name: "Apollo Sports Gr.",
-        image: "https://pbs.twimg.com/profile_images/1409242215990300682/8Yd96nWf_400x400.jpg",
+        image:
+          "https://pbs.twimg.com/profile_images/1409242215990300682/8Yd96nWf_400x400.jpg",
         link: "https://x.com/apollo11collect",
         countries: ["ENGLAND"],
         platforms: ["twitter"],
       },
       {
         name: "Sunfire Jaguars",
-        image: "https://pbs.twimg.com/profile_images/1791094944779714561/hFiIp9ZX_400x400.jpg",
+        image:
+          "https://pbs.twimg.com/profile_images/1791094944779714561/hFiIp9ZX_400x400.jpg",
         link: "https://x.com/Sunfire_Jaguars",
         countries: ["ENGLAND"],
         platforms: ["twitter"],
       },
       {
         name: "Porto Vermelho",
-        image: "https://pbs.twimg.com/profile_images/1835804772512792576/OXKPiYTl_400x400.jpg",
+        image:
+          "https://pbs.twimg.com/profile_images/1835804772512792576/OXKPiYTl_400x400.jpg",
         link: "https://x.com/Porto_Vermelho",
         countries: ["ENGLAND"],
         platforms: ["twitter"],
@@ -509,11 +567,14 @@ const PageHome: React.FC < PageHomeProps > = ({
                     </div>
                     <div className="d-flex flex-column flex-lg-row flex-grow-1 flex-shrink-1 flex-basis-0 min-width-0">
                       <div className="d-flex card bg-black flex-grow-1 justify-content-center mb-2 mb-lg-0 p-1 mx-2 mt-4 mt-lg-0">
-                        <Link to="map" className="nav-link text-white text-center">
-                            <i className="bi bi-globe-americas h5"></i>
-                            <br />
-                            Map
-                          </Link>
+                        <Link
+                          to="map"
+                          className="nav-link text-white text-center"
+                        >
+                          <i className="bi bi-globe-americas h5"></i>
+                          <br />
+                          Map
+                        </Link>
                       </div>
                       <div className="d-flex card bg-black flex-grow-1 justify-content-center mb-2 mb-lg-0 p-1 mx-2 mt-4 mt-lg-0">
                         <ButtonLogin
@@ -539,7 +600,6 @@ const PageHome: React.FC < PageHomeProps > = ({
               </div>
             </div>
           </div>
-
           <div
             className="d-flex flex-column flex-grow-1 flex-lg-basis-50p py-lg-3 pe-lg-3"
             style={{ minWidth: "0" }}
@@ -550,7 +610,6 @@ const PageHome: React.FC < PageHomeProps > = ({
             >
               <BoxMflActivity />
             </div>
-
             <div
               className="d-flex flex-column card flex-grow-0 py-2 pb-3 px-3 m-2 m-lg-0 mb-4 mb-lg-2"
               style={{ minWidth: "0" }}
@@ -591,7 +650,6 @@ const PageHome: React.FC < PageHomeProps > = ({
                 />
               </div>
             </div>
-
             <div
               className="d-flex flex-column card flex-grow-1 flex-fill py-2 px-3 m-2 mb-4 m-lg-0 overflow-auto"
               style={{ minWidth: "0" }}
@@ -699,11 +757,11 @@ const PageHome: React.FC < PageHomeProps > = ({
                   </div>*/}
                 </div>
               </div>
-            </div> <
-    /div> < /
-    div > <
-    /div> < /
-    div >
+            </div>{" "}
+          </div>{" "}
+        </div>{" "}
+      </div>{" "}
+    </div>
   );
 };
 

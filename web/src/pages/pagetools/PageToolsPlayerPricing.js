@@ -20,18 +20,41 @@ const PageToolsPlayerPricing: React.FC<PageToolsPlayerPricingProps> = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [overall, setOverall] = useState(
-    searchParams.get("overall") ? parseInt(searchParams.get("overall")) : null
+    searchParams.get("overall") ? parseInt(searchParams.get("overall")) : ""
   );
   const [position, setPosition] = useState(
-    searchParams.get("position") ? searchParams.get("position") : null
+    searchParams.get("position") ? searchParams.get("position") : ""
   );
   const [age, setAge] = useState(
-    searchParams.get("age") ? parseInt(searchParams.get("age")) : null
+    searchParams.get("age") ? parseInt(searchParams.get("age")) : ""
   );
   const [firstPositionOnly, setFirstPositionOnly] = useState(
     searchParams.get("firstPositionOnly")
       ? searchParams.get("firstPositionOnly") === "true"
       : false
+  );
+
+  const [isAdvancedModeActive, setIsAdvancedModeActive] = useState(
+    searchParams.get("isAdvancedModeActive")
+      ? searchParams.get("isAdvancedModeActive") === "true"
+      : false
+  );
+
+  const [minAge, setMinAge] = useState(
+    searchParams.get("minAge") ? parseInt(searchParams.get("minAge")) : ""
+  );
+  const [maxAge, setMaxAge] = useState(
+    searchParams.get("maxAge") ? parseInt(searchParams.get("maxAge")) : ""
+  );
+  const [minOverall, setMinOverall] = useState(
+    searchParams.get("minOverall")
+      ? parseInt(searchParams.get("minOverall"))
+      : ""
+  );
+  const [maxOverall, setMaxOverall] = useState(
+    searchParams.get("maxOverall")
+      ? parseInt(searchParams.get("maxOverall"))
+      : ""
   );
 
   const [sales, setSales] = useState(null);
@@ -43,16 +66,33 @@ const PageToolsPlayerPricing: React.FC<PageToolsPlayerPricingProps> = () => {
     setIsLoading(true);
     setSales(null);
 
-    navigate({
-      search:
-        "?" +
-        convertDictToUrlParams({
-          overall,
-          position,
-          age,
-          firstPositionOnly,
-        }),
-    });
+    if (isAdvancedModeActive) {
+      navigate({
+        search:
+          "?" +
+          convertDictToUrlParams({
+            minOverall,
+            maxOverall,
+            minAge,
+            maxAge,
+            position,
+            firstPositionOnly,
+            isAdvancedModeActive,
+          }),
+      });
+    } else {
+      navigate({
+        search:
+          "?" +
+          convertDictToUrlParams({
+            overall,
+            age,
+            position,
+            firstPositionOnly,
+            isAdvancedModeActive,
+          }),
+      });
+    }
 
     getPlayerSales({
       handleSuccess: (v) => {
@@ -61,23 +101,21 @@ const PageToolsPlayerPricing: React.FC<PageToolsPlayerPricingProps> = () => {
       },
       params: {
         type: "PLAYER",
-        limit: 1000000,
-        minOvr:
-          scarcity.map((s) => s.overallMin).indexOf(overall) < 0
-            ? overall - 1
-            : overall,
-        maxOvr:
-          scarcity.map((s) => s.overallMax).indexOf(overall) < 0
-            ? overall + 1
-            : overall,
+        limit: 500,
+        minOvr: isAdvancedModeActive ? minOverall : overall - 1,
+        maxOvr: isAdvancedModeActive ? maxOverall : overall + 1,
         positions: [position],
-        minAge: age - 1,
-        maxAge: age + 1,
+        minAge: isAdvancedModeActive ? minAge : age - 1,
+        maxAge: isAdvancedModeActive ? maxAge : age + 1,
         firstPositionOnly,
       },
     });
 
-    fetchPlayerListings();
+    if (!isAdvancedModeActive) {
+      fetchPlayerListings();
+    } else {
+      setPlayerListings(null);
+    }
   };
 
   const fetchPlayerListings = () => {
@@ -101,11 +139,71 @@ const PageToolsPlayerPricing: React.FC<PageToolsPlayerPricingProps> = () => {
     });
   };
 
+  const isRunButtonActive = () => {
+    if (position) {
+      if (!isAdvancedModeActive) {
+        return age && overall;
+      }
+
+      return minAge && maxAge && minOverall && maxOverall;
+    }
+
+    return false;
+  };
+
+  const clearForm = () => {
+    setAge("");
+    setMinAge("");
+    setMaxAge("");
+    setOverall("");
+    setMinOverall("");
+    setMaxOverall("");
+    setPosition("");
+    setFirstPositionOnly(false);
+    setSales(null);
+
+    navigate({
+      search: "",
+    });
+  };
+
   useEffect(() => {
-    if (overall && position && age) {
+    if (
+      (!isAdvancedModeActive && overall && position && age) ||
+      (isAdvancedModeActive &&
+        minOverall &&
+        maxOverall &&
+        position &&
+        minAge &&
+        maxAge)
+    ) {
       getData();
     }
   }, []);
+
+  useEffect(() => {
+    if (!isAdvancedModeActive) {
+      if (age) {
+        setMinAge(age - 1);
+        setMaxAge(age + 1);
+      } else {
+        setMinAge("");
+        setMaxAge("");
+      }
+    }
+  }, [age]);
+
+  useEffect(() => {
+    if (!isAdvancedModeActive) {
+      if (overall) {
+        setMinOverall(overall - 1);
+        setMaxOverall(overall + 1);
+      } else {
+        setMinOverall("");
+        setMaxOverall("");
+      }
+    }
+  }, [overall]);
 
   return (
     <div id="PageToolsPlayerPricing" className="h-100 w-100">
@@ -115,6 +213,25 @@ const PageToolsPlayerPricing: React.FC<PageToolsPlayerPricingProps> = () => {
             <div className="card d-flex flex-column flex-md-grow-0 m-2 p-3 pt-2">
               <div className="d-flex flex-row flex-md-grow-1">
                 <h4 className="flex-grow-1">Player profile</h4>
+
+                {(position ||
+                  age ||
+                  minAge ||
+                  maxAge ||
+                  overall ||
+                  minOverall ||
+                  maxOverall) && (
+                  <div className="flex-glow-0">
+                    <button
+                      className="btn btn-sm btn-link align-self-start"
+                      onClick={() => clearForm()}
+                      data-bs-toggle="tooltip"
+                      data-bs-title="Default tooltip"
+                    >
+                      <i class="bi bi-x-square-fill text-warning"></i>
+                    </button>
+                  </div>
+                )}
 
                 {sales && (
                   <div className="flex-glow-0">
@@ -129,17 +246,82 @@ const PageToolsPlayerPricing: React.FC<PageToolsPlayerPricingProps> = () => {
               </div>
 
               <div className="d-flex flex-fill flex-column">
-                <input
-                  type="number"
-                  min="30"
-                  max="100"
-                  step="1"
-                  className="form-control w-100 mb-1"
-                  value={overall}
-                  onChange={(v) => setOverall(parseInt(v.target.value))}
-                  placeholder={"OVR"}
-                  autoFocus
-                />
+                {!isAdvancedModeActive ? (
+                  <>
+                    <input
+                      type="number"
+                      min="30"
+                      max="100"
+                      step="1"
+                      className="form-control w-100 mb-1"
+                      value={overall}
+                      onChange={(v) => setOverall(parseInt(v.target.value))}
+                      placeholder={"OVR"}
+                    />
+                    <input
+                      type="number"
+                      min="15"
+                      max="40"
+                      step="1"
+                      className="form-control w-100 mb-1"
+                      value={age}
+                      onChange={(v) => setAge(parseInt(v.target.value))}
+                      placeholder={"Age"}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <div className="d-flex flex-row">
+                      <input
+                        type="number"
+                        min="30"
+                        max="100"
+                        step="1"
+                        className="form-control w-100 mb-1 me-1"
+                        value={minOverall}
+                        onChange={(v) =>
+                          setMinOverall(parseInt(v.target.value))
+                        }
+                        placeholder={"Min OVR"}
+                      />
+                      <input
+                        type="number"
+                        min="30"
+                        max="100"
+                        step="1"
+                        className="form-control w-100 mb-1 ms-1"
+                        value={maxOverall}
+                        onChange={(v) =>
+                          setMaxOverall(parseInt(v.target.value))
+                        }
+                        placeholder={"Max OVR"}
+                      />
+                    </div>
+                    <div className="d-flex flex-row">
+                      <input
+                        type="number"
+                        min="15"
+                        max="40"
+                        step="1"
+                        className="form-control w-100 mb-1 me-1"
+                        value={minAge}
+                        onChange={(v) => setMinAge(parseInt(v.target.value))}
+                        placeholder={"Max age"}
+                      />
+                      <input
+                        type="number"
+                        min="15"
+                        max="40"
+                        step="1"
+                        className="form-control w-100 mb-1 ms-1"
+                        value={maxAge}
+                        onChange={(v) => setMaxAge(parseInt(v.target.value))}
+                        placeholder={"Max age"}
+                      />
+                    </div>
+                  </>
+                )}
+
                 <select
                   className="form-select w-100 mb-1"
                   value={position}
@@ -153,16 +335,6 @@ const PageToolsPlayerPricing: React.FC<PageToolsPlayerPricingProps> = () => {
                     </option>
                   ))}
                 </select>
-                <input
-                  type="number"
-                  min="15"
-                  max="40"
-                  step="1"
-                  className="form-control w-100 mb-1"
-                  value={age}
-                  onChange={(v) => setAge(parseInt(v.target.value))}
-                  placeholder={"Age"}
-                />
                 <div className="d-flex flex-fill justify-content-end align-items-end mb-1">
                   <small>
                     First position only
@@ -174,27 +346,39 @@ const PageToolsPlayerPricing: React.FC<PageToolsPlayerPricingProps> = () => {
                     />
                   </small>
                 </div>
-                <button
-                  className="btn btn-info text-white align-self-end"
-                  onClick={getData}
-                  disabled={!overall || !position || !age}
-                >
-                  Run
-                </button>
+
+                <div className="d-flex flex-fill justify-content-end flex-row align-items-end mb-1">
+                  <button
+                    className="btn text-info align-self-end"
+                    onClick={() =>
+                      setIsAdvancedModeActive(!isAdvancedModeActive)
+                    }
+                  >
+                    <i class="bi bi-sliders2 text-info"></i>{" "}
+                    {isAdvancedModeActive ? "Basic" : "Advanced"}
+                  </button>
+                  <button
+                    className="btn btn-info text-white align-self-end"
+                    onClick={getData}
+                    disabled={!isRunButtonActive()}
+                  >
+                    <i class="bi bi-arrow-right-square-fill text-white"></i> Run
+                  </button>
+                </div>
               </div>
             </div>
 
-            {/*<div className="card d-flex flex-column flex-fill m-2 p-3 pt-2">
-              <div className="d-flex flex-row">
-                <div className="d-flex">
-                  <h4 className="flex-grow-1">Pricing</h4>
+            {sales && sales.length === 500 && (
+              <div class="alert alert-warning m-2 p-3 pt-2" role="alert">
+                <div className="d-flex flex-row">
+                  <i class="bi bi-cone-striped me-2"></i>
+                  <div>
+                    Due to the broad selection, only the latest 500 sales are
+                    displayed.
+                  </div>
                 </div>
               </div>
-
-              <div className="d-flex flex-fill overflow-hidden">
-                <BoxSoonToCome />
-              </div>
-            </div>*/}
+            )}
           </div>
 
           <div className="d-flex flex-column flex-md-column flex-md-grow-1">
@@ -206,12 +390,13 @@ const PageToolsPlayerPricing: React.FC<PageToolsPlayerPricingProps> = () => {
 
                 <div className="d-flex flex-fill overflow-auto justify-content-end align-items-center">
                   <small className="me-md-3">
-                    Hide 1$ and lower
+                    Hide &le; 1$
                     <input
                       type="checkbox"
                       className="ms-1"
                       value={hideOneAndLower}
                       onChange={() => setHideOneAndLower(!hideOneAndLower)}
+                      disabled={!sales}
                     />
                   </small>
 
@@ -221,6 +406,7 @@ const PageToolsPlayerPricing: React.FC<PageToolsPlayerPricingProps> = () => {
                       (timeUnit === "w" ? " btn-info text-white" : " text-info")
                     }
                     onClick={() => setTimeUnit("w")}
+                    disabled={!sales}
                   >
                     W
                   </button>
@@ -230,6 +416,7 @@ const PageToolsPlayerPricing: React.FC<PageToolsPlayerPricingProps> = () => {
                       (timeUnit === "m" ? " btn-info text-white" : " text-info")
                     }
                     onClick={() => setTimeUnit("m")}
+                    disabled={!sales}
                   >
                     M
                   </button>
@@ -239,6 +426,7 @@ const PageToolsPlayerPricing: React.FC<PageToolsPlayerPricingProps> = () => {
                       (timeUnit === "q" ? " btn-info text-white" : " text-info")
                     }
                     onClick={() => setTimeUnit("q")}
+                    disabled={!sales}
                   >
                     Q
                   </button>
@@ -248,6 +436,7 @@ const PageToolsPlayerPricing: React.FC<PageToolsPlayerPricingProps> = () => {
                       (timeUnit === "y" ? " btn-info text-white" : " text-info")
                     }
                     onClick={() => setTimeUnit("y")}
+                    disabled={!sales}
                   >
                     Y
                   </button>
@@ -276,7 +465,7 @@ const PageToolsPlayerPricing: React.FC<PageToolsPlayerPricingProps> = () => {
               <div className="d-flex flex-fill overflow-hidden">
                 <div className="d-flex flex-fill overflow-hidden">
                   {!sales && !isLoading ? (
-                    <BoxMessage content="No criteria selected" />
+                    <BoxMessage content="No selection" />
                   ) : (
                     <ChartScatterPlayerSales
                       sales={sales}

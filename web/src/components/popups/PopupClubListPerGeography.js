@@ -9,6 +9,7 @@ interface PopupClubListPerGeographyProps {
   country: String;
   city: String;
   open: Boolean;
+  includeMfl: Boolean;
 }
 
 const PopupClubListPerGeography: React.FC<PopupClubListPerGeographyProps> = ({
@@ -16,6 +17,7 @@ const PopupClubListPerGeography: React.FC<PopupClubListPerGeographyProps> = ({
   country,
   city,
   open,
+  includeMfl,
 }) => {
   const [clubs, setClubs] = useState(null);
 
@@ -25,7 +27,7 @@ const PopupClubListPerGeography: React.FC<PopupClubListPerGeographyProps> = ({
         setClubs(d.data.getClubs);
       },
       handleError: (e) => console.log(e),
-      params: { city, country },
+      params: { city, country, includeMfl: includeMfl },
     });
   };
 

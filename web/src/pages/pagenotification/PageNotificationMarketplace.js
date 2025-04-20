@@ -1,18 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { NotificationManager as nm } from "react-notifications";
-import ButtonLogin from "components/buttons/ButtonLogin.js";
-import BoxLogin from "components/box/BoxLogin.js";
-import LoadingSquare from "components/loading/LoadingSquare.js";
 import BoxMessage from "components/box/BoxMessage.js";
-import UtilConditionalRender from "components/utils/UtilConditionalRender.js";
-import PopupNotificationScope from "components/popups/PopupNotificationScope.js";
-import ItemNotificationScope from "components/items/ItemNotificationScope.js";
 import ItemNotification from "components/items/ItemNotification.js";
-import ItemPlayer from "components/items/ItemPlayer.js";
+import ItemNotificationScope from "components/items/ItemNotificationScope.js";
+import LoadingSquare from "components/loading/LoadingSquare.js";
+import PopupNotificationScope from "components/popups/PopupNotificationScope.js";
+import UtilConditionalRender from "components/utils/UtilConditionalRender.js";
+import React, { useEffect, useState } from "react";
 import {
   getNotificationScopesAndNotifications,
   getNotificationsOfNotificationScope,
-  sendConfirmationMail,
 } from "services/api-assistant.js";
 
 interface PageNotificationMarketplaceProps {}
@@ -25,56 +20,54 @@ const PageNotificationMarketplace: React.FC<
   const [selectedNotificationScope, setSelectedNotificationScope] =
     useState(null);
   const [selectedNotification, setSelectedNotification] = useState(null);
+  const [skip, setSkip] = useState(0);
 
   const fetchNotificationScopesAndNotifications = () => {
     getNotificationScopesAndNotifications({
       handleSuccess: (v) => {
         setNotificationScopes(v.data.getNotificationScopes);
-        setNotifications(v.data.getNotifications);
       },
     });
   };
 
   const fetchNotificationsOfNotificationScope = () => {
-    if (selectedNotificationScope) {
-      getNotificationsOfNotificationScope({
-        handleSuccess: (v) => {
-          if (notifications) {
-            setNotifications(notifications.concat(v.data.getNotifications));
-          } else {
-            setNotifications(v.data.getNotifications);
-          }
-        },
-        params: {
-          notificationScope: selectedNotificationScope.id,
-          skip: notifications ? notifications.length : 0,
-          limit: 10,
-          order: -1,
-        },
-      });
-    }
+    getNotificationsOfNotificationScope({
+      handleSuccess: (v) => {
+        if (skip > 0) {
+          setNotifications(notifications.concat(v.data.getNotifications));
+        } else {
+          setNotifications(v.data.getNotifications);
+        }
+
+        setSkip(skip + 10);
+      },
+      params: {
+        notificationScope: selectedNotificationScope?.id,
+        limit: 10,
+        order: -1,
+        skip,
+      },
+    });
   };
 
   useEffect(() => {
     if (props.assistantUser && props.assistantUser.email) {
       fetchNotificationScopesAndNotifications();
+      fetchNotificationsOfNotificationScope();
     }
   }, [props.assistantUser]);
 
   useEffect(() => {
     setNotifications(null);
     setSelectedNotification(null);
-  }, [selectedNotificationScope]);
+    setSkip(0);
+  }, [selectedNotificationScope, notificationScopes]);
 
   useEffect(() => {
-    if (notifications === null) {
-      if (selectedNotificationScope && selectedNotificationScope.id) {
-        fetchNotificationsOfNotificationScope();
-      } else {
-        setNotifications([]);
-      }
+    if (skip === 0) {
+      fetchNotificationsOfNotificationScope();
     }
-  }, [notifications]);
+  }, [skip]);
 
   return (
     <div id="PageNotificationMarketplace" className="h-100 w-100">
@@ -171,11 +164,13 @@ const PageNotificationMarketplace: React.FC<
                       />
                     ))}
 
-                    {selectedNotificationScope && notifications && (
+                    {notifications && (
                       <div className="d-flex justify-content-start">
                         <button
                           className="btn btn-sm btn-link"
-                          onClick={fetchNotificationsOfNotificationScope}
+                          onClick={() =>
+                            fetchNotificationsOfNotificationScope()
+                          }
                         >
                           Load more
                         </button>

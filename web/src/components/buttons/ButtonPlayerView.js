@@ -1,15 +1,17 @@
 import React from "react";
 
 interface ButtonPlayerViewProps {
-  selectedView?: string;
-  onChange?: func;
-  displayPricing?: Boolean;
+  selectedView ? : string;
+  onChange ? : func;
+  displayPricing ? : Boolean;
+  displayOwner ? : Boolean;
 }
 
-const ButtonPlayerView: React.FC<ButtonPlayerViewProps> = ({
+const ButtonPlayerView: React.FC < ButtonPlayerViewProps > = ({
   selectedView,
   onChange,
   displayPricing,
+  displayOwner
 }) => {
   return (
     <div className="d-flex flex-row ms-md-2 border rounded-2">
@@ -52,6 +54,17 @@ const ButtonPlayerView: React.FC<ButtonPlayerViewProps> = ({
           onClick={() => onChange("pricing")}
         >
           Pricing
+        </button>
+      )}
+      {displayOwner && (
+        <button
+          className={
+            "btn btn-small" +
+            (selectedView === "owner" ? " btn-info text-white" : " text-info")
+          }
+          onClick={() => onChange("owner")}
+        >
+          Owner
         </button>
       )}
     </div>

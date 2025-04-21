@@ -69,6 +69,24 @@ services:
     expose:
       - "3000"
 
+  webcoach:
+    image: mfl-coach_web:local
+    container_name: mfl-coach
+    build:
+      context: ../web-coach
+      dockerfile: Dockerfile
+    tty: true
+    volumes:
+      - ../web-coach:/app
+      - /app/node_modules
+    command: npm start
+    environment:
+       - CHOKIDAR_USEPOLLING=true
+    ports:
+      - "3001:3000"
+    expose:
+      - "3001"
+
   mariadb:
     image: mariadb:10.11
     container_name: mariadb

@@ -11,6 +11,7 @@
 
 # dependencies
 /web/node_modules
+/web-coach/node_modules
 /api/venv
 /.pnp
 .pnp.js

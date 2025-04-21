@@ -26,7 +26,7 @@
 }
 
 #Menu .nav-link-search:hover {
-  color: #0dcaf0;
+  color: #f86285;
 }
 
 #Menu .Menu-login i,
@@ -40,12 +40,12 @@
 }
 
 #Menu .Menu-login:hover {
-  color: #0dcaf0;
+  color: #f86285;
 }
 
 #Menu .Menu-hq:hover i,
 #Menu .Menu-hq:hover div {
-  color: #0dcaf0 !important;
+  color: #f86285 !important;
 }
 
 @media (max-width: 992px) {
@@ -107,7 +107,7 @@
 }
 
 #Menu a.nav-link:hover i {
-  color: #0dcaf0;
+  color: #f86285;
 }
 
 @keyframes in-out {

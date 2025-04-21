@@ -1,6 +1,6 @@
 import React from "react";
 
-interface PageFormation {
+interface PageFormationProps {
   yScrollPosition: number;
 }
 

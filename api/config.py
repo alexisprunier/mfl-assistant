@@ -18,7 +18,7 @@ def _getenv(key, default=None, mandatory=True):
 ENVIRONMENT =       _getenv('ENVIRONMENT',      default='dev')
 PORT =              _getenv('PORT',             default=5000)
 HOST =              _getenv('HOST',             default=f"http://127.0.0.1:{PORT}")
-ORIGINS =           _getenv('ORIGINS',          default="http://127.0.0.1:3000,http://127.0.0.1:5000").split(",")
+ORIGINS =           _getenv('ORIGINS',          default="http://127.0.0.1:3000,http://127.0.0.1:3001,http://127.0.0.1:5000").split(",")
 WEBAPP_ENDPOINT =   _getenv('WEBAPP_ENDPOINT',  default="http://127.0.0.1:3000")
 
 # AUTH

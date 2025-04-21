@@ -48,46 +48,48 @@ const Menu: React.FC<MenuProps> = (props) => {
           </li>
           <li className="nav-item">
             <Link
-              to="/dash"
+              to="/match-analysis"
               className={
                 "nav-link" +
-                (location.pathname.startsWith("/dash") ? " active" : "")
+                (location.pathname.startsWith("/match-analysis")
+                  ? " active"
+                  : "")
               }
             >
-              {location.pathname.startsWith("/dash") &&
-                getMenuLabel("Dashboard", "d-none d-lg-inline")}
+              {location.pathname.startsWith("/match-analysis") &&
+                getMenuLabel("Match analysis", "d-none d-lg-inline")}
               <div className="px-2 px-lg-0">
-                {location.pathname.startsWith("/dash") ? (
+                {location.pathname.startsWith("/match-analysis") ? (
                   <i className="bi bi-clipboard-data-fill"></i>
                 ) : (
                   <i className="bi bi-clipboard-data"></i>
                 )}
               </div>
-              {location.pathname.startsWith("/dash") &&
-                getMenuLabel("Dashboard", "d-inline d-lg-none")}
+              {location.pathname.startsWith("/match-analysis") &&
+                getMenuLabel("Analysis", "d-inline d-lg-none")}
             </Link>
           </li>
-          <li className="nav-item">
+          {/*<li className="nav-item">
             <Link
               to="/tools"
               className={
                 "nav-link" +
-                (location.pathname.startsWith("/tools") ? " active" : "")
+                (location.pathname.startsWith("/formation") ? " active" : "")
               }
             >
-              {location.pathname.startsWith("/tools") &&
-                getMenuLabel("Tools", "d-none d-lg-inline")}
+              {location.pathname.startsWith("/formation") &&
+                getMenuLabel("Formation", "d-none d-lg-inline")}
               <div className="px-2 px-lg-0">
-                {location.pathname.startsWith("/tools") ? (
+                {location.pathname.startsWith("/formation") ? (
                   <i className="bi bi-wrench-adjustable-circle-fill"></i>
                 ) : (
                   <i className="bi bi-wrench-adjustable-circle"></i>
                 )}
               </div>
-              {location.pathname.startsWith("/tools") &&
+              {location.pathname.startsWith("/formation") &&
                 getMenuLabel("Tools", "d-inline d-lg-none")}
             </Link>
-          </li>
+          </li>*/}
         </ul>
       </div>
 

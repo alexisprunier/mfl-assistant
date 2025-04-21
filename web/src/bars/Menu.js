@@ -5,7 +5,7 @@ import ButtonLogin from "components/buttons/ButtonLogin.js";
 
 interface MenuProps {}
 
-const Menu: React.FC<MenuProps> = (props) => {
+const Menu: React.FC < MenuProps > = (props) => {
   const location = useLocation();
 
   const getMenuLabel = (text, cl) => {
@@ -67,9 +67,9 @@ const Menu: React.FC<MenuProps> = (props) => {
                 getMenuLabel("Dashboard", "d-none d-lg-inline")}
               <div className="px-2 px-lg-0">
                 {location.pathname.startsWith("/dash") ? (
-                  <i className="bi bi-clipboard-data-fill"></i>
+                  <i className="bi bi-graph-up-arrow"></i>
                 ) : (
-                  <i className="bi bi-clipboard-data"></i>
+                  <i className="bi bi-graph-up"></i>
                 )}
               </div>
               {location.pathname.startsWith("/dash") &&
@@ -88,9 +88,9 @@ const Menu: React.FC<MenuProps> = (props) => {
                 getMenuLabel("Tools", "d-none d-lg-inline")}
               <div className="px-2 px-lg-0">
                 {location.pathname.startsWith("/tools") ? (
-                  <i className="bi bi-wrench-adjustable-circle-fill"></i>
+                  <i className="bi bi-wrench-adjustable"></i>
                 ) : (
-                  <i className="bi bi-wrench-adjustable-circle"></i>
+                  <i className="bi bi-wrench-adjustable"></i>
                 )}
               </div>
               {location.pathname.startsWith("/tools") &&

@@ -1,8 +1,8 @@
 import Menu from "bars/Menu";
 import Page404 from "pages/Page404";
 import PageHome from "pages/PageHome";
-import PageMatches from "pages/PageMatches.js";
-import PageFormation from "pages/pagedash/PageFormation.js";
+import PageMatchAnalysis from "pages/PageMatchAnalysis.js";
+import PageFormation from "pages/PageFormation.js";
 import React, { useState } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 
@@ -49,8 +49,11 @@ const Router: React.FC = (props) => {
                 />
               }
             />
-            <Route path="/matches" element={<PageMatches />} />
-            <Route path="/formation" element={<PageFormation />} />
+            <Route
+              path="/match-analysis"
+              element={<PageMatchAnalysis {...props} />}
+            />
+            {/* <Route path="/formation" element={<PageFormation />} /> */}
 
             {/* 404 */}
             <Route element={<Page404 />} />

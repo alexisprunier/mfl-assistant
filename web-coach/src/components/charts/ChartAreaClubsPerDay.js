@@ -1,37 +1,38 @@
-import React from 'react';
-import { Line } from 'react-chartjs-2';
+import React from "react";
+import { Line } from "react-chartjs-2";
 import LoadingSquare from "components/loading/LoadingSquare";
 import { divisions } from "utils/division.js";
-import { Chart as ChartJS, CategoryScale } from 'chart.js';
-import 'chartjs-adapter-date-fns';
+import { Chart as ChartJS, CategoryScale } from "chart.js";
+import "chartjs-adapter-date-fns";
 
-ChartJS.register(
-  CategoryScale,
-);
+ChartJS.register(CategoryScale);
 
 interface ChartAreaClubsPerDayProps {
   data: object;
 }
 
-const ChartAreaClubsPerDay: React.FC < ChartAreaClubsPerDayProps > = ({ data }) => {
-
+const ChartAreaClubsPerDay: React.FC<ChartAreaClubsPerDayProps> = ({
+  data,
+}) => {
   const getData = () => ({
     labels: data.map((d) => d.date),
-    datasets: [{
-      fill: true,
-      borderColor: "#0dcaf0",
-      backgroundColor: "rgba(13,202,240,.4)",
-      data: data.map((d) => d.value),
-    }],
+    datasets: [
+      {
+        fill: true,
+        borderColor: "#f86285",
+        backgroundColor: "rgba(13,202,240,.4)",
+        data: data.map((d) => d.value),
+      },
+    ],
   });
 
   const options = {
     responsive: true,
     maintainAspectRatio: false,
-    indexAxis: 'x',
+    indexAxis: "x",
     scales: {
       x: {
-        type: 'time',
+        type: "time",
         ticks: {
           beginAtZero: true,
         },
@@ -43,11 +44,11 @@ const ChartAreaClubsPerDay: React.FC < ChartAreaClubsPerDayProps > = ({ data }) 
           display: false,
         },
         time: {
-          unit: 'month',
-          tooltipFormat: 'yyyy-MM-dd',
+          unit: "month",
+          tooltipFormat: "yyyy-MM-dd",
           displayFormats: {
-            day: 'yyyy-MM-dd',
-            month: 'MMM yyyy',
+            day: "yyyy-MM-dd",
+            month: "MMM yyyy",
           },
         },
       },
@@ -67,7 +68,7 @@ const ChartAreaClubsPerDay: React.FC < ChartAreaClubsPerDayProps > = ({ data }) 
     },
     plugins: {
       legend: {
-        display: false
+        display: false,
       },
       datalabels: {
         display: false,
@@ -77,13 +78,7 @@ const ChartAreaClubsPerDay: React.FC < ChartAreaClubsPerDayProps > = ({ data }) 
 
   return (
     <div className="h-100 w-100">
-      {!data
-        ? <LoadingSquare />
-        : <Line
-          data={getData()}
-          options={options}
-        />
-      }
+      {!data ? <LoadingSquare /> : <Line data={getData()} options={options} />}
     </div>
   );
 };

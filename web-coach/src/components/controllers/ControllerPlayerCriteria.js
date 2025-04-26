@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { divisions } from "utils/division.js";
 
 interface ControllerPlayerCriteriaProps {
@@ -6,7 +6,10 @@ interface ControllerPlayerCriteriaProps {
   onChange: func;
 }
 
-const ControllerPlayerCriteria: React.FC < ControllerPlayerCriteriaProps > = ({ selectedCriteria, onChange }) => {
+const ControllerPlayerCriteria: React.FC<ControllerPlayerCriteriaProps> = ({
+  selectedCriteria,
+  onChange,
+}) => {
   const [criteria, setCriteria] = useState(["OVR", "AGE", "POS"]);
 
   const onClick = (p) => {
@@ -21,8 +24,8 @@ const ControllerPlayerCriteria: React.FC < ControllerPlayerCriteriaProps > = ({ 
           onClick={() => onClick(c)}
           style={
             selectedCriteria && selectedCriteria == c
-              ? { color: "white", backgroundColor: "#0dcaf0" }
-              : { color: "#0dcaf0" }
+              ? { color: "white", backgroundColor: "#f86285" }
+              : { color: "#f86285" }
           }
         >
           {c}

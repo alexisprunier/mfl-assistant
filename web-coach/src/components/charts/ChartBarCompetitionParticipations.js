@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 // eslint-disable-next-line no-unused-vars
-import { Chart as ChartJS } from 'chart.js/auto';
-import { Bar } from 'react-chartjs-2';
+import { Chart as ChartJS } from "chart.js/auto";
+import { Bar } from "react-chartjs-2";
 import LoadingSquare from "components/loading/LoadingSquare";
 import { sortDataset, fillMonthlyDataset } from "utils/chart.js";
 import { unixTimestampToMonthString } from "utils/date.js";
@@ -14,8 +14,9 @@ interface ChartLineCompetitionParticipationsProps {
   competitions: Competition[];
 }
 
-const ChartLineCompetitionParticipations: React.FC<ChartLineCompetitionParticipationsProps> = ({ competitions }) => {
-  
+const ChartLineCompetitionParticipations: React.FC<
+  ChartLineCompetitionParticipationsProps
+> = ({ competitions }) => {
   const computeData = () => {
     const data = {};
 
@@ -30,21 +31,22 @@ const ChartLineCompetitionParticipations: React.FC<ChartLineCompetitionParticipa
     }
 
     return sortDataset(fillMonthlyDataset(data));
-  }
+  };
 
   return (
     <div className="mb-4 py-2 px-1 px-md-3">
       <div className="ratio ratio-16x9 w-100">
-        {!competitions
-          ? <LoadingSquare />
-          : <Bar
+        {!competitions ? (
+          <LoadingSquare />
+        ) : (
+          <Bar
             data={{
               labels: [],
               datasets: [
                 {
                   data: computeData(),
                   fill: false,
-                  backgroundColor: "#0dcaf0",
+                  backgroundColor: "#f86285",
                   lineTension: 0.3,
                 },
               ],
@@ -63,7 +65,7 @@ const ChartLineCompetitionParticipations: React.FC<ChartLineCompetitionParticipa
                   },
                   title: {
                     display: true,
-                    text: 'Month',
+                    text: "Month",
                   },
                   grid: {
                     display: false,
@@ -75,21 +77,21 @@ const ChartLineCompetitionParticipations: React.FC<ChartLineCompetitionParticipa
                   },
                   title: {
                     display: true,
-                    text: 'Participant',
+                    text: "Participant",
                   },
                   grid: {
-                    color: '#333',
+                    color: "#333",
                   },
                   border: {
-                    color: '#333',
+                    color: "#333",
                   },
                 },
               },
             }}
           />
-        }
+        )}
       </div>
-  	</div>
+    </div>
   );
 };
 

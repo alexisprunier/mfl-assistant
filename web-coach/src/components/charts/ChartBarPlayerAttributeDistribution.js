@@ -27,7 +27,7 @@ const ChartBarPlayerAttributeDistribution: React.FC<
         {
           label: "Median",
           data: attributes.map((attr) => data[attr]?.median || 0),
-          backgroundColor: "#0dcaf0",
+          backgroundColor: "#f86285",
         },
         {
           label: "Max",

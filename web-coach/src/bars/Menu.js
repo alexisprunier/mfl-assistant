@@ -24,6 +24,16 @@ const Menu: React.FC<MenuProps> = (props) => {
 
   return (
     <nav id="Menu" className="navbar h-100 flex-lg-column px-3 py-2">
+      <div className="d-flex flex-grow-0 align-items-center">
+        <img
+          width="auto"
+          className="mt-lg-2 me-1 me-lg-0"
+          style={{ maxWidth: "32px" }}
+          src="/media/images/coach.png"
+          alt="MFL Assistant"
+        />
+      </div>
+
       <div className="d-flex flex-grow-1 align-items-lg-center">
         <ul className="navbar-nav flex-row flex-lg-column h4">
           <li className="nav-item">
@@ -43,7 +53,7 @@ const Menu: React.FC<MenuProps> = (props) => {
                 )}
               </div>
               {location.pathname === "/" &&
-                getMenuLabel("Home", "d-inline d-lg-none")}
+                getMenuLabel("", "d-inline d-lg-none")}
             </Link>
           </li>
           <li className="nav-item">
@@ -66,7 +76,7 @@ const Menu: React.FC<MenuProps> = (props) => {
                 )}
               </div>
               {location.pathname.startsWith("/match-analysis") &&
-                getMenuLabel("Analysis", "d-inline d-lg-none")}
+                getMenuLabel("", "d-inline d-lg-none")}
             </Link>
           </li>
           {/*<li className="nav-item">

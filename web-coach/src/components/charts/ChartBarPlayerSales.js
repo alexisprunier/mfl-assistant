@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 // eslint-disable-next-line no-unused-vars
-import { Chart as ChartJS } from 'chart.js/auto';
-import { Bar } from 'react-chartjs-2';
+import { Chart as ChartJS } from "chart.js/auto";
+import { Bar } from "react-chartjs-2";
 import LoadingSquare from "components/loading/LoadingSquare";
 import { sortDataset } from "utils/chart.js";
 import { unixTimestampToDayString } from "utils/date.js";
@@ -15,7 +15,6 @@ interface ChartBarPlayerSalesProps {
 }
 
 const ChartBarPlayerSales: React.FC<ChartBarPlayerSalesProps> = ({ sales }) => {
-  
   const computeData = () => {
     let data = {};
 
@@ -30,21 +29,22 @@ const ChartBarPlayerSales: React.FC<ChartBarPlayerSalesProps> = ({ sales }) => {
     }
 
     return sortDataset(data);
-  }
+  };
 
   return (
     <div className="mb-4 py-2 px-1 px-md-3">
       <div className="ratio ratio-16x9 w-100">
-        {!sales
-          ? <LoadingSquare />
-          : <Bar
+        {!sales ? (
+          <LoadingSquare />
+        ) : (
+          <Bar
             data={{
               labels: [],
               datasets: [
                 {
                   data: computeData(),
                   fill: false,
-                  backgroundColor: "#0dcaf0",
+                  backgroundColor: "#f86285",
                   lineTension: 0.3,
                 },
               ],
@@ -62,7 +62,7 @@ const ChartBarPlayerSales: React.FC<ChartBarPlayerSalesProps> = ({ sales }) => {
                   },
                   title: {
                     display: true,
-                    text: 'Day',
+                    text: "Day",
                   },
                   grid: {
                     display: false,
@@ -74,21 +74,21 @@ const ChartBarPlayerSales: React.FC<ChartBarPlayerSalesProps> = ({ sales }) => {
                   },
                   title: {
                     display: true,
-                    text: 'Sale',
+                    text: "Sale",
                   },
                   grid: {
-                    color: '#333',
+                    color: "#333",
                   },
                   border: {
-                    color: '#333',
+                    color: "#333",
                   },
                 },
               },
             }}
           />
-        }
+        )}
       </div>
-  	</div>
+    </div>
   );
 };
 

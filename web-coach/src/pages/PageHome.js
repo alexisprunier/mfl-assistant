@@ -25,14 +25,14 @@ const PageHome: React.FC<PageHomeProps> = ({
     <div id="PageHome" className="h-100">
       {window.innerWidth < 768 && yScrollPosition < 100 && <BoxScrollDown />}
       {window.innerWidth < 768 && yScrollPosition >= 100 && <BoxScrollUp />}
-      <div className="h-lg-100 w-100">
-        <div className="d-flex h-lg-100 w-100 flex-column flex-lg-row flex-nowrap">
+      <div className="h-100 w-100">
+        <div className="d-flex h-100 w-100 flex-column flex-lg-row flex-nowrap">
           <div
-            className="d-flex flex-column flex-lg-grow-1 flex-lg-basis-50p h-100 pe-lg-3 pb-lg-3"
+            className="d-flex flex-column flex-grow-1 flex-basis-50p h-100 pe-lg-3 pb-lg-3"
             style={{ minWidth: "0" }}
           >
-            <div className="d-flex flex-column flex-lg-fill ps-lg-3">
-              <div className="main-view d-flex flex-column flex-lg-row flex-lg-fill justify-content-center">
+            <div className="d-flex flex-column flex-fill ps-lg-3">
+              <div className="main-view d-flex flex-row flex-grow-1 justify-content-center">
                 <div className="d-flex flex-column align-self-center position-relative">
                   <img
                     width="auto"
@@ -112,18 +112,20 @@ const PageHome: React.FC<PageHomeProps> = ({
                 </div>
               </div>
 
-              <div className="d-flex flex-column flex-lg-row justify-content-center align-items-center my-1 px-3">
-                <div className="d-flex flex-grow-0 card flex-column mx-2 px-4 py-2">
-                  <div className="d-flex justify-content-center align-items-center">
-                    <div className="text-center">
-                      <i className="bi bi-clipboard-data h4"></i>
-                      <br />
-                      Match analysis
+              <div className="d-flex flex-row justify-content-center align-items-center mt-1 mb-2 px-3">
+                <Link to="/match-analysis">
+                  <div className="d-flex flex-grow-0 card flex-column mx-1 px-4 py-2">
+                    <div className="d-flex justify-content-center align-items-center">
+                      <div className="text-center">
+                        <i className="bi bi-clipboard-data h4"></i>
+                        <br />
+                        Match analysis
+                      </div>
                     </div>
                   </div>
-                </div>
+                </Link>
 
-                <div className="d-flex flex-grow-0 card flex-column mx-2 px-4 py-2">
+                <div className="d-flex flex-grow-0 card flex-column mx-1 px-4 py-2">
                   <div className="d-flex justify-content-center align-items-center">
                     <div className="text-center">
                       <i className="bi bi-cone-striped h4"></i>

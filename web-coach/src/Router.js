@@ -2,7 +2,7 @@ import Menu from "bars/Menu";
 import Page404 from "pages/Page404";
 import PageHome from "pages/PageHome";
 import PageMatchAnalysis from "pages/PageMatchAnalysis.js";
-import PageFormation from "pages/PageFormation.js";
+import PageUser from "pages/PageUser.js";
 import React, { useState } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 
@@ -52,6 +52,12 @@ const Router: React.FC = (props) => {
             <Route
               path="/match-analysis"
               element={<PageMatchAnalysis {...props} />}
+            />
+            <Route
+              path="/user/:address"
+              element={
+                <PageUser {...props} yScrollPosition={yScrollPosition} />
+              }
             />
             {/* <Route path="/formation" element={<PageFormation />} /> */}
 

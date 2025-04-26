@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 // eslint-disable-next-line no-unused-vars
-import { Chart as ChartJS } from 'chart.js/auto';
-import { Bar } from 'react-chartjs-2';
+import { Chart as ChartJS } from "chart.js/auto";
+import { Bar } from "react-chartjs-2";
 import LoadingSquare from "components/loading/LoadingSquare";
 import { sortDataset, fillMonthlyDataset } from "utils/chart.js";
 import { unixTimestampToMonthString } from "utils/date.js";
@@ -14,25 +14,33 @@ interface ChartLineCompetitionsProps {
   competitions: Competition[];
 }
 
-const ChartLineCompetitions: React.FC<ChartLineCompetitionsProps> = ({ competitions }) => {
-  
+const ChartLineCompetitions: React.FC<ChartLineCompetitionsProps> = ({
+  competitions,
+}) => {
   const computeData = () => {
     const data = {};
 
-    const cleanedCompetitions = competitions.map((c) => ({
-      name: c.root?.name ? c.root.name : c.name,
-      startingDate: c.startingDate,
-      type: c.type,
-    }))
-    .reduce((accumulator, current) => {
-      if (!accumulator.find((item) => item.startingDate === current.startingDate)) {
-        accumulator.push(current);
-      }
-      return accumulator;
-    }, []);
+    const cleanedCompetitions = competitions
+      .map((c) => ({
+        name: c.root?.name ? c.root.name : c.name,
+        startingDate: c.startingDate,
+        type: c.type,
+      }))
+      .reduce((accumulator, current) => {
+        if (
+          !accumulator.find(
+            (item) => item.startingDate === current.startingDate
+          )
+        ) {
+          accumulator.push(current);
+        }
+        return accumulator;
+      }, []);
 
     for (let i = 0; i < cleanedCompetitions.length; i++) {
-      let month = unixTimestampToMonthString(cleanedCompetitions[i].startingDate);
+      let month = unixTimestampToMonthString(
+        cleanedCompetitions[i].startingDate
+      );
 
       if (!data[month]) {
         data[month] = 1;
@@ -42,21 +50,22 @@ const ChartLineCompetitions: React.FC<ChartLineCompetitionsProps> = ({ competiti
     }
 
     return sortDataset(fillMonthlyDataset(data));
-  }
+  };
 
   return (
     <div className="mb-4 py-2 px-1 px-md-3">
       <div className="ratio ratio-16x9 w-100">
-        {!competitions
-          ? <LoadingSquare />
-          : <Bar
+        {!competitions ? (
+          <LoadingSquare />
+        ) : (
+          <Bar
             data={{
               labels: [],
               datasets: [
                 {
                   data: computeData(),
                   fill: false,
-                  backgroundColor: "#0dcaf0",
+                  backgroundColor: "#f86285",
                   lineTension: 0.3,
                 },
               ],
@@ -74,11 +83,11 @@ const ChartLineCompetitions: React.FC<ChartLineCompetitionsProps> = ({ competiti
                     beginAtZero: true,
                   },
                   time: {
-                    unit: 'month'
+                    unit: "month",
                   },
                   title: {
                     display: true,
-                    text: 'Month',
+                    text: "Month",
                   },
                   grid: {
                     display: false,
@@ -90,21 +99,21 @@ const ChartLineCompetitions: React.FC<ChartLineCompetitionsProps> = ({ competiti
                   },
                   title: {
                     display: true,
-                    text: 'Competition',
+                    text: "Competition",
                   },
                   grid: {
-                    color: '#333',
+                    color: "#333",
                   },
                   border: {
-                    color: '#333',
+                    color: "#333",
                   },
                 },
               },
             }}
           />
-        }
+        )}
       </div>
-  	</div>
+    </div>
   );
 };
 

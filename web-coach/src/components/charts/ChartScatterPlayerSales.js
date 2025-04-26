@@ -99,7 +99,7 @@ const ChartScatterPlayerSales: React.FC<ChartScatterPlayerSalesProps> = ({
               datasets: [
                 {
                   ...computeData(),
-                  pointBackgroundColor: "#0dcaf0",
+                  pointBackgroundColor: "#f86285",
                   pointBorderWidth: 0,
                   pointRadius: 5,
                   pointHoverRadius: 8,
@@ -155,7 +155,7 @@ const ChartScatterPlayerSales: React.FC<ChartScatterPlayerSalesProps> = ({
                           type: "line",
                           scaleID: "y",
                           value: floor,
-                          borderColor: "#0dcaf0",
+                          borderColor: "#f86285",
                           borderWidth: 2,
                           borderDash: [6, 6],
                           label: {
@@ -167,7 +167,7 @@ const ChartScatterPlayerSales: React.FC<ChartScatterPlayerSalesProps> = ({
                               weight: "bold",
                               size: 9,
                             },
-                            backgroundColor: "#0dcaf0",
+                            backgroundColor: "#f86285",
                             padding: { top: 2, bottom: 2, left: 4, right: 4 },
                           },
                         },

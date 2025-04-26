@@ -223,140 +223,152 @@ const PageToolsMatchAnalysis: React.FC<PageToolsMatchAnalysisProps> = (
 
   return (
     <div id="PageToolsMatchAnalysis" className="h-100 w-100">
-      <div className="container-xl h-100 px-2 px-md-4 py-4">
-        <div className="d-flex flex-column flex-md-row">
-          <div className="d-flex flex-column flex-md-grow-0 flex-md-basis-300">
-            <div className="card d-flex flex-column flex-md-grow-0 m-2 p-3 pt-2 fade-in">
-              <div className="d-flex flex-row">
-                <h4 className="flex-grow-1">My club</h4>
+      <div className="h-100 w-100">
+        <nav className="TopBar navbar w-100 ps-md-5 px-4 py-2">
+          <h3 className="my-2">
+            <i className="bi bi-clipboard-data-fill me-2"></i> Match analysis
+          </h3>
+        </nav>
 
-                {club && (
-                  <button
-                    className="btn btn-warning btn-small text-white mb-2"
-                    onClick={() => setClub(null)}
-                  >
-                    <i className="bi bi-x-square-fill text-white"></i>
-                  </button>
-                )}
+        <div className="container-xl px-md-4 py-4">
+          <div className="d-flex flex-column flex-md-row">
+            <div className="d-flex flex-column flex-md-grow-0 flex-md-basis-300">
+              <div className="card d-flex flex-column flex-md-grow-0 m-2 p-3 pt-2 fade-in">
+                <div className="d-flex flex-row">
+                  <h4 className="flex-grow-1">My club</h4>
+
+                  {club && (
+                    <button
+                      className="btn btn-warning btn-small text-white mb-2"
+                      onClick={() => setClub(null)}
+                    >
+                      <i className="bi bi-x-square-fill text-white"></i>
+                    </button>
+                  )}
+                </div>
+
+                <div className="d-flex justify-content-center">
+                  {club ? (
+                    <div className="d-flex flex-column flex-md-grow-1 flex-fill">
+                      <ItemCardClub id={club.id} name={club.name} />
+                    </div>
+                  ) : (
+                    <PopupSelectClub
+                      userId={props.assistantUser.id}
+                      trigger={
+                        <button className="btn btn-info text-white">
+                          <i className="bi bi-check-lg" /> Select club
+                        </button>
+                      }
+                      onConfirm={(c) => setClub(c)}
+                    />
+                  )}
+                </div>
               </div>
 
-              <div className="d-flex justify-content-center">
-                {club ? (
-                  <div className="d-flex flex-column flex-md-grow-1 flex-fill">
-                    <ItemCardClub id={club.id} name={club.name} />
+              {(opponentClubs || isOpponentLoading) && (
+                <div className="card d-flex flex-column flex-md-grow-1 m-2 p-3 pt-2 fade-in">
+                  <div className="d-flex flex-row flex-md-grow-0">
+                    <h4 className="flex-grow-1">My opponents</h4>
                   </div>
-                ) : (
-                  <PopupSelectClub
-                    userId={props.assistantUser.id}
-                    trigger={
-                      <button className="btn btn-info text-white">
-                        <i className="bi bi-check-lg" /> Select club
-                      </button>
-                    }
-                    onConfirm={(c) => setClub(c)}
-                  />
-                )}
-              </div>
+
+                  {isOpponentLoading && (
+                    <div className="ratio ratio-16x9 w-100">
+                      <LoadingSquare />
+                    </div>
+                  )}
+
+                  {!isOpponentLoading && (
+                    <div className="d-flex flex-column flex-md-grow-1 overflow-auto">
+                      {opponentClubs.map((c) => (
+                        <div className="my-1">
+                          <ItemCardClub
+                            id={c.id}
+                            name={c.name}
+                            text={
+                              c.playCount +
+                              " match" +
+                              (c.playCount > 1 ? "es" : "")
+                            }
+                            onClick={(id) => setSelectedOpponentId(id)}
+                            selected={c.id === selectedOpponentId}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
-            {(opponentClubs || isOpponentLoading) && (
-              <div className="card d-flex flex-column flex-md-grow-1 m-2 p-3 pt-2 fade-in">
-                <div className="d-flex flex-row flex-md-grow-0">
-                  <h4 className="flex-grow-1">My opponents</h4>
-                </div>
-
-                {isOpponentLoading && (
-                  <div className="ratio ratio-16x9 w-100">
-                    <LoadingSquare />
+            <div className="d-flex flex-column flex-md-grow-0 flex-md-basis-300">
+              {opponentMatches && (
+                <div className="card d-flex flex-column flex-md-grow-1 flex-md-shrink-1 m-2 p-3 pt-2 fade-in">
+                  <div className="d-flex flex-row">
+                    <h4 className="flex-grow-1">Matches</h4>
                   </div>
-                )}
 
-                {!isOpponentLoading && (
-                  <div className="d-flex flex-column flex-md-grow-1 overflow-auto">
-                    {opponentClubs.map((c) => (
-                      <div className="my-1">
-                        <ItemCardClub
-                          id={c.id}
-                          name={c.name}
-                          text={
-                            c.playCount +
-                            " match" +
-                            (c.playCount > 1 ? "es" : "")
-                          }
-                          onClick={(id) => setSelectedOpponentId(id)}
-                          selected={c.id === selectedOpponentId}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-
-          <div className="d-flex flex-column flex-md-grow-0 flex-md-basis-300">
-            {opponentMatches && (
-              <div className="card d-flex flex-column flex-md-grow-1 flex-md-shrink-1 m-2 p-3 pt-2 fade-in">
-                <div className="d-flex flex-row">
-                  <h4 className="flex-grow-1">Matches</h4>
-                </div>
-
-                <div className="d-flex flex-fill flex-column">
-                  {opponentMatches &&
-                    opponentMatches.map((m) => (
-                      <div className="my-1">
-                        <ItemCardMatch
-                          match={m}
-                          onClick={(id) => {
-                            if (selectedOpponentMatchIds.indexOf(id) >= 0) {
-                              setSelectedOpponentMatchIds(
-                                selectedOpponentMatchIds.filter((i) => i !== id)
-                              );
-                            } else {
-                              setSelectedOpponentMatchIds([
-                                ...selectedOpponentMatchIds,
-                                ...[id],
-                              ]);
+                  <div className="d-flex flex-fill flex-column">
+                    {opponentMatches &&
+                      opponentMatches.map((m) => (
+                        <div className="my-1">
+                          <ItemCardMatch
+                            match={m}
+                            onClick={(id) => {
+                              if (selectedOpponentMatchIds.indexOf(id) >= 0) {
+                                setSelectedOpponentMatchIds(
+                                  selectedOpponentMatchIds.filter(
+                                    (i) => i !== id
+                                  )
+                                );
+                              } else {
+                                setSelectedOpponentMatchIds([
+                                  ...selectedOpponentMatchIds,
+                                  ...[id],
+                                ]);
+                              }
+                            }}
+                            disabled={loadingMatchReport}
+                            selected={
+                              selectedOpponentMatchIds.indexOf(m.id) >= 0
                             }
-                          }}
-                          disabled={loadingMatchReport}
-                          selected={selectedOpponentMatchIds.indexOf(m.id) >= 0}
-                        />
-                      </div>
-                    ))}
-                </div>
-              </div>
-            )}
-          </div>
-
-          <div className="d-flex flex-column flex-grow-1">
-            {currentAggregatedReport?.myClub &&
-              Object.keys(currentAggregatedReport.myClub).length > 0 && (
-                <div className="d-flex flex-column">
-                  <ItemCardMatchReport
-                    report={currentAggregatedReport}
-                    title={"Current report"}
-                    loading={loadingMatchReport}
-                  />
-
-                  <div className="d-flex justify-content-end">
-                    <button
-                      className="d-block btn btn-info btn-sm text-white mb-1 me-2"
-                      onClick={() => saveCurrentAggregatedReport()}
-                    >
-                      <i className="bi bi-box-arrow-down"></i> Save report
-                    </button>
+                          />
+                        </div>
+                      ))}
                   </div>
                 </div>
               )}
+            </div>
 
-            {aggregatedReports.map((r, i) => (
-              <ItemCardMatchReport
-                report={r}
-                title={"Saved report " + (aggregatedReports.length - i)}
-                key={i}
-              />
-            ))}
+            <div className="d-flex flex-column flex-grow-1">
+              {currentAggregatedReport?.myClub &&
+                Object.keys(currentAggregatedReport.myClub).length > 0 && (
+                  <div className="d-flex flex-column">
+                    <ItemCardMatchReport
+                      report={currentAggregatedReport}
+                      title={"Current report"}
+                      loading={loadingMatchReport}
+                    />
+
+                    <div className="d-flex justify-content-end">
+                      <button
+                        className="d-block btn btn-info btn-sm text-white mb-1 me-2"
+                        onClick={() => saveCurrentAggregatedReport()}
+                      >
+                        <i className="bi bi-box-arrow-down"></i> Save report
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+              {aggregatedReports.map((r, i) => (
+                <ItemCardMatchReport
+                  report={r}
+                  title={"Saved report " + (aggregatedReports.length - i)}
+                  key={i}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>

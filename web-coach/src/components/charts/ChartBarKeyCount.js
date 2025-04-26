@@ -1,36 +1,36 @@
-import React from 'react';
-import { Chart as ChartJS } from 'chart.js/auto';
-import { Bar } from 'react-chartjs-2';
+import React from "react";
+import { Chart as ChartJS } from "chart.js/auto";
+import { Bar } from "react-chartjs-2";
 import LoadingSquare from "components/loading/LoadingSquare";
 import { sortDataset, fillMonthlyDataset } from "utils/chart.js";
 import { unixTimestampToMonthString } from "utils/date.js";
-import ChartDataLabels from 'chartjs-plugin-datalabels';
+import ChartDataLabels from "chartjs-plugin-datalabels";
 
-ChartJS.register(
-  ChartDataLabels
-);
+ChartJS.register(ChartDataLabels);
 
 interface ChartBarKeyCountProps {
-  data ? : object;
+  data?: object;
 }
 
-const ChartBarKeyCount: React.FC < ChartBarKeyCountProps > = ({ data }) => {
-
+const ChartBarKeyCount: React.FC<ChartBarKeyCountProps> = ({ data }) => {
   const getData = () => {
     return {
       labels: data.sort((a, b) => a.key - b.key).map((d) => d.key),
-      datasets: [{
-        data: data.sort((a, b) => a.key - b.key).map((d) => d.count),
-        backgroundColor: "#0dcaf0",
-      }],
+      datasets: [
+        {
+          data: data.sort((a, b) => a.key - b.key).map((d) => d.count),
+          backgroundColor: "#f86285",
+        },
+      ],
     };
   };
 
   return (
     <div className="h-100 w-100">
-      {!data
-        ? <LoadingSquare />
-        : <Bar
+      {!data ? (
+        <LoadingSquare />
+      ) : (
+        <Bar
           data={getData()}
           options={{
             responsive: true,
@@ -42,15 +42,15 @@ const ChartBarKeyCount: React.FC < ChartBarKeyCountProps > = ({ data }) => {
                 display: false,
               },
               datalabels: {
-                anchor: 'end',
-                align: 'end',
-                color: 'rgb(173, 181, 189)',
+                anchor: "end",
+                align: "end",
+                color: "rgb(173, 181, 189)",
                 font: {
-                  weight: 'bold',
+                  weight: "bold",
                   size: 16,
                 },
-                formatter: (val) => (val > 0 ? val : '')
-              }
+                formatter: (val) => (val > 0 ? val : ""),
+              },
             },
             scales: {
               x: {
@@ -78,7 +78,7 @@ const ChartBarKeyCount: React.FC < ChartBarKeyCountProps > = ({ data }) => {
             },
           }}
         />
-      }
+      )}
     </div>
   );
 };

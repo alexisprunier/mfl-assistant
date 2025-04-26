@@ -98,6 +98,16 @@ services:
     ports:
       - "3000:80"
 
+  webcoach:
+    image: mfl-coach_web:local
+    container_name: webcoach
+    build:
+      context: ../web-coach
+      dockerfile: production/Dockerfile.prod
+      target: production
+    ports:
+      - "3000:80"
+
   mariadb:
     image: mariadb:10.11
     container_name: mariadb

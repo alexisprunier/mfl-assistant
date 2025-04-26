@@ -106,7 +106,7 @@ services:
       dockerfile: production/Dockerfile.prod
       target: production
     ports:
-      - "3000:80"
+      - "3001:80"
 
   mariadb:
     image: mariadb:10.11

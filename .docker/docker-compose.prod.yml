@@ -62,7 +62,7 @@ services:
       dockerfile: Dockerfile
     env_file: api.prod.env
     environment:
-      ORIGINS: "https://mfl-assistant.com,https://www.mfl-assistant.com"
+      ORIGINS: "https://mfl-assistant.com,https://www.mfl-assistant.com,https://mfl-coach.com,https://www.mfl-coach.com"
       HOST: "https://api.mfl-assistant.com/"
       WEBAPP_ENDPOINT: "https://mfl-assistant.com"
       DB_HOSTNAME: "mongodb"

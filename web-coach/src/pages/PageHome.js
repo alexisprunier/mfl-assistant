@@ -11,7 +11,7 @@ interface PageHomeProps {
   yScrollPosition: number;
 }
 
-const PageHome: React.FC<PageHomeProps> = ({
+const PageHome: React.FC < PageHomeProps > = ({
   props,
   flowUser,
   assistantUser,
@@ -23,8 +23,6 @@ const PageHome: React.FC<PageHomeProps> = ({
 
   return (
     <div id="PageHome" className="h-100">
-      {window.innerWidth < 768 && yScrollPosition < 100 && <BoxScrollDown />}
-      {window.innerWidth < 768 && yScrollPosition >= 100 && <BoxScrollUp />}
       <div className="h-100 w-100">
         <div className="d-flex h-100 w-100 flex-column flex-lg-row flex-nowrap">
           <div

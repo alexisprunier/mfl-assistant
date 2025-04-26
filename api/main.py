@@ -18,7 +18,6 @@ from fastapi.responses import HTMLResponse
 import json
 from datetime import datetime, timedelta
 from utils.flow import verify_signature
-from update_player_sales import update_sales_data
 
 # FastAPI setup
 

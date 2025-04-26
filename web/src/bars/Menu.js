@@ -5,7 +5,7 @@ import ButtonLogin from "components/buttons/ButtonLogin.js";
 
 interface MenuProps {}
 
-const Menu: React.FC < MenuProps > = (props) => {
+const Menu: React.FC<MenuProps> = (props) => {
   const location = useLocation();
 
   const getMenuLabel = (text, cl) => {
@@ -33,6 +33,16 @@ const Menu: React.FC < MenuProps > = (props) => {
           </Link>
         )}
 
+      <div className="d-flex flex-grow-0 align-items-center">
+        <img
+          width="auto"
+          className="mt-lg-2 me-1 me-lg-0"
+          style={{ maxWidth: "32px" }}
+          src="/media/images/assistant.png"
+          alt="MFL Assistant"
+        />
+      </div>
+
       <div className="d-flex flex-grow-1 align-items-lg-center">
         <ul className="navbar-nav flex-row flex-lg-column h4">
           <li className="nav-item">
@@ -51,8 +61,8 @@ const Menu: React.FC < MenuProps > = (props) => {
                   <i className="bi bi-house"></i>
                 )}
               </div>
-              {location.pathname === "/" &&
-                getMenuLabel("Home", "d-inline d-lg-none")}
+              {/*location.pathname === "/" &&
+                getMenuLabel("", "d-inline d-lg-none")*/}
             </Link>
           </li>
           <li className="nav-item">
@@ -73,7 +83,7 @@ const Menu: React.FC < MenuProps > = (props) => {
                 )}
               </div>
               {location.pathname.startsWith("/dash") &&
-                getMenuLabel("Dashboard", "d-inline d-lg-none")}
+                getMenuLabel("Dash", "d-inline d-lg-none")}
             </Link>
           </li>
           <li className="nav-item">
@@ -115,7 +125,7 @@ const Menu: React.FC < MenuProps > = (props) => {
                 )}
               </div>
               {location.pathname.startsWith("/notification") &&
-                getMenuLabel("Notification", "d-inline d-lg-none")}
+                getMenuLabel("Notif.", "d-inline d-lg-none")}
             </Link>
           </li>
           <li className="nav-item">

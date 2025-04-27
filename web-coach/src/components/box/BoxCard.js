@@ -22,9 +22,11 @@ const BoxCard: React.FC<BoxCardProps> = ({
       }
     >
       <div className="d-flex flex-row">
-        <div className="d-flex">
-          <h4 className="flex-grow-1">{title}</h4>
-        </div>
+        {title && (
+          <div className="d-flex">
+            <h4 className="flex-grow-1">{title}</h4>
+          </div>
+        )}
 
         <div className="d-flex flex-fill overflow-auto justify-content-end align-items-end">
           {actions}

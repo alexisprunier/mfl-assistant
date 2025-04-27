@@ -961,3 +961,43 @@ export const getRawPlayerPricings = ({
     (v) => defaultHandleSuccess(handleSuccess, v),
     (e) => defaultHandleError(handleError, e)
   );
+
+export const getFormationMetaEngines = ({
+  handleSuccess = null,
+  handleError = null,
+}) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `{
+          getFormationMetaEngines() {
+            key
+          }
+        }`,
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );
+
+export const getFormationMetas = ({
+  handleSuccess = null,
+  handleError = null,
+  params,
+}) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `{
+          getFormationMetas(${jsonToParams(params)}) {
+            formation1,
+            formation2,
+            victories,
+            draws,
+            defeats,
+            engine
+          }
+        }`,
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );

@@ -352,3 +352,13 @@ class MatchType(ObjectType):
     awayUser = Field(UserType)
     homeClub = Field(ClubType)
     awayClub = Field(ClubType)
+
+class FormationMetaType(ObjectType):
+    id = ID(source='_id')
+    last_computation_date = DateTime()
+    formation1 = String()
+    formation2 = String()
+    victories = Int()
+    draws = Int()
+    defeats = Int()
+    engine = String()

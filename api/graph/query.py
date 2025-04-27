@@ -1,5 +1,5 @@
 from graphene import ObjectType, String, Int, Schema, Field, List, ID, Boolean, Date
-from graph.schema import RawPlayerPricingType, PlayerPricingType, UserType, GeolocationType, SaleType, ContractType, NotificationScopeType, NotificationType, CountType, DataPointType, ClubType, TeamType, TeamMemberType, PlayerType, ReportConfigurationType, ReportType
+from graph.schema import RawPlayerPricingType, FormationMetaType, PlayerPricingType, UserType, GeolocationType, SaleType, ContractType, NotificationScopeType, NotificationType, CountType, DataPointType, ClubType, TeamType, TeamMemberType, PlayerType, ReportConfigurationType, ReportType
 from bson import ObjectId
 from decorator.require_token import require_token
 from decorator.add_token_if_exists import add_token_if_exists
@@ -911,3 +911,41 @@ class Query(ObjectType):
         ]
 
         return flattened_results
+
+    get_formation_metas = List(FormationMetaType, search=String(required=True))
+
+    async def resolve_get_formation_metas(self, info, engine):
+
+        query = {
+            "engine": engine
+        }
+
+        result = [
+            item async for item in info.context["db"].formation_metas.find(query)
+        ]
+
+        return result
+
+    get_formation_metas = List(String)
+
+    async def resolve_get_formation_meta_engines(self, info):
+
+        pipeline = [
+            {
+                "$group": {
+                    "_id": "$engine"
+                }
+            },
+            {
+                "$project": {
+                    "_id": 0,
+                    "engine": "$_id"
+                }
+            }
+        ]
+        
+        result = [
+            item["engine"] async for item in info.context["db"].formation_metas.aggregate(pipeline)
+        ]
+        
+        return result

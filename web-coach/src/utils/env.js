@@ -12,7 +12,7 @@ export const getApiEndpoint = () => {
   if (isLocalEnv()) {
     return "http://127.0.0.1:5000/";
   }
-  return "https://api.mfl-assistant.com/";
+  return "https://api.mfl-coach.com/";
 }
 
 export const getGraphQLEndpoint = () => {

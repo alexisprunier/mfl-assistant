@@ -912,7 +912,7 @@ class Query(ObjectType):
 
         return flattened_results
 
-    get_formation_metas = List(FormationMetaType, search=String(required=True))
+    get_formation_metas = List(FormationMetaType, engine=String(required=True))
 
     async def resolve_get_formation_metas(self, info, engine):
 
@@ -926,7 +926,7 @@ class Query(ObjectType):
 
         return result
 
-    get_formation_metas = List(String)
+    get_formation_meta_engines = List(String)
 
     async def resolve_get_formation_meta_engines(self, info):
 

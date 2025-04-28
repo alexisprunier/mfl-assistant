@@ -53,7 +53,7 @@ async def main(db):
             "formation2": key[1], 
             "victories": value['victories'], 
             "draws": value['draws'],
-            "defeat": value['defeats'], 
+            "defeats": value['defeats'], 
             "engine": value['engine']
         } for key, value in formation_stats.items()]
 

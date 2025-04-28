@@ -75,7 +75,7 @@ const Menu: React.FC<MenuProps> = (props) => {
               </div>
             </Link>
           </li>
-          <li className="nav-item">
+          {/*<li className="nav-item">
             <Link
               to="/formation-meta"
               className={
@@ -95,7 +95,7 @@ const Menu: React.FC<MenuProps> = (props) => {
                 )}
               </div>
             </Link>
-          </li>
+          </li>*/}
         </ul>
       </div>
 

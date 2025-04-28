@@ -970,9 +970,7 @@ export const getFormationMetaEngines = ({
     getGraphQLEndpoint(),
     JSON.stringify({
       query: `{
-          getFormationMetaEngines() {
-            key
-          }
+          getFormationMetaEngines
         }`,
     }),
     (v) => defaultHandleSuccess(handleSuccess, v),

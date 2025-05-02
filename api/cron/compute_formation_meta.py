@@ -61,7 +61,9 @@ async def main(db):
         } for key, value in formation_stats.items()]
 
         await db.formation_metas.delete_many({"engine": engine})
-        await db.formation_metas.insert_many(result)
+
+        if result:
+            await db.formation_metas.insert_many(result)
 
     return result
 

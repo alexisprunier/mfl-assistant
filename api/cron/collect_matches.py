@@ -56,7 +56,6 @@ async def main(db):
                 elif response.status_code == 404:
                     logger.critical("collect_matches: 404 found for: " + str(last_stored_match_id))
                     last_stored_match_id += 1
-                    treated_match_count += 1
             except httpx.RequestError as e:
                 logger.error(f"Error fetching match data for {last_stored_match_id}: {e}")
                 break

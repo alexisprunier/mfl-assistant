@@ -17,6 +17,9 @@ async def main(db):
         formation_stats = defaultdict(lambda: {"victories": 0, "draws": 0, "defeats": 0, "engine": engine})
 
         for match in matches:
+            if 'homePositions' not in match or 'awayPositions' not in match:
+                continue
+
             # Calculate the overall ratings for both teams
             home_total_overall = calculate_team_overall(match['homePositions'], match['players'])
             away_total_overall = calculate_team_overall(match['awayPositions'], match['players'])

@@ -18,7 +18,7 @@ const BoxCard: React.FC<BoxCardProps> = ({
   return (
     <div
       className={
-        "card d-flex flex-column m-2 p-3 pt-2 " + (className ? className : "")
+        (className ? className : "") + " card d-flex flex-column m-2 p-3 pt-2"
       }
     >
       <div className="d-flex flex-row">

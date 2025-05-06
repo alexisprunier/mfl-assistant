@@ -1,11 +1,14 @@
 
 #PageFormationMeta {
 
+    .formation-box {
+        padding-top: 0px !important;
+    }
+
     .table-container {
     width: 100%;
-    height: 500px; /* or whatever you want */
     overflow: auto;
-    border: 1px solid #808080;
+    border: 0px solid rgba(255, 255, 255, 0.15);
     }
     
     .formation-table {
@@ -16,7 +19,7 @@
     
     .formation-table th,
     .formation-table td {
-    border: 1px solid #808080;
+    border: 1px solid rgba(255, 255, 255, 0.15);
     padding: 8px 12px;
     text-align: center;
     background: #16191C;

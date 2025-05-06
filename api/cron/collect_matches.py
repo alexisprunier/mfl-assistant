@@ -8,7 +8,7 @@ last_matches_url = "https://z519wdyajg.execute-api.us-east-1.amazonaws.com/prod/
 base_url = "https://z519wdyajg.execute-api.us-east-1.amazonaws.com/prod/matches/"
 
 min_match_id_stepping = 1
-max_match_id_stepping = 5
+max_match_id_stepping = 10
 
 logger = logging.getLogger("collect_matches")
 logger.setLevel(logging.INFO)
@@ -49,6 +49,8 @@ async def main(db):
                     if raw_match_data["status"] != "ENDED":
                         logger.critical("collect_matches: crossed non ENDED match: " + str(last_stored_match_id))
                         last_stored_match_id += 1
+                        if last_match_id - last_stored_match_id < 1000:
+                            break
                     else:
                         await _treat_match(db, raw_match_data)
                         last_stored_match_id += 1

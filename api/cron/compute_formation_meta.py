@@ -12,7 +12,13 @@ async def main(db):
     engines = await db.matches.distinct("engine")
 
     for engine in engines:
-        matches = await db.matches.find({"engine": engine}).to_list(None)
+        matches = await db.matches.find({
+            "engine": engine,
+            "$or": [
+                {"status": "ENDED"},
+                {"status": {"$exists": False}}
+            ]
+        }).to_list(None)
 
         formation_stats = defaultdict(lambda: {"victories": 0, "draws": 0, "defeats": 0, "engine": engine})
 

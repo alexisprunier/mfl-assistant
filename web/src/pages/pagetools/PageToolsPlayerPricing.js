@@ -13,7 +13,7 @@ import { convertDictToUrlParams } from "utils/url.js";
 
 interface PageToolsPlayerPricingProps {}
 
-const PageToolsPlayerPricing: React.FC<PageToolsPlayerPricingProps> = () => {
+const PageToolsPlayerPricing: React.FC < PageToolsPlayerPricingProps > = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
@@ -29,15 +29,15 @@ const PageToolsPlayerPricing: React.FC<PageToolsPlayerPricingProps> = () => {
     searchParams.get("age") ? parseInt(searchParams.get("age")) : ""
   );
   const [firstPositionOnly, setFirstPositionOnly] = useState(
-    searchParams.get("firstPositionOnly")
-      ? searchParams.get("firstPositionOnly") === "true"
-      : false
+    searchParams.get("firstPositionOnly") ?
+    searchParams.get("firstPositionOnly") === "true" :
+    false
   );
 
   const [isAdvancedModeActive, setIsAdvancedModeActive] = useState(
-    searchParams.get("isAdvancedModeActive")
-      ? searchParams.get("isAdvancedModeActive") === "true"
-      : false
+    searchParams.get("isAdvancedModeActive") ?
+    searchParams.get("isAdvancedModeActive") === "true" :
+    false
   );
 
   const [minAge, setMinAge] = useState(
@@ -47,14 +47,14 @@ const PageToolsPlayerPricing: React.FC<PageToolsPlayerPricingProps> = () => {
     searchParams.get("maxAge") ? parseInt(searchParams.get("maxAge")) : ""
   );
   const [minOverall, setMinOverall] = useState(
-    searchParams.get("minOverall")
-      ? parseInt(searchParams.get("minOverall"))
-      : ""
+    searchParams.get("minOverall") ?
+    parseInt(searchParams.get("minOverall")) :
+    ""
   );
   const [maxOverall, setMaxOverall] = useState(
-    searchParams.get("maxOverall")
-      ? parseInt(searchParams.get("maxOverall"))
-      : ""
+    searchParams.get("maxOverall") ?
+    parseInt(searchParams.get("maxOverall")) :
+    ""
   );
 
   const [sales, setSales] = useState(null);
@@ -68,8 +68,7 @@ const PageToolsPlayerPricing: React.FC<PageToolsPlayerPricingProps> = () => {
 
     if (isAdvancedModeActive) {
       navigate({
-        search:
-          "?" +
+        search: "?" +
           convertDictToUrlParams({
             minOverall,
             maxOverall,
@@ -82,8 +81,7 @@ const PageToolsPlayerPricing: React.FC<PageToolsPlayerPricingProps> = () => {
       });
     } else {
       navigate({
-        search:
-          "?" +
+        search: "?" +
           convertDictToUrlParams({
             overall,
             age,
@@ -450,7 +448,7 @@ const PageToolsPlayerPricing: React.FC<PageToolsPlayerPricingProps> = () => {
                         onlyPrimaryPosition: firstPositionOnly,
                       };
                       const url =
-                        "https://app.playmfl.com/marketplace?" +
+                        "https://app.playmfl.com/marketplace?sort=listing.price%3AASC&" +
                         convertDictToUrlParams(params);
                       window.open(url, "_blank");
                     }}

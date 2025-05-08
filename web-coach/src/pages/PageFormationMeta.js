@@ -16,6 +16,7 @@ const PageFormationMeta: React.FC<PageFormationMetaProps> = (props) => {
   const [formationMetas, setFormationMetas] = useState(null);
   const [formations, setFormations] = useState(null);
   const [dataMap, setDataMap] = useState(null);
+  const [totalMatches, setTotalMatches] = useState(null);
 
   const fetchFormationMetaEngines = () => {
     getFormationMetaEngines({
@@ -52,6 +53,12 @@ const PageFormationMeta: React.FC<PageFormationMetaProps> = (props) => {
           }
         );
         setDataMap(victoriesMap);
+
+        setTotalMatches(
+          d.data.getFormationMetas
+            .map((m) => m.victories + m.draws + m.defeats)
+            .reduce((sum, val) => sum + val, 0) / 2
+        );
       },
       handleError: (e) => console.log(e),
       params: { engine: selectedEngine },
@@ -67,6 +74,9 @@ const PageFormationMeta: React.FC<PageFormationMetaProps> = (props) => {
   }, []);
 
   useEffect(() => {
+    setFormationMetas(null);
+    setDataMap(null);
+    setTotalMatches(null);
     fetchFormationMetas();
   }, [selectedEngine]);
 
@@ -85,19 +95,25 @@ const PageFormationMeta: React.FC<PageFormationMetaProps> = (props) => {
             content={
               <>
                 {engines ? (
-                  <div>
-                    <select
-                      className="form-control w-100 text-white"
-                      value={selectedEngine}
-                      onChange={(v) => setSelectedEngine(v.target.value)}
-                    >
-                      <option value={""} key={null} />
-                      {engines.map((p) => (
-                        <option value={p.toString()} key={p.toString()}>
-                          {p}
-                        </option>
-                      ))}
-                    </select>
+                  <div className="d-flex flex-fill flex-column flex-lg-row">
+                    <div className="d-flex flex-grow-0">
+                      <select
+                        className="form-control w-100 text-white"
+                        value={selectedEngine}
+                        onChange={(v) => setSelectedEngine(v.target.value)}
+                      >
+                        <option value={""} key={null} />
+                        {engines.map((p) => (
+                          <option value={p.toString()} key={p.toString()}>
+                            {p}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="d-flex flex-grow-1 justify-content-end align-items-center">
+                      <i class="bi bi-info-circle-fill me-1"></i>
+                      Max OVR difference: 20
+                    </div>
                   </div>
                 ) : (
                   <LoadingSquare />
@@ -133,7 +149,14 @@ const PageFormationMeta: React.FC<PageFormationMetaProps> = (props) => {
                           <th
                             className="sticky top-left"
                             style={{ minWidth: "120px" }}
-                          ></th>
+                          >
+                            {totalMatches && (
+                              <>
+                                <div>{totalMatches}</div>
+                                <div>Matches</div>
+                              </>
+                            )}
+                          </th>
                           {formations.map((formation2) => (
                             <th className="sticky top" key={formation2}>
                               {shortenFormationName(formation2)}

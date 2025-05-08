@@ -86,6 +86,9 @@ const PageFormationMeta: React.FC<PageFormationMetaProps> = (props) => {
         <h3 className="my-2">
           <i className="bi bi-grid-3x3-gap-fill me-2"></i> Formation meta
         </h3>
+        <span class="text-warning">
+          <i class="bi bi-cone-striped me-1"></i>ALPHA
+        </span>
       </nav>
 
       <div className="d-flex flex-grow-1 flex-column container-xl px-2 px-md-4 py-4">

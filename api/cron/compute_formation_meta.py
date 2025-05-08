@@ -27,8 +27,8 @@ async def main(db):
                 continue
 
             # Calculate the overall ratings for both teams
-            home_total_overall = calculate_team_overall(match['homePositions'], match['players'])
-            away_total_overall = calculate_team_overall(match['awayPositions'], match['players'])
+            home_total_overall = calculate_team_overall(match['homePositions'], match['players'], match['modifiers'])
+            away_total_overall = calculate_team_overall(match['awayPositions'], match['players'], match['modifiers'])
 
             # Skip matches where the overall difference exceeds 10
             if abs(home_total_overall - away_total_overall) > 20:
@@ -73,13 +73,21 @@ async def main(db):
 
     return result
 
-def calculate_team_overall(positions, players):
+def calculate_team_overall(positions, players, modifiers):
 
-    #TODO take the modifiers in account
+    total = 0
 
-    total_overall = 0
-    for position in positions:
-        player_id = position['player']
-        if player_id in players:
-            total_overall += players[player_id][1]
-    return total_overall
+    player_ids = [str(p["player"]) for p in positions]
+
+    for player_id in player_ids:
+        total += players[player_id][1]
+
+    for modifier in modifiers:
+        if modifier["target"]["type"] == "players" and "ids" in modifier["target"]:
+            for m_id in modifier["target"]["ids"]:
+                if str(m_id) in player_ids:
+                    for value in modifier["values"]:
+                        if value["field"] in ["ovr", "overall"]:
+                            total += value["value"]
+
+    return total

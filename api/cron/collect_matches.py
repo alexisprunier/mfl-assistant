@@ -49,7 +49,7 @@ async def main(db):
                     if raw_match_data["status"] != "ENDED":
                         logger.critical("collect_matches: crossed non ENDED match: " + str(last_stored_match_id))
                         last_stored_match_id += 1
-                        logger.critical("collect_matches: should i continue: " + str(last_match_id) + " - " +str(last_stored_match_id))
+                        await _treat_match(db, raw_match_data)
                         if last_match_id - last_stored_match_id < 1000:
                             break
                     else:

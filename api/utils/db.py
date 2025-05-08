@@ -246,6 +246,8 @@ async def build_and_upsert_match(db, mfl_match, home_user=None, away_user=None, 
         "last_computation_date": datetime.datetime.now(),
     }
 
+    if "status" in mfl_match:
+        match["status"] = mfl_match["status"]
     if "type" in mfl_match:
         match["type"] = mfl_match["type"]
     if "competition" in mfl_match and "id" in mfl_match["competition"]:

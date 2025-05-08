@@ -334,6 +334,7 @@ class PositionType(ObjectType):
 class MatchType(ObjectType):
     id = ID(source='_id')
     last_computation_date = DateTime()
+    status = String()
     type = String()
     competitionId = String()
     competitionName = String()

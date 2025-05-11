@@ -17,11 +17,48 @@ const PageFormationMeta: React.FC<PageFormationMetaProps> = (props) => {
   const [formations, setFormations] = useState(null);
   const [dataMap, setDataMap] = useState(null);
   const [totalMatches, setTotalMatches] = useState(null);
+  const [displays, setDisplays] = useState([
+    "Victory rate",
+    "Victory and draw rate",
+    "Point average",
+  ]);
+  const [selectedDisplay, setSelectedDisplay] = useState("Victory rate");
 
   const fetchFormationMetaEngines = () => {
     getFormationMetaEngines({
       handleSuccess: (d) => {
-        setEngines(d.data.getFormationMetaEngines.sort());
+        const orderedEngines = d.data.getFormationMetaEngines.sort((a, b) => {
+          const parse = (v) => {
+            const [main] = v.split("/");
+            const [maj, min, rest] = main.split(".");
+            const [patch, beta] = rest.split("-beta.");
+            return {
+              major: +maj,
+              minor: +min,
+              patch: +patch,
+              isBeta: rest.includes("beta"),
+              betaNum: beta ? +beta : Infinity,
+            };
+          };
+          const va = parse(a),
+            vb = parse(b);
+
+          return (
+            vb.major - va.major ||
+            vb.minor - va.minor ||
+            vb.patch - va.patch ||
+            (va.isBeta !== vb.isBeta
+              ? va.isBeta
+                ? 1
+                : -1
+              : vb.betaNum - va.betaNum)
+          );
+        });
+
+        setEngines(orderedEngines);
+        setSelectedEngine(
+          orderedEngines.filter((e) => !e.includes("beta"))[0] ?? null
+        );
       },
       handleError: (e) => console.log(e),
     });
@@ -39,10 +76,10 @@ const PageFormationMeta: React.FC<PageFormationMetaProps> = (props) => {
         });
         setFormations(Array.from(set).sort());
 
-        const victoriesMap = {};
+        const dataMap = {};
         d.data.getFormationMetas.forEach(
           ({ formation1, formation2, victories, draws, defeats, engine }) => {
-            victoriesMap[`${formation1}||${formation2}`] = {
+            dataMap[`${formation1}||${formation2}`] = {
               formation1,
               formation2,
               victories,
@@ -52,7 +89,7 @@ const PageFormationMeta: React.FC<PageFormationMetaProps> = (props) => {
             };
           }
         );
-        setDataMap(victoriesMap);
+        setDataMap(dataMap);
 
         setTotalMatches(
           d.data.getFormationMetas
@@ -99,15 +136,26 @@ const PageFormationMeta: React.FC<PageFormationMetaProps> = (props) => {
               <>
                 {engines ? (
                   <div className="d-flex flex-fill flex-column flex-lg-row">
-                    <div className="d-flex flex-grow-0">
+                    <div className="d-flex flex-grow-0 flex-column flex-sm-row">
                       <select
-                        className="form-control w-100 text-white"
+                        className="form-control w-100 text-white me-0 me-sm-1"
                         value={selectedEngine}
                         onChange={(v) => setSelectedEngine(v.target.value)}
                       >
                         <option value={""} key={null} />
                         {engines.map((p) => (
                           <option value={p.toString()} key={p.toString()}>
+                            {p}
+                          </option>
+                        ))}
+                      </select>
+                      <select
+                        className="form-control w-100 text-white"
+                        value={selectedDisplay}
+                        onChange={(v) => setSelectedDisplay(v.target.value)}
+                      >
+                        {displays.map((p) => (
+                          <option value={p} key={p}>
                             {p}
                           </option>
                         ))}
@@ -178,19 +226,46 @@ const PageFormationMeta: React.FC<PageFormationMetaProps> = (props) => {
                             </th>
                             {formations.map((formation2) => {
                               const key = `${formation1}||${formation2}`;
-                              const victories =
+                              let data = "";
+                              if (
                                 dataMap[key] &&
                                 dataMap[key].victories &&
                                 dataMap[key].draws &&
                                 dataMap[key].defeats
-                                  ? Math.round(
-                                      (dataMap[key].victories /
+                              ) {
+                                if (selectedDisplay === "Victory rate") {
+                                  data = Math.round(
+                                    (dataMap[key].victories /
+                                      (dataMap[key].victories +
+                                        dataMap[key].draws +
+                                        dataMap[key].defeats)) *
+                                      100
+                                  );
+                                } else if (
+                                  selectedDisplay === "Victory and draw rate"
+                                ) {
+                                  data = Math.round(
+                                    ((dataMap[key].victories +
+                                      dataMap[key].draws) /
+                                      (dataMap[key].victories +
+                                        dataMap[key].draws +
+                                        dataMap[key].defeats)) *
+                                      100
+                                  );
+                                } else if (
+                                  selectedDisplay === "Point average"
+                                ) {
+                                  data =
+                                    Math.round(
+                                      (100 *
+                                        (dataMap[key].victories * 3 +
+                                          dataMap[key].draws)) /
                                         (dataMap[key].victories +
                                           dataMap[key].draws +
-                                          dataMap[key].defeats)) *
-                                        100
-                                    )
-                                  : "";
+                                          dataMap[key].defeats)
+                                    ) / 100;
+                                }
+                              }
                               const matches =
                                 dataMap[key] &&
                                 dataMap[key].victories &&
@@ -212,7 +287,11 @@ const PageFormationMeta: React.FC<PageFormationMetaProps> = (props) => {
                                         }
                                       : {
                                           backgroundColor: `rgba(248, 98, 133, ${
-                                            victories ? victories / 400 : 0
+                                            data
+                                              ? selectedDisplay.includes("rate")
+                                                ? data / 100 / 4
+                                                : data / 3 / 4
+                                              : 0
                                           })`,
                                         }
                                   }
@@ -220,8 +299,10 @@ const PageFormationMeta: React.FC<PageFormationMetaProps> = (props) => {
                                   <PopupFormationInfo
                                     trigger={
                                       <div>
-                                        {victories}
-                                        {victories && "%"}
+                                        {data}
+                                        {data &&
+                                          selectedDisplay.includes("rate") &&
+                                          "%"}
                                         <div
                                           className="position-absolute"
                                           style={{

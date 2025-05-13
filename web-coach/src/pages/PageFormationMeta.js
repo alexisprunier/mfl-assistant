@@ -16,6 +16,7 @@ const PageFormationMeta: React.FC<PageFormationMetaProps> = (props) => {
   const [formationMetas, setFormationMetas] = useState(null);
   const [formations, setFormations] = useState(null);
   const [dataMap, setDataMap] = useState(null);
+  const [globalDataMap, setGlobalDataMap] = useState(null);
   const [totalMatches, setTotalMatches] = useState(null);
   const [displays, setDisplays] = useState([
     "Victory rate",
@@ -23,6 +24,7 @@ const PageFormationMeta: React.FC<PageFormationMetaProps> = (props) => {
     "Point average",
   ]);
   const [selectedDisplay, setSelectedDisplay] = useState("Victory rate");
+  const [detailedView, setDetailedView] = useState(true);
 
   const fetchFormationMetaEngines = () => {
     getFormationMetaEngines({
@@ -91,6 +93,27 @@ const PageFormationMeta: React.FC<PageFormationMetaProps> = (props) => {
         );
         setDataMap(dataMap);
 
+        const globalDataMap = {};
+        d.data.getFormationMetas.forEach(
+          ({ formation1, victories, draws, defeats, engine }) => {
+            if (!globalDataMap[formation1]) {
+              globalDataMap[formation1] = {
+                formation1,
+                formation2: null,
+                victories: 0,
+                draws: 0,
+                defeats: 0,
+                engine: engine,
+              };
+            }
+
+            globalDataMap[formation1].victories += victories;
+            globalDataMap[formation1].draws += draws;
+            globalDataMap[formation1].defeats += defeats;
+          }
+        );
+        setGlobalDataMap(globalDataMap);
+
         setTotalMatches(
           d.data.getFormationMetas
             .map((m) => m.victories + m.draws + m.defeats)
@@ -104,6 +127,90 @@ const PageFormationMeta: React.FC<PageFormationMetaProps> = (props) => {
 
   const shortenFormationName = (n) => {
     return n.replace(/([a-zA-Z])[a-zA-Z]*/g, "$1");
+  };
+
+  const getDetailCellValue = (data) => {
+    let output = "";
+    if (data && data.victories && data.draws && data.defeats) {
+      if (selectedDisplay === "Victory rate") {
+        output = Math.round(
+          (data.victories / (data.victories + data.draws + data.defeats)) * 100
+        );
+      } else if (selectedDisplay === "Victory and draw rate") {
+        output = Math.round(
+          ((data.victories + data.draws) /
+            (data.victories + data.draws + data.defeats)) *
+            100
+        );
+      } else if (selectedDisplay === "Point average") {
+        output =
+          Math.round(
+            (100 * (data.victories * 3 + data.draws)) /
+              (data.victories + data.draws + data.defeats)
+          ) / 100;
+      }
+    }
+
+    return output;
+  };
+
+  const countMatches = (data) => {
+    return data && data.victories && data.draws && data.defeats
+      ? data.victories + data.draws + data.defeats
+      : "";
+  };
+
+  const buildCell = (data, formation1, formation2, overridenValue = null) => {
+    const value = getDetailCellValue(data);
+    const matchCount = countMatches(data);
+    console.log(data, formation1, formation2);
+
+    return (
+      <td
+        className="position-relative"
+        key={formation1 || formation2}
+        style={
+          formation1 === formation2
+            ? {
+                backgroundColor: "rgba(255, 255, 255, 0.10)",
+              }
+            : {
+                backgroundColor: `rgba(248, 98, 133, ${
+                  value
+                    ? !detailedView || selectedDisplay.includes("rate")
+                      ? overridenValue / 100 / 4
+                      : overridenValue / 3 / 4
+                    : 0
+                })`,
+              }
+        }
+      >
+        <PopupFormationInfo
+          trigger={
+            <div>
+              {overridenValue ? overridenValue + "%" : value}
+              {value &&
+                !overridenValue &&
+                selectedDisplay.includes("rate") &&
+                "%"}
+              <div
+                className="position-absolute"
+                style={{
+                  right: "2px",
+                  bottom: "-2px",
+                  fontSize: "10px",
+                  color: "rgba(255, 255, 255, 0.3)",
+                }}
+              >
+                {matchCount}
+              </div>
+            </div>
+          }
+          onClose={() => console.log("closed")}
+          data={data}
+        />
+      </td>
+    );
   };
 
   useEffect(() => {
@@ -150,7 +257,7 @@ const PageFormationMeta: React.FC<PageFormationMetaProps> = (props) => {
                         ))}
                       </select>
                       <select
-                        className="form-control w-100 text-white"
+                        className="form-control w-100 text-white me-0 me-sm-1"
                         value={selectedDisplay}
                         onChange={(v) => setSelectedDisplay(v.target.value)}
                       >
@@ -160,6 +267,17 @@ const PageFormationMeta: React.FC<PageFormationMetaProps> = (props) => {
                           </option>
                         ))}
                       </select>
+                      <small>
+                        <div className="d-flex flex-row h-100 align-items-center mt-1 mt-sm-0 mx-1">
+                          <input
+                            type="checkbox"
+                            className="me-1"
+                            checked={detailedView}
+                            onChange={(p) => setDetailedView(!detailedView)}
+                          />
+                          Detailed
+                        </div>
+                      </small>
                     </div>
                     <div className="d-flex flex-grow-1 justify-content-end align-items-center">
                       <i class="bi bi-info-circle-fill me-1"></i>
@@ -208,11 +326,21 @@ const PageFormationMeta: React.FC<PageFormationMetaProps> = (props) => {
                               </>
                             )}
                           </th>
-                          {formations.map((formation2) => (
-                            <th className="sticky top" key={formation2}>
-                              {shortenFormationName(formation2)}
-                            </th>
-                          ))}
+                          {detailedView ? (
+                            <>
+                              {formations.map((formation2) => (
+                                <th className="sticky top" key={formation2}>
+                                  {shortenFormationName(formation2)}
+                                </th>
+                              ))}
+                            </>
+                          ) : (
+                            <>
+                              <th className="sticky top">Victory</th>
+                              <th className="sticky top">Draw</th>
+                              <th className="sticky top">Defeat</th>
+                            </>
+                          )}
                         </tr>
                       </thead>
                       <tbody>
@@ -224,104 +352,57 @@ const PageFormationMeta: React.FC<PageFormationMetaProps> = (props) => {
                             >
                               {shortenFormationName(formation1)}
                             </th>
-                            {formations.map((formation2) => {
-                              const key = `${formation1}||${formation2}`;
-                              let data = "";
-                              if (
-                                dataMap[key] &&
-                                dataMap[key].victories &&
-                                dataMap[key].draws &&
-                                dataMap[key].defeats
-                              ) {
-                                if (selectedDisplay === "Victory rate") {
-                                  data = Math.round(
-                                    (dataMap[key].victories /
-                                      (dataMap[key].victories +
-                                        dataMap[key].draws +
-                                        dataMap[key].defeats)) *
-                                      100
+                            {detailedView ? (
+                              <>
+                                {formations.map((formation2) => {
+                                  const key = `${formation1}||${formation2}`;
+                                  return buildCell(
+                                    dataMap[key],
+                                    formation1,
+                                    formation2
                                   );
-                                } else if (
-                                  selectedDisplay === "Victory and draw rate"
-                                ) {
-                                  data = Math.round(
-                                    ((dataMap[key].victories +
-                                      dataMap[key].draws) /
-                                      (dataMap[key].victories +
-                                        dataMap[key].draws +
-                                        dataMap[key].defeats)) *
+                                })}
+                              </>
+                            ) : (
+                              <>
+                                {buildCell(
+                                  globalDataMap[formation1],
+                                  formation1,
+                                  null,
+                                  Math.round(
+                                    (globalDataMap[formation1].victories /
+                                      (globalDataMap[formation1].victories +
+                                        globalDataMap[formation1].draws +
+                                        globalDataMap[formation1].defeats)) *
                                       100
-                                  );
-                                } else if (
-                                  selectedDisplay === "Point average"
-                                ) {
-                                  data =
-                                    Math.round(
-                                      (100 *
-                                        (dataMap[key].victories * 3 +
-                                          dataMap[key].draws)) /
-                                        (dataMap[key].victories +
-                                          dataMap[key].draws +
-                                          dataMap[key].defeats)
-                                    ) / 100;
-                                }
-                              }
-                              const matches =
-                                dataMap[key] &&
-                                dataMap[key].victories &&
-                                dataMap[key].draws &&
-                                dataMap[key].defeats
-                                  ? dataMap[key].victories +
-                                    dataMap[key].draws +
-                                    dataMap[key].defeats
-                                  : "";
-                              return (
-                                <td
-                                  className="position-relative"
-                                  key={key}
-                                  style={
-                                    formation1 === formation2
-                                      ? {
-                                          backgroundColor:
-                                            "rgba(255, 255, 255, 0.10)",
-                                        }
-                                      : {
-                                          backgroundColor: `rgba(248, 98, 133, ${
-                                            data
-                                              ? selectedDisplay.includes("rate")
-                                                ? data / 100 / 4
-                                                : data / 3 / 4
-                                              : 0
-                                          })`,
-                                        }
-                                  }
-                                >
-                                  <PopupFormationInfo
-                                    trigger={
-                                      <div>
-                                        {data}
-                                        {data &&
-                                          selectedDisplay.includes("rate") &&
-                                          "%"}
-                                        <div
-                                          className="position-absolute"
-                                          style={{
-                                            right: "2px",
-                                            bottom: "-2px",
-                                            fontSize: "10px",
-                                            color: "rgba(255, 255, 255, 0.3)",
-                                          }}
-                                        >
-                                          {matches}
-                                        </div>
-                                      </div>
-                                    }
-                                    onClose={() => console.log("closed")}
-                                    data={dataMap[key]}
-                                  />
-                                </td>
-                              );
-                            })}
+                                  )
+                                )}
+                                {buildCell(
+                                  globalDataMap[formation1],
+                                  formation1,
+                                  null,
+                                  Math.round(
+                                    (globalDataMap[formation1].draws /
+                                      (globalDataMap[formation1].victories +
+                                        globalDataMap[formation1].draws +
+                                        globalDataMap[formation1].defeats)) *
+                                      100
+                                  )
+                                )}
+                                {buildCell(
+                                  globalDataMap[formation1],
+                                  formation1,
+                                  null,
+                                  Math.round(
+                                    (globalDataMap[formation1].defeats /
+                                      (globalDataMap[formation1].victories +
+                                        globalDataMap[formation1].draws +
+                                        globalDataMap[formation1].defeats)) *
+                                      100
+                                  )
+                                )}
+                              </>
+                            )}
                           </tr>
                         ))}
                       </tbody>

@@ -41,7 +41,8 @@ const PopupFormationInfo: React.FC<PopupFormationInfoProps> = ({
           <div className="container bg-dark text-white border border-pink border-3 rounded-3 p-4">
             <div className="d-flex justify-content-between align-items-center mb-3">
               <h4 className="mb-0">
-                {data.formation1} vs {data.formation2}
+                {data.formation1}
+                {data.formation2 && " vs " + data.formation2}
               </h4>
               <button className="btn btn-sm btn-outline-light" onClick={close}>
                 <i className="bi bi-x-lg"></i>

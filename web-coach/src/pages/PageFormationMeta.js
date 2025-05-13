@@ -161,7 +161,7 @@ const PageFormationMeta: React.FC<PageFormationMetaProps> = (props) => {
   };
 
   const buildCell = (data, formation1, formation2, overridenValue = null) => {
-    const value = getDetailCellValue(data);
+    const value = overridenValue || getDetailCellValue(data);
     const matchCount = countMatches(data);
     console.log(data, formation1, formation2);
 
@@ -178,8 +178,8 @@ const PageFormationMeta: React.FC<PageFormationMetaProps> = (props) => {
                 backgroundColor: `rgba(248, 98, 133, ${
                   value
                     ? !detailedView || selectedDisplay.includes("rate")
-                      ? overridenValue / 100 / 4
-                      : overridenValue / 3 / 4
+                      ? value / 100 / 4
+                      : value / 3 / 4
                     : 0
                 })`,
               }
@@ -188,7 +188,7 @@ const PageFormationMeta: React.FC<PageFormationMetaProps> = (props) => {
         <PopupFormationInfo
           trigger={
             <div>
-              {overridenValue ? overridenValue + "%" : value}
+              {overridenValue ? value + "%" : value}
               {value &&
                 !overridenValue &&
                 selectedDisplay.includes("rate") &&

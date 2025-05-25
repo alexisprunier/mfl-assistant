@@ -999,3 +999,65 @@ export const getFormationMetas = ({
     (v) => defaultHandleSuccess(handleSuccess, v),
     (e) => defaultHandleError(handleError, e)
   );
+
+export const getOpponents = ({
+  handleSuccess = null,
+  handleError = null,
+  params,
+}) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `{
+          getOpponents(${jsonToParams(params)}) {
+            club {
+              id,
+              name,
+              division,
+              city,
+              country
+            },
+            match {
+              id,
+              startDate,
+              status,
+              type,
+              homeScore,
+              awayScore,
+              homeFormation,
+              awayFormation,
+              homePositions {
+                index,
+                player
+              },
+              awayPositions {
+                index,
+                player
+              },
+              modifiers {
+                target {
+                  type,
+                  ids
+                },
+                values {
+                  type,
+                  value,
+                  field
+                }
+              },
+              players,
+              homeClub {
+                id,
+                name
+              },
+              awayClub {
+                id,
+                name
+              }
+            }
+          }
+        }`,
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );

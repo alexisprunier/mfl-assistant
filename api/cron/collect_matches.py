@@ -92,6 +92,6 @@ async def main(db):
 async def _treat_match(db, mfl_match):
     home_user = await build_and_upsert_user(db, {"address": mfl_match["homeCoachWalletAddress"]})
     away_user = await build_and_upsert_user(db, {"address": mfl_match["awayCoachWalletAddress"]})
-    home_club = await build_and_upsert_club(db, {"_id": mfl_match["homeSquad"]["club"]["id"]}) if "homeSquad" in mfl_match else None
-    away_club = await build_and_upsert_club(db, {"_id": mfl_match["awaySquad"]["club"]["id"]}) if "awaySquad" in mfl_match else None
+    home_club = await build_and_upsert_club(db, {"id": mfl_match["homeSquad"]["club"]["id"]}) if "homeSquad" in mfl_match else None
+    away_club = await build_and_upsert_club(db, {"id": mfl_match["awaySquad"]["club"]["id"]}) if "awaySquad" in mfl_match else None
     return await build_and_upsert_match(db, mfl_match, home_user, away_user, home_club, away_club)

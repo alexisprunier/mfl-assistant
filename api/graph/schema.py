@@ -1,6 +1,7 @@
 from graphene import ObjectType, String, Int, Boolean, Field, List, ID, DateTime, Float
 import enum
 from bson import ObjectId
+from graphene.types.generic import GenericScalar
 
 
 class DefaultStatusEnum(enum.Enum):
@@ -325,7 +326,7 @@ class ModifierTargetType(ObjectType):
 
 class ModifierType(ObjectType):
     target = Field(ModifierTargetType)
-    values = List(Field(ModifierValueType))
+    values = List(ModifierValueType)
 
 class PositionType(ObjectType):
     index = Int()
@@ -339,20 +340,32 @@ class MatchType(ObjectType):
     competitionId = String()
     competitionName = String()
     engine = String()
-    modifiers = List(Field(ModifierType))
-    players = List(Field(PlayerStatsType))
+    modifiers = List(ModifierType)
+    players = GenericScalar()
     startDate = DateTime()
     creation_date = DateTime()
     homeScore = Int()
     homeFormation = String()
-    homePositions = List(Field(PositionType))
+    homePositions = List(PositionType)
     awayScore = Int()
     awayFormation = String()
-    awayPositions = List(Field(PositionType))
+    awayPositions = List(PositionType)
     homeUser = Field(UserType)
     awayUser = Field(UserType)
     homeClub = Field(ClubType)
     awayClub = Field(ClubType)
+
+    async def resolve_homeClub(self, info):
+        home_club_id = self.get("homeClub")
+        if not home_club_id:
+            return None
+        return await info.context["db"].clubs.find_one({"_id": home_club_id})
+
+    async def resolve_awayClub(self, info):
+        away_club_id = self.get("awayClub")
+        if not away_club_id:
+            return None
+        return await info.context["db"].clubs.find_one({"_id": away_club_id})
 
 class FormationMetaType(ObjectType):
     id = ID(source='_id')
@@ -363,3 +376,7 @@ class FormationMetaType(ObjectType):
     draws = Int()
     defeats = Int()
     engine = String()
+
+class MatchClubPairType(ObjectType):
+    club = Field(ClubType)
+    match = Field(MatchType)

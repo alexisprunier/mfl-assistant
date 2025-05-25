@@ -5,9 +5,11 @@ import ButtonMflManagerClub from "components/buttons/ButtonMflManagerClub.js";
 
 interface ItemRowClubProps {
   c: object;
+  overall?: Object;
+  formation?: Object;
 }
 
-const ItemRowClub: React.FC<ItemRowClubProps> = ({ c }) => {
+const ItemRowClub: React.FC<ItemRowClubProps> = ({ c, overall, formation }) => {
   return (
     <div className="Item ItemRowPlayer">
       <div className="d-flex flex-column flex-md-row flex-fill pb-1 pb-md-0">
@@ -30,6 +32,11 @@ const ItemRowClub: React.FC<ItemRowClubProps> = ({ c }) => {
 
             {c.city ? c.city : ""}
           </div>
+
+          {overall && <div className="d-flex flex-basis-80">{overall}</div>}
+          {formation && (
+            <div className="d-flex flex-basis-140">{formation}</div>
+          )}
 
           <div className="d-flex flex-row flex-md-grow-0 justify-content-end">
             <div className="me-1">

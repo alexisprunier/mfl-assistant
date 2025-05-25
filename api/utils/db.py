@@ -178,7 +178,6 @@ async def build_and_upsert_club(db, mfl_club, owner=None):
         if geolocation is not None:
             club["geolocation"] = geolocation["_id"]
         
-
     if owner and "_id" in owner:
         club["owner"] = owner["_id"]
 

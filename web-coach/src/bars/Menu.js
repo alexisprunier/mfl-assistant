@@ -77,6 +77,27 @@ const Menu: React.FC<MenuProps> = (props) => {
           </li>
           <li className="nav-item">
             <Link
+              to="/opponent-finder"
+              className={
+                "nav-link" +
+                (location.pathname.startsWith("/opponent-finder")
+                  ? " active"
+                  : "")
+              }
+            >
+              {location.pathname.startsWith("/opponent-finder") &&
+                getMenuLabel("Opponent finder", "d-none d-lg-inline")}
+              <div className="px-2 px-lg-0">
+                {location.pathname.startsWith("/opponent-finder") ? (
+                  <i className="bi bi-binoculars-fill"></i>
+                ) : (
+                  <i className="bi bi-binoculars"></i>
+                )}
+              </div>
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link
               to="/match-analysis"
               className={
                 "nav-link" +

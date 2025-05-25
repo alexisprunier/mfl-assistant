@@ -1,10 +1,11 @@
 from graphene import ObjectType, String, Int, Schema, Field, List, ID, Boolean, Date
-from graph.schema import RawPlayerPricingType, FormationMetaType, PlayerPricingType, UserType, GeolocationType, SaleType, ContractType, NotificationScopeType, NotificationType, CountType, DataPointType, ClubType, TeamType, TeamMemberType, PlayerType, ReportConfigurationType, ReportType
+from graph.schema import MatchType, MatchClubPairType, RawPlayerPricingType, FormationMetaType, PlayerPricingType, UserType, GeolocationType, SaleType, ContractType, NotificationScopeType, NotificationType, CountType, DataPointType, ClubType, TeamType, TeamMemberType, PlayerType, ReportConfigurationType, ReportType
 from bson import ObjectId
 from decorator.require_token import require_token
 from decorator.add_token_if_exists import add_token_if_exists
 from fastapi import HTTPException, status
 from datetime import datetime, timedelta
+from utils.overall import calculate_team_overall
 
 
 class Query(ObjectType):
@@ -949,3 +950,80 @@ class Query(ObjectType):
         ]
         
         return result
+
+    get_opponents = List(
+        MatchClubPairType,
+        formation=String(),
+        minOvr=Int(),
+        maxOvr=Int(),
+        skip=Int(default_value=0),
+        limit=Int(default_value=20)
+    )
+
+    async def resolve_get_opponents(
+        self,
+        info,
+        formation=None,
+        minOvr=None,
+        maxOvr=None,
+        skip=0,
+        limit=10
+    ):
+        def sanitize_datetime(date_str):
+            return datetime.fromisoformat(date_str.replace("Z", "+00:00"))
+
+        db = info.context["db"]
+
+        match_filter = {
+            "type": "FRIENDLY",
+            "homeClub": {"$exists": True, "$ne": None},
+            "awayClub": {"$exists": True, "$ne": None}
+        }
+
+        if formation:
+            match_filter["$or"] = [
+                {"homeFormation": formation},
+                {"awayFormation": formation}
+            ]
+
+        matches_cursor = db.matches.find(
+            match_filter,
+            sort=[("startDate", -1)],
+            skip=skip,
+            limit=limit
+        )
+        matches = await matches_cursor.to_list(length=None)
+
+        results = []
+        for match in matches:
+            # Calculate overalls
+            home_ovr = calculate_team_overall(match['homePositions'], match['players'], match['modifiers'])
+            away_ovr = calculate_team_overall(match['awayPositions'], match['players'], match['modifiers'])
+
+            # Apply ovr filter
+            if minOvr is not None and home_ovr < minOvr and away_ovr < minOvr:
+                continue
+            if maxOvr is not None and home_ovr > maxOvr and away_ovr > maxOvr:
+                continue
+
+            if "startDate" in match:
+                match["startDate"] = sanitize_datetime(match["startDate"])
+
+            # Add results for both clubs if within ovr range
+            """if minOvr is None or home_ovr >= minOvr:
+                if maxOvr is None or home_ovr <= maxOvr:
+                    home_club = await db.clubs.find_one({"_id": match.get("homeClub")})
+                    results.append({"club": home_club, "match": match})
+
+            if minOvr is None or away_ovr >= minOvr:
+                if maxOvr is None or away_ovr <= maxOvr:
+                    away_club = await db.clubs.find_one({"_id": match.get("awayClub")})
+                    results.append({"club": away_club, "match": match})"""
+
+            home_ok = (minOvr is None or home_ovr >= minOvr) and (maxOvr is None or home_ovr <= maxOvr)
+            away_ok = (minOvr is None or away_ovr >= minOvr) and (maxOvr is None or away_ovr <= maxOvr)
+
+            if home_ok or away_ok:
+                results.append({"match": match})
+
+        return results

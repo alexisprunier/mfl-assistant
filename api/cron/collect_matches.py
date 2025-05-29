@@ -50,7 +50,7 @@ async def main(db):
                         logger.critical("collect_matches: crossed non ENDED match: " + str(last_stored_match_id))
                         last_stored_match_id += 1
                         await _treat_match(db, raw_match_data)
-                        if last_match_id - last_stored_match_id < 1000:
+                        if last_match_id - last_stored_match_id < 10:
                             break
                     else:
                         await _treat_match(db, raw_match_data)

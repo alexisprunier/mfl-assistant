@@ -1010,50 +1010,41 @@ export const getOpponents = ({
     JSON.stringify({
       query: `{
           getOpponents(${jsonToParams(params)}) {
-            club {
-              id,
-              name,
-              division,
-              city,
-              country
+            id,
+            startDate,
+            status,
+            type,
+            homeScore,
+            awayScore,
+            homeFormation,
+            awayFormation,
+            homePositions {
+              index,
+              player
             },
-            match {
-              id,
-              startDate,
-              status,
-              type,
-              homeScore,
-              awayScore,
-              homeFormation,
-              awayFormation,
-              homePositions {
-                index,
-                player
+            awayPositions {
+              index,
+              player
+            },
+            modifiers {
+              target {
+                type,
+                ids
               },
-              awayPositions {
-                index,
-                player
-              },
-              modifiers {
-                target {
-                  type,
-                  ids
-                },
-                values {
-                  type,
-                  value,
-                  field
-                }
-              },
-              players,
-              homeClub {
-                id,
-                name
-              },
-              awayClub {
-                id,
-                name
+              values {
+                type,
+                value,
+                field
               }
+            },
+            players,
+            homeClub {
+              id,
+              name
+            },
+            awayClub {
+              id,
+              name
             }
           }
         }`,

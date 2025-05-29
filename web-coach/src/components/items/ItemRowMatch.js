@@ -72,6 +72,9 @@ const ItemRowMatch: React.FC<ItemRowMatchProps> = ({ match }) => {
           )}
         </div>
       </div>
+      <div className="d-flex flex-fill justify-content-end">
+        {match.startDate ? match.startDate.split("+")[0] : ""}
+      </div>
       <div>
         <ItemRowClub
           c={match.homeClub}

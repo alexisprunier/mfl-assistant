@@ -12,13 +12,13 @@ interface ItemRowClubProps {
 const ItemRowClub: React.FC<ItemRowClubProps> = ({ c, overall, formation }) => {
   return (
     <div className="Item ItemRowPlayer">
-      <div className="d-flex flex-column flex-md-row flex-fill pb-1 pb-md-0">
-        <div className="d-flex flex-md-basis-300">
+      <div className="d-flex flex-column flex-sm-row flex-fill pb-1 pb-md-0">
+        <div className="d-flex flex-sm-basis-300">
           <i className="bi bi-buildings-fill me-1" />
           {c.name ? c.name : "Non-established club"}
         </div>
 
-        <div className="d-flex flex-md-grow-1">
+        <div className="d-flex flex-sm-grow-1">
           <div className="d-flex flex-grow-1">
             {c.country ? (
               <img
@@ -38,7 +38,7 @@ const ItemRowClub: React.FC<ItemRowClubProps> = ({ c, overall, formation }) => {
             <div className="d-flex flex-basis-140">{formation}</div>
           )}
 
-          <div className="d-flex flex-row flex-md-grow-0 justify-content-end">
+          <div className="d-flex flex-row flex-sm-grow-0 justify-content-end">
             <div className="me-1">
               <ButtonMflManagerClub clubId={c.id} />
             </div>

@@ -3,6 +3,7 @@ from pymongo import ReturnDocument
 import datetime
 from utils.date import convert_unix_to_datetime
 from utils.geolocation import get_geolocation
+from utils.overall import calculate_team_overall
 
 
 async def upsert_vars(db, var, value):
@@ -284,6 +285,13 @@ async def build_and_upsert_match(db, mfl_match, home_user=None, away_user=None, 
             {"index": pos["index"], "player": pos["player"]["id"]}
             for pos in mfl_match["awayFormation"]["positions"]
         ]
+
+    if "modifiers" in match and "players" in match:
+        if "homePositions" in match:
+            match["homeOverall"] = calculate_team_overall(match['homePositions'], match['players'], match['modifiers'])
+        if "awayPositions" in match:
+            match["awayOverall"] = calculate_team_overall(match['awayPositions'], match['players'], match['modifiers'])
+
 
     if home_user and "_id" in home_user:
         match["homeUser"] = home_user["_id"]

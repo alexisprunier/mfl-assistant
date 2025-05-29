@@ -3,12 +3,13 @@ import { getOpponents } from "services/api-assistant.js";
 import BoxCard from "components/box/BoxCard.js";
 import LoadingSquare from "components/loading/LoadingSquare.js";
 import ItemRowMatch from "components/items/ItemRowMatch.js";
+import PopupInformation from "components/popups/PopupInformation.js";
 import { formations } from "utils/formation.js";
 
 interface PageOpponentFinderProps {}
 
 const PageOpponentFinder: React.FC<PageOpponentFinderProps> = (props) => {
-  const [matchClubPairs, setMatchClubPairs] = useState(null);
+  const [matches, setMatches] = useState(null);
   const [selectedFormation, setSelectedFormation] = useState(null);
   const [minOverall, setMinOverall] = useState(null);
   const [maxOverall, setMaxOverall] = useState(null);
@@ -16,7 +17,7 @@ const PageOpponentFinder: React.FC<PageOpponentFinderProps> = (props) => {
   const fetchOpponents = () => {
     getOpponents({
       handleSuccess: (d) => {
-        setMatchClubPairs(d.data.getOpponents);
+        setMatches(d.data.getOpponents);
       },
       handleError: (e) => console.log(e),
       params: {
@@ -41,21 +42,58 @@ const PageOpponentFinder: React.FC<PageOpponentFinderProps> = (props) => {
         <h3 className="my-2">
           <i className="bi bi-binoculars-fill me-2"></i> Opponent finder
         </h3>
+        <span class="text-warning">
+          <i class="bi bi-cone-striped me-1"></i>ALPHA
+        </span>
       </nav>
 
-      <div className="d-flex flex-grow-1 flex-column container-xl px-2 px-md-4 py-4">
-        <div className="d-flex" style={{ minHeight: "90px" }}>
+      <div className="d-flex flex-grow-1 flex-column flex-lg-row container-xl px-2 px-md-4 py-4">
+        <div className="d-flex flex-lg-basis-300" style={{ minHeight: "90px" }}>
           <BoxCard
-            className="flex-fill pt-3"
+            className="flex-fill"
+            title={"Filters"}
+            actions={
+              <div className="h-100 text-align-middle">
+                <PopupInformation
+                  trigger={<i class="bi bi-info-circle-fill text-main"></i>}
+                  title={"What is the Opponent Finder?"}
+                  content={
+                    <div>
+                      <p>
+                        The <strong>Opponent Finder</strong> is a module
+                        designed to help you explore recent{" "}
+                        <strong>Friendly matches</strong> in order to scan the
+                        default teams used by various clubs. By applying filters
+                        like <strong>formation</strong> and{" "}
+                        <strong>team overall rating</strong>, it's easy to
+                        identify an opponent that matches your desired criteria.
+                      </p>
+                      <p>
+                        This tool is particularly useful for scouting potential
+                        opponents for balanced or strategic matchups.
+                      </p>
+                      <div class="warning">
+                        ⚠️ <strong>Note:</strong> While the Opponent Finder
+                        helps you find clubs based on past matches, there is{" "}
+                        <em>no guarantee</em> that the opponent will use the
+                        same team or overall rating in a new friendly. Users can
+                        change their team setups at any time after those matches
+                        occurred.
+                      </div>
+                    </div>
+                  }
+                />
+              </div>
+            }
             content={
-              <div className="d-flex flex-fill flex-column flex-lg-row">
-                <div className="d-flex flex-grow-0 flex-column flex-sm-row">
+              <div className="d-flex flex-fill flex-column flex-column flex-lg-row">
+                <div className="d-flex flex-grow-0 flex-lg-grow-1 flex-column">
                   <select
                     className="form-control w-100 text-white me-0 me-sm-1"
                     value={selectedFormation}
                     onChange={(v) => setSelectedFormation(v.target.value)}
                   >
-                    <option value={""} key={null} />
+                    <option value={null} key={null} />
                     {Object.keys(formations).map((p) => (
                       <option value={p.toString()} key={p.toString()}>
                         {p}
@@ -88,20 +126,18 @@ const PageOpponentFinder: React.FC<PageOpponentFinderProps> = (props) => {
           />
         </div>
 
-        <div
-          className="d-flex flex-fill overflow-auto"
-          style={{ height: "1px" }}
-        >
+        <div className="height-1-lg d-flex flex-fill flex-lg-grow-1">
           <BoxCard
             className="d-flex flex-fill overflow-auto"
+            title={"Friendly matches"}
             content={
-              matchClubPairs ? (
+              matches ? (
                 <div
                   className="d-flex flex-column flex-fill"
                   style={{ minHeight: 0 }}
                 >
-                  {matchClubPairs.map((m) => (
-                    <ItemRowMatch match={m.match} />
+                  {matches.map((m) => (
+                    <ItemRowMatch match={m} />
                   ))}
                 </div>
               ) : (

@@ -15,6 +15,8 @@ const PageOpponentFinder: React.FC<PageOpponentFinderProps> = (props) => {
   const [maxOverall, setMaxOverall] = useState(null);
 
   const fetchOpponents = () => {
+    setMatches(null);
+
     getOpponents({
       handleSuccess: (d) => {
         setMatches(d.data.getOpponents);
@@ -32,10 +34,6 @@ const PageOpponentFinder: React.FC<PageOpponentFinderProps> = (props) => {
     fetchOpponents();
   }, []);
 
-  useEffect(() => {
-    fetchOpponents();
-  }, [selectedFormation, minOverall, maxOverall]);
-
   return (
     <div id="PageOpponentFinder" className="d-flex flex-column w-100 h-100">
       <nav className="d-flex flex-grow-0 TopBar navbar w-100 ps-md-5 px-4 py-2">
@@ -47,10 +45,13 @@ const PageOpponentFinder: React.FC<PageOpponentFinderProps> = (props) => {
         </span>
       </nav>
 
-      <div className="d-flex flex-grow-1 flex-column flex-lg-row container-xl px-2 px-md-4 py-4">
-        <div className="d-flex flex-lg-basis-300" style={{ minHeight: "90px" }}>
+      <div
+        className="d-flex flex-grow-1 flex-column flex-lg-row px-2 px-md-4 py-4"
+        style={{ minHeight: 0 }}
+      >
+        <div className="d-flex flex-lg-basis-300 flex-column">
           <BoxCard
-            className="flex-fill"
+            className="flex-grow-0"
             title={"Filters"}
             actions={
               <div className="h-100 text-align-middle">
@@ -86,40 +87,46 @@ const PageOpponentFinder: React.FC<PageOpponentFinderProps> = (props) => {
               </div>
             }
             content={
-              <div className="d-flex flex-fill flex-column flex-column flex-lg-row">
-                <div className="d-flex flex-grow-0 flex-lg-grow-1 flex-column">
-                  <select
-                    className="form-control w-100 text-white me-0 me-sm-1"
-                    value={selectedFormation}
-                    onChange={(v) => setSelectedFormation(v.target.value)}
+              <div className="d-flex flex-fill flex-column">
+                <select
+                  className="form-control w-100 text-white me-0 me-sm-1"
+                  value={selectedFormation}
+                  onChange={(v) => setSelectedFormation(v.target.value)}
+                >
+                  <option value={null} key={null} />
+                  {Object.keys(formations).map((p) => (
+                    <option value={p.toString()} key={p.toString()}>
+                      {p}
+                    </option>
+                  ))}
+                </select>
+                <input
+                  type="number"
+                  min="300"
+                  max="1200"
+                  step="1"
+                  className="form-control w-100 mb-1"
+                  value={minOverall}
+                  onChange={(v) => setMinOverall(parseInt(v.target.value))}
+                  placeholder={"Min OVR"}
+                />
+                <input
+                  type="number"
+                  min="300"
+                  max="1200"
+                  step="1"
+                  className="form-control w-100 mb-1"
+                  value={maxOverall}
+                  onChange={(v) => setMaxOverall(parseInt(v.target.value))}
+                  placeholder={"Max OVR"}
+                />
+                <div className="d-flex justify-content-end flex-row align-items-end mb-1">
+                  <button
+                    className="btn btn-info text-white align-self-end"
+                    onClick={fetchOpponents}
                   >
-                    <option value={null} key={null} />
-                    {Object.keys(formations).map((p) => (
-                      <option value={p.toString()} key={p.toString()}>
-                        {p}
-                      </option>
-                    ))}
-                  </select>
-                  <input
-                    type="number"
-                    min="300"
-                    max="1200"
-                    step="1"
-                    className="form-control w-100 mb-1"
-                    value={minOverall}
-                    onChange={(v) => setMinOverall(parseInt(v.target.value))}
-                    placeholder={"Min OVR"}
-                  />
-                  <input
-                    type="number"
-                    min="300"
-                    max="1200"
-                    step="1"
-                    className="form-control w-100 mb-1"
-                    value={maxOverall}
-                    onChange={(v) => setMaxOverall(parseInt(v.target.value))}
-                    placeholder={"Max OVR"}
-                  />
+                    <i class="bi bi-arrow-right-square-fill text-white"></i> Run
+                  </button>
                 </div>
               </div>
             }

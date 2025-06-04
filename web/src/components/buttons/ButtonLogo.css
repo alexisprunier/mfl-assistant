@@ -1,0 +1,47 @@
+.ButtonLogo {
+  .image-wrapper {
+    max-width: 32px;
+    width: 32px;
+    height: 32px;
+    aspect-ratio: 1 / 1;
+    overflow: visible;
+    cursor: pointer;
+  }
+
+  .image-wrapper .bg-img,
+  .image-wrapper .main-img {
+    transition: all 0.3s ease;
+  }
+
+  .image-wrapper .main-img {
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    position: absolute;
+  }
+
+  .image-wrapper .bg-img {
+    width: 70%;
+    height: 70%;
+    z-index: 0;
+    position: absolute;
+    bottom: -5px;
+    right: -5px;
+  }
+
+  .image-wrapper:hover .main-img {
+    width: 80%;
+    height: 80%;
+    position: absolute;
+    height: auto;
+    top: 0;
+    left: 0;
+    z-index: 2;
+  }
+
+  .image-wrapper:hover .bg-img {
+    width: 80%;
+    height: 80%;
+    z-index: 1;
+  }
+}

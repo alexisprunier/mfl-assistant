@@ -2,6 +2,7 @@ import React from "react";
 import "./Menu.css";
 import { Link, useLocation } from "react-router-dom";
 import ButtonLogin from "components/buttons/ButtonLogin.js";
+import ButtonLogo from "components/buttons/ButtonLogo.js";
 
 interface MenuProps {}
 
@@ -34,13 +35,7 @@ const Menu: React.FC<MenuProps> = (props) => {
         )}
 
       <div className="d-flex flex-grow-0 align-items-center">
-        <img
-          width="auto"
-          className="mt-lg-2 me-1 me-lg-0"
-          style={{ maxWidth: "32px" }}
-          src="/media/images/assistant.png"
-          alt="MFL Assistant"
-        />
+        <ButtonLogo />
       </div>
 
       <div className="d-flex flex-grow-1 align-items-lg-center">

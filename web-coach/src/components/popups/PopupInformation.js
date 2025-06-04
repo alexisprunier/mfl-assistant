@@ -1,7 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import Popup from "reactjs-popup";
-import ItemPlayer from "components/items/ItemPlayer.js";
-import { prettifyId } from "utils/graphql.js";
 
 interface PopupInformationProps {
   className: String;

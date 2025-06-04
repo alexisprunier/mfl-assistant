@@ -110,7 +110,7 @@ const PageHome: React.FC<PageHomeProps> = ({
                 </div>
               </div>
 
-              <div className="d-flex flex-row justify-content-center align-items-center mt-1 mb-2 px-3">
+              <div className="d-none d-sm-flex flex-row flex-row justify-content-center align-items-center mt-1 mb-2 px-3">
                 <Link to="/formation-meta">
                   <div className="d-flex flex-grow-0 card flex-column mx-1 px-4 py-2">
                     <div className="d-flex justify-content-center align-items-center">
@@ -118,6 +118,17 @@ const PageHome: React.FC<PageHomeProps> = ({
                         <i className="bi bi-grid-3x3-gap h4"></i>
                         <br />
                         Formation meta
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+                <Link to="/opponent-finder">
+                  <div className="d-flex flex-grow-0 card flex-column mx-1 px-4 py-2">
+                    <div className="d-flex justify-content-center align-items-center">
+                      <div className="text-center">
+                        <i className="bi bi-binoculars h4"></i>
+                        <br />
+                        Opponent finder
                       </div>
                     </div>
                   </div>

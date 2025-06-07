@@ -225,7 +225,7 @@ def build_club_section(club_ids):
             "<table style='width: 100%; border-spacing: 10px; margin-bottom: 20px;'>"
             "<tr>"
             f"<td style='vertical-align: top; width: 160px;'>"
-            f"<img src='https://d13e14gtps4iwl.cloudfront.net/u/clubs/${i}/logo.png?v=63c386597972f1fcbdcef019a7b453c8' "
+            f"<img src='https://d13e14gtps4iwl.cloudfront.net/u/clubs/{i}/logo.png?v=63c386597972f1fcbdcef019a7b453c8' "
             f"style='width: 80px;' />"
             "</td>"
             "<td style='vertical-align: top;'>"

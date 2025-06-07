@@ -93,7 +93,7 @@ async def _get_listings_to_treat(db):
 
     last_listing_var_record = await db.vars.find_one({"var": last_list_var})
 
-    if last_listing_var_record:
+    if last_listing_var_record and last_listing_var_record["value"]:
         listings = [listing for listing in listings
                     if convert_unix_to_datetime(listing["createdDateTime"]) > last_listing_var_record["value"]]
 
@@ -107,7 +107,7 @@ async def _get_sales_to_treat(db):
 
     last_sale_var_record = await db.vars.find_one({"var": last_sale_var})
 
-    if last_sale_var_record:
+    if last_sale_var_record and last_sale_var_record["value"]:
         sales = [sale for sale in sales
                  if convert_unix_to_datetime(sale["createdDateTime"]) > last_sale_var_record["value"]]
 

@@ -116,6 +116,8 @@ class AddClubNotificationScope(Mutation):
     class Arguments:
         user = String(required=True)
         type = String(required=True)
+        min_price = Int()
+        max_price = Int()
         countries = List(String)
         cities = List(String)
         divisions = List(Int)

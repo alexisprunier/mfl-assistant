@@ -258,6 +258,8 @@ export const getClubNotificationScopesAndNotifications = ({
         getClubNotificationScopes {
           id,
           type,
+          minPrice,
+          maxPrice,
           countries,
           cities,
           divisions

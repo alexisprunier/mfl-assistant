@@ -179,7 +179,7 @@ const PopupClubNotificationScope: React.FC<PopupClubNotificationScopeProps> = ({
             </div>
 
             <div className="mb-2">
-              <div className="row mb-1">
+              <div className="row p-1">
                 <div className="col-6">Countries:</div>
                 <div className="col-6">
                   <select
@@ -218,7 +218,7 @@ const PopupClubNotificationScope: React.FC<PopupClubNotificationScopeProps> = ({
                 </div>
               </div>
 
-              <div className="row m-1">
+              <div className="row p-1">
                 <div className="col-6">Cities:</div>
                 <div className="col-6">
                   <select
@@ -257,7 +257,7 @@ const PopupClubNotificationScope: React.FC<PopupClubNotificationScopeProps> = ({
                 </div>
               </div>
 
-              <div className="row m-1">
+              <div className="row p-1">
                 <div className="col-6">Divisions:</div>
                 <div className="col-6">
                   <select

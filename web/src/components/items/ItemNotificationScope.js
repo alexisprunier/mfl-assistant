@@ -64,7 +64,7 @@ const ItemNotificationScope: React.FC<ItemNotificationScopeProps> = ({
       <div className="d-flex flex-grow-0 px-1 text-info">
         <PopupNotificationScope
           item={item}
-          trigger={<i className="bi bi-pencil-square" />}
+          trigger={<i className="bi bi-eye-fill" />}
           onDelete={onDelete}
         />
       </div>

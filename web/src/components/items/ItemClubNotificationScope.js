@@ -1,6 +1,6 @@
 import React from "react";
 import "./Item.css";
-import PopupClubNotificationScope from "components/popups/PopupNotificationScope.js";
+import PopupClubNotificationScope from "components/popups/PopupClubNotificationScope.js";
 import { prettifyId } from "utils/graphql.js";
 
 interface ItemClubNotificationScopeProps {
@@ -64,7 +64,7 @@ const ItemClubNotificationScope: React.FC<ItemClubNotificationScopeProps> = ({
       <div className="d-flex flex-grow-0 px-1 text-info">
         <PopupClubNotificationScope
           item={item}
-          trigger={<i className="bi bi-pencil-square" />}
+          trigger={<i className="bi bi-eye-fill" />}
           onDelete={onDelete}
         />
       </div>

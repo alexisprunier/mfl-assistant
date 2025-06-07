@@ -1,20 +1,18 @@
 import BoxMessage from "components/box/BoxMessage.js";
 import ItemNotification from "components/items/ItemNotification.js";
-import ItemNotificationScope from "components/items/ItemNotificationScope.js";
+import ItemClubNotificationScope from "components/items/ItemClubNotificationScope.js";
 import LoadingSquare from "components/loading/LoadingSquare.js";
-import PopupNotificationScope from "components/popups/PopupNotificationScope.js";
+import PopupClubNotificationScope from "components/popups/PopupClubNotificationScope.js";
 import UtilConditionalRender from "components/utils/UtilConditionalRender.js";
 import React, { useEffect, useState } from "react";
 import {
-  getNotificationScopesAndNotifications,
-  getNotificationsOfNotificationScope,
+  getClubNotificationScopesAndNotifications,
+  getNotificationsOfClubNotificationScope,
 } from "services/api-assistant.js";
 
-interface PageNotificationMarketplaceProps {}
+interface PageNotificationClubProps {}
 
-const PageNotificationMarketplace: React.FC<
-  PageNotificationMarketplaceProps
-> = (props) => {
+const PageNotificationClub: React.FC<PageNotificationClubProps> = (props) => {
   const [notificationScopes, setNotificationScopes] = useState(null);
   const [notifications, setNotifications] = useState(null);
   const [selectedNotificationScope, setSelectedNotificationScope] =
@@ -22,16 +20,16 @@ const PageNotificationMarketplace: React.FC<
   const [selectedNotification, setSelectedNotification] = useState(null);
   const [skip, setSkip] = useState(0);
 
-  const fetchNotificationScopesAndNotifications = () => {
-    getNotificationScopesAndNotifications({
+  const fetchClubNotificationScopesAndNotifications = () => {
+    getClubNotificationScopesAndNotifications({
       handleSuccess: (v) => {
-        setNotificationScopes(v.data.getNotificationScopes);
+        setNotificationScopes(v.data.getClubNotificationScopes);
       },
     });
   };
 
-  const fetchNotificationsOfNotificationScope = () => {
-    getNotificationsOfNotificationScope({
+  const fetchNotificationsOfClubNotificationScope = () => {
+    getNotificationsOfClubNotificationScope({
       handleSuccess: (v) => {
         if (skip > 0) {
           setNotifications(notifications.concat(v.data.getNotifications));
@@ -42,7 +40,8 @@ const PageNotificationMarketplace: React.FC<
         setSkip(skip + 10);
       },
       params: {
-        notificationScope: selectedNotificationScope?.id,
+        clubNotificationScope: selectedNotificationScope?.id,
+        type: "club",
         limit: 10,
         order: -1,
         skip,
@@ -52,8 +51,8 @@ const PageNotificationMarketplace: React.FC<
 
   useEffect(() => {
     if (props.assistantUser && props.assistantUser.email) {
-      fetchNotificationScopesAndNotifications();
-      fetchNotificationsOfNotificationScope();
+      fetchClubNotificationScopesAndNotifications();
+      fetchNotificationsOfClubNotificationScope();
     }
   }, [props.assistantUser]);
 
@@ -65,12 +64,12 @@ const PageNotificationMarketplace: React.FC<
 
   useEffect(() => {
     if (skip === 0) {
-      fetchNotificationsOfNotificationScope();
+      fetchNotificationsOfClubNotificationScope();
     }
   }, [skip]);
 
   return (
-    <div id="PageNotificationMarketplace" className="h-100 w-100">
+    <div id="PageNotificationClub" className="h-100 w-100">
       <div className="container max-width-md h-100 px-2 px-md-4 py-4">
         <div className="d-flex flex-column h-100 w-100 fade-in">
           <div className="card d-flex flex-column flex-md-grow-0 m-2 p-3 pt-2 flex-basis-200">
@@ -78,14 +77,14 @@ const PageNotificationMarketplace: React.FC<
               <h4 className="flex-grow-1">Notification scopes</h4>
 
               {notificationScopes?.length > 0 && (
-                <PopupNotificationScope
+                <PopupClubNotificationScope
                   trigger={
                     <button className="btn btn-info btn-sm text-white">
                       <i className="bi bi-plus"></i>
                     </button>
                   }
                   assistantUser={props.assistantUser}
-                  onClose={fetchNotificationScopesAndNotifications}
+                  onClose={fetchClubNotificationScopesAndNotifications}
                 />
               )}
             </div>
@@ -99,14 +98,14 @@ const PageNotificationMarketplace: React.FC<
                     content={
                       <div>
                         <div>No scope found</div>
-                        <PopupNotificationScope
+                        <PopupClubNotificationScope
                           trigger={
                             <button className="btn btn-info btn-sm text-white">
                               <i className="bi bi-plus"></i> Add scope
                             </button>
                           }
                           assistantUser={props.assistantUser}
-                          onClose={fetchNotificationScopesAndNotifications}
+                          onClose={fetchClubNotificationScopesAndNotifications}
                         />
                       </div>
                     }
@@ -115,7 +114,7 @@ const PageNotificationMarketplace: React.FC<
                 renderOk={() => (
                   <div className="w-100">
                     {notificationScopes.map((s) => (
-                      <ItemNotificationScope
+                      <ItemClubNotificationScope
                         key={s.id}
                         item={s}
                         isSelected={selectedNotificationScope?.id === s.id}
@@ -125,7 +124,7 @@ const PageNotificationMarketplace: React.FC<
                           );
                         }}
                         onDelete={() => {
-                          fetchNotificationScopesAndNotifications();
+                          fetchClubNotificationScopesAndNotifications();
                           setSelectedNotificationScope(null);
                           setSelectedNotification(null);
                         }}
@@ -169,7 +168,7 @@ const PageNotificationMarketplace: React.FC<
                         <button
                           className="btn btn-sm btn-link"
                           onClick={() =>
-                            fetchNotificationsOfNotificationScope()
+                            fetchNotificationsOfClubNotificationScope()
                           }
                         >
                           Load more
@@ -187,4 +186,4 @@ const PageNotificationMarketplace: React.FC<
   );
 };
 
-export default PageNotificationMarketplace;
+export default PageNotificationClub;

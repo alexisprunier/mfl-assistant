@@ -40,7 +40,7 @@ async def send_listing_email(db, mail, notification, user, player_ids):
     body = _load_template(body)
 
     message = MessageSchema(
-        subject="[MFL-A] New listing notification",
+        subject="[MFL-A] New player listing notification",
         recipients=[user["email"]],
         subtype="html",
         body=body,
@@ -72,7 +72,71 @@ async def send_sale_email(db, mail, notification, user, player_ids):
     body = _load_template(body)
 
     message = MessageSchema(
-        subject="[MFL-A] New sale notification",
+        subject="[MFL-A] New player sale notification",
+        recipients=[user["email"]],
+        subtype="html",
+        body=body,
+    )
+
+    try:
+        await mail.send_message(message)
+
+        filters = {"_id": ObjectId(notification.inserted_id)}
+        update_data = {
+            "status": "sent",
+            "sending_date": datetime.datetime.now(),
+        }
+
+        await db.notifications.update_one(filters, {"$set": update_data})
+
+        return {"message": "Email sent successfully"}
+    except Exception:
+        raise
+
+
+async def send_club_listing_email(db, mail, notification, user, club_ids):
+    body = open("mail/templates/club_listing_notification.html", 'r').read()
+    body = body.format(
+        host=HOST,
+        club_section=build_club_section(club_ids),
+        webapp_url=get_webapp_url()
+    )
+    body = _load_template(body)
+
+    message = MessageSchema(
+        subject="[MFL-A] New club listing notification",
+        recipients=[user["email"]],
+        subtype="html",
+        body=body,
+    )
+
+    try:
+        await mail.send_message(message)
+
+        filters = {"_id": ObjectId(notification.inserted_id)}
+        update_data = {
+            "status": "sent",
+            "sending_date": datetime.datetime.now(),
+        }
+
+        await db.notifications.update_one(filters, {"$set": update_data})
+
+        return {"message": "Email sent successfully"}
+    except Exception:
+        raise
+
+
+async def send_club_sale_email(db, mail, notification, user, club_ids):
+    body = open("mail/templates/club_sale_notification.html", 'r').read()
+    body = body.format(
+        host=HOST,
+        club_section=build_club_section(club_ids),
+        webapp_url=get_webapp_url()
+    )
+    body = _load_template(body)
+
+    message = MessageSchema(
+        subject="[MFL-A] New club sale notification",
         recipients=[user["email"]],
         subtype="html",
         body=body,
@@ -152,6 +216,32 @@ def build_player_section(player_ids):
     player_section += "</div>"
 
     return player_section
+
+def build_club_section(club_ids):
+    club_section = "<div style='font-family: Arial, sans-serif;'>"
+
+    for i in club_ids:
+        club_section += (
+            "<table style='width: 100%; border-spacing: 10px; margin-bottom: 20px;'>"
+            "<tr>"
+            f"<td style='vertical-align: top; width: 160px;'>"
+            f"<img src='https://d13e14gtps4iwl.cloudfront.net/u/clubs/${i}/logo.png?v=63c386597972f1fcbdcef019a7b453c8' "
+            f"style='width: 80px;' />"
+            "</td>"
+            "<td style='vertical-align: top;'>"
+            "<div>"
+            f"<a href='https://app.playmfl.com/club/{i}' target='_blank' "
+            f"style='text-decoration: none; color: #0dcaf0; font-weight: bold; margin-right: 10px;'>See on MFL</a>"
+            "</div>"
+            "</td>"
+            "</tr>"
+            "</table>"
+            "<hr style='border: 0; border-top: 1px solid #555;' />"
+        )
+
+    club_section += "</div>"
+
+    return club_section
 
 def build_player_progress_section(data):
     player_section = "<div style='font-family: Arial, sans-serif;'>"

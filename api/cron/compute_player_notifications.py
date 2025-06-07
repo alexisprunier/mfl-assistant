@@ -13,20 +13,18 @@ sale_url = base_url + "listings?limit=25&type=PLAYER&status=BOUGHT&sorts=listing
 last_list_var = "last_treated_listing_datetime"
 last_sale_var = "last_treated_sale_datetime"
 
-logger = logging.getLogger("compute_notification")
+logger = logging.getLogger("compute_player_notifications")
 logger.setLevel(logging.INFO)
 
 
 async def main(db, mail):
     users = await _get_users(db)
     user_ids = [u["_id"] for u in users]
-    logger.critical(f"Number of users to treat: {len(user_ids)}")
 
     scopes = await _get_notification_scopes(db, user_ids)
     listing_scopes = [s for s in scopes if s["type"] == "listing"]
     sale_scopes = [s for s in scopes if s["type"] == "sale"]
-    logger.critical(f"Number of listing scopes to treat: {len(listing_scopes)}")
-    logger.critical(f"Number of sale scopes to treat: {len(sale_scopes)}")
+    logger.critical(f"Number of listing/sale scopes to treat: {len(listing_scopes)}/{len(sale_scopes)}")
 
     # Treat listing scopes
     listings = await _get_listings_to_treat(db)

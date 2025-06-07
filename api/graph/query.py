@@ -1,5 +1,5 @@
 from graphene import ObjectType, String, Int, Schema, Field, List, ID, Boolean, Date
-from graph.schema import MatchType, MatchClubPairType, RawPlayerPricingType, FormationMetaType, PlayerPricingType, UserType, GeolocationType, SaleType, ContractType, NotificationScopeType, NotificationType, CountType, DataPointType, ClubType, TeamType, TeamMemberType, PlayerType, ReportConfigurationType, ReportType
+from graph.schema import MatchType, ClubNotificationScopeType, MatchClubPairType, RawPlayerPricingType, FormationMetaType, PlayerPricingType, UserType, GeolocationType, SaleType, ContractType, NotificationScopeType, NotificationType, CountType, DataPointType, ClubType, TeamType, TeamMemberType, PlayerType, ReportConfigurationType, ReportType
 from bson import ObjectId
 from decorator.require_token import require_token
 from decorator.add_token_if_exists import add_token_if_exists
@@ -23,10 +23,21 @@ class Query(ObjectType):
             .find({"user": info.context["user"]["_id"]}) \
             .to_list(length=None)
 
-    get_notifications = List(NotificationType, notification_scope=String(), skip=Int(), limit=Int(), sort=String(), order=Int())
+    get_club_notification_scopes = List(ClubNotificationScopeType)
 
     @require_token
-    async def resolve_get_notifications(self, info, notification_scope=None, skip=0, limit=10, sort="_id", order=1):
+    async def resolve_get_club_notification_scopes(self, info):
+        return await info.context["db"].club_notification_scopes \
+            .find({"user": info.context["user"]["_id"]}) \
+            .to_list(length=None)
+
+    get_notifications = List(NotificationType, notification_scope=String(), club_notification_scope=String(), type=String(), skip=Int(), limit=Int(), sort=String(), order=Int())
+
+    @require_token
+    async def resolve_get_notifications(self, info, notification_scope=None, club_notification_scope=None, type=None, skip=0, limit=10, sort="_id", order=1):
+
+        notification_scopes = []
+        club_notification_scopes = []
 
         if notification_scope:
             notification_scope = await info.context["db"].notification_scopes \
@@ -46,15 +57,60 @@ class Query(ObjectType):
 
             notification_scopes = [notification_scope]
 
-        else:
+        if club_notification_scope:
+            club_notification_scope = await info.context["db"].club_notification_scopes \
+                .find_one({"_id": ObjectId(club_notification_scope)})
+
+            if not club_notification_scope:
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED, # to change to 404
+                    detail="Club notification scope not found",
+                )
+
+            if info.context["user"]["_id"] != club_notification_scope["user"]:
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="This user does not have access to this club notification scope",
+                )
+
+            club_notification_scopes = [club_notification_scope]
+
+        if not notification_scope and not club_notification_scope:
             notification_scopes = await info.context["db"].notification_scopes \
+                .find({"user": info.context["user"]["_id"]}) \
+                .to_list(length=None)
+            club_notification_scopes = await info.context["db"].club_notification_scopes \
                 .find({"user": info.context["user"]["_id"]}) \
                 .to_list(length=None)
 
         notification_scope_ids = [s["_id"] for s in notification_scopes]
+        club_notification_scope_ids = [s["_id"] for s in club_notification_scopes]
+
+        query = {}
+
+        if type == "player":
+            if notification_scope_ids:
+                query["notification_scope"] = {
+                    "$in": notification_scope_ids,
+                    "$ne": None
+                }
+            else:
+                return []
+
+        elif type == "club":
+            if club_notification_scope:
+                query["club_notification_scope"] = ObjectId(club_notification_scope)
+            else:
+                query["club_notification_scope"] = {"$ne": None}
+
+        else:
+            if notification_scope_ids:
+                query["notification_scope"] = {"$in": notification_scope_ids}
+            else:
+                return []
 
         notifications = await info.context["db"].notifications \
-            .find({"notification_scope": { "$in": notification_scope_ids }}) \
+            .find(query) \
             .sort(sort, -1 if order < 0 else 1) \
             .skip(skip) \
             .limit(limit) \
@@ -811,6 +867,34 @@ class Query(ObjectType):
         ]
 
         result = info.context["db"].players.aggregate(pipeline)
+
+        return [doc["_id"] async for doc in result]
+
+    get_club_countries = List(String)
+
+    async def resolve_get_club_countries(self, info):
+
+        pipeline = [
+            { "$match": { "country": { "$ne": None } } },
+            { "$group": { "_id": "$country" } },
+            { "$sort": { "_id": 1 } }
+        ]
+
+        result = info.context["db"].clubs.aggregate(pipeline)
+
+        return [doc["_id"] async for doc in result]
+
+    get_club_cities = List(String)
+
+    async def resolve_get_club_cities(self, info):
+
+        pipeline = [
+            { "$match": { "city": { "$ne": None } } },
+            { "$group": { "_id": "$city" } },
+            { "$sort": { "_id": 1 } }
+        ]
+
+        result = info.context["db"].clubs.aggregate(pipeline)
 
         return [doc["_id"] async for doc in result]
 

@@ -18,9 +18,7 @@ const MenuPageTools: React.FC<MenuPageToolsProps> = (props) => {
             to="player-pricing"
             className={
               "nav-link" +
-              (["/tools", "/tools/", "/tools/player-pricing"].indexOf(
-                location.pathname
-              ) >= 0
+              (["/tools/player-pricing"].indexOf(location.pathname) >= 0
                 ? " active"
                 : "")
             }

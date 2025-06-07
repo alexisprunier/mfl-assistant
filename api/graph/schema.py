@@ -197,7 +197,7 @@ class DataPointType(ObjectType):
 
 class NotificationScopeType(ObjectType):
     id = ID(source='_id')
-    type = String() # Enum.from_enum(NotificationScopeTypeEnum)
+    type = String() # listing or sale
     positions = List(lambda: String())
     nationalities = List(lambda: String())
     min_price = Int()
@@ -234,17 +234,49 @@ class NotificationScopeType(ObjectType):
     async def resolve_user(self, info):
         return await info.context["db"].users.find_one({"_id": self["user"]})
 
+class ClubNotificationScopeType(ObjectType):
+    id = ID(source='_id')
+    type = String() # listing or sale
+    min_price = Int()
+    max_price = Int()
+    countries = List(String)
+    cities = List(String)
+    divisions = List(Int)
+    creation_date = DateTime()
+    last_computation_date = DateTime()
+    user = Field(UserType)
+    notifications = List(lambda: NotificationType)
+
+    async def resolve_notifications(self, info):
+        return await info.context["db"].notifications \
+            .find({"club_notification_scope": ObjectId(str(self.id))}) \
+            .to_list(None)
+
+    async def resolve_user(self, info):
+        return await info.context["db"].users.find_one({"_id": self["user"]})
+
 
 class NotificationType(ObjectType):
     id = ID(source='_id')
     status = String()
     player_ids = List(lambda: Int())
+    club_ids = List(lambda: Int())
     creation_date = DateTime()
     sending_date = DateTime()
     notification_scope = Field(NotificationScopeType)
+    club_notification_scope = Field(ClubNotificationScopeType)
 
     async def resolve_notification_scope(self, info):
-        return await info.context["db"].notification_scopes.find_one({"_id": self["notification_scope"]})
+        scope_id = self.get("notification_scope")
+        if scope_id is None:
+            return None
+        return await info.context["db"].notification_scopes.find_one({"_id": scope_id})
+
+    async def resolve_club_notification_scope(self, info):
+        scope_id = self.get("club_notification_scope")
+        if scope_id is None:
+            return None
+        return await info.context["db"].club_notification_scopes.find_one({"_id": scope_id})
 
 
 class ReportConfigurationType(ObjectType):

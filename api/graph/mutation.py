@@ -1,7 +1,7 @@
 from graphene import Mutation, ObjectType, String, Int, Field, ID, Boolean, List
 
 from decorator.require_token import require_token
-from graph.schema import UserType, NotificationScopeType, NotificationType, TeamType, TeamMemberType, ReportConfigurationType, ReportType
+from graph.schema import UserType, ClubNotificationScopeType, NotificationScopeType, NotificationType, TeamType, TeamMemberType, ReportConfigurationType, ReportType
 import datetime
 import secrets
 from bson import ObjectId
@@ -108,6 +108,46 @@ class DeleteNotificationScope(Mutation):
         if notification_scope:
             info.context["db"].notification_scopes.delete_one({'_id': ObjectId(scope_id)})
             return DeleteNotificationScope(notification_scope=notification_scope)
+        else:
+            raise Exception("Scope not found")
+
+
+class AddClubNotificationScope(Mutation):
+    class Arguments:
+        user = String(required=True)
+        type = String(required=True)
+        countries = List(String)
+        cities = List(String)
+        divisions = List(Int)
+
+    club_notification_scope = Field(lambda: ClubNotificationScopeType)
+
+    @require_token
+    async def mutate(self, info, **kwargs):
+        club_notification_scope = kwargs
+        club_notification_scope["status"] = "active"
+        club_notification_scope["user"] = info.context["user"]["_id"]
+        club_notification_scope["creation_date"] = datetime.datetime.now()
+
+        club_notification_scope = info.context["db"].club_notification_scopes.insert_one(club_notification_scope)
+        return AddClubNotificationScope(club_notification_scope=club_notification_scope)
+
+
+class DeleteClubNotificationScope(Mutation):
+    class Arguments:
+        scope_id = String(required=True)
+
+    club_notification_scope = Field(lambda: ClubNotificationScopeType)
+
+    @require_token
+    async def mutate(self, info, scope_id):
+        club_notification_scope = info.context["db"].club_notification_scopes.find_one({
+            "_id": ObjectId(scope_id)
+        })
+
+        if club_notification_scope:
+            info.context["db"].club_notification_scopes.delete_one({'_id': ObjectId(scope_id)})
+            return DeleteClubNotificationScope(club_notification_scope=club_notification_scope)
         else:
             raise Exception("Scope not found")
 
@@ -312,6 +352,8 @@ class Mutation(ObjectType):
     update_logged_user_email = UpdateLoggedUserEmail.Field()
     add_notification_scope = AddNotificationScope.Field()
     delete_notification_scope = DeleteNotificationScope.Field()
+    add_club_notification_scope = AddClubNotificationScope.Field()
+    delete_club_notification_scope = DeleteClubNotificationScope.Field()
     add_notification = AddNotification.Field()
     send_confirmation_mail = SendConfirmationEmail.Field()
     add_team = AddTeam.Field()

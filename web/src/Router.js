@@ -7,7 +7,8 @@ import PageDashMarketplace from "pages/pagedash/PageDashMarketplace.js";
 import PageDashPlayers from "pages/pagedash/PageDashPlayers.js";
 import PageHome from "pages/PageHome";
 import PageNotification from "pages/PageNotification.js";
-import PageNotificationMarketplace from "pages/pagenotification/PageNotificationMarketplace.js";
+import PageNotificationPlayer from "pages/pagenotification/PageNotificationPlayer.js";
+import PageNotificationClub from "pages/pagenotification/PageNotificationClub.js";
 import PageNotificationReport from "pages/pagenotification/PageNotificationReport.js";
 import PageSearch from "pages/PageSearch";
 import PageTools from "pages/PageTools";
@@ -21,7 +22,7 @@ import PageMap from "pages/PageMap.js";
 import PageUserClubs from "pages/pageuser/PageUserClubs.js";
 import PageUserPlayers from "pages/pageuser/PageUserPlayers.js";
 import React, { useState } from "react";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes, useLocation, Navigate } from "react-router-dom";
 
 const Router: React.FC = (props) => {
   const location = useLocation();
@@ -74,7 +75,7 @@ const Router: React.FC = (props) => {
                 <PageUser {...props} yScrollPosition={yScrollPosition} />
               }
             >
-              <Route index element={<PageUserPlayers />} />
+              <Route index element={<Navigate to="players" replace />} />
               <Route path="players" element={<PageUserPlayers />} />
               <Route path="clubs" element={<PageUserClubs />} />
               <Route path="map" element={<PageUserMap />} />
@@ -83,7 +84,7 @@ const Router: React.FC = (props) => {
               path="dash"
               element={<PageDash yScrollPosition={yScrollPosition} />}
             >
-              <Route index element={<PageDashMarketplace />} />
+              <Route index element={<Navigate to="marketplace" replace />} />
               <Route path="marketplace" element={<PageDashMarketplace />} />
               <Route path="players" element={<PageDashPlayers />} />
               <Route path="clubs" element={<PageDashClubs />} />
@@ -92,7 +93,7 @@ const Router: React.FC = (props) => {
               path="tools"
               element={<PageTools yScrollPosition={yScrollPosition} />}
             >
-              <Route index element={<PageToolsPlayerPricing {...props} />} />
+              <Route index element={<Navigate to="player-pricing" replace />} />
               {
                 <Route
                   path="player-pricing"
@@ -121,16 +122,15 @@ const Router: React.FC = (props) => {
                 />
               }
             >
+              <Route index element={<Navigate to="player" replace />} />
               <Route
-                index
-                element={<PageNotificationMarketplace {...props} />}
+                path="player"
+                element={<PageNotificationPlayer {...props} />}
               />
-              {
-                <Route
-                  path="marketplace"
-                  element={<PageNotificationMarketplace {...props} />}
-                />
-              }
+              <Route
+                path="club"
+                element={<PageNotificationClub {...props} />}
+              />
               <Route
                 path="report"
                 element={<PageNotificationReport {...props} />}

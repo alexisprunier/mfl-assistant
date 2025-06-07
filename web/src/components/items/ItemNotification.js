@@ -19,15 +19,29 @@ const ItemNotification: React.FC<ItemNotificationProps> = ({ item }) => {
         <i className="bi bi-envelope-check-fill pe-1"></i> {prettifyId(item.id)}
       </div>
       <div className="d-flex flex-grow-0 px-1" style={{ width: 150 }}>
-        Scope: {prettifyId(item.notificationScope?.id)}
+        Scope: {item.notificationScope && prettifyId(item.notificationScope.id)}
+        {item.clubNotificationScope &&
+          prettifyId(item.clubNotificationScope.id)}
       </div>
+
       <div className="d-flex flex-grow-1 px-1">
-        <div className="text-truncate">
-          {item.playerIds.length +
-            " player" +
-            (item.playerIds.length > 1 ? "s" : "")}
-        </div>
+        {item.playerIds && (
+          <div className="text-truncate">
+            {item.playerIds.length +
+              " player" +
+              (item.playerIds.length > 1 ? "s" : "")}
+          </div>
+        )}
+
+        {item.clubIds && (
+          <div className="text-truncate">
+            {item.clubIds.length +
+              " club" +
+              (item.clubIds.length > 1 ? "s" : "")}
+          </div>
+        )}
       </div>
+
       <div
         className="d-flex flex-grow-0 justify-content-sm-end px-1"
         style={{ width: 160 }}

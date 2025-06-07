@@ -9,7 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from graph.query import Query
 from graph.mutation import Mutation
 import config
-from cron import compute_notifications, compute_reports, collect_matches, collect_clubs, collect_sales, collect_players, \
+from cron import compute_club_notifications, compute_player_notifications, compute_reports, collect_matches, collect_clubs, collect_sales, collect_players, \
     compute_club_count_per_day, compute_sale_total, compute_raw_player_pricings, compute_player_pricings, collect_users, \
     compute_formation_meta
 from endpoint.generate_nonce import generate_nonce
@@ -131,20 +131,21 @@ app.add_route("/api/confirm_email", confirm_email)
 
 scheduler = AsyncIOScheduler()
 
-scheduler.add_job(compute_notifications.main,       'interval', args=[db, mail],    seconds=24)
-scheduler.add_job(compute_reports.main,             'interval', args=[db, mail],    seconds=40)
+scheduler.add_job(compute_player_notifications.main,    'interval', args=[db, mail],    seconds=24)
+scheduler.add_job(compute_club_notifications.main,      'interval', args=[db, mail],    seconds=55)
+scheduler.add_job(compute_reports.main,                 'interval', args=[db, mail],    seconds=40)
 
-scheduler.add_job(collect_clubs.main,               'interval', args=[db],          seconds=60)
-scheduler.add_job(collect_sales.main,               'interval', args=[db],          seconds=28)
-scheduler.add_job(collect_players.main,             'interval', args=[db],          seconds=26)
-scheduler.add_job(collect_matches.main,             'interval', args=[db],          seconds=32)
-scheduler.add_job(collect_users.main,               'interval', args=[db],          seconds=20)
+scheduler.add_job(collect_clubs.main,                   'interval', args=[db],          seconds=60)
+scheduler.add_job(collect_sales.main,                   'interval', args=[db],          seconds=28)
+scheduler.add_job(collect_players.main,                 'interval', args=[db],          seconds=26)
+scheduler.add_job(collect_matches.main,                 'interval', args=[db],          seconds=32)
+scheduler.add_job(collect_users.main,                   'interval', args=[db],          seconds=20)
 
-scheduler.add_job(compute_club_count_per_day.main,  'interval', args=[db],          seconds=60 * 20)
-scheduler.add_job(compute_sale_total.main,          'interval', args=[db],          seconds=60 * 25)
-scheduler.add_job(compute_raw_player_pricings.main, 'interval', args=[db],          seconds=60 * 10)
-scheduler.add_job(compute_player_pricings.main,     'interval', args=[db],          seconds=60 * 60)
-scheduler.add_job(compute_formation_meta.main,      'interval', args=[db],          seconds=30 * 15)
+scheduler.add_job(compute_club_count_per_day.main,      'interval', args=[db],          seconds=60 * 20)
+scheduler.add_job(compute_sale_total.main,              'interval', args=[db],          seconds=60 * 25)
+scheduler.add_job(compute_raw_player_pricings.main,     'interval', args=[db],          seconds=60 * 10)
+scheduler.add_job(compute_player_pricings.main,         'interval', args=[db],          seconds=60 * 60)
+scheduler.add_job(compute_formation_meta.main,          'interval', args=[db],          seconds=30 * 15)
 scheduler.start()
 
 

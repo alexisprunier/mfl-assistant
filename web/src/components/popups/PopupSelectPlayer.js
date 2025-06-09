@@ -55,6 +55,7 @@ const PopupSelectPlayer: React.FC<PopupSelectPlayerProps> = ({
                   .map((p) => (
                     <ItemRowPlayerAssist
                       p={p.player}
+                      selectable={true}
                       isSelected={
                         selectedTeamMember &&
                         selectedTeamMember.player.id === p.player.id

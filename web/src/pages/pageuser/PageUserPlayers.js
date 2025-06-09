@@ -113,7 +113,7 @@ const PageUserPlayers: React.FC<PageUserPlayersProps> = () => {
   }, []);
 
   useEffect(() => {
-    if (filters === defaultFilters) {
+    if (user && filters === defaultFilters) {
       fetchPlayers();
     }
   }, [filters]);

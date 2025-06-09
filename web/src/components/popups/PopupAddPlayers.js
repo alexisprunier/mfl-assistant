@@ -221,6 +221,7 @@ const PopupAddPlayers: React.FC<PopupAddPlayersProps> = ({
                       <ItemRowPlayerAssist
                         p={p}
                         display={playerView}
+                        selectable={true}
                         isSelected={
                           selectedPlayers.map((p) => p.id).indexOf(p.id) >= 0
                         }

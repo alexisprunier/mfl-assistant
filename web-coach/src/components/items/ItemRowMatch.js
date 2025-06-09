@@ -29,52 +29,61 @@ const ItemRowMatch: React.FC<ItemRowMatchProps> = ({ match }) => {
     `https://d13e14gtps4iwl.cloudfront.net/u/clubs/${club?.id}/logo.png?v=63c386597972f1fcbdcef019a7b453c8`;
 
   return (
-    <div className="Item d-flex flex-column">
-      <div className="ItemRowMatch d-flex align-items-center justify-content-between">
-        {/* Home club left */}
-        <div className="d-flex align-items-center flex-fill me-3">
-          {homeClub && (
-            <>
+    <div className="Item ItemRowMatch d-flex flex-column">
+      <div className="d-flex flex-column flex-md-row">
+        <div className="d-flex flex-row flex-md-basis-420">
+          <div className="d-flex flex-row flex-basis-140">
+            <i class="bi bi-caret-right-square-fill me-1"></i>
+            {match.type}
+          </div>
+
+          <div className="d-flex flex-row flex-basis-140">
+            STATUS: {match.status}
+          </div>
+
+          <div className="d-flex flex-row flex-basis-140">
+            {/* Home club left */}
+            <div className="d-flex align-items-center">
               <img
                 className="club-logo me-2"
                 src={getLogoUrl(homeClub)}
                 alt={homeClub.name || "Home Club"}
                 style={{ width: 16, height: 16, objectFit: "contain" }}
               />
-              <span>{homeClub.name || "Unknown Home Club"}</span>
-            </>
-          )}
-        </div>
+            </div>
 
-        {/* Score center */}
-        <div
-          className="d-flex align-items-center justify-content-center flex-grow-0"
-          style={{ minWidth: 60 }}
-        >
-          <span className="fw-bold">
-            {homeScore != null ? homeScore : "-"} :{" "}
-            {awayScore != null ? awayScore : "-"}
-          </span>
-        </div>
+            {/* Score center */}
+            <div
+              className="d-flex align-items-center justify-content-center"
+              style={{ minWidth: 50 }}
+            >
+              <span className="fw-bold">
+                {homeScore != null && match.status === "ENDED"
+                  ? homeScore
+                  : "?"}{" "}
+                :{" "}
+                {awayScore != null && match.status === "ENDED"
+                  ? awayScore
+                  : "?"}
+              </span>
+            </div>
 
-        {/* Away club right */}
-        <div className="d-flex align-items-center flex-fill justify-content-end ms-3">
-          {awayClub && (
-            <>
-              <span>{awayClub.name || "Unknown Away Club"}</span>
+            {/* Away club right */}
+            <div className="d-flex align-items-center">
               <img
                 className="club-logo ms-2"
                 src={getLogoUrl(awayClub)}
                 alt={awayClub.name || "Away Club"}
                 style={{ width: 16, height: 16, objectFit: "contain" }}
               />
-            </>
-          )}
+            </div>
+          </div>
+        </div>
+        <div className="d-flex flex-grow-1 justify-content-end">
+          {match.startDate ? match.startDate.split("+")[0] : ""}
         </div>
       </div>
-      <div className="d-flex flex-fill justify-content-end">
-        {match.startDate ? match.startDate.split("+")[0] : ""}
-      </div>
+
       <div>
         <ItemRowClub
           c={match.homeClub}

@@ -49,27 +49,7 @@ const Menu: React.FC<MenuProps> = (props) => {
               </div>
             </Link>
           </li>
-          <li className="nav-item">
-            <Link
-              to="/formation-meta"
-              className={
-                "nav-link" +
-                (location.pathname.startsWith("/formation-meta")
-                  ? " active"
-                  : "")
-              }
-            >
-              {location.pathname.startsWith("/formation-meta") &&
-                getMenuLabel("Formation meta", "d-none d-lg-inline")}
-              <div className="px-2 px-lg-0">
-                {location.pathname.startsWith("/formation-meta") ? (
-                  <i className="bi bi-grid-3x3-gap-fill"></i>
-                ) : (
-                  <i className="bi bi-grid-3x3-gap"></i>
-                )}
-              </div>
-            </Link>
-          </li>
+
           <li className="nav-item">
             <Link
               to="/opponent-finder"
@@ -91,6 +71,29 @@ const Menu: React.FC<MenuProps> = (props) => {
               </div>
             </Link>
           </li>
+
+          <li className="nav-item">
+            <Link
+              to="/formation-meta"
+              className={
+                "nav-link" +
+                (location.pathname.startsWith("/formation-meta")
+                  ? " active"
+                  : "")
+              }
+            >
+              {location.pathname.startsWith("/formation-meta") &&
+                getMenuLabel("Formation meta", "d-none d-lg-inline")}
+              <div className="px-2 px-lg-0">
+                {location.pathname.startsWith("/formation-meta") ? (
+                  <i className="bi bi-grid-3x3-gap-fill"></i>
+                ) : (
+                  <i className="bi bi-grid-3x3-gap"></i>
+                )}
+              </div>
+            </Link>
+          </li>
+
           <li className="nav-item">
             <Link
               to="/match-analysis"

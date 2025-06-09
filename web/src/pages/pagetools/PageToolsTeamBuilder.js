@@ -26,7 +26,7 @@ import { formations } from "utils/formation.js";
 
 interface PageToolsTeamBuilderProps {}
 
-const PageToolsTeamBuilder: React.FC < PageToolsTeamBuilderProps > = (props) => {
+const PageToolsTeamBuilder: React.FC<PageToolsTeamBuilderProps> = (props) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [teams, setTeams] = useState(null);
@@ -160,7 +160,7 @@ const PageToolsTeamBuilder: React.FC < PageToolsTeamBuilderProps > = (props) => 
           flowUser={props.flowUser}
           assistantUser={props.assistantUser}
           logout={props.logout}
-          content={<BoxLogin />}
+          content={<BoxLogin assistantUser={props.assistantUser} />}
         />
       </div>
     );

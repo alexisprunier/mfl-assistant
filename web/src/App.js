@@ -63,7 +63,7 @@ const App: React.FC<AppProps> = (props) => {
   const getAssistantUser = () => {
     getLoggedUser({
       handleSuccess: (v) => {
-        if (!v.data.getLoggedUser) {
+        if (!v.data?.getLoggedUser) {
           setFlowUser(null);
           setAssistantUser(null);
         } else {
@@ -71,6 +71,8 @@ const App: React.FC<AppProps> = (props) => {
         }
       },
       handleError: (v) => {
+        setFlowUser(null);
+        setAssistantUser(null);
         return;
       },
     });

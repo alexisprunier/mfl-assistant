@@ -140,7 +140,7 @@ const PageUserPlayers: React.FC<PageUserPlayersProps> = () => {
             </div>
 
             <div class="d-flex flex-column flex-md-row">
-              <div class="d-flex flex-grow-1 align-items-center mb-3">
+              <div class="d-flex flex-grow-1 align-items-center mb-3 me-2">
                 {pricings && players ? (
                   <div class="d-flex flex-row">
                     <span class="me-1">Estimated gallery value:</span>
@@ -159,6 +159,11 @@ const PageUserPlayers: React.FC<PageUserPlayersProps> = () => {
                 )}
               </div>
               <div class="d-flex flex-grow-0 justify-content-end mb-3">
+                {players && (
+                  <div className="d-flex align-items-center me-2">
+                    {players.length} players
+                  </div>
+                )}
                 <FilterContainerPlayer
                   trigger={
                     <button className="d-flex flex-row btn btn-info text-white me-1">

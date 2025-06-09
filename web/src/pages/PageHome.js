@@ -472,12 +472,7 @@ const PageHome: React.FC<PageHomeProps> = ({
                           <i className="bi bi-buildings mx-1"></i> Clubs
                         </Link>
                       </div>
-                      <div className="d-flex card bg-black flex-grow-1 flex-shrink-1 flex-basis-0 min-width-0 min-width-0 me-0 me-lg-1">
-                        <Link className={"nav-link p-1"}>
-                          <i className="bi bi-cone-striped mx-1"></i> Soon to
-                          come
-                        </Link>
-                      </div>
+                      <div className="d-flex flex-grow-1 flex-basis-0 min-width-0 min-width-0 me-0 me-lg-1"></div>
                     </div>
                   </div>
                 </div>
@@ -523,15 +518,7 @@ const PageHome: React.FC<PageHomeProps> = ({
                           Contract evaluation
                         </Link>
                       </div>
-                      <div className="d-flex card bg-black flex-grow-1 flex-basis-0 min-width-0 min-width-0 me-0 me-lg-1">
-                        <Link
-                          to="/tools/match-observatory"
-                          className={"nav-link text-white p-1"}
-                        >
-                          <i className="bi bi-clipboard-data-fill mx-1"></i>
-                          Match observatory
-                        </Link>
-                      </div>
+                      <div className="d-flex flex-grow-1 flex-basis-0 min-width-0 min-width-0 me-0 me-lg-1"></div>
                     </div>
                   </div>
                 </div>

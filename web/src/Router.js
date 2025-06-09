@@ -13,7 +13,6 @@ import PageNotificationReport from "pages/pagenotification/PageNotificationRepor
 import PageSearch from "pages/PageSearch";
 import PageTools from "pages/PageTools";
 import PageToolsContractEvaluation from "pages/pagetools/PageToolsContractEvaluation.js";
-import PageToolsMatchObservatory from "pages/pagetools/PageToolsMatchObservatory.js";
 import PageToolsPlayerPricing from "pages/pagetools/PageToolsPlayerPricing.js";
 import PageToolsTeamBuilder from "pages/pagetools/PageToolsTeamBuilder.js";
 import PageUser from "pages/PageUser.js";
@@ -94,12 +93,10 @@ const Router: React.FC = (props) => {
               element={<PageTools yScrollPosition={yScrollPosition} />}
             >
               <Route index element={<Navigate to="player-pricing" replace />} />
-              {
-                <Route
-                  path="player-pricing"
-                  element={<PageToolsPlayerPricing />}
-                />
-              }
+              <Route
+                path="player-pricing"
+                element={<PageToolsPlayerPricing />}
+              />
               <Route
                 path="team-builder"
                 element={<PageToolsTeamBuilder {...props} />}
@@ -107,10 +104,6 @@ const Router: React.FC = (props) => {
               <Route
                 path="contract-evaluation"
                 element={<PageToolsContractEvaluation />}
-              />
-              <Route
-                path="match-observatory"
-                element={<PageToolsMatchObservatory {...props} />}
               />
             </Route>
             <Route

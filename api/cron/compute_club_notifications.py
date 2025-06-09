@@ -55,7 +55,7 @@ async def main(db, mail):
         await upsert_vars(db, last_sale_var, convert_unix_to_datetime(sales[0]["createdDateTime"]))
 
         for scope in sale_scopes:
-            filtered_sales = await _filter_listings_per_scope(scope, sales)
+            filtered_sales = await _filter_club_listings_per_scope(scope, sales)
             club_ids = [sale["club"]["id"] for sale in filtered_sales]
 
             if len(club_ids) > 0:
@@ -87,9 +87,15 @@ async def _get_club_notification_scopes(db, user_ids):
 
 
 async def _get_listings_to_treat(db):
-    async with httpx.AsyncClient() as client:
-        response = await client.get(list_url)
-        listings = response.json()
+    timeout = httpx.Timeout(10.0)
+
+    async with httpx.AsyncClient(timeout=timeout) as client:
+        try:
+            response = await client.get(list_url)
+            listings = response.json()
+        except httpx.ReadTimeout:
+            logger.critical(f"compute_club_notifications: Timeout while fetching listings from {list_url}")
+            listings = []
 
     last_listing_var_record = await db.vars.find_one({"var": last_list_var})
 
@@ -101,9 +107,15 @@ async def _get_listings_to_treat(db):
 
 
 async def _get_sales_to_treat(db):
-    async with httpx.AsyncClient() as client:
-        response = await client.get(sale_url)
-        sales = response.json()
+    timeout = httpx.Timeout(10.0)
+
+    async with httpx.AsyncClient(timeout=timeout) as client:
+        try:
+            response = await client.get(sale_url)
+            sales = response.json()
+        except httpx.ReadTimeout:
+            logger.critical(f"compute_club_notifications: Timeout while fetching sales from {sale_url}")
+            sales = []
 
     last_sale_var_record = await db.vars.find_one({"var": last_sale_var})
 
@@ -120,7 +132,7 @@ async def _filter_club_listings_per_scope(scope, listings):
         if ("min_price" not in scope or scope["min_price"] is None or scope["min_price"] <= l["price"])
         and ("max_price" not in scope or scope["max_price"] is None or scope["max_price"] >= l["price"])
         and ("countries" not in scope or scope["countries"] is None or len(scope["countries"]) == 0
-            or l["club"]["city"] in scope["nationalities"])
+            or l["club"]["country"] in scope["countries"])
         and ("cities" not in scope or scope["cities"] is None or len(scope["cities"]) == 0
             or l["club"]["city"] in scope["cities"])
         and ("divisions" not in scope or scope["divisions"] is None or len(scope["divisions"]) == 0

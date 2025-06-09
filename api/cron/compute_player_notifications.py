@@ -87,9 +87,15 @@ async def _get_notification_scopes(db, user_ids):
 
 
 async def _get_listings_to_treat(db):
-    async with httpx.AsyncClient() as client:  # Use httpx for async requests
-        response = await client.get(list_url)
-        listings = response.json()
+    timeout = httpx.Timeout(10.0)
+
+    async with httpx.AsyncClient(timeout=timeout) as client:
+        try:
+            response = await client.get(list_url)
+            listings = response.json()
+        except httpx.ReadTimeout:
+            logger.critical(f"compute_player_notifications: Timeout while fetching listings from {list_url}")
+            listings = []
 
     last_listing_var_record = await db.vars.find_one({"var": last_list_var})
 
@@ -101,9 +107,15 @@ async def _get_listings_to_treat(db):
 
 
 async def _get_sales_to_treat(db):
-    async with httpx.AsyncClient() as client:  # Use httpx for async requests
-        response = await client.get(sale_url)
-        sales = response.json()
+    timeout = httpx.Timeout(10.0)
+
+    async with httpx.AsyncClient(timeout=timeout) as client:
+        try:
+            response = await client.get(sale_url)
+            sales = response.json()
+        except httpx.ReadTimeout:
+            logger.critical(f"compute_player_notifications: Timeout while fetching sales from {sale_url}")
+            sales = []
 
     last_sale_var_record = await db.vars.find_one({"var": last_sale_var})
 
@@ -138,7 +150,7 @@ async def _filter_listings_per_scope(scope, listings):
         and ("nationalities" not in scope or scope["nationalities"] is None or len(scope["nationalities"]) == 0
             or l["player"]["metadata"]["nationalities"][0] in scope["nationalities"])
         and ("positions" not in scope or scope["positions"] is None or len(scope["positions"]) == 0 or (
-            l["player"]["metadata"]["positions"][0] in scope["nationalities"]
+            l["player"]["metadata"]["positions"][0] in scope["positions"]
                 if "primary_position_only" in scope and scope["primary_position_only"]
                 else set(scope["positions"]) & set(l["player"]["metadata"]["positions"])
             )

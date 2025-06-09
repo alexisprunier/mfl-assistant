@@ -92,6 +92,7 @@ a .card:hover {
 .popup-overlay {
   background-color: rgba(0, 0, 0, .8);
   z-index: 8000;
+  animation: fadeIn .3s;
 }
 
 .popup-content {

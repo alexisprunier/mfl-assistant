@@ -8,7 +8,12 @@ const PopupInformationPricing: React.FC<
 > = ({}) => {
   return (
     <PopupInformation
-      trigger={<i class="bi bi-info-circle-fill text-main"></i>}
+      trigger={
+        <i
+          class="bi bi-info-circle-fill text-main"
+          style={{ cursor: "pointer" }}
+        ></i>
+      }
       title={"The pricing is an estimation!"}
       content={
         <div>

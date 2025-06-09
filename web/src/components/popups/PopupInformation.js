@@ -8,7 +8,7 @@ interface PopupInformationProps {
   trigger: Object;
 }
 
-const PopupInformation: React.FC < PopupInformationProps > = ({
+const PopupInformation: React.FC<PopupInformationProps> = ({
   className,
   title,
   content,

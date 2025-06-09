@@ -4,33 +4,42 @@ import LoadingSquare from "components/loading/LoadingSquare";
 import React, { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import { getPlayers, getPlayerPricings } from "services/api-assistant.js";
+import FilterContainerPlayer from "components/filters/FilterContainerPlayer.js";
+import PopupInformationPricing from "components/popups/PopupInformationPricing.js";
 
 interface PageUserPlayersProps {}
 
 const PageUserPlayers: React.FC<PageUserPlayersProps> = () => {
   const user = useOutletContext();
+
+  const [defaultFilters] = useState({
+    firstPositionOnly: false,
+    positions: undefined,
+    minAge: undefined,
+    maxAge: undefined,
+    minOvr: undefined,
+    maxOvr: undefined,
+  });
+  const [filters, setFilters] = useState(defaultFilters);
+
   const [players, setPlayers] = useState(null);
-  const [playerPage, setPlayerPage] = useState(0);
-  const [canLoadMorePlayers, setCanLoadMorePlayers] = useState(false);
   const [pricings, setPricings] = useState([]);
 
   const [playerView, setPlayerView] = useState(null);
 
   const fetchPlayers = () => {
+    setPlayers(null);
+
     getPlayers({
       handleSuccess: (d) => {
-        if (!players) {
-          setPlayers(d.data.getPlayers);
-        } else {
-          setPlayers(players.concat(d.data.getPlayers));
-        }
-
-        setCanLoadMorePlayers(d.data.getPlayers.length === 500);
-
-        setPlayerPage(playerPage + 1);
+        setPlayers(d.data.getPlayers);
       },
       handleError: (e) => console.log(e),
-      params: { owners: [user.id], limit: 50000, skip: playerPage * 50000 },
+      params: {
+        ...filters,
+        owners: [user.id],
+        limit: 50000,
+      },
     });
   };
 
@@ -55,6 +64,21 @@ const PageUserPlayers: React.FC<PageUserPlayersProps> = () => {
       )
       .map((p) => p.price)
       .pop();
+  };
+
+  const countFilters = (p) => {
+    return Object.keys(filters).reduce((count, key) => {
+      if (
+        key !== "search" &&
+        filters[key] != null &&
+        filters[key] != false &&
+        filters[key] !== "" &&
+        (!Array.isArray(filters[key]) || filters[key].length > 0)
+      ) {
+        return count + 1;
+      }
+      return count;
+    }, 0);
   };
 
   const calculateTotalPricing = (players) => {
@@ -88,6 +112,12 @@ const PageUserPlayers: React.FC<PageUserPlayersProps> = () => {
     fetchPricings();
   }, []);
 
+  useEffect(() => {
+    if (filters === defaultFilters) {
+      fetchPlayers();
+    }
+  }, [filters]);
+
   return (
     <div id="PageUserPlayers">
       <div className="container max-width-md px-4 py-5">
@@ -109,22 +139,57 @@ const PageUserPlayers: React.FC<PageUserPlayersProps> = () => {
               )}
             </div>
 
-            {playerView == "pricing" && (
-              <div class="d-flex justify-content-end w-100 mb-3">
-                <div class="me-1">
-                  <span className="text-warning">
-                    <i class="bi bi-cone-striped me-1"></i>ALPHA:&nbsp;
-                  </span>
-                  Est. gallery value:{" "}
-                  <span class="text-info">
-                    ${calculateTotalPricing(players).total}
-                  </span>
-                </div>
-                {!calculateTotalPricing(players).complete && (
-                  <div>Pricing is missing for some players</div>
+            <div class="d-flex flex-column flex-md-row">
+              <div class="d-flex flex-grow-1 align-items-center mb-3">
+                {pricings && players ? (
+                  <div class="d-flex flex-row">
+                    <span class="me-1">Estimated gallery value:</span>
+                    <span class="text-info me-1">
+                      ${calculateTotalPricing(players).total}
+                    </span>
+                    <PopupInformationPricing />
+                    {!calculateTotalPricing(players).complete && (
+                      <div className="ms-1">
+                        Pricing is missing for some players
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <LoadingSquare />
                 )}
               </div>
-            )}
+              <div class="d-flex flex-grow-0 justify-content-end mb-3">
+                <FilterContainerPlayer
+                  trigger={
+                    <button className="d-flex flex-row btn btn-info text-white me-1">
+                      <i className="bi bi-filter-square-fill" />
+                      {countFilters() > 0 ? (
+                        <div className="ms-2">{countFilters()}</div>
+                      ) : (
+                        ""
+                      )}
+                    </button>
+                  }
+                  filters={filters}
+                  onChange={(f) => setFilters(f)}
+                  onApply={() => fetchPlayers()}
+                  showPositions={true}
+                  showOverallScore={true}
+                  showAge={true}
+                  deactivateNavigate={true}
+                />
+                {countFilters() > 0 && (
+                  <button
+                    className="btn btn-warning text-white me-1"
+                    onClick={() => {
+                      setFilters(defaultFilters);
+                    }}
+                  >
+                    <i className="bi bi-x-square-fill text-white"></i>
+                  </button>
+                )}
+              </div>
+            </div>
 
             {user && players !== null && (
               <div>
@@ -136,17 +201,6 @@ const PageUserPlayers: React.FC<PageUserPlayersProps> = () => {
                   />
                 ))}
               </div>
-            )}
-
-            {user && canLoadMorePlayers && (
-              <button
-                className="btn btn-sm btn-link align-self-start"
-                onClick={() => {
-                  fetchPlayers();
-                }}
-              >
-                Load more
-              </button>
             )}
 
             {(!user || players === null) && (

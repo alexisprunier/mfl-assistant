@@ -39,6 +39,7 @@ mail = FastMail(ConnectionConfig(**config.MAIL_CONFIG))
 # Setup indexes
 
 async def init_indexes(db):
+    await db.users.create_index([('address', 1)])
     await db.contracts.create_index([('player', 1)])
     await db.matches.create_index([('engine', 1), ('status', 1)])
     await db.matches.create_index([('status', 1), ('startDate', -1)])
@@ -53,6 +54,7 @@ async def init_indexes(db):
     ])
     await db.sales.create_index([('overall', 1), ('age', 1), ('positions.0', 1), ('execution_date', -1)])
     await db.players.create_index([("owner", 1), ("overall", -1)])
+    await db.players.create_index([("owner", 1)])
     await db.data_points.create_index([('property', 1)])
     await db.clubs.create_index(
         [
@@ -161,7 +163,7 @@ scheduler.add_job(compute_club_count_per_day.main,      'interval', args=[db],  
 scheduler.add_job(compute_sale_total.main,              'interval', args=[db],          seconds=60 * 25)
 scheduler.add_job(compute_raw_player_pricings.main,     'interval', args=[db],          seconds=60 * 10)
 scheduler.add_job(compute_player_pricings.main,         'interval', args=[db],          seconds=60 * 60)
-scheduler.add_job(compute_formation_meta.main,          'interval', args=[db],          seconds=30 * 15)
+scheduler.add_job(compute_formation_meta.main,          'interval', args=[db],          seconds=60 * 90)
 scheduler.start()
 
 @app.on_event("startup")

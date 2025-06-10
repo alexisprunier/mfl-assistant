@@ -38,24 +38,36 @@ mail = FastMail(ConnectionConfig(**config.MAIL_CONFIG))
 
 # Setup indexes
 
-db.clubs.create_index(
-    [
-        ('name', 'text'),
-        ('city', 'text'),
-        ('country', 'text')
-    ],
-    weights={
-        'name': 10,
-        'city': 5,
-        'country': 2
-    }
-)
-db.contracts.create_index([('player', 1)])
-db.matches.create_index([('engine', 1), ('status', 1)])
-db.matches.create_index([('status', 1), ('startDate', -1)])
-db.matches.create_index([('status', 1), ('engine', 1), ('startDate', -1)])
-db.sales.create_index([('overall', 1), ('age', 1), ('positions.0', 1), ('execution_date', -1)])
-db.players.create_index([("owner", 1), ("overall", -1)])
+async def init_indexes(db):
+    await db.contracts.create_index([('player', 1)])
+    await db.matches.create_index([('engine', 1), ('status', 1)])
+    await db.matches.create_index([('status', 1), ('startDate', -1)])
+    await db.matches.create_index([('status', 1), ('engine', 1), ('startDate', -1)])
+    await db.matches.create_index([
+        ('type', 1),
+        ('homeClub', 1),
+        ('awayClub', 1),
+        ('homeOverall', 1),
+        ('awayOverall', 1),
+        ('startDate', -1)
+    ])
+    await db.sales.create_index([('overall', 1), ('age', 1), ('positions.0', 1), ('execution_date', -1)])
+    await db.players.create_index([("owner", 1), ("overall", -1)])
+    await db.data_points.create_index([('property', 1)])
+    await db.clubs.create_index(
+        [
+            ('name', 'text'),
+            ('city', 'text'),
+            ('country', 'text')
+        ],
+        weights={
+            'name': 10,
+            'city': 5,
+            'country': 2
+        }
+    )
+
+await init_indexes(db)
 
 # Setup GraphQL
 

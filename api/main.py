@@ -38,8 +38,7 @@ mail = FastMail(ConnectionConfig(**config.MAIL_CONFIG))
 
 # Setup indexes
 
-
-db.clubs.create_index(
+await db.clubs.create_index(
     [
         ('name', 'text'),
         ('city', 'text'),

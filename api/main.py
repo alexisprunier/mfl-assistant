@@ -38,7 +38,7 @@ mail = FastMail(ConnectionConfig(**config.MAIL_CONFIG))
 
 # Setup indexes
 
-await db.clubs.create_index(
+db.clubs.create_index(
     [
         ('name', 'text'),
         ('city', 'text'),
@@ -50,6 +50,12 @@ await db.clubs.create_index(
         'country': 2
     }
 )
+db.contracts.create_index([('player', 1)])
+db.matches.create_index([('engine', 1), ('status', 1)])
+db.matches.create_index([('status', 1), ('startDate', -1)])
+db.matches.create_index([('status', 1), ('engine', 1), ('startDate', -1)])
+db.sales.create_index([('overall', 1), ('age', 1), ('positions.0', 1), ('execution_date', -1)])
+db.players.create_index([("owner", 1), ("overall", -1)])
 
 # Setup GraphQL
 

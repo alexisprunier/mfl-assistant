@@ -33,10 +33,11 @@ app.add_middleware(
 
 # Plugins
 
-db = AsyncIOMotorClient(config.DB_URL)[config.DB_CONFIG["database"]]
+db = AsyncIOMotorClient(config.DB_URL, serverSelectionTimeoutMS=5000, retryWrites=True, retryRead=True)[config.DB_CONFIG["database"]]
 mail = FastMail(ConnectionConfig(**config.MAIL_CONFIG))
 
 # Setup indexes
+
 
 db.clubs.create_index(
     [

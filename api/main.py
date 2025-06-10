@@ -67,8 +67,6 @@ async def init_indexes(db):
         }
     )
 
-await init_indexes(db)
-
 # Setup GraphQL
 
 def get_context_value(request: Request) -> dict:
@@ -165,6 +163,10 @@ scheduler.add_job(compute_raw_player_pricings.main,     'interval', args=[db],  
 scheduler.add_job(compute_player_pricings.main,         'interval', args=[db],          seconds=60 * 60)
 scheduler.add_job(compute_formation_meta.main,          'interval', args=[db],          seconds=30 * 15)
 scheduler.start()
+
+@app.on_event("startup")
+async def startup_event():
+    await init_indexes(db)
 
 
 if __name__ == "__main__":

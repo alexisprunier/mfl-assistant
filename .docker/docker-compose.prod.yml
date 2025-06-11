@@ -15,6 +15,7 @@ services:
       - "27017"
     volumes:
       - /var/www/mfl-assistant/database/data:/data
+    cpus: 2.0
 
   mailserver:
     image: docker.io/mailserver/docker-mailserver:latest

@@ -33,7 +33,15 @@ app.add_middleware(
 
 # Plugins
 
-db = AsyncIOMotorClient(config.DB_URL, serverSelectionTimeoutMS=5000, retryWrites=True, retryReads=True)[config.DB_CONFIG["database"]]
+db = AsyncIOMotorClient(
+    config.DB_URL,
+    serverSelectionTimeoutMS=5000,
+    retryWrites=True,
+    retryReads=True,
+    socketTimeoutMS=10000,
+    maxIdleTimeMS=30000,
+    maxPoolSize=100,
+)[config.DB_CONFIG["database"]]
 mail = FastMail(ConnectionConfig(**config.MAIL_CONFIG))
 
 # Setup indexes

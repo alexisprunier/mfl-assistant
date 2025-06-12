@@ -9,8 +9,8 @@ last_matches_url = "https://z519wdyajg.execute-api.us-east-1.amazonaws.com/prod/
 base_url = "https://z519wdyajg.execute-api.us-east-1.amazonaws.com/prod/matches/"
 
 min_match_id_stepping = 1
-max_match_id_stepping = 5
-max_live_match_to_treat = 5
+max_match_id_stepping = 10
+max_live_match_to_treat = 3
 
 logger = logging.getLogger("collect_matches")
 logger.setLevel(logging.INFO)

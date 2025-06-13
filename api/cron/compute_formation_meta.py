@@ -7,47 +7,64 @@ logger = logging.getLogger("compute_formation_meta")
 logger.setLevel(logging.INFO)
 
 
+def make_hashable(obj):
+    if isinstance(obj, dict):
+        # Sort dict items so that order doesn't affect the hash
+        return tuple((k, make_hashable(v)) for k, v in sorted(obj.items()))
+    elif isinstance(obj, list):
+        return tuple(make_hashable(i) for i in obj)
+    else:
+        return obj  # assume already hashable
+
+
 async def main(db):
     logger.critical("Start compute_formation_meta")
     
     engines = await db.matches.distinct("engine")
 
     for engine in engines:
-        matches = await db.matches.find({
+        formation_stats = defaultdict(lambda: {"victories": 0, "draws": 0, "defeats": 0, "engine": engine})
+        overall_cache = {}
+
+        cursor = db.matches.find({
             "engine": engine,
             "$or": [
                 {"status": "ENDED"},
                 {"status": {"$exists": False}}
             ]
-        }).to_list(None)
+        })
 
-        formation_stats = defaultdict(lambda: {"victories": 0, "draws": 0, "defeats": 0, "engine": engine})
+        def get_overall(positions, players, modifiers):
+            key = (make_hashable(positions), make_hashable(players), make_hashable(modifiers))
+            if key not in overall_cache:
+                overall_cache[key] = calculate_team_overall(positions, players, modifiers)
+            return overall_cache[key]
 
-        for match in matches:
+        while await cursor.fetch_next:
+            match = cursor.next_object()
+
             if 'homePositions' not in match or 'awayPositions' not in match:
                 continue
 
-            # Calculate the overall ratings for both teams
-            home_total_overall = calculate_team_overall(match['homePositions'], match['players'], match['modifiers'])
-            away_total_overall = calculate_team_overall(match['awayPositions'], match['players'], match['modifiers'])
+            home_total_overall = get_overall(match['homePositions'], match['players'], match.get('modifiers'))
+            away_total_overall = get_overall(match['awayPositions'], match['players'], match.get('modifiers'))
 
-            # Skip matches where the overall difference exceeds 10
             if abs(home_total_overall - away_total_overall) > 20:
                 continue
 
-            # Get the formations
-            home_formation = match['homeFormation']
-            away_formation = match['awayFormation']
+            home_formation = match.get('homeFormation')
+            away_formation = match.get('awayFormation')
 
-            # Determine the result
-            if match['homeScore'] > match['awayScore']:
+            if home_formation is None or away_formation is None:
+                continue
+
+            if match.get('homeScore', 0) > match.get('awayScore', 0):
                 result = 'home'
-            elif match['homeScore'] < match['awayScore']:
+            elif match.get('homeScore', 0) < match.get('awayScore', 0):
                 result = 'away'
             else:
                 result = 'draw'
 
-            # Track the result in the statistics
             if result == 'home':
                 formation_stats[(home_formation, away_formation)]['victories'] += 1
                 formation_stats[(away_formation, home_formation)]['defeats'] += 1

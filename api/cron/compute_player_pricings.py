@@ -1,5 +1,5 @@
 from collections import defaultdict
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time as dt_time
 from math import exp
 from pymongo import MongoClient
 import json
@@ -20,6 +20,9 @@ logger.setLevel(logging.INFO)
 
 async def main(db):
     logger.critical("Start compute_player_pricings")
+
+    dt = datetime.now()
+
     positions = [
         "GK", "RB", "LB", "CB", "RWB", "LWB", 
         "CDM", "RM", "LM", "CM", "CAM", "RW", 
@@ -27,12 +30,21 @@ async def main(db):
     ]
 
     for p in positions:
-        await get_smoothed_prices(db, datetime.now(), position=p)
+        await get_smoothed_prices(db, dt - timedelta(days=7), position=p)
+        await get_smoothed_prices(db, dt - timedelta(days=6), position=p)
+        await get_smoothed_prices(db, dt - timedelta(days=5), position=p)
+        await get_smoothed_prices(db, dt - timedelta(days=4), position=p)
+        await get_smoothed_prices(db, dt - timedelta(days=3), position=p)
+        await get_smoothed_prices(db, dt - timedelta(days=2), position=p)
+        await get_smoothed_prices(db, dt - timedelta(days=1), position=p)
+        await get_smoothed_prices(db, dt, position=p)
     logger.critical("End compute_player_pricings")
 
 
 async def get_smoothed_prices(db, target_date, position="ST"):
+    target_date = datetime.combine(target_date.date(), dt_time(23, 59, 59))
     lookback_date = target_date - timedelta(days=30)
+    lookback_date = datetime.combine(lookback_date, dt_time.min)
 
     pipeline = [
         {"$match": {
@@ -78,14 +90,15 @@ async def get_smoothed_prices(db, target_date, position="ST"):
             interp_price = model.predict([[age, overall]])[0]
         interp_price = int(round(interp_price.item() if isinstance(interp_price, np.ndarray) else interp_price))
         interp_price = 1 if interp_price < 1 else interp_price
-        await upsert_player_pricing(db, overall=int(overall), position=position, age=int(age), price=interp_price)
+        await upsert_player_pricing(db, overall=int(overall), position=position, age=int(age), price=interp_price, date=target_date)
 
 
-async def upsert_player_pricing(db, overall, position, age, price):
+async def upsert_player_pricing(db, overall, position, age, price, date):
     filter_query = {
         "overall": overall,
         "position": position,
-        "age": age
+        "age": age,
+        "date": date
     }
     
     update_data = {

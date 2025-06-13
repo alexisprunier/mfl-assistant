@@ -958,9 +958,36 @@ class Query(ObjectType):
     get_player_pricings = List(PlayerPricingType)
 
     async def resolve_get_player_pricings(self, info):
-        return await info.context["db"].player_pricings \
-            .find() \
-            .to_list(length=None)
+        db = info.context["db"].player_pricings
+    
+        latest_doc = await db.find().sort("date", -1).limit(1).to_list(length=1)
+        
+        if not latest_doc:
+            return []
+        
+        latest_date = latest_doc[0]["date"]
+        
+        return await db.find({"date": latest_date}).to_list(length=None)
+
+    get_player_pricing_history = List(
+        PlayerPricingType,
+        overall=Int(required=True),
+        position=String(required=True),
+        age=Int(required=True)
+    )
+
+    async def resolve_get_player_pricing_history(self, info, overall, position, age):
+        db = info.context["db"].player_pricings
+        
+        query = {
+            "overall": overall,
+            "position": position,
+            "age": age
+        }
+        
+        cursor = db.find(query).sort("date", 1)
+        
+        return await cursor.to_list(length=None)
 
     get_raw_player_pricings = List(RawPlayerPricingType)
 

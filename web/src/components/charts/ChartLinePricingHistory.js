@@ -1,29 +1,41 @@
 import React from "react";
 import { Line } from "react-chartjs-2";
 import LoadingSquare from "components/loading/LoadingSquare";
-import { Chart as ChartJS, CategoryScale } from "chart.js";
+import { Chart as ChartJS, CategoryScale, TimeScale } from "chart.js";
 import "chartjs-adapter-date-fns";
 
-ChartJS.register(CategoryScale);
+ChartJS.register(CategoryScale, TimeScale);
 
-interface ChartAreaClubsPerDayProps {
+interface ChartLinePricingHistoryProps {
   data: object;
 }
 
-const ChartAreaClubsPerDay: React.FC<ChartAreaClubsPerDayProps> = ({
+const ChartLinePricingHistory: React.FC<ChartLinePricingHistoryProps> = ({
   data,
 }) => {
-  const getData = () => ({
-    labels: data.map((d) => d.date),
-    datasets: [
-      {
-        fill: true,
-        borderColor: "#0dcaf0",
-        backgroundColor: "rgba(13,202,240,.4)",
-        data: data.map((d) => d.value),
-      },
-    ],
-  });
+  const getData = () => {
+    const now = new Date();
+    const sevenDaysAgo = new Date(now);
+    sevenDaysAgo.setDate(now.getDate() - 7);
+
+    const filteredData = data
+      .filter((d) => new Date(d.date) >= sevenDaysAgo)
+      .map((d) => ({
+        x: new Date(d.date),
+        y: d.price,
+      }));
+
+    return {
+      datasets: [
+        {
+          fill: true,
+          borderColor: "#0dcaf0",
+          backgroundColor: "rgba(13,202,240,.4)",
+          data: filteredData,
+        },
+      ],
+    };
+  };
 
   const options = {
     responsive: true,
@@ -32,9 +44,6 @@ const ChartAreaClubsPerDay: React.FC<ChartAreaClubsPerDayProps> = ({
     scales: {
       x: {
         type: "time",
-        ticks: {
-          beginAtZero: true,
-        },
         grid: {
           display: false,
           drawBorder: false,
@@ -43,17 +52,16 @@ const ChartAreaClubsPerDay: React.FC<ChartAreaClubsPerDayProps> = ({
           display: false,
         },
         time: {
-          unit: "month",
-          tooltipFormat: "yyyy-MM-dd",
+          unit: "day",
+          tooltipFormat: "dd-MM",
           displayFormats: {
-            day: "yyyy-MM-dd",
+            day: "dd-MM",
             month: "MMM yyyy",
           },
         },
       },
       y: {
         ticks: {
-          display: false,
           beginAtZero: true,
         },
         grid: {
@@ -82,4 +90,4 @@ const ChartAreaClubsPerDay: React.FC<ChartAreaClubsPerDayProps> = ({
   );
 };
 
-export default ChartAreaClubsPerDay;
+export default ChartLinePricingHistory;

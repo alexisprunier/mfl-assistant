@@ -1057,6 +1057,28 @@ export const getPlayerSales = ({
     (e) => defaultHandleError(handleError, e)
   );
 
+export const getPlayerPricingHistory = ({
+  handleSuccess = null,
+  handleError = null,
+  params,
+}) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `{
+        getPlayerPricingHistory(${jsonToParams(params)}) {
+          overall,
+          age,
+          price,
+          position,
+          date
+        }
+      }`,
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );
+
 export const getPlayerPricings = ({
   handleSuccess = null,
   handleError = null,

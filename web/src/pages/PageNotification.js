@@ -34,7 +34,6 @@ const PageNotification: React.FC<PageNotificationProps> = (props) => {
 
   useEffect(() => {
     fetchUser();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

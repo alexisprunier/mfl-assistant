@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Popup from "reactjs-popup";
 import ButtonMflPlayerInfo from "components/buttons/ButtonMflPlayerInfo.js";
 import ButtonMflPlayer from "components/buttons/ButtonMflPlayer.js";
 import BoxCard from "components/box/BoxCard.js";
+import { getPlayerPricingHistory } from "services/api-assistant.js";
+import ChartLinePricingHistory from "components/charts/ChartLinePricingHistory.js";
+import LoadingSquare from "components/loading/LoadingSquare.js";
+
 import {
   positions,
   getCalculatedOverall,
@@ -20,6 +24,24 @@ const PopupPlayer: React.FC<PopupPlayerProps> = ({
   player,
   trigger,
 }) => {
+  const [pricings, setPricings] = useState(null);
+
+  const fetchPlayerPricingHistory = () => {
+    getPlayerPricingHistory({
+      handleSuccess: (d) => {
+        if (d.data.getPlayerPricingHistory) {
+          setPricings(d.data.getPlayerPricingHistory);
+        }
+      },
+      handleError: (e) => console.log(e),
+      params: {
+        overall: player.overall,
+        age: player.age,
+        position: player.positions[0],
+      },
+    });
+  };
+
   const getOVRs = () => {
     return positions
       .map((pos) => {
@@ -54,6 +76,7 @@ const PopupPlayer: React.FC<PopupPlayerProps> = ({
         modal
         closeOnDocumentClick
         className={"fade-in popup-lg " + className}
+        onOpen={fetchPlayerPricingHistory}
       >
         {(close) => (
           <div className="container bg-dark overflow-auto border border-info border-3 rounded-3 p-4">
@@ -73,7 +96,7 @@ const PopupPlayer: React.FC<PopupPlayerProps> = ({
 
             <div className="d-flex flex-column flex-md-row m-1 mb-3">
               <div className="d-flex flex-column flex-md-basis-200">
-                <div className="d-flex flex-fill justify-content-center mb-3">
+                <div className="d-flex justify-content-center mb-3">
                   <img
                     src={`https://d13e14gtps4iwl.cloudfront.net/players/${player.id}/card_512.png`}
                     style={{ width: "80%" }}
@@ -130,6 +153,21 @@ const PopupPlayer: React.FC<PopupPlayerProps> = ({
                         <i class="bi bi-rulers me-1"></i>
                         {player.height}
                       </div>
+                    </div>
+                  }
+                />
+
+                <BoxCard
+                  className="mb-2 "
+                  content={
+                    <div className="d-flex flex-fill overflow-hidden ratio ratio-16x9">
+                      {pricings ? (
+                        <ChartLinePricingHistory data={pricings} />
+                      ) : (
+                        <div className="h-100 w-100">
+                          <LoadingSquare />
+                        </div>
+                      )}
                     </div>
                   }
                 />

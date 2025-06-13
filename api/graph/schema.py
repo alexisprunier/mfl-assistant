@@ -1,4 +1,4 @@
-from graphene import ObjectType, String, Int, Boolean, Field, List, ID, DateTime, Float
+from graphene import ObjectType, String, Int, Boolean, Field, List, ID, DateTime, Float, Date
 import enum
 from bson import ObjectId
 from graphene.types.generic import GenericScalar
@@ -331,10 +331,12 @@ class PlayerPricingType(ObjectType):
     price = Int()
     overall = Int()
     position = String()
+    date = Date()
     age = Int()
 
     def resolve_id(self, info):
-        return f"{self.overall}-{self.position}-{self.age}"
+        date_str = self.date.isoformat() if isinstance(self.date, date) else str(self.date)
+        return f"{self.overall}-{self.position}-{self.age}-{date_str}"
 
 class PlayerStatsType(ObjectType):
     overall = Int()

@@ -30,13 +30,6 @@ async def main(db):
     ]
 
     for p in positions:
-        await get_smoothed_prices(db, dt - timedelta(days=7), position=p)
-        await get_smoothed_prices(db, dt - timedelta(days=6), position=p)
-        await get_smoothed_prices(db, dt - timedelta(days=5), position=p)
-        await get_smoothed_prices(db, dt - timedelta(days=4), position=p)
-        await get_smoothed_prices(db, dt - timedelta(days=3), position=p)
-        await get_smoothed_prices(db, dt - timedelta(days=2), position=p)
-        await get_smoothed_prices(db, dt - timedelta(days=1), position=p)
         await get_smoothed_prices(db, dt, position=p)
     logger.critical("End compute_player_pricings")
 

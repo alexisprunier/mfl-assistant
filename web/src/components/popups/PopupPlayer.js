@@ -6,6 +6,8 @@ import BoxCard from "components/box/BoxCard.js";
 import { getPlayerPricingHistory } from "services/api-assistant.js";
 import ChartLinePricingHistory from "components/charts/ChartLinePricingHistory.js";
 import LoadingSquare from "components/loading/LoadingSquare.js";
+import PopupInformationPricing from "components/popups/PopupInformationPricing.js";
+import { useNavigate } from "react-router-dom";
 
 import {
   positions,
@@ -24,6 +26,8 @@ const PopupPlayer: React.FC<PopupPlayerProps> = ({
   player,
   trigger,
 }) => {
+  const navigate = useNavigate();
+
   const [pricings, setPricings] = useState(null);
 
   const fetchPlayerPricingHistory = () => {
@@ -162,7 +166,35 @@ const PopupPlayer: React.FC<PopupPlayerProps> = ({
                   content={
                     <div className="d-flex flex-fill overflow-hidden ratio ratio-16x9">
                       {pricings ? (
-                        <ChartLinePricingHistory data={pricings} />
+                        <div className="d-flex flex-column">
+                          <div className="d-flex flex-row mb-1">
+                            <div className="d-flex flex-row flex-fill">
+                              Estimated pricing:&nbsp;
+                              <PopupInformationPricing />
+                              &nbsp;
+                              <span className="text-main">
+                                $
+                                {pricings.length > 0
+                                  ? pricings[pricings.length - 1].price
+                                  : "--"}
+                              </span>
+                            </div>
+                            <div className="d-flex justify-content-end">
+                              <button
+                                className="btn btn-info btn-small text-white"
+                                onClick={() => {
+                                  navigate(
+                                    `/tools/player-pricing?overall=${player.overall}&age=${player.age}&position=${player.positions[0]}`
+                                  );
+                                }}
+                              >
+                                Player pricing{" "}
+                                <i class="bi bi-caret-right-fill text-white"></i>
+                              </button>
+                            </div>
+                          </div>
+                          <ChartLinePricingHistory data={pricings} />
+                        </div>
                       ) : (
                         <div className="h-100 w-100">
                           <LoadingSquare />

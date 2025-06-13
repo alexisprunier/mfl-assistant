@@ -63,6 +63,8 @@ const ChartLinePricingHistory: React.FC<ChartLinePricingHistoryProps> = ({
       y: {
         ticks: {
           beginAtZero: true,
+          stepSize: 1,
+          maxTicksLimit: 5,
         },
         grid: {
           display: false,

@@ -181,8 +181,9 @@ const ItemRowPlayerAssist: React.FC<ItemRowPlayerAssistProps> = ({
                 <div className="d-flex flex-grow-1 pe-1">
                   {pricing ? (
                     <div className="d-flex flex-row">
+                      Estimated pricing:&nbsp;
                       <PopupInformationPricing />
-                      &nbsp;Estimated pricing:&nbsp;
+                      &nbsp;
                       <span className="text-main">${pricing}</span>
                     </div>
                   ) : (

@@ -144,10 +144,11 @@ const PageUserPlayers: React.FC<PageUserPlayersProps> = () => {
                 {pricings && players ? (
                   <div class="d-flex flex-row">
                     <span class="me-1">Estimated gallery value:</span>
+                    <PopupInformationPricing />
+                    &nbsp;
                     <span class="text-info me-1">
                       ${calculateTotalPricing(players).total}
                     </span>
-                    <PopupInformationPricing />
                     {!calculateTotalPricing(players).complete && (
                       <div className="ms-1">
                         Pricing is missing for some players

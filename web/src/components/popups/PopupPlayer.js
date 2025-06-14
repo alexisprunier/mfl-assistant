@@ -8,6 +8,7 @@ import ChartLinePricingHistory from "components/charts/ChartLinePricingHistory.j
 import LoadingSquare from "components/loading/LoadingSquare.js";
 import PopupInformationPricing from "components/popups/PopupInformationPricing.js";
 import { useNavigate } from "react-router-dom";
+import MiscOverallField from "components/misc/MiscOverallField.js";
 
 import {
   positions,
@@ -83,7 +84,7 @@ const PopupPlayer: React.FC<PopupPlayerProps> = ({
         onOpen={fetchPlayerPricingHistory}
       >
         {(close) => (
-          <div className="container bg-dark overflow-auto border border-info border-3 rounded-3 p-4">
+          <div className="container bg-dark overflow-auto border border-3 rounded-3 px-2 py-4 px-md-4">
             <div className="d-flex flex-row mb-3">
               <div className="flex-grow-1">
                 <h2 className="text-white">
@@ -98,7 +99,7 @@ const PopupPlayer: React.FC<PopupPlayerProps> = ({
               </div>
             </div>
 
-            <div className="d-flex flex-column flex-md-row m-1 mb-3">
+            <div className="d-flex flex-column flex-md-row m-1 mb-2">
               <div className="d-flex flex-column flex-md-basis-200">
                 <div className="d-flex justify-content-center mb-3">
                   <img
@@ -107,16 +108,47 @@ const PopupPlayer: React.FC<PopupPlayerProps> = ({
                   />
                 </div>
 
+                <div className="my-2 px-2">
+                  <button
+                    className="btn background-mfl text-black w-100 mb-2"
+                    onClick={() =>
+                      window.open(
+                        "https://app.playmfl.com/players/" + player.id,
+                        "_blank"
+                      )
+                    }
+                  >
+                    MFL<i className="bi bi-caret-right-fill"></i>
+                  </button>
+
+                  <button
+                    className="btn btn-info text-white w-100"
+                    onClick={() =>
+                      window.open(
+                        "https://mflplayer.info/player/" + player.id,
+                        "_blank"
+                      )
+                    }
+                  >
+                    Player Info<i className="bi bi-caret-right-fill"></i>
+                  </button>
+                </div>
+
                 <BoxCard
-                  className="mb-3"
                   content={
-                    <div className="d-flex flex-row flex-fill justify-content-center">
-                      <div className="me-1">
-                        <ButtonMflPlayerInfo playerId={player.id} />
+                    <div className="w-100">
+                      <div className="col-12">#{player.id}</div>
+                      <div className="col-12">
+                        {player.positions.join(", ")}
+                      </div>
+                      <div className="col-6">
+                        <i class="bi bi-cake2-fill me-1"></i>
+                        {player.age}
                       </div>
 
-                      <div>
-                        <ButtonMflPlayer playerId={player.id} />
+                      <div className="col-6">
+                        <i class="bi bi-rulers me-1"></i>
+                        {player.height}
                       </div>
                     </div>
                   }
@@ -127,35 +159,30 @@ const PopupPlayer: React.FC<PopupPlayerProps> = ({
                 <BoxCard
                   className="mb-2"
                   content={
-                    <div className="row w-100">
-                      <div className="col-6 ps-3">
-                        {player.positions.join(", ")}
+                    <div className={"row"}>
+                      <div className={"col-2 text-center"}>PAC</div>
+                      <div className={"col-2 text-center"}>DRI</div>
+                      <div className={"col-2 text-center"}>PAS</div>
+                      <div className={"col-2 text-center"}>SHO</div>
+                      <div className={"col-2 text-center"}>DEF</div>
+                      <div className={"col-2 text-center"}>PHY</div>
+                      <div className={"col-2 text-center"}>
+                        {getOverallTag(player.pace)}
                       </div>
-
-                      <div className="col-6">
-                        <i class="bi bi-cake2-fill me-1"></i>
-                        {player.age}
+                      <div className={"col-2 text-center"}>
+                        {getOverallTag(player.dribbling)}
                       </div>
-
-                      <div className="col-6">
-                        {player.nationalities && player.nationalities[0] ? (
-                          <img
-                            className="d-inline me-1 my-1 ms-md-1"
-                            style={{ height: 13 }}
-                            src={`https://app.playmfl.com/img/flags/${player.nationalities[0]}.svg`}
-                          />
-                        ) : (
-                          ""
-                        )}
-
-                        {player.nationalities && player.nationalities
-                          ? player.nationalities[0]
-                          : ""}
+                      <div className={"col-2 text-center"}>
+                        {getOverallTag(player.passing)}
                       </div>
-
-                      <div className="col-6">
-                        <i class="bi bi-rulers me-1"></i>
-                        {player.height}
+                      <div className={"col-2 text-center"}>
+                        {getOverallTag(player.shooting)}
+                      </div>
+                      <div className={"col-2 text-center"}>
+                        {getOverallTag(player.defense)}
+                      </div>
+                      <div className={"col-2 text-center"}>
+                        {getOverallTag(player.physical)}
                       </div>
                     </div>
                   }
@@ -204,62 +231,45 @@ const PopupPlayer: React.FC<PopupPlayerProps> = ({
                   }
                 />
 
-                <BoxCard
-                  className="mb-2"
-                  content={
-                    <div className={"row"}>
-                      <div className={"col-2"}>PAC</div>
-                      <div className={"col-2"}>DRI</div>
-                      <div className={"col-2"}>PAS</div>
-                      <div className={"col-2"}>SHO</div>
-                      <div className={"col-2"}>DEF</div>
-                      <div className={"col-2"}>PHY</div>
-                      <div className={"col-2"}>
-                        {getOverallTag(player.pace)}
+                <div className="d-flex flex-column flex-md-row flex-fill">
+                  <BoxCard
+                    className="flex-grow-1 mb-2"
+                    content={
+                      <div className="d-flex flex-grow-1">
+                        <MiscOverallField player={player} />
                       </div>
-                      <div className={"col-2"}>
-                        {getOverallTag(player.dribbling)}
-                      </div>
-                      <div className={"col-2"}>
-                        {getOverallTag(player.passing)}
-                      </div>
-                      <div className={"col-2"}>
-                        {getOverallTag(player.shooting)}
-                      </div>
-                      <div className={"col-2"}>
-                        {getOverallTag(player.defense)}
-                      </div>
-                      <div className={"col-2"}>
-                        {getOverallTag(player.physical)}
-                      </div>
-                    </div>
-                  }
-                />
+                    }
+                  />
 
-                <BoxCard
-                  className="mb-2"
-                  content={
-                    <div className="d-flex flex-grow-1">
-                      {getOVRs().map((o) => (
-                        <div className={"me-1"}>
-                          <div
-                            className={"d-inline-block"}
-                            style={{ width: "40px" }}
-                          >
-                            {o.pos}:
+                  <BoxCard
+                    className="mb-2"
+                    content={
+                      <div className="d-flex flex-row flex-md-column flex-grow-1 justify-content-center">
+                        {getOVRs().map((o) => (
+                          <div className={"d-flex flex-md-column mb-1"}>
+                            <div
+                              className={
+                                "d-inline-block text-center line-height-1"
+                              }
+                              style={{ width: "40px" }}
+                            >
+                              {o.pos}
+                            </div>
+                            <div
+                              className={
+                                "d-inline-block text-center line-height-1"
+                              }
+                              style={{ width: "40px" }}
+                            >
+                              {getOverallTag(o.ovr)}
+                              <small>{getDiff(o.diff)}</small>
+                            </div>
                           </div>
-                          <div
-                            className={"d-inline-block"}
-                            style={{ width: "40px" }}
-                          >
-                            {getOverallTag(o.ovr)}
-                            <small>{getDiff(o.diff)}</small>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  }
-                />
+                        ))}
+                      </div>
+                    }
+                  />
+                </div>
               </div>
             </div>
           </div>

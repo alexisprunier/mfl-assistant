@@ -417,6 +417,10 @@ const PageSquadBuilder: React.FC<PageSquadBuilderProps> = (props) => {
                                   .filter(
                                     (p) => !p.position || showOnfieldPlayers
                                   )
+                                  .sort(
+                                    (a, b) =>
+                                      b.player.overall - a.player.overall
+                                  )
                                   .map((p) => (
                                     <div className="d-flex flex-row">
                                       <div className="d-flex flex-grow-1 me-1">

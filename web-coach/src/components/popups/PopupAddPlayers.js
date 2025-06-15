@@ -37,7 +37,7 @@ const PopupAddPlayers: React.FC<PopupAddPlayersProps> = ({
   const [selectedPlayers, setSelectedPlayers] = useState([]);
   const [playerView, setPlayerView] = useState(null);
   const [userPlayerOnly, setUserPlayerOnly] = useState(true);
-  const [hidePlayersInTeams, setHidePlayersInTeams] = useState(false);
+  const [hidePlayersInTeams, setHidePlayersInTeams] = useState(true);
 
   const [isLoading, setIsLoading] = useState(false);
   const [canLoadMore, setCanLoadMore] = useState(false);

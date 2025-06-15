@@ -25,12 +25,12 @@ const ButtonOnFieldPlayerView: React.FC<ButtonOnFieldPlayerViewProps> = ({
       <button
         className={
           "btn btn-small" +
-          (selectedView === "age" ? " btn-info text-white" : " text-main")
+          (selectedView === "profile" ? " btn-info text-white" : " text-main")
         }
-        onClick={() => onChange("age")}
+        onClick={() => onChange("profile")}
         selected={true}
       >
-        Age
+        Profile
       </button>
     </div>
   );

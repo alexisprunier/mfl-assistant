@@ -18,7 +18,6 @@ import React, { useEffect, useState } from "react";
 import {
   addTeamMembers,
   deleteTeamMember,
-  getTeamMembers,
   getTeams,
   updateTeam,
   updateTeamMember,
@@ -297,17 +296,6 @@ const PageSquadBuilder: React.FC<PageSquadBuilderProps> = (props) => {
                                             }
                                           </div>
                                           <div className="d-flex flex-row">
-                                            {/*<div className="d-flex align-items-center flex-wrap me-1">
-                                              <MiscFlag
-                                                country={
-                                                  getTeamMemberInPosition(
-                                                    t,
-                                                    parseInt(p)
-                                                  ).player.nationalities[0]
-                                                }
-                                              />
-                                            </div>*/}
-
                                             <div
                                               className="d-flex flex-grow-1"
                                               style={{
@@ -336,14 +324,30 @@ const PageSquadBuilder: React.FC<PageSquadBuilderProps> = (props) => {
                                                 />
                                               )}
 
-                                              {onFieldPlayerView === "age" && (
-                                                <div className="text-white">
-                                                  <i className="bi bi-cake2-fill me-1"></i>
+                                              {onFieldPlayerView ===
+                                                "profile" && (
+                                                <div className="d-flex text-white align-item-center">
+                                                  <MiscFlag
+                                                    country={
+                                                      getTeamMemberInPosition(
+                                                        t,
+                                                        parseInt(p)
+                                                      ).player.nationalities[0]
+                                                    }
+                                                  />
+                                                  &nbsp;
                                                   {
                                                     getTeamMemberInPosition(
                                                       t,
                                                       parseInt(p)
                                                     ).player.age
+                                                  }
+                                                  -
+                                                  {
+                                                    getTeamMemberInPosition(
+                                                      t,
+                                                      parseInt(p)
+                                                    ).player.height
                                                   }
                                                 </div>
                                               )}

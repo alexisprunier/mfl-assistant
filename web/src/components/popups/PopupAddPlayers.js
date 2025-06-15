@@ -37,7 +37,7 @@ const PopupAddPlayers: React.FC<PopupAddPlayersProps> = ({
   const [selectedPlayers, setSelectedPlayers] = useState([]);
   const [playerView, setPlayerView] = useState(null);
   const [userPlayerOnly, setUserPlayerOnly] = useState(true);
-  const [hidePlayersInTeams, setHidePlayersInTeams] = useState(false);
+  const [hidePlayersInTeams, setHidePlayersInTeams] = useState(true);
 
   const [isLoading, setIsLoading] = useState(false);
   const [canLoadMore, setCanLoadMore] = useState(false);
@@ -188,12 +188,12 @@ const PopupAddPlayers: React.FC<PopupAddPlayersProps> = ({
 
               <div className="d-flex flex-grow-0 justify-content-end mb-3">
                 <small>
-                  Hide players in teams
+                  Show players in teams
                   <input
                     type="checkbox"
                     className="ms-1 me-2"
-                    defaultChecked={hidePlayersInTeams}
-                    value={hidePlayersInTeams}
+                    defaultChecked={!hidePlayersInTeams}
+                    value={!hidePlayersInTeams}
                     onChange={() => setHidePlayersInTeams(!hidePlayersInTeams)}
                   />
                 </small>

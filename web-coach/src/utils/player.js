@@ -20,7 +20,7 @@ export const scarcity = [
   { name: "Common", overallMin: 1, overallMax: 54, color: "#9f9f9f" },
   { name: "Limited", overallMin: 55, overallMax: 64, color: "#FFCC00" },
   { name: "Uncommon", overallMin: 65, overallMax: 74, color: "#3af24b" },
-  { name: "Rare", overallMin: 75, overallMax: 84, color: "#0047ff" },
+  { name: "Rare", overallMin: 75, overallMax: 84, color: "#169fed" },
   { name: "Legendary", overallMin: 85, overallMax: 94, color: "#fa53ff" },
   { name: "Ultimate", overallMin: 95, overallMax: 99, color: "#FFFFFF" },
 ];

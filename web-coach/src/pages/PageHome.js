@@ -139,7 +139,7 @@ const PageHome: React.FC<PageHomeProps> = ({
                   <div className="d-flex flex-grow-0 card flex-column mx-1 px-4 py-2">
                     <div className="d-flex justify-content-center align-items-center">
                       <div className="text-center">
-                        <i className="bi bi-clipboard-data h4"></i>
+                        <i className="bi bi-clipboard2-pulse h4"></i>
                         <br />
                         Match analysis
                       </div>

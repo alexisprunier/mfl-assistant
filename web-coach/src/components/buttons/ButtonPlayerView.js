@@ -1,17 +1,17 @@
 import React from "react";
 
 interface ButtonPlayerViewProps {
-  selectedView ? : string;
-  onChange ? : func;
-  displayPricing ? : Boolean;
-  displayOwner ? : Boolean;
+  selectedView?: string;
+  onChange?: func;
+  displayPricing?: Boolean;
+  displayOwner?: Boolean;
 }
 
-const ButtonPlayerView: React.FC < ButtonPlayerViewProps > = ({
+const ButtonPlayerView: React.FC<ButtonPlayerViewProps> = ({
   selectedView,
   onChange,
   displayPricing,
-  displayOwner
+  displayOwner,
 }) => {
   return (
     <div className="d-flex flex-row ms-md-2 border rounded-2">
@@ -20,7 +20,7 @@ const ButtonPlayerView: React.FC < ButtonPlayerViewProps > = ({
           "btn btn-small" +
           (!selectedView || selectedView === "profile"
             ? " btn-info text-white"
-            : " text-info")
+            : " text-main")
         }
         onClick={() => onChange("profile")}
       >
@@ -29,7 +29,7 @@ const ButtonPlayerView: React.FC < ButtonPlayerViewProps > = ({
       <button
         className={
           "btn btn-small" +
-          (selectedView === "stats" ? " btn-info text-white" : " text-info")
+          (selectedView === "stats" ? " btn-info text-white" : " text-main")
         }
         onClick={() => onChange("stats")}
         selected={true}
@@ -39,7 +39,7 @@ const ButtonPlayerView: React.FC < ButtonPlayerViewProps > = ({
       <button
         className={
           "btn btn-small" +
-          (selectedView === "ovr" ? " btn-info text-white" : " text-info")
+          (selectedView === "ovr" ? " btn-info text-white" : " text-main")
         }
         onClick={() => onChange("ovr")}
       >
@@ -49,7 +49,7 @@ const ButtonPlayerView: React.FC < ButtonPlayerViewProps > = ({
         <button
           className={
             "btn btn-small" +
-            (selectedView === "pricing" ? " btn-info text-white" : " text-info")
+            (selectedView === "pricing" ? " btn-info text-white" : " text-main")
           }
           onClick={() => onChange("pricing")}
         >
@@ -60,7 +60,7 @@ const ButtonPlayerView: React.FC < ButtonPlayerViewProps > = ({
         <button
           className={
             "btn btn-small" +
-            (selectedView === "owner" ? " btn-info text-white" : " text-info")
+            (selectedView === "owner" ? " btn-info text-white" : " text-main")
           }
           onClick={() => onChange("owner")}
         >

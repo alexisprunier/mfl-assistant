@@ -231,8 +231,18 @@ const PageSquadBuilder: React.FC<PageSquadBuilderProps> = (props) => {
                         </div>
 
                         <div className="d-flex flex-row">
-                          <div className="d-flex ratio ratio-1x1 flex-md-basis-400">
+                          <div className="position-relative d-flex ratio ratio-1x1 flex-md-basis-400">
                             <div className="position-relative rounded-2 football-field">
+                              <div
+                                className="position-absolute"
+                                style={{ top: "1px", right: "1px" }}
+                              >
+                                <ButtonOnFieldPlayerView
+                                  selectedView={onFieldPlayerView}
+                                  onChange={(v) => setOnFieldPlayerView(v)}
+                                />
+                              </div>
+
                               {t.formation &&
                                 Object.keys(formations[t.formation]).map(
                                   (p) => (
@@ -251,10 +261,30 @@ const PageSquadBuilder: React.FC<PageSquadBuilderProps> = (props) => {
                                       ) ? (
                                         <div
                                           className="d-flex flex-column transform-scale-sm-80"
-                                          style={{ lineHeight: 1.3 }}
+                                          style={{
+                                            lineHeight: 1.1,
+                                            backgroundColor:
+                                              "rgba(33, 37, 41, .9)",
+                                            color: "#fff",
+                                            borderRadius: "8px",
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                            width: "80px",
+                                            cursor: "pointer",
+                                            padding: "2px",
+                                          }}
+                                          onClick={() =>
+                                            saveTeamMember(
+                                              getTeamMemberInPosition(
+                                                t,
+                                                parseInt(p)
+                                              ).id,
+                                              null
+                                            )
+                                          }
                                         >
                                           <div
-                                            className="text-white"
+                                            className="text-white text-center text-truncate w-100"
                                             style={{
                                               textShadow: "black 0px 0px 2px",
                                             }}
@@ -267,7 +297,7 @@ const PageSquadBuilder: React.FC<PageSquadBuilderProps> = (props) => {
                                             }
                                           </div>
                                           <div className="d-flex flex-row">
-                                            <div className="d-flex align-items-center flex-wrap me-1">
+                                            {/*<div className="d-flex align-items-center flex-wrap me-1">
                                               <MiscFlag
                                                 country={
                                                   getTeamMemberInPosition(
@@ -276,7 +306,7 @@ const PageSquadBuilder: React.FC<PageSquadBuilderProps> = (props) => {
                                                   ).player.nationalities[0]
                                                 }
                                               />
-                                            </div>
+                                            </div>*/}
 
                                             <div
                                               className="d-flex flex-grow-1"
@@ -318,21 +348,6 @@ const PageSquadBuilder: React.FC<PageSquadBuilderProps> = (props) => {
                                                 </div>
                                               )}
                                             </div>
-
-                                            <button
-                                              className="btn btn-small text-danger"
-                                              onClick={() =>
-                                                saveTeamMember(
-                                                  getTeamMemberInPosition(
-                                                    t,
-                                                    parseInt(p)
-                                                  ).id,
-                                                  null
-                                                )
-                                              }
-                                            >
-                                              <i className="bi bi-person-fill-x"></i>
-                                            </button>
                                           </div>
                                         </div>
                                       ) : (

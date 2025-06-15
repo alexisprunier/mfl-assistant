@@ -585,7 +585,32 @@ export const getTeams = ({ handleSuccess = null, handleError = null }) =>
           id,
           name,
           formation,
-          isPublic
+          isPublic,
+          teamMembers {
+            id,
+            player {
+              id,
+              firstName,
+              lastName,
+              age,
+              overall,
+              nationalities,
+              positions,
+              pace,
+              shooting,
+              dribbling,
+              passing,
+              defense,
+              physical,
+              goalkeeping,
+              resistance,
+              owner {
+                id,
+                name
+              }
+            },
+            position
+          }
         }
       }`,
     }),
@@ -1048,6 +1073,28 @@ export const getOpponents = ({
             }
           }
         }`,
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );
+
+export const getPlayerPricingHistory = ({
+  handleSuccess = null,
+  handleError = null,
+  params,
+}) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `{
+        getPlayerPricingHistory(${jsonToParams(params)}) {
+          overall,
+          age,
+          price,
+          position,
+          date
+        }
+      }`,
     }),
     (v) => defaultHandleSuccess(handleSuccess, v),
     (e) => defaultHandleError(handleError, e)

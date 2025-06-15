@@ -127,7 +127,7 @@ const PopupAddPlayers: React.FC<PopupAddPlayersProps> = ({
         className={"fade-in popup-xl"}
       >
         {(close) => (
-          <div className="container bg-dark d-flex flex-column border border-info border-3 rounded-3 p-4">
+          <div className="container bg-dark d-flex flex-column border border-3 rounded-3 p-4">
             <div className="d-flex flex-row flex-grow-0 mb-3">
               <div className="flex-grow-1">
                 <h2 className="text-white">Add players</h2>
@@ -221,6 +221,7 @@ const PopupAddPlayers: React.FC<PopupAddPlayersProps> = ({
                       <ItemRowPlayerAssist
                         p={p}
                         display={playerView}
+                        selectable={true}
                         isSelected={
                           selectedPlayers.map((p) => p.id).indexOf(p.id) >= 0
                         }

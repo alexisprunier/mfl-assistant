@@ -108,9 +108,9 @@ const Menu: React.FC<MenuProps> = (props) => {
                 getMenuLabel("Match analysis", "d-none d-lg-inline")}
               <div className="px-2 px-lg-0">
                 {location.pathname.startsWith("/match-analysis") ? (
-                  <i className="bi bi-clipboard-data-fill"></i>
+                  <i className="bi bi-clipboard2-pulse-fill"></i>
                 ) : (
-                  <i className="bi bi-clipboard-data"></i>
+                  <i className="bi bi-clipboard2-pulse"></i>
                 )}
               </div>
             </Link>

@@ -226,7 +226,7 @@ const PageToolsMatchAnalysis: React.FC<PageToolsMatchAnalysisProps> = (
       <div className="h-100 w-100">
         <nav className="TopBar navbar w-100 ps-md-5 px-4 py-2">
           <h3 className="my-2">
-            <i className="bi bi-clipboard-data-fill me-2"></i> Match analysis
+            <i className="bi bi-clipboard2-pulse-fill me-2"></i> Match analysis
           </h3>
         </nav>
 

@@ -2,6 +2,7 @@ import Menu from "bars/Menu";
 import Page404 from "pages/Page404";
 import PageHome from "pages/PageHome";
 import PageMatchAnalysis from "pages/PageMatchAnalysis.js";
+import PageSquadBuilder from "pages/PageSquadBuilder.js";
 import PageFormationMeta from "pages/PageFormationMeta.js";
 import PageOpponentFinder from "pages/PageOpponentFinder.js";
 import PageUser from "pages/PageUser.js";
@@ -54,6 +55,10 @@ const Router: React.FC = (props) => {
             <Route
               path="/match-analysis"
               element={<PageMatchAnalysis {...props} />}
+            />
+            <Route
+              path="/squad-builder"
+              element={<PageSquadBuilder {...props} />}
             />
             <Route
               path="/user/:address"

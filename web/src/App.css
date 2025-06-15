@@ -173,9 +173,25 @@ svg .content .bar text {
   flex-basis: 160px;
 }
 
+.flex-basis-200 {
+  flex-basis: 200px;
+}
+
+.flex-basis-420 {
+  flex-basis: 420px;
+}
+
+.flex-basis-450 {
+  flex-basis: 450px;
+}
+
 @media (min-width: 768px) {
   .flex-md-basis-50p {
     flex-basis: 50%;
+  }
+
+  .flex-md-basis-140 {
+    flex-basis: 140px;
   }
 
   .flex-md-basis-200 {
@@ -192,6 +208,10 @@ svg .content .bar text {
 
   .flex-md-basis-400 {
     flex-basis: 400px;
+  }
+
+  .flex-md-basis-420 {
+    flex-basis: 420px;
   }
 
   .flex-md-basis-500 {

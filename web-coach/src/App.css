@@ -160,12 +160,16 @@ svg .content .bar text {
   flex-basis: 100px;
 }
 
-.flex-basis-140 {
-  flex-basis: 140px;
+.flex-basis-120 {
+  flex-basis: 120px;
 }
 
 .flex-basis-140 {
   flex-basis: 140px;
+}
+
+.flex-basis-160 {
+  flex-basis: 160px;
 }
 
 .flex-basis-200 {
@@ -184,7 +188,7 @@ svg .content .bar text {
   .flex-md-basis-50p {
     flex-basis: 50%;
   }
-  
+
   .flex-md-basis-140 {
     flex-basis: 140px;
   }
@@ -195,6 +199,10 @@ svg .content .bar text {
 
   .flex-md-basis-300 {
     flex-basis: 300px;
+  }
+
+  .flex-md-basis-340 {
+    flex-basis: 340px;
   }
 
   .flex-md-basis-400 {
@@ -221,6 +229,10 @@ svg .content .bar text {
 
   .flex-lg-basis-300 {
     flex-basis: 300px;
+  }
+
+  .flex-lg-basis-340 {
+    flex-basis: 340px;
   }
 
   .flex-lg-basis-400 {

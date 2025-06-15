@@ -166,7 +166,12 @@ class TeamType(ObjectType):
     name = String()
     formation = String()
     is_public = Boolean()
+    team_members = List(lambda: TeamMemberType)
     user = Field(UserType)
+
+    async def resolve_team_members(self, info):
+        team_members_cursor = info.context["db"].team_members.find({"team": self["_id"]})
+        return await team_members_cursor.to_list(length=None)
 
 
 class TeamMemberType(ObjectType):

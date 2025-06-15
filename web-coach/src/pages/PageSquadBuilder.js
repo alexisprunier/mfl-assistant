@@ -398,7 +398,7 @@ const PageSquadBuilder: React.FC<PageSquadBuilderProps> = (props) => {
                                   <input
                                     type="checkbox"
                                     className="m-1"
-                                    value={showOnfieldPlayers}
+                                    checked={showOnfieldPlayers}
                                     onChange={() =>
                                       setShowOnfieldPlayers(!showOnfieldPlayers)
                                     }

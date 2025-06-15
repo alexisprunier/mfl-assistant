@@ -179,7 +179,7 @@ scheduler.add_job(compute_club_count_per_day.main,      'interval', args=[db],  
 scheduler.add_job(compute_sale_total.main,              'interval', args=[db],          seconds=60 * 25)
 scheduler.add_job(compute_raw_player_pricings.main,     'interval', args=[db],          seconds=60 * 10)
 scheduler.add_job(compute_player_pricings.main,         'interval', args=[db],          seconds=60 * 60)
-"""scheduler.add_job(compute_formation_meta.main,          'interval', args=[db],          seconds=60)"""
+scheduler.add_job(compute_formation_meta.main,          'interval', args=[db],          seconds=60)
 scheduler.start()
 
 @app.on_event("startup")

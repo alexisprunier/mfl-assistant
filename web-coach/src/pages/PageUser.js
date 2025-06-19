@@ -2,6 +2,10 @@ import BoxScrollUp from "components/box/BoxScrollUp.js";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getUsers } from "services/api-assistant.js";
+import BoxCard from "components/box/BoxCard.js";
+import LoadingSquare from "components/loading/LoadingSquare.js";
+import { getMatches } from "services/api-assistant.js";
+import ItemRowMatch from "../components/items/ItemRowMatch";
 
 interface PageUserProps {
   yScrollPosition: number;
@@ -13,6 +17,7 @@ const PageUser: React.FC<PageUserProps> = (props) => {
 
   const { address } = useParams();
   const [user, setUser] = useState(null);
+  const [matches, setMatches] = useState(null);
 
   const fetchUser = () => {
     getUsers({
@@ -25,6 +30,27 @@ const PageUser: React.FC<PageUserProps> = (props) => {
       params: { search: address },
     });
   };
+
+  const fetchMatches = () => {
+    setMatches(null);
+
+    getMatches({
+      handleSuccess: (d) => {
+        setMatches(d.data.getMatches);
+      },
+      handleError: (e) => console.log(e),
+      params: {
+        limit: 20,
+        //user: user.id,
+      },
+    });
+  };
+
+  useEffect(() => {
+    if (user) {
+      fetchMatches();
+    }
+  }, [user]);
 
   useEffect(() => {
     if (address !== "me") {
@@ -46,14 +72,23 @@ const PageUser: React.FC<PageUserProps> = (props) => {
 
   return (
     <div id="PageUser" className="w-100 h-100">
-      <div className="d-flex w-100 h-100 justify-content-center align-items-center">
-        <div className="d-flex card mx-1 px-4 py-2">
-          <div className="d-flex justify-content-center align-items-center">
-            <div className="text-center">
-              <i className="bi bi-cone-striped h4"></i>
-              <br />
-              Soon to come
-            </div>
+      <div className="d-flex w-100 h-100 justify-content-center">
+        <div className="container-xl px-md-4 py-4">
+          <div className="d-flex flex-column">
+            <BoxCard
+              title={"Matches"}
+              content={
+                matches ? (
+                  <div className="d-flex flex-column flex-fill">
+                    {matches.map((m) => (
+                      <ItemRowMatch match={m} />
+                    ))}
+                  </div>
+                ) : (
+                  <LoadingSquare height={300} />
+                )
+              }
+            />
           </div>
         </div>
       </div>

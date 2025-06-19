@@ -4,7 +4,7 @@ import BoxScrollUp from "components/box/BoxScrollUp.js";
 import ControllerFlagCountry from "components/controllers/ControllerFlagCountry.js";
 import ItemCardCommunityMember from "components/items/ItemCardCommunityMember.js";
 import MiscHorizontalScroll from "components/misc/MiscHorizontalScroll.js";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ButtonLogin from "components/buttons/ButtonLogin.js";
 import "./PageHome.css";
@@ -177,6 +177,14 @@ const PageHome: React.FC<PageHomeProps> = ({
         countries: ["GERMANY"],
         platforms: ["youtube"],
       },
+      {
+        name: "Cambridge PFC",
+        image:
+          "https://yt3.googleusercontent.com/RrCcDheco698-5D0s3hRnhX-__AaLCkpVPKvX3FiS4TBx4xWk0OqWoW2QeJkmSXgt9K0l9Ah=s160-c-k-c0x00ffffff-no-rj",
+        link: "https://www.youtube.com/@CambridgePhoenixMFL",
+        countries: ["ENGLAND"],
+        platforms: ["youtube"],
+      },
     ];
     return c.sort(() => Math.random() - 0.5);
   });
@@ -247,13 +255,22 @@ const PageHome: React.FC<PageHomeProps> = ({
         countries: ["FRANCE"],
         platforms: ["discord"],
       },
-      /*{
-        name: "Twitter club list",
+      {
+        name: "WenDirkCast",
         image:
-          "https://pbs.twimg.com/profile_images/1609671494187249665/YehoRvrC_400x400.png",
-        link: "https://x.com/i/lists/1644128469939552256",
-        platforms: ["twitter"],
-      },*/
+          "https://cdn.discordapp.com/icons/1354002743416721418/19fcbe5bcaf369e7a0d268421b2fe1df.png?size=128",
+        link: "https://discord.gg/qEByWrxw",
+        countries: ["ENGLAND"],
+        platforms: ["discord"],
+      },
+      {
+        name: "Duelz MFL",
+        image:
+          "https://cdn.discordapp.com/icons/1363658135008575599/87593ae8c5bc78426050838cfe3045bd.png?size=128",
+        link: "https://discord.gg/uENzPqq6",
+        countries: ["ENGLAND"],
+        platforms: ["discord"],
+      },
     ];
     return c.sort(() => Math.random() - 0.5);
   });

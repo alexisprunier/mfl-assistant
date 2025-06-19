@@ -87,22 +87,34 @@ const ItemRowMatch: React.FC<ItemRowMatchProps> = ({ match }) => {
       <div>
         <ItemRowClub
           c={match.homeClub}
-          overall={calculateTeamOverall(
-            match.homePositions,
-            match.players,
-            match.modifiers
-          )}
+          overall={
+            match.status !== "ENDED"
+              ? ""
+              : match.homeOverall
+              ? match.homeOverall
+              : calculateTeamOverall(
+                  match.homePositions,
+                  match.players,
+                  match.modifiers
+                )
+          }
           formation={match.homeFormation}
         />
       </div>
       <div>
         <ItemRowClub
           c={match.awayClub}
-          overall={calculateTeamOverall(
-            match.awayPositions,
-            match.players,
-            match.modifiers
-          )}
+          overall={
+            match.status !== "ENDED"
+              ? ""
+              : match.awayOverall
+              ? match.awayOverall
+              : calculateTeamOverall(
+                  match.awayPositions,
+                  match.players,
+                  match.modifiers
+                )
+          }
           formation={match.awayFormation}
         />
       </div>

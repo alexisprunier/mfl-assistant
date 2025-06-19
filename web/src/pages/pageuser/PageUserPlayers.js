@@ -120,7 +120,7 @@ const PageUserPlayers: React.FC<PageUserPlayersProps> = () => {
 
   return (
     <div id="PageUserPlayers">
-      <div className="container max-width-md px-4 py-5">
+      <div className="container max-width-lg px-4 py-4">
         <div className="card d-flex mb-3 p-3 pt-2">
           <div className="d-flex flex-column">
             <div className="d-flex flex-column flex-md-row mb-3">

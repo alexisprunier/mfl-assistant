@@ -1129,3 +1129,49 @@ class Query(ObjectType):
                 match["startDate"] = sanitize_datetime(match["startDate"])
 
         return matches
+
+    get_matches = List(
+        MatchType,
+        user=String(),
+        skip=Int(default_value=0),
+        limit=Int(default_value=20)
+    )
+
+    async def resolve_get_matches(
+        self,
+        info,
+        user=None,
+        skip=0,
+        limit=20
+    ):
+        def sanitize_datetime(date_str):
+            return datetime.fromisoformat(date_str.replace("Z", "+00:00"))
+
+        db = info.context["db"]
+
+        match_filter = {
+            "homeClub": {"$exists": True, "$ne": None},
+            "awayClub": {"$exists": True, "$ne": None},
+        }
+
+        # Owner filter logic
+        if user:
+            match_filter["$or"] = [
+                {"homeClub.owner": user},
+                {"awayClub.owner": user}
+            ]
+
+        matches_cursor = db.matches.find(
+            match_filter,
+            sort=[("startDate", -1)],
+            skip=skip,
+            limit=limit
+        )
+
+        matches = await matches_cursor.to_list(length=None)
+
+        for match in matches:
+            if "startDate" in match:
+                match["startDate"] = sanitize_datetime(match["startDate"])
+
+        return matches

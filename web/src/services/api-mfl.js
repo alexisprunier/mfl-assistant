@@ -77,6 +77,13 @@ export const getClubStandings = ({ handleSuccess, handleError, params }) =>
     handleError
   );
 
+export const getClubCompetitions = ({ handleSuccess, handleError, params }) =>
+  get(
+    getMflApiEndpoint() + `clubs/${params.id}/competitions`,
+    handleSuccess,
+    handleError
+  );
+
 /* LISTINGS */
 
 export const getPlayerListings = ({ handleSuccess, handleError, params }) =>

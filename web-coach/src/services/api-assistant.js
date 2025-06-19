@@ -1080,6 +1080,61 @@ export const getOpponents = ({
     (e) => defaultHandleError(handleError, e)
   );
 
+export const getMatches = ({
+  handleSuccess = null,
+  handleError = null,
+  params,
+}) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `{
+          getMatches(${jsonToParams(params)}) {
+            id,
+            startDate,
+            status,
+            type,
+            homeScore,
+            awayScore,
+            homeFormation,
+            awayFormation,
+            homeOverall,
+            awayOverall,
+            homePositions {
+              index,
+              player
+            },
+            awayPositions {
+              index,
+              player
+            },
+            modifiers {
+              target {
+                type,
+                ids
+              },
+              values {
+                type,
+                value,
+                field
+              }
+            },
+            players,
+            homeClub {
+              id,
+              name
+            },
+            awayClub {
+              id,
+              name
+            }
+          }
+        }`,
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );
+
 export const getPlayerPricingHistory = ({
   handleSuccess = null,
   handleError = null,

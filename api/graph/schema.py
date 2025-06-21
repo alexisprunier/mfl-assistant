@@ -115,6 +115,12 @@ class ClubType(ObjectType):
     owner = Field(UserType)
     geolocation = Field(GeolocationType)
 
+    async def resolve_owner(self, info):
+        owner_id = self.get("owner")
+        if not owner_id:
+            return None
+        return await info.context["db"].users.find_one({"_id": owner_id})
+
     async def resolve_geolocation(self, info):
         geolocation_id = self.get("geolocation") 
         if not geolocation_id:

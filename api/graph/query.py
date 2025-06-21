@@ -1133,6 +1133,7 @@ class Query(ObjectType):
     get_matches = List(
         MatchType,
         clubs=List(Int),
+        types=List(String),
         skip=Int(default_value=0),
         limit=Int(default_value=20)
     )
@@ -1141,6 +1142,7 @@ class Query(ObjectType):
         self,
         info,
         clubs=None,
+        types=None,
         skip=0,
         limit=20
     ):
@@ -1159,6 +1161,9 @@ class Query(ObjectType):
                 {"homeClub": {"$in": clubs}},
                 {"awayClub": {"$in": clubs}}
             ]
+
+        if types:
+            match_filter["type"] = {"$in": types}
 
         matches_cursor = db.matches.find(
             match_filter,

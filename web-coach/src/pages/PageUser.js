@@ -54,6 +54,7 @@ const PageUser: React.FC<PageUserProps> = (props) => {
       params: {
         limit: 20,
         clubs: clubs.map((c) => c.id),
+        types: ["LIVE", "ENDED"],
       },
     });
   };

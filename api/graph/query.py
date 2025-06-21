@@ -1134,6 +1134,7 @@ class Query(ObjectType):
         MatchType,
         clubs=List(Int),
         types=List(String),
+        statuses=List(String),
         skip=Int(default_value=0),
         limit=Int(default_value=20)
     )
@@ -1143,6 +1144,7 @@ class Query(ObjectType):
         info,
         clubs=None,
         types=None,
+        statuses=None,
         skip=0,
         limit=20
     ):
@@ -1164,6 +1166,9 @@ class Query(ObjectType):
 
         if types:
             match_filter["type"] = {"$in": types}
+
+        if statuses:
+            match_filter["status"] = {"$in": statuses}
 
         matches_cursor = db.matches.find(
             match_filter,

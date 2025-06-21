@@ -58,11 +58,11 @@ const ItemRowMatch: React.FC<ItemRowMatchProps> = ({ match }) => {
               style={{ minWidth: 50 }}
             >
               <span className="fw-bold">
-                {homeScore != null && match.status === "ENDED"
+                {homeScore != null && ["ENDED"].includes(match.status)
                   ? homeScore
                   : "?"}{" "}
                 :{" "}
-                {awayScore != null && match.status === "ENDED"
+                {awayScore != null && ["ENDED"].includes(match.status)
                   ? awayScore
                   : "?"}
               </span>
@@ -88,7 +88,7 @@ const ItemRowMatch: React.FC<ItemRowMatchProps> = ({ match }) => {
         <ItemRowClub
           c={match.homeClub}
           overall={
-            match.status !== "ENDED"
+            !["ENDED", "LIVE"].includes(match.status)
               ? ""
               : match.homeOverall
               ? match.homeOverall
@@ -105,7 +105,7 @@ const ItemRowMatch: React.FC<ItemRowMatchProps> = ({ match }) => {
         <ItemRowClub
           c={match.awayClub}
           overall={
-            match.status !== "ENDED"
+            !["ENDED", "LIVE"].includes(match.status)
               ? ""
               : match.awayOverall
               ? match.awayOverall

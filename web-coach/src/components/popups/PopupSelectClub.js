@@ -1,5 +1,6 @@
 import ItemCardClub from "components/items/ItemCardClub.js";
 import LoadingSquare from "components/loading/LoadingSquare.js";
+import BoxMessage from "components/box/BoxMessage.js";
 import React, { useState } from "react";
 import Popup from "reactjs-popup";
 import { getClubs } from "services/api-assistant.js";
@@ -19,15 +20,23 @@ const PopupSelectClub: React.FC<PopupSelectClubProps> = ({
 }) => {
   const [clubs, setClubs] = useState(null);
   const [selectedClub, setSelectedClub] = useState(null);
+  const [clubSearch, setClubSearch] = useState("");
 
-  const onOpen = () => {
+  const fetchClubs = () => {
     getClubs({
       handleSuccess: (d) => {
         setClubs(d.data.getClubs);
       },
       handleError: (e) => console.log(e),
-      params: { owners: [userId] },
+      params:
+        clubSearch === ""
+          ? { owners: [userId] }
+          : { search: clubSearch, limit: 20 },
     });
+  };
+
+  const onOpen = () => {
+    fetchClubs();
   };
 
   const onButtonConfirm = (close) => {
@@ -62,15 +71,38 @@ const PopupSelectClub: React.FC<PopupSelectClubProps> = ({
             </div>
 
             <div className="d-flex flex-grow-1 flex-column mb-3 overflow-auto">
+              <div className="d-flex flex-row mb-3">
+                <input
+                  type="text"
+                  className="form-control me-1"
+                  value={clubSearch}
+                  onChange={(v) => setClubSearch(v.target.value)}
+                  placeholder={"Club name, city, country, ..."}
+                  autoFocus
+                />
+                <button
+                  className="btn btn-info text-white"
+                  onClick={() => fetchClubs()}
+                >
+                  Apply
+                </button>
+              </div>
+
               {clubs ? (
-                clubs.map((p) => (
-                  <ItemCardClub
-                    id={p.id}
-                    name={p.name}
-                    onClick={() => setSelectedClub(p)}
-                    selected={selectedClub && selectedClub.id === p.id}
-                  />
-                ))
+                clubs.length > 0 ? (
+                  clubs.map((p) => (
+                    <div>
+                      <ItemCardClub
+                        id={p.id}
+                        name={p.name}
+                        onClick={() => setSelectedClub(p)}
+                        selected={selectedClub && selectedClub.id === p.id}
+                      />
+                    </div>
+                  ))
+                ) : (
+                  <BoxMessage className={"py-5"} content={"No club found"} />
+                )
               ) : (
                 <div className="ratio ratio-16x9 w-100">
                   <LoadingSquare />

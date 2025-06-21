@@ -29,7 +29,7 @@ const ItemCardMatchReport: React.FC<ItemCardMatchReportProps> = ({
         ) : (
           <div className="row px-1">
             <div className="col-4"></div>
-            <div className="col-4 text-center">My club</div>
+            <div className="col-4 text-center">Selected club</div>
             <div className="col-4 text-center">Opponent</div>
 
             <div className="col-12 text-white border-bottom mt-2 mb-1">
@@ -51,11 +51,11 @@ const ItemCardMatchReport: React.FC<ItemCardMatchReportProps> = ({
             <div className="col-4">Goals (xG)</div>
             <div className="col-4 text-center">
               {report?.myClub?.goals + report?.opponent?.ownGoals} (
-              {report?.myClub?.xG.toFixed(2)})
+              {report?.myClub?.xG?.toFixed(2)})
             </div>
             <div className="col-4 text-center">
               {report?.opponent?.goals + report?.myClub?.ownGoals} (
-              {report?.opponent?.xG.toFixed(2)})
+              {report?.opponent?.xG?.toFixed(2)})
             </div>
 
             <div className="col-4">Shots (on target)</div>

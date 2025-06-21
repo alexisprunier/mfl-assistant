@@ -15,13 +15,8 @@ const PageToolsMatchAnalysis: React.FC<PageToolsMatchAnalysisProps> = (
 ) => {
   const [club, setClub] = useState(null);
   const [matches, setMatches] = useState(null);
-
-  const [isOpponentLoading, setIsOpponentLoading] = useState(false);
-  const [opponentClubs, setOpponentClubs] = useState(null);
-  const [selectedOpponentId, setSelectedOpponentId] = useState(null);
-
-  const [opponentMatches, setOpponentMatches] = useState(null);
-  const [selectedOpponentMatchIds, setSelectedOpponentMatchIds] = useState([]);
+  const [selectedMatchIds, setSelectedMatchIds] = useState([]);
+  const [loadingMatches, setLoadingMatches] = useState(false);
 
   const [matchReports, setMatchReports] = useState({});
   const [loadingMatchReport, setLoadingMatchReport] = useState(false);
@@ -30,14 +25,14 @@ const PageToolsMatchAnalysis: React.FC<PageToolsMatchAnalysisProps> = (
 
   const fetchMatches = () => {
     if (props.assistantUser && club) {
-      setIsOpponentLoading(true);
+      setLoadingMatches(true);
 
       getClub({
         handleSuccess: (d) => {
           getMatches({
             handleSuccess: (m) => {
               setMatches(m);
-              setIsOpponentLoading(false);
+              setLoadingMatches(false);
             },
             handleError: (e) => console.log(e),
             params: {
@@ -80,7 +75,7 @@ const PageToolsMatchAnalysis: React.FC<PageToolsMatchAnalysisProps> = (
       opponent: {},
     };
 
-    selectedOpponentMatchIds.forEach((id) => {
+    selectedMatchIds.forEach((id) => {
       const match = matches.filter((m) => m.id === id).pop();
       const matchReport = matchReports[id];
 
@@ -111,7 +106,7 @@ const PageToolsMatchAnalysis: React.FC<PageToolsMatchAnalysisProps> = (
 
     Object.keys(added).forEach((key) => {
       if (typeof added[key] === "number") {
-        if (key === "rating") {
+        if (["rating"].includes(key)) {
           const totalRating =
             (current.rating || 0) * (current.ratingCount || 0) + added[key];
           const newRatingCount = (current.ratingCount || 0) + 1;
@@ -144,13 +139,6 @@ const PageToolsMatchAnalysis: React.FC<PageToolsMatchAnalysisProps> = (
     if (props.assistantUser) {
       fetchMatches();
     }
-
-    if (club === null) {
-      setOpponentClubs(null);
-      setOpponentMatches(null);
-      setSelectedOpponentId(null);
-      setSelectedOpponentMatchIds([]);
-    }
   }, [props.assistantUser, club]);
 
   useEffect(() => {
@@ -177,36 +165,22 @@ const PageToolsMatchAnalysis: React.FC<PageToolsMatchAnalysisProps> = (
           }
         }
       });
+    }
 
-      setOpponentClubs(
-        Object.values(stats).sort((a, b) => b.playCount - a.playCount)
-      );
+    if (!club) {
+      setSelectedMatchIds([]);
+      setMatches(null);
+      setMatchReports([]);
     }
   }, [matches, club]);
 
   useEffect(() => {
-    fetchMatchReports(selectedOpponentMatchIds);
-  }, [selectedOpponentMatchIds]);
+    fetchMatchReports(selectedMatchIds);
+  }, [selectedMatchIds]);
 
   useEffect(() => {
     computeAggregatedReport();
-  }, [selectedOpponentMatchIds, matchReports]);
-
-  useEffect(() => {
-    if (selectedOpponentId && matches) {
-      setOpponentMatches(
-        matches.filter(
-          (match) =>
-            match.homeSquad?.club?.id === selectedOpponentId ||
-            match.awaySquad?.club?.id === selectedOpponentId
-        )
-      );
-    }
-  }, [selectedOpponentId, matches]);
-
-  useEffect(() => {
-    setSelectedOpponentMatchIds([]);
-  }, [selectedOpponentId]);
+  }, [selectedMatchIds, matchReports]);
 
   if (!props.assistantUser) {
     return (
@@ -233,9 +207,9 @@ const PageToolsMatchAnalysis: React.FC<PageToolsMatchAnalysisProps> = (
         <div className="container-xl px-md-4 py-4">
           <div className="d-flex flex-column flex-md-row">
             <div className="d-flex flex-column flex-md-grow-0 flex-md-basis-300">
-              <div className="card d-flex flex-column flex-md-grow-0 m-2 p-3 pt-2 fade-in">
+              <div className="card d-flex flex-column m-2 p-3 pt-2">
                 <div className="d-flex flex-row">
-                  <h4 className="flex-grow-1">My club</h4>
+                  <h4 className="flex-grow-1">Selected club</h4>
 
                   {club && (
                     <button
@@ -266,81 +240,46 @@ const PageToolsMatchAnalysis: React.FC<PageToolsMatchAnalysisProps> = (
                 </div>
               </div>
 
-              {(opponentClubs || isOpponentLoading) && (
-                <div className="card d-flex flex-column flex-md-grow-1 m-2 p-3 pt-2 fade-in">
-                  <div className="d-flex flex-row flex-md-grow-0">
-                    <h4 className="flex-grow-1">My opponents</h4>
+              <div className="d-flex flex-column flex-md-basis-300 w-100">
+                {(loadingMatches || matches) && (
+                  <div className="card d-flex flex-column flex-md-grow-1 flex-md-shrink-1 m-2 p-3 pt-2 fade-in">
+                    <div className="d-flex flex-row">
+                      <h4 className="flex-grow-1">Matches</h4>
+                    </div>
+
+                    <div className="d-flex flex-fill flex-column">
+                      {matches ? (
+                        matches.map((m) => (
+                          <div className="my-1">
+                            <ItemCardMatch
+                              match={m}
+                              onClick={(id) => {
+                                if (selectedMatchIds.indexOf(id) >= 0) {
+                                  setSelectedMatchIds(
+                                    selectedMatchIds.filter((i) => i !== id)
+                                  );
+                                } else {
+                                  setSelectedMatchIds([
+                                    ...selectedMatchIds,
+                                    ...[id],
+                                  ]);
+                                }
+                              }}
+                              disabled={loadingMatchReport}
+                              selected={selectedMatchIds.indexOf(m.id) >= 0}
+                            />
+                          </div>
+                        ))
+                      ) : (
+                        <LoadingSquare height={200} />
+                      )}
+                    </div>
                   </div>
-
-                  {isOpponentLoading && (
-                    <div className="ratio ratio-16x9 w-100">
-                      <LoadingSquare />
-                    </div>
-                  )}
-
-                  {!isOpponentLoading && (
-                    <div className="d-flex flex-column flex-md-grow-1 overflow-auto">
-                      {opponentClubs.map((c) => (
-                        <div className="my-1">
-                          <ItemCardClub
-                            id={c.id}
-                            name={c.name}
-                            text={
-                              c.playCount +
-                              " match" +
-                              (c.playCount > 1 ? "es" : "")
-                            }
-                            onClick={(id) => setSelectedOpponentId(id)}
-                            selected={c.id === selectedOpponentId}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )}
+                )}
+              </div>
             </div>
 
-            <div className="d-flex flex-column flex-md-grow-0 flex-md-basis-300">
-              {opponentMatches && (
-                <div className="card d-flex flex-column flex-md-grow-1 flex-md-shrink-1 m-2 p-3 pt-2 fade-in">
-                  <div className="d-flex flex-row">
-                    <h4 className="flex-grow-1">Matches</h4>
-                  </div>
-
-                  <div className="d-flex flex-fill flex-column">
-                    {opponentMatches &&
-                      opponentMatches.map((m) => (
-                        <div className="my-1">
-                          <ItemCardMatch
-                            match={m}
-                            onClick={(id) => {
-                              if (selectedOpponentMatchIds.indexOf(id) >= 0) {
-                                setSelectedOpponentMatchIds(
-                                  selectedOpponentMatchIds.filter(
-                                    (i) => i !== id
-                                  )
-                                );
-                              } else {
-                                setSelectedOpponentMatchIds([
-                                  ...selectedOpponentMatchIds,
-                                  ...[id],
-                                ]);
-                              }
-                            }}
-                            disabled={loadingMatchReport}
-                            selected={
-                              selectedOpponentMatchIds.indexOf(m.id) >= 0
-                            }
-                          />
-                        </div>
-                      ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <div className="d-flex flex-column flex-grow-1">
+            <div className="d-flex flex-column flex-md-grow-0">
               {currentAggregatedReport?.myClub &&
                 Object.keys(currentAggregatedReport.myClub).length > 0 && (
                   <div className="d-flex flex-column">

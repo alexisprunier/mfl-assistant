@@ -1,7 +1,7 @@
 import BoxScrollUp from "components/box/BoxScrollUp.js";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getUsers } from "services/api-assistant.js";
+import { getUsers, getClubs } from "services/api-assistant.js";
 import BoxCard from "components/box/BoxCard.js";
 import BoxMessage from "components/box/BoxMessage.js";
 import LoadingSquare from "components/loading/LoadingSquare.js";
@@ -18,6 +18,7 @@ const PageUser: React.FC<PageUserProps> = (props) => {
 
   const { address } = useParams();
   const [user, setUser] = useState(null);
+  const [clubs, setClubs] = useState(null);
   const [matches, setMatches] = useState(null);
 
   const fetchUser = () => {
@@ -32,6 +33,16 @@ const PageUser: React.FC<PageUserProps> = (props) => {
     });
   };
 
+  const fetchClubs = () => {
+    getClubs({
+      handleSuccess: (d) => {
+        setClubs(d.data.getClubs);
+      },
+      handleError: (e) => console.log(e),
+      params: { owners: [user.id] },
+    });
+  };
+
   const fetchMatches = () => {
     setMatches(null);
 
@@ -42,16 +53,22 @@ const PageUser: React.FC<PageUserProps> = (props) => {
       handleError: (e) => console.log(e),
       params: {
         limit: 20,
-        user: user.id,
+        clubs: clubs.map((c) => c.id),
       },
     });
   };
 
   useEffect(() => {
     if (user) {
-      fetchMatches();
+      fetchClubs();
     }
   }, [user]);
+
+  useEffect(() => {
+    if (clubs) {
+      fetchMatches();
+    }
+  }, [clubs]);
 
   useEffect(() => {
     if (address !== "me") {

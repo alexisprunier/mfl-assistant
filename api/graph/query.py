@@ -1132,7 +1132,7 @@ class Query(ObjectType):
 
     get_matches = List(
         MatchType,
-        user=String(),
+        clubs=List(Int),
         skip=Int(default_value=0),
         limit=Int(default_value=20)
     )
@@ -1140,7 +1140,7 @@ class Query(ObjectType):
     async def resolve_get_matches(
         self,
         info,
-        user=None,
+        clubs=None,
         skip=0,
         limit=20
     ):
@@ -1154,11 +1154,10 @@ class Query(ObjectType):
             "awayClub": {"$exists": True, "$ne": None},
         }
 
-        # Owner filter logic
-        if user:
+        if clubs:
             match_filter["$or"] = [
-                {"homeClub.owner": user},
-                {"awayClub.owner": user}
+                {"homeClub": {"$in": clubs}},
+                {"awayClub": {"$in": clubs}}
             ]
 
         matches_cursor = db.matches.find(

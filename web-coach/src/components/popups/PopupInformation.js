@@ -8,7 +8,7 @@ interface PopupInformationProps {
   trigger: Object;
 }
 
-const PopupInformation: React.FC < PopupInformationProps > = ({
+const PopupInformation: React.FC<PopupInformationProps> = ({
   className,
   title,
   content,
@@ -23,7 +23,7 @@ const PopupInformation: React.FC < PopupInformationProps > = ({
         className={"fade-in popup-md " + className}
       >
         {(close) => (
-          <div className="container bg-dark overflow-auto border border-info border-3 rounded-3 p-4">
+          <div className="container bg-dark overflow-auto border border-3 rounded-3 p-4">
             <div className="d-flex flex-row mb-3">
               <div className="flex-grow-1">
                 <h2 className="text-white">{title}</h2>

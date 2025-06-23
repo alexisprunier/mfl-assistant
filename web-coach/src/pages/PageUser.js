@@ -8,6 +8,8 @@ import BoxMessage from "components/box/BoxMessage.js";
 import LoadingSquare from "components/loading/LoadingSquare.js";
 import { getMatches } from "services/api-assistant.js";
 import ItemRowMatch from "../components/items/ItemRowMatch";
+import ControllerMatchType from "components/controllers/ControllerMatchType.js";
+import ControllerClubs from "components/controllers/ControllerClubs.js";
 import * as fcl from "@onflow/fcl";
 
 interface PageUserProps {
@@ -21,7 +23,9 @@ const PageUser: React.FC<PageUserProps> = (props) => {
   const { address } = useParams();
   const [user, setUser] = useState(null);
   const [clubs, setClubs] = useState(null);
+  const [selectedClubIds, setSelectedClubIds] = useState([]);
   const [matches, setMatches] = useState(null);
+  const [types, setTypes] = useState([]);
 
   const fetchUser = () => {
     getUsers({
@@ -38,7 +42,7 @@ const PageUser: React.FC<PageUserProps> = (props) => {
   const fetchClubs = () => {
     getClubs({
       handleSuccess: (d) => {
-        setClubs(d.data.getClubs);
+        setClubs(d.data.getClubs.sort((a, b) => b.division - a.division));
       },
       handleError: (e) => console.log(e),
       params: { owners: [user.id] },
@@ -55,8 +59,12 @@ const PageUser: React.FC<PageUserProps> = (props) => {
       handleError: (e) => console.log(e),
       params: {
         limit: 20,
-        clubs: clubs.map((c) => c.id),
+        clubs:
+          selectedClubIds.length === 0
+            ? clubs.map((c) => c.id)
+            : selectedClubIds,
         statuses: ["LIVE", "ENDED"],
+        types: types,
       },
     });
   };
@@ -76,7 +84,7 @@ const PageUser: React.FC<PageUserProps> = (props) => {
     if (clubs) {
       fetchMatches();
     }
-  }, [clubs]);
+  }, [clubs, types, selectedClubIds]);
 
   useEffect(() => {
     if (address !== "me") {
@@ -159,26 +167,56 @@ const PageUser: React.FC<PageUserProps> = (props) => {
                 }
               />
             </div>
+
             <div className="d-flex flex-column flex-fill">
               <BoxCard
                 title={"Matches"}
+                actions={
+                  <div className="d-flex h-100 align-items-center">
+                    <ControllerMatchType
+                      selectedCriteria={types}
+                      onChange={(t) => setTypes(t)}
+                    />
+                  </div>
+                }
                 content={
-                  matches ? (
-                    matches.length > 0 ? (
-                      <div className="d-flex flex-column flex-fill">
-                        {matches.map((m) => (
-                          <ItemRowMatch match={m} />
-                        ))}
-                      </div>
+                  <div className="d-flex flex-column flex-fill mt-1">
+                    <div className="d-flex flex-fill justify-content-end mb-2">
+                      {clubs ? (
+                        <ControllerClubs
+                          clubs={clubs}
+                          selectedClubs={selectedClubIds}
+                          onChange={(t) => setSelectedClubIds(t)}
+                        />
+                      ) : (
+                        <div style={{ height: 25, width: 150 }}>
+                          <LoadingSquare />
+                        </div>
+                      )}
+                    </div>
+
+                    {matches ? (
+                      matches.length > 0 ? (
+                        <div className="d-flex flex-column flex-fill">
+                          {matches.map((m) => (
+                            <ItemRowMatch match={m} />
+                          ))}
+                        </div>
+                      ) : (
+                        <BoxMessage
+                          className={"py-md-4"}
+                          content={"No match found"}
+                        />
+                      )
                     ) : (
-                      <BoxMessage
-                        className={"py-4 py-md-0"}
-                        content={"No match found"}
-                      />
-                    )
-                  ) : (
-                    <LoadingSquare height={300} />
-                  )
+                      <div
+                        className="d-flex flex-fill w-100"
+                        style={{ height: 200 }}
+                      >
+                        <LoadingSquare />
+                      </div>
+                    )}
+                  </div>
                 }
               />
             </div>

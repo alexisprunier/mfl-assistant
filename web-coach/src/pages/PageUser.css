@@ -37,7 +37,7 @@
   display: inline !important;
 }
 
-#PageUser .LoadingSquare {
+#PageUser .nav-link .LoadingSquare {
   width: 100px !important;
   height: 22px !important;
 }

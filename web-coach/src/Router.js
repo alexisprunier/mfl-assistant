@@ -5,6 +5,7 @@ import PageMatchAnalysis from "pages/PageMatchAnalysis.js";
 import PageSquadBuilder from "pages/PageSquadBuilder.js";
 import PageFormationMeta from "pages/PageFormationMeta.js";
 import PageOpponentFinder from "pages/PageOpponentFinder.js";
+import PageSearch from "pages/PageSearch.js";
 import PageUser from "pages/PageUser.js";
 import React, { useState } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
@@ -68,6 +69,7 @@ const Router: React.FC = (props) => {
             />
             <Route path="/formation-meta" element={<PageFormationMeta />} />
             <Route path="/opponent-finder" element={<PageOpponentFinder />} />
+            <Route path="/search" element={<PageSearch />} />
 
             {/* 404 */}
             <Route element={<Page404 />} />

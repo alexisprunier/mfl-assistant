@@ -36,13 +36,10 @@ const PageOpponentFinder: React.FC<PageOpponentFinderProps> = (props) => {
 
   return (
     <div id="PageOpponentFinder" className="d-flex flex-column w-100 h-100">
-      <nav className="d-flex flex-grow-0 TopBar navbar w-100 ps-md-5 px-4 py-2">
-        <h3 className="my-2">
+      <nav className="d-flex flex-grow-0 TopBar navbar w-100 px-4 py-2">
+        <h3 className="my-2 ps-5">
           <i className="bi bi-binoculars-fill me-2"></i> Opponent finder
         </h3>
-        <span class="text-warning">
-          <i class="bi bi-cone-striped me-1"></i>ALPHA
-        </span>
       </nav>
 
       <div
@@ -89,7 +86,7 @@ const PageOpponentFinder: React.FC<PageOpponentFinderProps> = (props) => {
             content={
               <div className="d-flex flex-fill flex-column">
                 <select
-                  className="form-control w-100 text-white me-0 me-sm-1"
+                  className="form-control w-100 text-white me-0 me-sm-1 mb-1"
                   value={selectedFormation}
                   onChange={(v) => setSelectedFormation(v.target.value)}
                 >

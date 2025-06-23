@@ -204,8 +204,8 @@ const PageToolsMatchAnalysis: React.FC<PageToolsMatchAnalysisProps> = (
   return (
     <div id="PageToolsMatchAnalysis" className="h-100 w-100">
       <div className="h-100 w-100">
-        <nav className="TopBar navbar w-100 ps-md-5 px-4 py-2">
-          <h3 className="my-2">
+        <nav className="TopBar navbar w-100 px-4 py-2">
+          <h3 className="my-2 ps-5">
             <i className="bi bi-clipboard2-pulse-fill me-2"></i> Match analysis
           </h3>
         </nav>

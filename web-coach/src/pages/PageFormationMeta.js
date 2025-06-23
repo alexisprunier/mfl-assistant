@@ -226,13 +226,10 @@ const PageFormationMeta: React.FC<PageFormationMetaProps> = (props) => {
 
   return (
     <div id="PageFormationMeta" className="d-flex flex-column w-100 h-100">
-      <nav className="d-flex flex-grow-0 TopBar navbar w-100 ps-md-5 px-4 py-2">
-        <h3 className="my-2">
+      <nav className="d-flex flex-grow-0 TopBar navbar w-100 px-4 py-2">
+        <h3 className="my-2 ps-5">
           <i className="bi bi-grid-3x3-gap-fill me-2"></i> Formation meta
         </h3>
-        <span class="text-warning">
-          <i class="bi bi-cone-striped me-1"></i>ALPHA
-        </span>
       </nav>
 
       <div className="d-flex flex-grow-1 flex-column container-xl px-2 px-md-4 py-4">

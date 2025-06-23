@@ -1,12 +1,14 @@
 import BoxScrollUp from "components/box/BoxScrollUp.js";
+import "./PageUser.css";
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import { getUsers, getClubs } from "services/api-assistant.js";
 import BoxCard from "components/box/BoxCard.js";
 import BoxMessage from "components/box/BoxMessage.js";
 import LoadingSquare from "components/loading/LoadingSquare.js";
 import { getMatches } from "services/api-assistant.js";
 import ItemRowMatch from "../components/items/ItemRowMatch";
+import * as fcl from "@onflow/fcl";
 
 interface PageUserProps {
   yScrollPosition: number;
@@ -59,6 +61,11 @@ const PageUser: React.FC<PageUserProps> = (props) => {
     });
   };
 
+  const logOut = () => {
+    fcl.unauthenticate();
+    props.logout();
+  };
+
   useEffect(() => {
     if (user) {
       fetchClubs();
@@ -92,9 +99,27 @@ const PageUser: React.FC<PageUserProps> = (props) => {
   return (
     <div id="PageUser" className="w-100 h-100">
       <nav className="TopBar navbar w-100 ps-md-5 px-4 py-2">
-        <h3 className="my-2">
-          <i className="bi bi-clipboard2-pulse-fill me-2"></i> My HQ
-        </h3>
+        <ul className="navbar-nav flex-row h6 ps-md-3">
+          <li className="nav-item align-self-end lh-1 px-2 d-md-block d-none">
+            <Link className={"nav-link nav-user border rounded-2 px-3"}>
+              <i className="bi bi-person-fill me-1"></i>
+              <span className="d-none d-md-inline ms-1">
+                {user?.name ? user.name : <LoadingSquare />}
+              </span>
+            </Link>
+          </li>
+
+          {user?.address && props.assistantUser?.address === user?.address && (
+            <li className="nav-item align-self-end lh-1 px-2">
+              <Link onClick={logOut} className={"nav-link"}>
+                <i className="bi bi-box-arrow-right text-danger mx-1"></i>
+                <span className="d-none d-md-inline text-danger ms-1">
+                  Log out
+                </span>
+              </Link>
+            </li>
+          )}
+        </ul>
       </nav>
 
       <div className="d-flex w-100 h-100 justify-content-center">

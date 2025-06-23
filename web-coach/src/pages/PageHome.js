@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./PageHome.css";
 
@@ -21,15 +21,53 @@ const PageHome: React.FC<PageHomeProps> = ({
 }) => {
   const navigate = useNavigate();
 
+  const [searchValue, setSearchValue] = useState("");
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      if (searchValue.length >= 2) {
+        navigate("/search?q=" + searchValue);
+      }
+    }
+  };
+
   return (
     <div id="PageHome" className="h-100">
       <div className="h-100 w-100">
         <div className="d-flex h-100 w-100 flex-column flex-lg-row flex-nowrap">
           <div
-            className="d-flex flex-column flex-grow-1 flex-basis-50p h-100 pe-lg-3 pb-lg-3"
+            className="d-flex flex-column flex-grow-1 flex-basis-50p h-100 pb-lg-3"
             style={{ minWidth: "0" }}
           >
-            <div className="d-flex flex-column flex-fill ps-lg-3">
+            <div className="d-flex flex-column flex-fill">
+              <div
+                className="searchBar d-flex py-2 px-2"
+                style={{ borderBottomRightRadius: "10px" }}
+              >
+                <div className="d-flex flex-grow-1 pe-2">
+                  <input
+                    type="text"
+                    className="form-control w-100"
+                    value={searchValue}
+                    onChange={(v) => setSearchValue(v.target.value)}
+                    placeholder={"Search players, clubs, users..."}
+                    onKeyDown={handleKeyDown}
+                  />
+                </div>
+
+                <div className="d-flex flex-grow-0">
+                  <button
+                    type="text"
+                    className="btn btn-link w-100 me-2 me-lg-0"
+                    onClick={() => navigate("/search?q=" + searchValue)}
+                    disabled={searchValue.length < 2}
+                  >
+                    <i className="bi bi-search text-white"></i>
+                  </button>
+                </div>
+              </div>
+
               <div className="main-view d-flex flex-row flex-grow-1 justify-content-center">
                 <div className="d-flex flex-column align-self-center position-relative">
                   <img

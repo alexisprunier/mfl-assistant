@@ -5,6 +5,7 @@ import { getMatches, getClub, getMatchReport } from "services/api-mfl.js";
 import ItemCardClub from "components/items/ItemCardClub.js";
 import ItemCardMatch from "components/items/ItemCardMatch.js";
 import ItemCardMatchReport from "components/items/ItemCardMatchReport.js";
+import ControllerMflMatchType from "components/controllers/ControllerMflMatchType.js";
 import LoadingSquare from "components/loading/LoadingSquare.js";
 import PopupSelectClub from "components/popups/PopupSelectClub.js";
 
@@ -17,6 +18,8 @@ const PageToolsMatchAnalysis: React.FC<PageToolsMatchAnalysisProps> = (
   const [matches, setMatches] = useState(null);
   const [selectedMatchIds, setSelectedMatchIds] = useState([]);
   const [loadingMatches, setLoadingMatches] = useState(false);
+
+  const [selectedCriteria, setSelectedCriteria] = useState("All");
 
   const [matchReports, setMatchReports] = useState({});
   const [loadingMatchReport, setLoadingMatchReport] = useState(false);
@@ -39,6 +42,8 @@ const PageToolsMatchAnalysis: React.FC<PageToolsMatchAnalysisProps> = (
               squadId: d.squads[0].id,
               limit: 15,
               past: true,
+              onlyCompetitions: selectedCriteria === "Competitions",
+              onlyFriendliesHome: selectedCriteria === "Home friendlies",
             },
           });
         },
@@ -137,9 +142,10 @@ const PageToolsMatchAnalysis: React.FC<PageToolsMatchAnalysisProps> = (
 
   useEffect(() => {
     if (props.assistantUser) {
+      setMatches(null);
       fetchMatches();
     }
-  }, [props.assistantUser, club]);
+  }, [props.assistantUser, club, selectedCriteria]);
 
   useEffect(() => {
     if (matches && club) {
@@ -206,7 +212,7 @@ const PageToolsMatchAnalysis: React.FC<PageToolsMatchAnalysisProps> = (
 
         <div className="container-xl px-md-4 py-4">
           <div className="d-flex flex-column flex-md-row">
-            <div className="d-flex flex-column flex-md-grow-0 flex-md-basis-300">
+            <div className="d-flex flex-column flex-md-grow-0 flex-md-basis-300 flex-md-shrink-0">
               <div className="card d-flex flex-column m-2 p-3 pt-2">
                 <div className="d-flex flex-row">
                   <h4 className="flex-grow-1">Selected club</h4>
@@ -247,6 +253,13 @@ const PageToolsMatchAnalysis: React.FC<PageToolsMatchAnalysisProps> = (
                       <h4 className="flex-grow-1">Matches</h4>
                     </div>
 
+                    <div className="d-flex flex-row justify-content-end mb-1">
+                      <ControllerMflMatchType
+                        selectedCriteria={selectedCriteria}
+                        onChange={(c) => setSelectedCriteria(c)}
+                      />
+                    </div>
+
                     <div className="d-flex flex-fill flex-column">
                       {matches ? (
                         matches.map((m) => (
@@ -279,7 +292,7 @@ const PageToolsMatchAnalysis: React.FC<PageToolsMatchAnalysisProps> = (
               </div>
             </div>
 
-            <div className="d-flex flex-column flex-md-grow-0">
+            <div className="d-flex flex-column flex-md-grow-1">
               {currentAggregatedReport?.myClub &&
                 Object.keys(currentAggregatedReport.myClub).length > 0 && (
                   <div className="d-flex flex-column">

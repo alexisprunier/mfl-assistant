@@ -70,7 +70,7 @@ const PopupSelectClub: React.FC<PopupSelectClubProps> = ({
               </div>
             </div>
 
-            <div className="d-flex flex-grow-1 flex-column mb-3 overflow-auto">
+            <div className="d-flex flex-grow-0 flex-column mb-2">
               <div className="d-flex flex-row mb-3">
                 <input
                   type="text"
@@ -78,16 +78,21 @@ const PopupSelectClub: React.FC<PopupSelectClubProps> = ({
                   value={clubSearch}
                   onChange={(v) => setClubSearch(v.target.value)}
                   placeholder={"Club name, city, country, ..."}
+                  disabled={true}
                   autoFocus
                 />
                 <button
-                  className="btn btn-info text-white"
+                  className="btn btn-warning text-white d-flex flex-row"
                   onClick={() => fetchClubs()}
+                  disabled={true}
                 >
-                  Apply
+                  <i className="d-inline bi bi-lock-fill" />
+                  &nbsp;Locked
                 </button>
               </div>
+            </div>
 
+            <div className="d-flex flex-grow-1 flex-column mb-3 overflow-auto">
               {clubs ? (
                 clubs.length > 0 ? (
                   clubs.map((p) => (

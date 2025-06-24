@@ -1156,3 +1156,24 @@ export const getPlayerPricingHistory = ({
     (v) => defaultHandleSuccess(handleSuccess, v),
     (e) => defaultHandleError(handleError, e)
   );
+
+export const getOverallVsGdRates = ({
+  handleSuccess = null,
+  handleError = null,
+  params,
+}) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `{
+        getOverallVsGdRates(${jsonToParams(params)}) {
+          overallDifference,
+          goalDifference,
+          rate,
+          engine
+        }
+      }`,
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );

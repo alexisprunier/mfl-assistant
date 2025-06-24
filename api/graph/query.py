@@ -1,5 +1,5 @@
 from graphene import ObjectType, String, Int, Schema, Field, List, ID, Boolean, Date
-from graph.schema import MatchType, ClubNotificationScopeType, MatchClubPairType, RawPlayerPricingType, FormationMetaType, PlayerPricingType, UserType, GeolocationType, SaleType, ContractType, NotificationScopeType, NotificationType, CountType, DataPointType, ClubType, TeamType, TeamMemberType, PlayerType, ReportConfigurationType, ReportType
+from graph.schema import OverallVsGdRateType, MatchType, ClubNotificationScopeType, MatchClubPairType, RawPlayerPricingType, FormationMetaType, PlayerPricingType, UserType, GeolocationType, SaleType, ContractType, NotificationScopeType, NotificationType, CountType, DataPointType, ClubType, TeamType, TeamMemberType, PlayerType, ReportConfigurationType, ReportType
 from bson import ObjectId
 from decorator.require_token import require_token
 from decorator.add_token_if_exists import add_token_if_exists
@@ -1059,6 +1059,20 @@ class Query(ObjectType):
             item["engine"] async for item in info.context["db"].formation_metas.aggregate(pipeline)
         ]
         
+        return result
+
+    get_overall_vs_gd_rates = List(OverallVsGdRateType, engine=String(required=True))
+
+    async def resolve_get_overall_vs_gd_rates(self, info, engine):
+
+        query = {
+            "engine": engine
+        }
+
+        result = [
+            item async for item in info.context["db"].overall_vs_gd_rates.find(query)
+        ]
+
         return result
 
     get_opponents = List(

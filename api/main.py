@@ -11,7 +11,7 @@ from graph.mutation import Mutation
 import config
 from cron import compute_club_notifications, compute_player_notifications, compute_reports, collect_matches, collect_clubs, collect_sales, collect_players, \
     compute_club_count_per_day, compute_sale_total, compute_raw_player_pricings, compute_player_pricings, collect_users, \
-    compute_formation_meta
+    compute_formation_meta, compute_overall_vs_gd_rates
 from endpoint.generate_nonce import generate_nonce
 from utils.jwt import create_access_token
 from utils.cookie import set_cookie
@@ -180,6 +180,7 @@ scheduler.add_job(compute_sale_total.main,              'interval', args=[db],  
 scheduler.add_job(compute_raw_player_pricings.main,     'interval', args=[db],          seconds=60 * 10)
 scheduler.add_job(compute_player_pricings.main,         'interval', args=[db],          seconds=60 * 60)
 """scheduler.add_job(compute_formation_meta.main,          'interval', args=[db],          seconds=60)"""
+scheduler.add_job(compute_overall_vs_gd_rates.main,      'interval', args=[db],          seconds=60)
 scheduler.start()
 
 @app.on_event("startup")

@@ -11,10 +11,14 @@ interface ItemRowClubProps {
 
 const ItemRowClub: React.FC<ItemRowClubProps> = ({ c, overall, formation }) => {
   return (
-    <div className="Item ItemRowPlayer">
+    <div className="Item ItemRowPlayer w-100">
       <div className="d-flex flex-column flex-sm-row flex-fill pb-1 pb-md-0">
         <div className="d-flex flex-sm-basis-300">
-          <i className="bi bi-buildings-fill me-1" />
+          <img
+            className="me-1"
+            src={`https://d13e14gtps4iwl.cloudfront.net/u/clubs/${c?.id}/logo.png?v=63c386597972f1fcbdcef019a7b453c8`}
+            style={{ height: "18px", marginTop: "2px" }}
+          />
           {c.name ? c.name : "Non-established club"}
         </div>
 
@@ -33,9 +37,17 @@ const ItemRowClub: React.FC<ItemRowClubProps> = ({ c, overall, formation }) => {
             {c.city ? c.city : ""}
           </div>
 
-          {overall && <div className="d-flex flex-basis-80">{overall}</div>}
+          {overall && (
+            <div className="d-flex flex-basis-80">
+              <div style={{ opacity: ".2" }}>Ovr:&nbsp;</div>
+              {overall}
+            </div>
+          )}
           {formation && (
-            <div className="d-flex flex-basis-140">{formation}</div>
+            <div className="d-flex flex-basis-160">
+              <div style={{ opacity: ".2" }}>&nbsp;Form.:&nbsp;</div>
+              {formation}
+            </div>
           )}
 
           <div className="d-flex flex-row flex-sm-grow-0 justify-content-end">

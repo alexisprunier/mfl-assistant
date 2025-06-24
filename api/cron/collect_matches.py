@@ -70,13 +70,13 @@ async def treat_old_matches(db, client):
                 logger.error(f"collect_matches: Error fetching old match data for {min_stored_match_id}: {e}")
                 break
 
-async def treat_live_matches(db, client):
+async def treat_live_and_planned_matches(db, client):
     cutoff = datetime.utcnow() - timedelta(minutes=12)
 
     live_matches_cursor = db.matches.find(
         {
             "startDate": {"$lte": cutoff.isoformat()},
-            "status": "LIVE"
+            "status": {"$in": ["LIVE", "PLANNED"]}
         }
     ).sort("startDate", -1).limit(max_live_match_to_treat)
 

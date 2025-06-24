@@ -427,3 +427,9 @@ class FormationMetaType(ObjectType):
 class MatchClubPairType(ObjectType):
     club = Field(ClubType)
     match = Field(MatchType)
+
+class OverallVsGdRateType(ObjectType):
+    engine = String()
+    overall_difference = Int()
+    goal_difference = Int()
+    rate = Float()

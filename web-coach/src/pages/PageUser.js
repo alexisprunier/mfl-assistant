@@ -2,7 +2,12 @@ import BoxScrollUp from "components/box/BoxScrollUp.js";
 import "./PageUser.css";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
-import { getUsers, getClubs } from "services/api-assistant.js";
+import {
+  getUsers,
+  getClubs,
+  getOverallVsGdRates,
+} from "services/api-assistant.js";
+import { computeMatchRate } from "utils/rate.js";
 import BoxCard from "components/box/BoxCard.js";
 import BoxMessage from "components/box/BoxMessage.js";
 import LoadingSquare from "components/loading/LoadingSquare.js";
@@ -25,7 +30,8 @@ const PageUser: React.FC<PageUserProps> = (props) => {
   const [clubs, setClubs] = useState(null);
   const [selectedClubIds, setSelectedClubIds] = useState([]);
   const [matches, setMatches] = useState(null);
-  const [types, setTypes] = useState([]);
+  const [types, setTypes] = useState(["LEAGUE", "CUP"]);
+  const [overallVsGdRates, setOverallVsGdRates] = useState(null);
 
   const fetchUser = () => {
     getUsers({
@@ -46,6 +52,16 @@ const PageUser: React.FC<PageUserProps> = (props) => {
       },
       handleError: (e) => console.log(e),
       params: { owners: [user.id] },
+    });
+  };
+
+  const fetchOverallVsGdRates = () => {
+    getOverallVsGdRates({
+      handleSuccess: (d) => {
+        setOverallVsGdRates(d.data.getOverallVsGdRates);
+      },
+      handleError: (e) => console.log(e),
+      params: { engine: "10.1.1/6.0.2" },
     });
   };
 
@@ -87,6 +103,8 @@ const PageUser: React.FC<PageUserProps> = (props) => {
   }, [clubs, types, selectedClubIds]);
 
   useEffect(() => {
+    fetchOverallVsGdRates();
+
     if (address !== "me") {
       fetchUser();
     }
@@ -195,11 +213,18 @@ const PageUser: React.FC<PageUserProps> = (props) => {
                       )}
                     </div>
 
-                    {matches ? (
+                    {overallVsGdRates && matches ? (
                       matches.length > 0 ? (
                         <div className="d-flex flex-column flex-fill">
                           {matches.map((m) => (
-                            <ItemRowMatch match={m} />
+                            <ItemRowMatch
+                              match={m}
+                              rate={computeMatchRate(
+                                m,
+                                overallVsGdRates,
+                                clubs.map((c) => c.id).includes(m.homeClub)
+                              )}
+                            />
                           ))}
                         </div>
                       ) : (

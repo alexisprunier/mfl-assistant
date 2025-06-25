@@ -247,6 +247,10 @@ const PageUserClubs: React.FC<PageUserClubsProps> = () => {
   const getCompetitionBlock = (id, name, data) => {
     const cup = data.filter((d) => d.type === "CUP").shift();
 
+    if (!cup) {
+      return "";
+    }
+
     return (
       <div className="card bg-black pt-1 p-2 mb-2">
         <div className="d-flex flex-grow-1 flex-column flex-md-row">

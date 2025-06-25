@@ -13,7 +13,8 @@ export const computeMatchRate = (match, overallVsGdRates, home = true) => {
     homeOverall > awayOverall ? homeScore - awayScore : awayScore - homeScore;
 
   const below =
-    (home && homeOverall > awayOverall) || (!home && awayOverall > homeOverall);
+    (home && homeOverall >= awayOverall) ||
+    (!home && awayOverall >= homeOverall);
 
   // Filter worst-case results
   const relevantRates = overallVsGdRates.filter(

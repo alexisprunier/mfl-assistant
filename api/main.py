@@ -180,7 +180,7 @@ scheduler.add_job(compute_sale_total.main,              'interval', args=[db],  
 scheduler.add_job(compute_raw_player_pricings.main,     'interval', args=[db],          seconds=60 * 10)
 scheduler.add_job(compute_player_pricings.main,         'interval', args=[db],          seconds=60 * 60)
 """scheduler.add_job(compute_formation_meta.main,          'interval', args=[db],          seconds=60)"""
-scheduler.add_job(compute_overall_vs_gd_rates.main,      'interval', args=[db],          seconds=60)
+scheduler.add_job(compute_overall_vs_gd_rates.main,      'interval', args=[db],         seconds=60 * 422)
 scheduler.start()
 
 @app.on_event("startup")

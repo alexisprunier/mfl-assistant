@@ -109,7 +109,7 @@ async def main(db):
 
         await treat_new_matches(db, client, last_match_id)
         await treat_old_matches(db, client)
-        await treat_live_matches(db, client)
+        await treat_live_and_planned_matches(db, client)
 
 async def _treat_match(db, mfl_match):
     home_user = await build_and_upsert_user(db, {"address": mfl_match["homeCoachWalletAddress"]})

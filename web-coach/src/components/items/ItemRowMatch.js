@@ -44,7 +44,7 @@ const ItemRowMatch: React.FC<ItemRowMatchProps> = ({ match, rate }) => {
 
           {rate && (
             <div className="d-flex flex-row flex-basis-140">
-              <div style={{ opacity: ".2" }}>Rate:</div>&nbsp;{rate}
+              <div style={{ opacity: ".2" }}>Perf.:</div>&nbsp;{rate}
             </div>
           )}
         </div>

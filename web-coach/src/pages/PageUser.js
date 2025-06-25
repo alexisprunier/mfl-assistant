@@ -10,6 +10,7 @@ import {
 import { computeMatchRate } from "utils/rate.js";
 import BoxCard from "components/box/BoxCard.js";
 import BoxMessage from "components/box/BoxMessage.js";
+import Count from "components/counts/Count.js";
 import LoadingSquare from "components/loading/LoadingSquare.js";
 import { getMatches } from "services/api-assistant.js";
 import ItemRowMatch from "../components/items/ItemRowMatch";
@@ -85,6 +86,33 @@ const PageUser: React.FC<PageUserProps> = (props) => {
     });
   };
 
+  const computeAverageRate = (count) => {
+    if (!Array.isArray(matches) || !Array.isArray(overallVsGdRates))
+      return null;
+
+    const availableCount = Math.min(count, matches.length);
+    if (availableCount === 0) return null;
+
+    const selectedMatches = matches.slice(0, availableCount);
+
+    const rates = selectedMatches
+      .map((m) =>
+        computeMatchRate(
+          m,
+          overallVsGdRates,
+          clubs.map((c) => c.id).includes(m.homeClub.id)
+        )
+      )
+      .filter((rate) => typeof rate === "number");
+
+    if (rates.length === 0) return null;
+
+    const sum = rates.reduce((acc, rate) => acc + rate, 0);
+    const avg = sum / rates.length;
+
+    return Math.round(avg * 10) / 10;
+  };
+
   const logOut = () => {
     fcl.unauthenticate();
     props.logout();
@@ -152,6 +180,38 @@ const PageUser: React.FC<PageUserProps> = (props) => {
         <div className="container-xl px-md-4 py-4">
           <div className="d-flex flex-column flex-md-row flex-fill">
             <div className="d-flex flex-column flex-md-basis-300">
+              <BoxCard
+                title={"Performance"}
+                content={
+                  <div className="d-flex flex-column flex-fill align-items-center">
+                    <div className="d-flex mt-4 mb-3">
+                      <Count
+                        label={"Last 5 Matches"}
+                        count={
+                          matches && overallVsGdRates ? (
+                            computeAverageRate(5)
+                          ) : (
+                            <LoadingSquare />
+                          )
+                        }
+                      />
+                    </div>
+                    <div className="d-flex my-3 mb-4">
+                      <Count
+                        label={"Last 15 Matches"}
+                        count={
+                          matches && overallVsGdRates ? (
+                            computeAverageRate(15)
+                          ) : (
+                            <LoadingSquare />
+                          )
+                        }
+                      />
+                    </div>
+                  </div>
+                }
+              />
+
               <BoxCard
                 title={"HQ with Assistant"}
                 content={
@@ -222,7 +282,7 @@ const PageUser: React.FC<PageUserProps> = (props) => {
                               rate={computeMatchRate(
                                 m,
                                 overallVsGdRates,
-                                clubs.map((c) => c.id).includes(m.homeClub)
+                                clubs.map((c) => c.id).includes(m.homeClub.id)
                               )}
                             />
                           ))}

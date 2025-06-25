@@ -152,9 +152,9 @@ const PageUser: React.FC<PageUserProps> = (props) => {
 
   return (
     <div id="PageUser" className="w-100 h-100">
-      <nav className="TopBar navbar w-100 ps-md-5 px-4 py-2">
-        <ul className="navbar-nav flex-row h6 ps-md-3">
-          <li className="nav-item align-self-end lh-1 px-2 d-md-block d-none">
+      <nav className="TopBar navbar w-100 ps-5 px-4 py-2">
+        <ul className="navbar-nav flex-row h6 ps-3">
+          <li className="nav-item align-self-end lh-1 px-2 d-block">
             <Link className={"nav-link nav-user border rounded-2 px-3"}>
               <i className="bi bi-person-fill me-1"></i>
               <span className="d-none d-md-inline ms-1">

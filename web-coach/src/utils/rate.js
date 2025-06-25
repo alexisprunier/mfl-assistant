@@ -9,18 +9,18 @@ export const computeMatchRate = (match, overallVsGdRates, home = true) => {
 
   const diff = Math.abs(homeOverall - awayOverall);
   const overallDiff = bucketOverallDiff(diff);
+  const resultGoalDiff =
+    homeOverall > awayOverall ? homeScore - awayScore : awayScore - homeScore;
 
-  const teamIsHome = home;
-  const resultGoalDiff = teamIsHome
-    ? homeScore - awayScore
-    : awayScore - homeScore;
+  const below =
+    (home && homeOverall > awayOverall) || (!home && awayOverall > homeOverall);
 
   // Filter worst-case results
   const relevantRates = overallVsGdRates.filter(
     (entry) =>
       entry.overallDifference === overallDiff &&
-      ((home && entry.goalDifference < 0) ||
-        (!home && entry.goalDifference > 0))
+      ((below && entry.goalDifference < resultGoalDiff) ||
+        (!below && entry.goalDifference > resultGoalDiff))
   );
 
   const worstRateSum = relevantRates.reduce(

@@ -1027,6 +1027,18 @@ export const getFormationMetas = ({
     (e) => defaultHandleError(handleError, e)
   );
 
+export const getFormations = ({ handleSuccess = null, handleError = null }) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `{
+        getFormations
+      }`,
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );
+
 export const getOpponents = ({
   handleSuccess = null,
   handleError = null,

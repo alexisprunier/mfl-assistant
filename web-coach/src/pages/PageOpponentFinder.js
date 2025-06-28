@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { getOpponents } from "services/api-assistant.js";
+import { getOpponents, getFormations } from "services/api-assistant.js";
 import BoxCard from "components/box/BoxCard.js";
 import LoadingSquare from "components/loading/LoadingSquare.js";
 import ItemRowMatch from "components/items/ItemRowMatch.js";
 import PopupInformation from "components/popups/PopupInformation.js";
-import { formations } from "utils/formation.js";
 
 interface PageOpponentFinderProps {}
 
 const PageOpponentFinder: React.FC<PageOpponentFinderProps> = (props) => {
   const [matches, setMatches] = useState(null);
+  const [formations, setFormations] = useState(null);
   const [selectedFormation, setSelectedFormation] = useState(null);
   const [minOverall, setMinOverall] = useState(null);
   const [maxOverall, setMaxOverall] = useState(null);
@@ -30,8 +30,20 @@ const PageOpponentFinder: React.FC<PageOpponentFinderProps> = (props) => {
     });
   };
 
+  const fetchFormations = () => {
+    setMatches(null);
+
+    getFormations({
+      handleSuccess: (d) => {
+        setFormations(d.data.getFormations.sort());
+      },
+      handleError: (e) => console.log(e),
+    });
+  };
+
   useEffect(() => {
     fetchOpponents();
+    fetchFormations();
   }, []);
 
   return (
@@ -85,18 +97,32 @@ const PageOpponentFinder: React.FC<PageOpponentFinderProps> = (props) => {
             }
             content={
               <div className="d-flex flex-fill flex-column">
-                <select
-                  className="form-control w-100 text-white me-0 me-sm-1 mb-1"
-                  value={selectedFormation}
-                  onChange={(v) => setSelectedFormation(v.target.value)}
-                >
-                  <option value={null} key={null} />
-                  {Object.keys(formations).map((p) => (
-                    <option value={p.toString()} key={p.toString()}>
-                      {p}
+                {formations ? (
+                  <select
+                    className="form-control w-100 text-white me-0 me-sm-1 mb-1"
+                    value={selectedFormation}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setSelectedFormation(
+                        val === "All formations" ? null : val
+                      );
+                    }}
+                    placeholder={"Formation"}
+                  >
+                    <option value={null} key={null}>
+                      All formations
                     </option>
-                  ))}
-                </select>
+                    {formations.map((p) => (
+                      <option value={p} key={p}>
+                        {p}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <div className="mb-1" style={{ height: "38px" }}>
+                    <LoadingSquare />
+                  </div>
+                )}
                 <input
                   type="number"
                   min="300"

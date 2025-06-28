@@ -1061,6 +1061,29 @@ class Query(ObjectType):
         
         return result
 
+    get_formations = List(String)
+
+    async def resolve_get_formations(self, info):
+        pipeline = [
+            {"$match": {"homeFormation": {"$ne": None}}},
+            {"$project": {"formation": "$homeFormation"}},
+            {"$unionWith": {
+                "coll": "matches",
+                "pipeline": [
+                    {"$match": {"awayFormation": {"$ne": None}}},
+                    {"$project": {"formation": "$awayFormation"}}
+                ]
+            }},
+            {"$group": {"_id": "$formation"}},
+            {"$project": {"_id": 0, "formation": "$_id"}}
+        ]
+
+        result = [
+            item["formation"] async for item in info.context["db"].matches.aggregate(pipeline)
+        ]
+
+        return result
+
     get_overall_vs_gd_rates = List(OverallVsGdRateType, engine=String(required=True))
 
     async def resolve_get_overall_vs_gd_rates(self, info, engine):

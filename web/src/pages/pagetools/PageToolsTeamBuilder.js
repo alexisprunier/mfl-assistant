@@ -153,19 +153,6 @@ const PageToolsTeamBuilder: React.FC<PageToolsTeamBuilderProps> = (props) => {
     }
   }, [selectedTeam]);
 
-  if (!props.assistantUser) {
-    return (
-      <div className="d-flex h-100 justify-content-center align-items-center">
-        <ButtonLogin
-          flowUser={props.flowUser}
-          assistantUser={props.assistantUser}
-          logout={props.logout}
-          content={<BoxLogin assistantUser={props.assistantUser} />}
-        />
-      </div>
-    );
-  }
-
   return (
     <div id="PageToolsMatchObservatory" className="h-100 w-100">
       <div className="d-flex h-100 w-100 justify-content-center align-items-center">

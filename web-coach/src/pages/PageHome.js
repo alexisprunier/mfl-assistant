@@ -173,6 +173,18 @@ const PageHome: React.FC<PageHomeProps> = ({
                   </div>
                 </Link>
 
+                <Link to="/formation-meta">
+                  <div className="d-flex flex-grow-0 card flex-column mx-1 px-4 py-2">
+                    <div className="d-flex justify-content-center align-items-center">
+                      <div className="text-center">
+                        <i className="bi bi-clipboard2-check h4"></i>
+                        <br />
+                        Squad builder
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+
                 <Link to="/match-analysis">
                   <div className="d-flex flex-grow-0 card flex-column mx-1 px-4 py-2">
                     <div className="d-flex justify-content-center align-items-center">

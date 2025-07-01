@@ -105,6 +105,28 @@ const Menu: React.FC<MenuProps> = (props) => {
 
           <li className="nav-item">
             <Link
+              to="/squad-builder"
+              className={
+                "nav-link" +
+                (location.pathname.startsWith("/squad-builder")
+                  ? " active"
+                  : "")
+              }
+            >
+              {location.pathname.startsWith("/squad-builder") &&
+                getMenuLabel("Squad builder", "d-none d-lg-inline")}
+              <div className="px-2 px-lg-0">
+                {location.pathname.startsWith("/squad-builder") ? (
+                  <i className="bi bi-clipboard2-check-fill"></i>
+                ) : (
+                  <i className="bi bi-clipboard2-check"></i>
+                )}
+              </div>
+            </Link>
+          </li>
+
+          <li className="nav-item">
+            <Link
               to="/match-analysis"
               className={
                 "nav-link" +

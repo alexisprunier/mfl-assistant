@@ -1,11 +1,10 @@
+import BoxCard from "components/box/BoxCard.js";
 import BoxLogin from "components/box/BoxLogin.js";
 import BoxMessage from "components/box/BoxMessage.js";
 import ButtonLogin from "components/buttons/ButtonLogin.js";
 import ButtonOnFieldPlayerView from "components/buttons/ButtonOnFieldPlayerView.js";
 import ButtonPlayerView from "components/buttons/ButtonPlayerView.js";
-import Count from "components/counts/Count.js";
 import ItemRowPlayerAssist from "components/items/ItemRowPlayerAssist.js";
-import ItemTeam from "components/items/ItemTeam.js";
 import LoadingSquare from "components/loading/LoadingSquare.js";
 import MiscFlag from "components/misc/MiscFlag.js";
 import MiscOverall from "components/misc/MiscOverall.js";
@@ -13,7 +12,6 @@ import PopupAddPlayers from "components/popups/PopupAddPlayers.js";
 import PopupAddTeam from "components/popups/PopupAddTeam.js";
 import PopupEditTeam from "components/popups/PopupEditTeam.js";
 import PopupSelectPlayer from "components/popups/PopupSelectPlayer.js";
-import BoxCard from "components/box/BoxCard.js";
 import React, { useEffect, useState } from "react";
 import {
   addTeamMembers,
@@ -23,6 +21,7 @@ import {
   updateTeamMember,
 } from "services/api-assistant.js";
 import { formations } from "utils/formation.js";
+import { getCalculatedOverall } from "utils/player.js";
 
 interface PageSquadBuilderProps {}
 
@@ -30,8 +29,6 @@ const PageSquadBuilder: React.FC<PageSquadBuilderProps> = (props) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [teams, setTeams] = useState(null);
-  //const [selectedTeam, setSelectedTeam] = useState(null);
-  //const [teamMembers, setTeamMembers] = useState(null);
 
   const [playerView, setPlayerView] = useState(null);
   const [onFieldPlayerView, setOnFieldPlayerView] = useState(null);
@@ -240,6 +237,117 @@ const PageSquadBuilder: React.FC<PageSquadBuilderProps> = (props) => {
                                   selectedView={onFieldPlayerView}
                                   onChange={(v) => setOnFieldPlayerView(v)}
                                 />
+                              </div>
+
+                              <div
+                                className="position-absolute text-small text-dark"
+                                style={{
+                                  top: "3px",
+                                  left: "5px",
+                                  opacity: ".8",
+                                }}
+                              >
+                                Starter:{" "}
+                                {t.teamMembers &&
+                                t.formation &&
+                                t.teamMembers.filter((tm) => tm.position)
+                                  .length > 0
+                                  ? t.teamMembers
+                                      .filter((tm) => tm.position)
+                                      .map((tm) =>
+                                        getCalculatedOverall(
+                                          tm.player,
+                                          formations[t.formation][tm.position]
+                                            .position
+                                        )
+                                      )
+                                      .reduce((acc, cur) => acc + cur)
+                                  : 0}{" "}
+                                -{" "}
+                                {t.teamMembers &&
+                                t.formation &&
+                                t.teamMembers.filter((tm) => tm.position)
+                                  .length > 0
+                                  ? Number(
+                                      t.teamMembers
+                                        .filter((tm) => tm.position)
+                                        .map((tm) =>
+                                          getCalculatedOverall(
+                                            tm.player,
+                                            formations[t.formation][tm.position]
+                                              .position
+                                          )
+                                        )
+                                        .reduce((acc, cur) => acc + cur) /
+                                        t.teamMembers.filter(
+                                          (tm) => tm.position
+                                        ).length
+                                    ).toFixed(1)
+                                  : 0}
+                              </div>
+
+                              <div
+                                className="position-absolute text-small text-dark"
+                                style={{
+                                  bottom: "3px",
+                                  left: "5px",
+                                  opacity: ".8",
+                                }}
+                              >
+                                B11:{" "}
+                                {t.teamMembers && t.teamMembers.length > 0
+                                  ? t.teamMembers
+                                      .map((tm) => tm.player.overall)
+                                      .sort((a, b) => b - a)
+                                      .slice(0, 11)
+                                      .reduce((acc, cur) => acc + cur, 0)
+                                  : 0}{" "}
+                                -{" "}
+                                {t.teamMembers && t.teamMembers.length > 0
+                                  ? Number(
+                                      t.teamMembers
+                                        .map((tm) => tm.player.overall)
+                                        .sort((a, b) => b - a)
+                                        .slice(0, 11)
+                                        .reduce((acc, cur) => acc + cur, 0) /
+                                        t.teamMembers
+                                          .map((tm) => tm.player.overall)
+                                          .sort((a, b) => b - a)
+                                          .slice(0, 11).length
+                                    ).toFixed(1)
+                                  : 0}
+                              </div>
+
+                              <div
+                                className="position-absolute text-small text-dark"
+                                style={{
+                                  bottom: "3px",
+                                  right: "5px",
+                                  opacity: ".8",
+                                }}
+                              >
+                                B16:{" "}
+                                {t.teamMembers && t.teamMembers.length > 0
+                                  ? t.teamMembers
+                                      .map((tm) => tm.player.overall)
+                                      .sort((a, b) => b - a)
+                                      .slice(0, 16)
+                                      .reduce((acc, cur) => acc + cur, 0)
+                                  : 0}{" "}
+                                -{" "}
+                                {t.teamMembers && t.teamMembers.length > 0
+                                  ? Number(
+                                      t.teamMembers
+                                        .map((tm) => tm.player.overall)
+                                        .sort((a, b) => b - a)
+                                        .slice(0, 16)
+                                        .reduce((acc, cur) => acc + cur, 0) /
+                                        t.teamMembers
+                                          .map((tm) => tm.player.overall)
+                                          .sort((a, b) => b - a)
+                                          .slice(0, 16).length
+                                    ).toFixed(1)
+                                  : 0}
                               </div>
 
                               {t.formation &&

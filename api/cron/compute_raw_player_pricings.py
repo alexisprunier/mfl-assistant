@@ -81,7 +81,8 @@ async def calculate_price_from_sale(db, sale, lookback_days=30):
         "execution_date": {"$gte": lookback_date, "$lte": sale["execution_date"]},
         "overall": {"$gte": overall_range[0], "$lte": overall_range[1]},
         "age": {"$gte": age_range[0], "$lte": age_range[1]},
-        "positions.0": sale["positions"][0]
+        "positions.0": sale["positions"][0],
+        "price": {"$gte": 0.1}
     }).to_list(length=None)
     
     relevant_prices_dates = [(sale["price"], sale["execution_date"]) for sale in sales]

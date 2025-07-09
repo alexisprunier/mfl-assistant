@@ -150,8 +150,8 @@ const PageSquadBuilder: React.FC<PageSquadBuilderProps> = (props) => {
             className="pb-2"
             content={
               <div className="d-flex flex-column flex-md-row flex-fill">
-                <div className="d-flex flex-grow-1">
-                  <h4>
+                <div className="d-flex flex-grow-1 align-content-center">
+                  <h4 className="mb-0 mt-1">
                     {teams ? teams.length : "?"} team
                     {teams && teams.length > 1 && "s"}
                   </h4>

@@ -16,7 +16,7 @@ const ChartLinePricingHistory: React.FC<ChartLinePricingHistoryProps> = ({
   const getData = () => {
     const now = new Date();
     const sevenDaysAgo = new Date(now);
-    sevenDaysAgo.setDate(now.getDate() - 7);
+    sevenDaysAgo.setDate(now.getDate() - 30);
 
     const filteredData = data
       .filter((d) => new Date(d.date) >= sevenDaysAgo)

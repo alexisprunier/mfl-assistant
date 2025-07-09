@@ -177,14 +177,38 @@ scheduler.add_job(collect_users.main,                   'interval', args=[db],  
 
 scheduler.add_job(compute_club_count_per_day.main,      'interval', args=[db],          seconds=60 * 20)
 scheduler.add_job(compute_sale_total.main,              'interval', args=[db],          seconds=60 * 25)
-scheduler.add_job(compute_raw_player_pricings.main,     'interval', args=[db],          seconds=60 * 10)
+scheduler.add_job(compute_raw_player_pricings.main,     'interval', args=[db],          seconds=60 * 28)
 scheduler.add_job(compute_player_pricings.main,         'interval', args=[db],          seconds=60 * 60)
 """scheduler.add_job(compute_formation_meta.main,          'interval', args=[db],          seconds=60)"""
 scheduler.add_job(compute_overall_vs_gd_rates.main,      'interval', args=[db],         seconds=60 * 422)
 scheduler.start()
 
+async def backfill_player_pricings(db):
+    count = await db.player_pricings.count_documents({})
+    print(count)
+    if count > 0:
+        print("Skipping backfill: player_pricings collection is not empty.")
+        return
+
+    print("Starting backfill: player_pricings collection is empty.")
+    
+    start_date = datetime(2024, 1, 1)
+    today = datetime.now().date()
+    current_date = start_date.date()
+
+    while current_date <= today:
+        dt = datetime.combine(current_date, datetime.min.time())
+        print(f"Backfilling for {dt.strftime('%Y-%m-%d')}")
+        await compute_player_pricings.main(db, dt)
+        current_date += timedelta(days=1)
+
+    print("Backfill completed.")
+
+
+
 @app.on_event("startup")
 async def startup_event():
+    await backfill_player_pricings(db)
     await init_indexes(db)
 
 

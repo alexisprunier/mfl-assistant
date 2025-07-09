@@ -18,10 +18,13 @@ logger = logging.getLogger("compute_player_pricings")
 logger.setLevel(logging.INFO)
 
 
-async def main(db):
+async def main(db, date: datetime = None):
     logger.critical("Start compute_player_pricings")
 
-    dt = datetime.now()
+    if date is None:
+        dt = datetime.now()
+    else:
+        dt = date
 
     positions = [
         "GK", "RB", "LB", "CB", "RWB", "LWB", 
@@ -64,7 +67,11 @@ async def get_smoothed_prices(db, target_date, position="ST"):
     y = np.array(known_prices)  # Target : prix
 
     # 🌟 1. Interpolation linéaire
-    interp = spi.LinearNDInterpolator(X, y)
+    try:
+        interp = spi.LinearNDInterpolator(X, y)
+    except Exception as e:
+        logger.error(f"Interpolation failed on {target_date.date()} - {position}: {e}")
+        return
 
     # 🌟 2. Modèle de régression pour estimer les valeurs manquantes
     model = RandomForestRegressor(n_estimators=100, random_state=42)

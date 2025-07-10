@@ -192,7 +192,7 @@ async def backfill_player_pricings(db):
 
     print("Starting backfill: player_pricings collection is empty.")
     
-    start_date = datetime(2024, 1, 1)
+    start_date = datetime(2025, 7, 1)
     today = datetime.now().date()
     current_date = start_date.date()
 

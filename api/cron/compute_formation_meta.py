@@ -32,7 +32,7 @@ async def main(db):
                 {"status": "ENDED"},
                 {"status": {"$exists": False}}
             ]
-        })
+        }).batch_size(100)
 
         def get_overall(positions, players, modifiers):
             key = (make_hashable(positions), make_hashable(players), make_hashable(modifiers))

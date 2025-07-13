@@ -61,7 +61,7 @@ const ButtonOnFieldPlayerView: React.FC<ButtonOnFieldPlayerViewProps> = ({
             className={"btn btn-small" + (selectedAttribute === "dri" ? " btn-info text-white" : " text-main")}
             onClick={() => onAttributeChange("dri")}
           >
-            Pas-Dri
+            Dri-Pas
           </button>
           <button
             className={"btn btn-small" + (selectedAttribute === "def" ? " btn-info text-white" : " text-main")}

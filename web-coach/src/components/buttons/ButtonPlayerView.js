@@ -34,7 +34,7 @@ const ButtonPlayerView: React.FC<ButtonPlayerViewProps> = ({
         onClick={() => onChange("stats")}
         selected={true}
       >
-        Stats
+        Attr.
       </button>
       <button
         className={

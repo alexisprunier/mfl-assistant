@@ -173,7 +173,7 @@ const PageHome: React.FC<PageHomeProps> = ({
                   </div>
                 </Link>
 
-                <Link to="/formation-meta">
+                <Link to="/squad-builder">
                   <div className="d-flex flex-grow-0 card flex-column mx-1 px-4 py-2">
                     <div className="d-flex justify-content-center align-items-center">
                       <div className="text-center">

@@ -8,6 +8,7 @@ export const divisions = [
   { number: 7, name: "Stone", color: "rgb(183, 176, 156)" },
   { number: 8, name: "Ice", color: "rgb(176, 204, 225)" },
   { number: 9, name: "Spark", color: "rgb(255, 177, 54)" },
+  { number: 10, name: "Flint", color: "rgb(117, 112, 97)" },
 ];
 
 export const getDivisionColor = (division) => {

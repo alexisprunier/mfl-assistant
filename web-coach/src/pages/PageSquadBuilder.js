@@ -132,33 +132,33 @@ const PageSquadBuilder: React.FC<PageSquadBuilderProps> = (props) => {
         </nav>
 
         <div className="position-relative container-xl px-md-4 py-4">
-          {(isLoading || !teams) && (
-            <div className="position-absolute w-100 h-100" style={{ zIndex: "800", top: 0, left: 0 }}>
-              <LoadingSquare />
-            </div>
-          )}
-
           <BoxCard
             className="pb-2"
             content={
-              <div className="d-flex flex-column flex-md-row flex-fill">
-                <div className="d-flex flex-grow-1 align-content-center">
-                  <h4 className="mb-0 mt-1">
-                    {teams ? teams.length : "?"} team
-                    {teams && teams.length > 1 && "s"}
-                  </h4>
+              isLoading || !teams ? (
+                <div className="w-100" style={{ height: "40px" }}>
+                  <LoadingSquare />
                 </div>
-                <div className="d-flex justify-content-end">
-                  <PopupAddTeam
-                    trigger={
-                      <button className="btn btn-info text-white">
-                        <i className="bi bi-plus-circle-fill"></i> Add Team
-                      </button>
-                    }
-                    onClose={fetchTeams}
-                  />
+              ) : (
+                <div className="d-flex flex-column flex-md-row flex-fill">
+                  <div className="d-flex flex-grow-1 align-content-center">
+                    <h4 className="mb-0 mt-1">
+                      {teams ? teams.length : "?"} team
+                      {teams && teams.length > 1 && "s"}
+                    </h4>
+                  </div>
+                  <div className="d-flex justify-content-end">
+                    <PopupAddTeam
+                      trigger={
+                        <button className="btn btn-info text-white">
+                          <i className="bi bi-plus-circle-fill"></i> Add Team
+                        </button>
+                      }
+                      onClose={fetchTeams}
+                    />
+                  </div>
                 </div>
-              </div>
+              )
             }
           />
 

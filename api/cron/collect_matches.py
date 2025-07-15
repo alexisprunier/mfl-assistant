@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 last_matches_url = "https://z519wdyajg.execute-api.us-east-1.amazonaws.com/prod/matches?live=true&past=true&limit=12"
 base_url = "https://z519wdyajg.execute-api.us-east-1.amazonaws.com/prod/matches/"
 
-min_match_id_stepping = 1
+min_match_id_stepping = 0
 max_match_id_stepping = 3
 max_live_match_to_treat = 10
 

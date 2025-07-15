@@ -241,7 +241,7 @@ const PageUser: React.FC<PageUserProps> = (props) => {
                             <ItemRowMatch
                               match={m}
                               rate={
-                                match.status === "ENDED"
+                                m.status === "ENDED"
                                   ? computeMatchRate(
                                       m,
                                       overallVsGdRates,

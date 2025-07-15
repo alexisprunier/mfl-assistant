@@ -2,11 +2,7 @@ import BoxScrollUp from "components/box/BoxScrollUp.js";
 import "./PageUser.css";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
-import {
-  getUsers,
-  getClubs,
-  getOverallVsGdRates,
-} from "services/api-assistant.js";
+import { getUsers, getClubs, getOverallVsGdRates } from "services/api-assistant.js";
 import { computeMatchRate } from "utils/rate.js";
 import BoxCard from "components/box/BoxCard.js";
 import BoxMessage from "components/box/BoxMessage.js";
@@ -76,10 +72,7 @@ const PageUser: React.FC<PageUserProps> = (props) => {
       handleError: (e) => console.log(e),
       params: {
         limit: 20,
-        clubs:
-          selectedClubIds.length === 0
-            ? clubs.map((c) => c.id)
-            : selectedClubIds,
+        clubs: selectedClubIds.length === 0 ? clubs.map((c) => c.id) : selectedClubIds,
         statuses: ["LIVE", "ENDED"],
         types: types,
       },
@@ -87,8 +80,7 @@ const PageUser: React.FC<PageUserProps> = (props) => {
   };
 
   const computeAverageRate = (count) => {
-    if (!Array.isArray(matches) || !Array.isArray(overallVsGdRates))
-      return null;
+    if (!Array.isArray(matches) || !Array.isArray(overallVsGdRates)) return null;
 
     const availableCount = Math.min(count, matches.length);
     if (availableCount === 0) return null;
@@ -96,13 +88,7 @@ const PageUser: React.FC<PageUserProps> = (props) => {
     const selectedMatches = matches.slice(0, availableCount);
 
     const rates = selectedMatches
-      .map((m) =>
-        computeMatchRate(
-          m,
-          overallVsGdRates,
-          clubs.map((c) => c.id).includes(m.homeClub.id)
-        )
-      )
+      .map((m) => computeMatchRate(m, overallVsGdRates, clubs.map((c) => c.id).includes(m.homeClub.id)))
       .filter((rate) => typeof rate === "number");
 
     if (rates.length === 0) return null;
@@ -157,9 +143,7 @@ const PageUser: React.FC<PageUserProps> = (props) => {
           <li className="nav-item align-self-end lh-1 px-2 d-block">
             <Link className={"nav-link nav-user border rounded-2 px-3"}>
               <i className="bi bi-person-fill me-1"></i>
-              <span className="d-none d-md-inline ms-1">
-                {user?.name ? user.name : <LoadingSquare />}
-              </span>
+              <span className="d-none d-md-inline ms-1">{user?.name ? user.name : <LoadingSquare />}</span>
             </Link>
           </li>
 
@@ -167,9 +151,7 @@ const PageUser: React.FC<PageUserProps> = (props) => {
             <li className="nav-item align-self-end lh-1 px-2">
               <Link onClick={logOut} className={"nav-link"}>
                 <i className="bi bi-box-arrow-right text-danger mx-1"></i>
-                <span className="d-none d-md-inline text-danger ms-1">
-                  Log out
-                </span>
+                <span className="d-none d-md-inline text-danger ms-1">Log out</span>
               </Link>
             </li>
           )}
@@ -187,25 +169,13 @@ const PageUser: React.FC<PageUserProps> = (props) => {
                     <div className="d-flex mt-4 mb-3">
                       <Count
                         label={"Last 5 Matches"}
-                        count={
-                          matches && overallVsGdRates ? (
-                            computeAverageRate(5)
-                          ) : (
-                            <LoadingSquare />
-                          )
-                        }
+                        count={matches && overallVsGdRates ? computeAverageRate(5) : <LoadingSquare />}
                       />
                     </div>
                     <div className="d-flex my-3 mb-4">
                       <Count
                         label={"Last 15 Matches"}
-                        count={
-                          matches && overallVsGdRates ? (
-                            computeAverageRate(15)
-                          ) : (
-                            <LoadingSquare />
-                          )
-                        }
+                        count={matches && overallVsGdRates ? computeAverageRate(15) : <LoadingSquare />}
                       />
                     </div>
                   </div>
@@ -230,15 +200,9 @@ const PageUser: React.FC<PageUserProps> = (props) => {
                     <div className="text-end">
                       <button
                         className="btn btn-info text-white"
-                        onClick={() =>
-                          window.open(
-                            "https://mfl-assistant.com/user/" +
-                              props.assistantUser.address
-                          )
-                        }
+                        onClick={() => window.open("https://mfl-assistant.com/user/" + props.assistantUser.address)}
                       >
-                        Go to clubs, players, map...{" "}
-                        <i class="bi bi-caret-right-fill text-white"></i>
+                        Go to clubs, players, map... <i class="bi bi-caret-right-fill text-white"></i>
                       </button>
                     </div>
                   </div>
@@ -251,10 +215,7 @@ const PageUser: React.FC<PageUserProps> = (props) => {
                 title={"Matches"}
                 actions={
                   <div className="d-flex h-100 align-items-center">
-                    <ControllerMatchType
-                      selectedCriteria={types}
-                      onChange={(t) => setTypes(t)}
-                    />
+                    <ControllerMatchType selectedCriteria={types} onChange={(t) => setTypes(t)} />
                   </div>
                 }
                 content={
@@ -279,25 +240,23 @@ const PageUser: React.FC<PageUserProps> = (props) => {
                           {matches.map((m) => (
                             <ItemRowMatch
                               match={m}
-                              rate={computeMatchRate(
-                                m,
-                                overallVsGdRates,
-                                clubs.map((c) => c.id).includes(m.homeClub.id)
-                              )}
+                              rate={
+                                match.status === "ENDED"
+                                  ? computeMatchRate(
+                                      m,
+                                      overallVsGdRates,
+                                      clubs.map((c) => c.id).includes(m.homeClub.id)
+                                    )
+                                  : "?"
+                              }
                             />
                           ))}
                         </div>
                       ) : (
-                        <BoxMessage
-                          className={"py-md-4"}
-                          content={"No match found"}
-                        />
+                        <BoxMessage className={"py-md-4"} content={"No match found"} />
                       )
                     ) : (
-                      <div
-                        className="d-flex flex-fill w-100"
-                        style={{ height: 200 }}
-                      >
+                      <div className="d-flex flex-fill w-100" style={{ height: 200 }}>
                         <LoadingSquare />
                       </div>
                     )}

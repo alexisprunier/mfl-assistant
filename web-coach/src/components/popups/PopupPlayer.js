@@ -10,11 +10,7 @@ import PopupInformationPricing from "components/popups/PopupInformationPricing.j
 import { useNavigate } from "react-router-dom";
 import MiscOverallField from "components/misc/MiscOverallField.js";
 
-import {
-  positions,
-  getCalculatedOverall,
-  getOverallTag,
-} from "utils/player.js";
+import { positions, getCalculatedOverall, getOverallTag } from "utils/player.js";
 
 interface PopupPlayerProps {
   className: String;
@@ -22,11 +18,7 @@ interface PopupPlayerProps {
   trigger: Object;
 }
 
-const PopupPlayer: React.FC<PopupPlayerProps> = ({
-  className,
-  player,
-  trigger,
-}) => {
+const PopupPlayer: React.FC<PopupPlayerProps> = ({ className, player, trigger }) => {
   const navigate = useNavigate();
 
   const [pricings, setPricings] = useState(null);
@@ -103,7 +95,7 @@ const PopupPlayer: React.FC<PopupPlayerProps> = ({
               <div className="d-flex flex-column flex-md-basis-200">
                 <div className="d-flex justify-content-center mb-3">
                   <img
-                    src={`https://d13e14gtps4iwl.cloudfront.net/players/${player.id}/card_512.png`}
+                    src={`https://d13e14gtps4iwl.cloudfront.net/players/v2/${player.id}/card.png`}
                     style={{ width: "80%" }}
                   />
                 </div>
@@ -111,24 +103,14 @@ const PopupPlayer: React.FC<PopupPlayerProps> = ({
                 <div className="my-2 px-2">
                   <button
                     className="btn background-mfl text-black w-100 mb-2"
-                    onClick={() =>
-                      window.open(
-                        "https://app.playmfl.com/players/" + player.id,
-                        "_blank"
-                      )
-                    }
+                    onClick={() => window.open("https://app.playmfl.com/players/" + player.id, "_blank")}
                   >
                     MFL<i className="bi bi-caret-right-fill"></i>
                   </button>
 
                   <button
                     className="btn btn-info text-white w-100"
-                    onClick={() =>
-                      window.open(
-                        "https://mflplayer.info/player/" + player.id,
-                        "_blank"
-                      )
-                    }
+                    onClick={() => window.open("https://mflplayer.info/player/" + player.id, "_blank")}
                   >
                     Player Info<i className="bi bi-caret-right-fill"></i>
                   </button>
@@ -138,9 +120,7 @@ const PopupPlayer: React.FC<PopupPlayerProps> = ({
                   content={
                     <div className="w-100">
                       <div className="col-12">#{player.id}</div>
-                      <div className="col-12">
-                        {player.positions.join(", ")}
-                      </div>
+                      <div className="col-12">{player.positions.join(", ")}</div>
                       <div className="col-6">
                         <i class="bi bi-cake2-fill me-1"></i>
                         {player.age}
@@ -166,24 +146,12 @@ const PopupPlayer: React.FC<PopupPlayerProps> = ({
                       <div className={"col-2 text-center"}>SHO</div>
                       <div className={"col-2 text-center"}>DEF</div>
                       <div className={"col-2 text-center"}>PHY</div>
-                      <div className={"col-2 text-center"}>
-                        {getOverallTag(player.pace)}
-                      </div>
-                      <div className={"col-2 text-center"}>
-                        {getOverallTag(player.dribbling)}
-                      </div>
-                      <div className={"col-2 text-center"}>
-                        {getOverallTag(player.passing)}
-                      </div>
-                      <div className={"col-2 text-center"}>
-                        {getOverallTag(player.shooting)}
-                      </div>
-                      <div className={"col-2 text-center"}>
-                        {getOverallTag(player.defense)}
-                      </div>
-                      <div className={"col-2 text-center"}>
-                        {getOverallTag(player.physical)}
-                      </div>
+                      <div className={"col-2 text-center"}>{getOverallTag(player.pace)}</div>
+                      <div className={"col-2 text-center"}>{getOverallTag(player.dribbling)}</div>
+                      <div className={"col-2 text-center"}>{getOverallTag(player.passing)}</div>
+                      <div className={"col-2 text-center"}>{getOverallTag(player.shooting)}</div>
+                      <div className={"col-2 text-center"}>{getOverallTag(player.defense)}</div>
+                      <div className={"col-2 text-center"}>{getOverallTag(player.physical)}</div>
                     </div>
                   }
                 />
@@ -200,10 +168,7 @@ const PopupPlayer: React.FC<PopupPlayerProps> = ({
                               <PopupInformationPricing />
                               &nbsp;
                               <span className="text-main">
-                                $
-                                {pricings.length > 0
-                                  ? pricings[pricings.length - 1].price
-                                  : "--"}
+                                ${pricings.length > 0 ? pricings[pricings.length - 1].price : "--"}
                               </span>
                             </div>
                             <div className="d-flex justify-content-end">
@@ -215,8 +180,7 @@ const PopupPlayer: React.FC<PopupPlayerProps> = ({
                                   );
                                 }}
                               >
-                                Player pricing{" "}
-                                <i class="bi bi-caret-right-fill text-white"></i>
+                                Player pricing <i class="bi bi-caret-right-fill text-white"></i>
                               </button>
                             </div>
                           </div>
@@ -247,20 +211,10 @@ const PopupPlayer: React.FC<PopupPlayerProps> = ({
                       <div className="d-flex flex-row flex-md-column flex-grow-1 justify-content-center">
                         {getOVRs().map((o) => (
                           <div className={"d-flex flex-md-column mb-1"}>
-                            <div
-                              className={
-                                "d-inline-block text-center line-height-1"
-                              }
-                              style={{ width: "40px" }}
-                            >
+                            <div className={"d-inline-block text-center line-height-1"} style={{ width: "40px" }}>
                               {o.pos}
                             </div>
-                            <div
-                              className={
-                                "d-inline-block text-center line-height-1"
-                              }
-                              style={{ width: "40px" }}
-                            >
+                            <div className={"d-inline-block text-center line-height-1"} style={{ width: "40px" }}>
                               {getOverallTag(o.ovr)}
                               <small>{getDiff(o.diff)}</small>
                             </div>

@@ -183,7 +183,6 @@ scheduler.add_job(compute_formation_meta.main,          'interval', args=[db],  
 scheduler.add_job(compute_overall_vs_gd_rates.main,      'interval', args=[db],         seconds=60 * 422)
 scheduler.start()
 
-compute_formation_meta.main(db)
 
 async def backfill_player_pricings(db):
     count = await db.player_pricings.count_documents({})
@@ -210,6 +209,7 @@ async def backfill_player_pricings(db):
 
 @app.on_event("startup")
 async def startup_event():
+    await compute_formation_meta.main(db)
     await backfill_player_pricings(db)
     await init_indexes(db)
 

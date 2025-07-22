@@ -38,7 +38,7 @@ db = AsyncIOMotorClient(
     serverSelectionTimeoutMS=5000,
     retryWrites=True,
     retryReads=True,
-    socketTimeoutMS=20000,
+    socketTimeoutMS=60000,
     maxIdleTimeMS=30000,
     maxPoolSize=100,
 )[config.DB_CONFIG["database"]]

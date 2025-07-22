@@ -36,7 +36,7 @@ async def main(db):
                 {"status": "ENDED"},
                 {"status": {"$exists": False}}
             ]
-        }).batch_size(100)
+        }).batch_size(50)
 
         def get_overall(positions, players, modifiers):
             key = (make_hashable(positions), make_hashable(players), make_hashable(modifiers))
@@ -44,9 +44,7 @@ async def main(db):
                 overall_cache[key] = calculate_team_overall(positions, players, modifiers)
             return overall_cache[key]
 
-        while await cursor.fetch_next:
-            match = cursor.next_object()
-
+        async for match in cursor:
             if 'homePositions' not in match or 'awayPositions' not in match:
                 continue
 

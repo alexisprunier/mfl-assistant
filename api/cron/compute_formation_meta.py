@@ -23,6 +23,7 @@ async def main(db):
     engines = await db.matches.distinct("engine")
 
     for engine in engines:
+        logger.critical("compute_formation_meta for engine: " + engine)
         formation_stats = defaultdict(lambda: {"victories": 0, "draws": 0, "defeats": 0, "engine": engine})
         overall_cache = {}
 

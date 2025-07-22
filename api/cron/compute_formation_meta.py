@@ -28,7 +28,6 @@ async def main(db):
 
         logger.critical("compute_formation_meta for engine: " + engine)
         formation_stats = defaultdict(lambda: {"victories": 0, "draws": 0, "defeats": 0, "engine": engine})
-        overall_cache = {}
 
         cursor = db.matches.find({
             "engine": engine,
@@ -38,18 +37,12 @@ async def main(db):
             ]
         }).batch_size(50)
 
-        def get_overall(positions, players, modifiers):
-            key = (make_hashable(positions), make_hashable(players), make_hashable(modifiers))
-            if key not in overall_cache:
-                overall_cache[key] = calculate_team_overall(positions, players, modifiers)
-            return overall_cache[key]
-
         async for match in cursor:
             if 'homePositions' not in match or 'awayPositions' not in match:
                 continue
 
-            home_total_overall = get_overall(match['homePositions'], match['players'], match.get('modifiers'))
-            away_total_overall = get_overall(match['awayPositions'], match['players'], match.get('modifiers'))
+            home_total_overall = calculate_team_overall(match['homePositions'], match['players'], match.get('modifiers'))
+            away_total_overall = calculate_team_overall(match['awayPositions'], match['players'], match.get('modifiers'))
 
             if abs(home_total_overall - away_total_overall) > 20:
                 continue

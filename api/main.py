@@ -209,7 +209,6 @@ async def backfill_player_pricings(db):
 
 @app.on_event("startup")
 async def startup_event():
-    await compute_formation_meta.main(db)
     await backfill_player_pricings(db)
     await init_indexes(db)
 

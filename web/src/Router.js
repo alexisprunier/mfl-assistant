@@ -14,7 +14,6 @@ import PageSearch from "pages/PageSearch";
 import PageTools from "pages/PageTools";
 import PageToolsContractEvaluation from "pages/pagetools/PageToolsContractEvaluation.js";
 import PageToolsPlayerPricing from "pages/pagetools/PageToolsPlayerPricing.js";
-import PageToolsTeamBuilder from "pages/pagetools/PageToolsTeamBuilder.js";
 import PageUser from "pages/PageUser.js";
 import PagePricing from "pages/PagePricing.js";
 import PageMap from "pages/PageMap.js";
@@ -47,11 +46,7 @@ const Router: React.FC = (props) => {
       </div>
 
       <div id="AppContent" className="order-1 order-lg-2 flex-fill">
-        <div
-          id="AppContent-content"
-          className="position-relative h-100 w-100"
-          onScroll={handleScroll}
-        >
+        <div id="AppContent-content" className="position-relative h-100 w-100" onScroll={handleScroll}>
           <Routes>
             <Route
               path="/"
@@ -68,66 +63,28 @@ const Router: React.FC = (props) => {
             />
             <Route path="/search" element={<PageSearch />} />
             <Route path="/pricing" element={<PagePricing />} />
-            <Route
-              path="user/:address"
-              element={
-                <PageUser {...props} yScrollPosition={yScrollPosition} />
-              }
-            >
+            <Route path="user/:address" element={<PageUser {...props} yScrollPosition={yScrollPosition} />}>
               <Route index element={<Navigate to="players" replace />} />
               <Route path="players" element={<PageUserPlayers />} />
               <Route path="clubs" element={<PageUserClubs />} />
               <Route path="map" element={<PageUserMap />} />
             </Route>
-            <Route
-              path="dash"
-              element={<PageDash yScrollPosition={yScrollPosition} />}
-            >
+            <Route path="dash" element={<PageDash yScrollPosition={yScrollPosition} />}>
               <Route index element={<Navigate to="marketplace" replace />} />
               <Route path="marketplace" element={<PageDashMarketplace />} />
               <Route path="players" element={<PageDashPlayers />} />
               <Route path="clubs" element={<PageDashClubs />} />
             </Route>
-            <Route
-              path="tools"
-              element={<PageTools yScrollPosition={yScrollPosition} />}
-            >
+            <Route path="tools" element={<PageTools yScrollPosition={yScrollPosition} />}>
               <Route index element={<Navigate to="player-pricing" replace />} />
-              <Route
-                path="player-pricing"
-                element={<PageToolsPlayerPricing />}
-              />
-              <Route
-                path="team-builder"
-                element={<PageToolsTeamBuilder {...props} />}
-              />
-              <Route
-                path="contract-evaluation"
-                element={<PageToolsContractEvaluation />}
-              />
+              <Route path="player-pricing" element={<PageToolsPlayerPricing />} />
+              <Route path="contract-evaluation" element={<PageToolsContractEvaluation />} />
             </Route>
-            <Route
-              path="notification"
-              element={
-                <PageNotification
-                  yScrollPosition={yScrollPosition}
-                  {...props}
-                />
-              }
-            >
+            <Route path="notification" element={<PageNotification yScrollPosition={yScrollPosition} {...props} />}>
               <Route index element={<Navigate to="player" replace />} />
-              <Route
-                path="player"
-                element={<PageNotificationPlayer {...props} />}
-              />
-              <Route
-                path="club"
-                element={<PageNotificationClub {...props} />}
-              />
-              <Route
-                path="report"
-                element={<PageNotificationReport {...props} />}
-              />
+              <Route path="player" element={<PageNotificationPlayer {...props} />} />
+              <Route path="club" element={<PageNotificationClub {...props} />} />
+              <Route path="report" element={<PageNotificationReport {...props} />} />
             </Route>
             <Route path="/map" element={<PageMap {...props} />} />
 

@@ -12,11 +12,7 @@ const BoxLogin: React.FC<BoxLoginProps> = ({ assistantUser }) => {
 
       <div className="d-flex flex-column flex-md-row">
         <div className="d-flex flex-fill justify-content-center">
-          <img
-            style={{ width: "120px" }}
-            src="/media/images/assistant.png"
-            alt="MFL Assistant"
-          />
+          <img style={{ width: "120px" }} src="/media/images/assistant.png" alt="MFL Assistant" />
         </div>
 
         <div className="d-flex flex-column flex-fill align-items-center justify-content-center px-2">
@@ -31,9 +27,7 @@ const BoxLogin: React.FC<BoxLoginProps> = ({ assistantUser }) => {
               className="d-flex flex-row btn btn-info text-white me-1"
               disabled={typeof assistantUser === "undefined"}
             >
-              {typeof assistantUser === "undefined"
-                ? "Checking logging..."
-                : "Connect"}
+              {typeof assistantUser === "undefined" ? "Checking login..." : "Connect"}
             </button>
           </div>
         </div>

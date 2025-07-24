@@ -11,9 +11,7 @@ import PopupSelectClub from "components/popups/PopupSelectClub.js";
 
 interface PageToolsMatchAnalysisProps {}
 
-const PageToolsMatchAnalysis: React.FC<PageToolsMatchAnalysisProps> = (
-  props
-) => {
+const PageToolsMatchAnalysis: React.FC<PageToolsMatchAnalysisProps> = (props) => {
   const [club, setClub] = useState(null);
   const [matches, setMatches] = useState(null);
   const [selectedMatchIds, setSelectedMatchIds] = useState([]);
@@ -112,8 +110,7 @@ const PageToolsMatchAnalysis: React.FC<PageToolsMatchAnalysisProps> = (
     Object.keys(added).forEach((key) => {
       if (typeof added[key] === "number") {
         if (["rating"].includes(key)) {
-          const totalRating =
-            (current.rating || 0) * (current.ratingCount || 0) + added[key];
+          const totalRating = (current.rating || 0) * (current.ratingCount || 0) + added[key];
           const newRatingCount = (current.ratingCount || 0) + 1;
           aggregated.rating = totalRating / newRatingCount;
           aggregated.ratingCount = newRatingCount;
@@ -156,9 +153,7 @@ const PageToolsMatchAnalysis: React.FC<PageToolsMatchAnalysisProps> = (
         const isAway = match.awaySquad?.club?.id === club.id;
 
         if (isHome || isAway) {
-          const opponentClub = isHome
-            ? match.awaySquad?.club
-            : match.homeSquad?.club;
+          const opponentClub = isHome ? match.awaySquad?.club : match.homeSquad?.club;
 
           if (opponentClub) {
             const { id, name } = opponentClub;
@@ -195,7 +190,7 @@ const PageToolsMatchAnalysis: React.FC<PageToolsMatchAnalysisProps> = (
           flowUser={props.flowUser}
           assistantUser={props.assistantUser}
           logout={props.logout}
-          content={<BoxLogin />}
+          content={<BoxLogin assistantUser={props.assistantUser} />}
         />
       </div>
     );
@@ -218,10 +213,7 @@ const PageToolsMatchAnalysis: React.FC<PageToolsMatchAnalysisProps> = (
                   <h4 className="flex-grow-1">Selected club</h4>
 
                   {club && (
-                    <button
-                      className="btn btn-warning btn-small text-white mb-2"
-                      onClick={() => setClub(null)}
-                    >
+                    <button className="btn btn-warning btn-small text-white mb-2" onClick={() => setClub(null)}>
                       <i className="bi bi-x-square-fill text-white"></i>
                     </button>
                   )}
@@ -268,14 +260,9 @@ const PageToolsMatchAnalysis: React.FC<PageToolsMatchAnalysisProps> = (
                               match={m}
                               onClick={(id) => {
                                 if (selectedMatchIds.indexOf(id) >= 0) {
-                                  setSelectedMatchIds(
-                                    selectedMatchIds.filter((i) => i !== id)
-                                  );
+                                  setSelectedMatchIds(selectedMatchIds.filter((i) => i !== id));
                                 } else {
-                                  setSelectedMatchIds([
-                                    ...selectedMatchIds,
-                                    ...[id],
-                                  ]);
+                                  setSelectedMatchIds([...selectedMatchIds, ...[id]]);
                                 }
                               }}
                               disabled={loadingMatchReport}
@@ -293,32 +280,27 @@ const PageToolsMatchAnalysis: React.FC<PageToolsMatchAnalysisProps> = (
             </div>
 
             <div className="d-flex flex-column flex-md-grow-1">
-              {currentAggregatedReport?.myClub &&
-                Object.keys(currentAggregatedReport.myClub).length > 0 && (
-                  <div className="d-flex flex-column">
-                    <ItemCardMatchReport
-                      report={currentAggregatedReport}
-                      title={"Current report"}
-                      loading={loadingMatchReport}
-                    />
+              {currentAggregatedReport?.myClub && Object.keys(currentAggregatedReport.myClub).length > 0 && (
+                <div className="d-flex flex-column">
+                  <ItemCardMatchReport
+                    report={currentAggregatedReport}
+                    title={"Current report"}
+                    loading={loadingMatchReport}
+                  />
 
-                    <div className="d-flex justify-content-end">
-                      <button
-                        className="d-block btn btn-info btn-sm text-white mb-1 me-2"
-                        onClick={() => saveCurrentAggregatedReport()}
-                      >
-                        <i className="bi bi-box-arrow-down"></i> Save report
-                      </button>
-                    </div>
+                  <div className="d-flex justify-content-end">
+                    <button
+                      className="d-block btn btn-info btn-sm text-white mb-1 me-2"
+                      onClick={() => saveCurrentAggregatedReport()}
+                    >
+                      <i className="bi bi-box-arrow-down"></i> Save report
+                    </button>
                   </div>
-                )}
+                </div>
+              )}
 
               {aggregatedReports.map((r, i) => (
-                <ItemCardMatchReport
-                  report={r}
-                  title={"Saved report " + (aggregatedReports.length - i)}
-                  key={i}
-                />
+                <ItemCardMatchReport report={r} title={"Saved report " + (aggregatedReports.length - i)} key={i} />
               ))}
             </div>
           </div>

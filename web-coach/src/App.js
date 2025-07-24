@@ -8,13 +8,7 @@ import "react-notifications/lib/notifications.css";
 import { BrowserRouter } from "react-router-dom";
 import Router from "Router";
 import * as fcl from "@onflow/fcl";
-import {
-  login,
-  logout,
-  getLoggedUser,
-  addLoggedUser,
-  updateLoggedUserEmail,
-} from "services/api-assistant.js";
+import { login, logout, getLoggedUser, addLoggedUser, updateLoggedUserEmail } from "services/api-assistant.js";
 import { getApiEndpoint } from "utils/env.js";
 import { verifyServiceData } from "utils/flow.js";
 
@@ -36,9 +30,7 @@ const App: React.FC<AppProps> = (props) => {
 
   const getToken = () => {
     if (flowUser && flowUser.loggedIn) {
-      let service = flowUser.services
-        .filter((s) => s.type === "account-proof")
-        .pop();
+      let service = flowUser.services.filter((s) => s.type === "account-proof").pop();
 
       if (!service) {
         nm.error("Wallet service not found");
@@ -63,7 +55,7 @@ const App: React.FC<AppProps> = (props) => {
   const getAssistantUser = () => {
     getLoggedUser({
       handleSuccess: (v) => {
-        if (!v.data.getLoggedUser) {
+        if (!v.data?.getLoggedUser) {
           setFlowUser(null);
           setAssistantUser(null);
         } else {
@@ -71,6 +63,8 @@ const App: React.FC<AppProps> = (props) => {
         }
       },
       handleError: (v) => {
+        setFlowUser(null);
+        setAssistantUser(null);
         return;
       },
     });

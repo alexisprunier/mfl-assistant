@@ -34,11 +34,7 @@ const Router: React.FC = (props) => {
       </div>
 
       <div id="AppContent" className="order-1 order-lg-2 flex-fill">
-        <div
-          id="AppContent-content"
-          className="position-relative h-100 w-100"
-          onScroll={handleScroll}
-        >
+        <div id="AppContent-content" className="position-relative h-100 w-100" onScroll={handleScroll}>
           <Routes>
             <Route
               path="/"
@@ -53,20 +49,9 @@ const Router: React.FC = (props) => {
                 />
               }
             />
-            <Route
-              path="/match-analysis"
-              element={<PageMatchAnalysis {...props} />}
-            />
-            <Route
-              path="/squad-builder"
-              element={<PageSquadBuilder {...props} />}
-            />
-            <Route
-              path="/user/:address"
-              element={
-                <PageUser {...props} yScrollPosition={yScrollPosition} />
-              }
-            />
+            <Route path="/match-analysis" element={<PageMatchAnalysis {...props} />} />
+            <Route path="/squad-builder" element={<PageSquadBuilder {...props} />} />
+            <Route path="/user/:address" element={<PageUser {...props} yScrollPosition={yScrollPosition} />} />
             <Route path="/formation-meta" element={<PageFormationMeta />} />
             <Route path="/opponent-finder" element={<PageOpponentFinder />} />
             <Route path="/search" element={<PageSearch />} />

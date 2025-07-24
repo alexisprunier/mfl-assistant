@@ -9,7 +9,7 @@ logger.setLevel(logging.INFO)
 
 
 async def main(db):
-    logger.critical("Start compute_raw_player_pricings")
+    logger.critical("compute_raw_player_pricings - Start")
     pipeline = [
         {
             "$lookup": {

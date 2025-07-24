@@ -11,6 +11,7 @@ logger = logging.getLogger("collect_clubs")
 logger.setLevel(logging.INFO)
 
 async def main(db):
+    logger.critical("collect_clubs - Start")
 
     last_id = await get_var_value(db, last_treated_club_id_var)
     reset_var = False
@@ -20,13 +21,13 @@ async def main(db):
         last_id = 0
 
     club_ids_to_fetch = [x for x in range(last_id + 1, last_id + 1 + max_clubs_to_update)]
-    logger.critical(f"Club IDs to treat: {club_ids_to_fetch}")
+    logger.critical(f"collect_clubs - Club IDs to treat: {club_ids_to_fetch}")
 
     async with httpx.AsyncClient() as client:  # Use httpx AsyncClient for async HTTP requests
         for i in club_ids_to_fetch:
             try:
                 response = await client.get(url=base_url + str(i))  # Asynchronous GET request
-                logger.critical(f"collect_clubs: Response status: {response.status_code} with id {i}")
+                logger.critical(f"collect_clubs - Response status: {response.status_code} with id {i}")
 
                 if response.status_code == 200:
                     data = response.json()
@@ -49,7 +50,7 @@ async def main(db):
                         reset_var = True
                         break
             except httpx.RequestError as e:
-                logger.error(f"Error fetching data for club id {i}: {e}")
+                logger.error(f"collect_clubs - Error fetching data for club id {i}: {e}")
                 continue  # Move to the next club id if there’s an error
 
     if reset_var:

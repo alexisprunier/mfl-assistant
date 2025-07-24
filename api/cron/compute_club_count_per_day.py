@@ -8,6 +8,7 @@ data_property = "founded_club_count"
 
 
 async def main(db):
+    logger.critical("compute_club_count_per_day - Start")
 
     # MongoDB aggregation pipeline to compute founded clubs per day
     pipeline = [
@@ -24,7 +25,7 @@ async def main(db):
     foundation_per_day = [c async for c in cursor]
 
     if len(foundation_per_day) == 0:
-        logger.critical("No clubs with foundation dates found.")
+        logger.critical("compute_club_count_per_day - No clubs with foundation dates found.")
         return
 
     # Convert the list into a dictionary with date as the key
@@ -56,4 +57,4 @@ async def main(db):
     await db.data_points.delete_many({"property": data_property})
     await db.data_points.insert_many(data_points)
 
-    logger.info(f"Successfully updated founded club counts per day from {start_date} to {end_date}.")
+    logger.info(f"compute_club_count_per_day - Successfully updated founded club counts per day from {start_date} to {end_date}.")

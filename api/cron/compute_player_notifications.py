@@ -18,17 +18,19 @@ logger.setLevel(logging.INFO)
 
 
 async def main(db, mail):
+    logger.critical("compute_player_notifications - Start")
+
     users = await _get_users(db)
     user_ids = [u["_id"] for u in users]
 
     scopes = await _get_notification_scopes(db, user_ids)
     listing_scopes = [s for s in scopes if s["type"] == "listing"]
     sale_scopes = [s for s in scopes if s["type"] == "sale"]
-    logger.critical(f"Number of listing/sale scopes to treat: {len(listing_scopes)}/{len(sale_scopes)}")
+    logger.critical(f"compute_player_notifications - Number of listing/sale scopes to treat: {len(listing_scopes)}/{len(sale_scopes)}")
 
     # Treat listing scopes
     listings = await _get_listings_to_treat(db)
-    logger.critical(f"Number of listings to treat: {len(listings)}")
+    logger.critical(f"compute_player_notifications - Number of listings to treat: {len(listings)}")
 
     if len(listings) > 0:
         await upsert_vars(db, last_list_var, convert_unix_to_datetime(listings[0]["createdDateTime"]))
@@ -39,17 +41,16 @@ async def main(db, mail):
 
             if len(player_ids) > 0:
                 user = [u for u in users if u["_id"] == scope["user"]]
-                logger.critical(f"{len(user)}")
 
                 if len(user) > 0:
-                    logger.critical(f"Listing notification to send with {len(player_ids)} players")
+                    logger.critical(f"compute_player_notifications - Listing notification to send with {len(player_ids)} players")
                     user = user.pop()
                     notification = await _add_notification_in_db(db, scope["_id"], player_ids)
                     await send_listing_email(db, mail, notification, user, player_ids)
 
     # Treat sale scopes
     sales = await _get_sales_to_treat(db)
-    logger.critical(f"Number of sales to treat: {len(sales)}")
+    logger.critical(f"compute_player_notifications - Number of sales to treat: {len(sales)}")
 
     if len(sales) > 0:
         await upsert_vars(db, last_sale_var, convert_unix_to_datetime(sales[0]["createdDateTime"]))
@@ -62,7 +63,7 @@ async def main(db, mail):
                 user = [u for u in users if u["_id"] == scope["user"]]
 
                 if len(user) > 0:
-                    logger.critical(f"Sale notification to send with {len(player_ids)} players")
+                    logger.critical(f"compute_player_notifications - Sale notification to send with {len(player_ids)} players")
                     user = user.pop()
                     notification = await _add_notification_in_db(db, scope["_id"], player_ids)
                     await send_sale_email(db, mail, notification, user, player_ids)
@@ -94,7 +95,7 @@ async def _get_listings_to_treat(db):
             response = await client.get(list_url)
             listings = response.json()
         except httpx.ReadTimeout:
-            logger.critical(f"compute_player_notifications: Timeout while fetching listings from {list_url}")
+            logger.critical(f"compute_player_notifications - Timeout while fetching listings from {list_url}")
             listings = []
 
     last_listing_var_record = await db.vars.find_one({"var": last_list_var})
@@ -114,7 +115,7 @@ async def _get_sales_to_treat(db):
             response = await client.get(sale_url)
             sales = response.json()
         except httpx.ReadTimeout:
-            logger.critical(f"compute_player_notifications: Timeout while fetching sales from {sale_url}")
+            logger.critical(f"compute_player_notifications - Timeout while fetching sales from {sale_url}")
             sales = []
 
     last_sale_var_record = await db.vars.find_one({"var": last_sale_var})

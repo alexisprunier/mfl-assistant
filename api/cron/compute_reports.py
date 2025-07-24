@@ -15,6 +15,8 @@ logger.setLevel(logging.INFO)
 
 
 async def main(db, mail):
+    logger.critical("compute_reports - Start")
+
     users = await _get_users(db)
     user_ids = [u["_id"] for u in users]
 
@@ -24,7 +26,7 @@ async def main(db, mail):
 
     # Skip computation if the last computation was more than 10 minutes ago
     if last_computation_time is None or (new_computation_time - last_computation_time).total_seconds() > 600:
-        logger.warning("Skipping computation as the difference is greater than 10 minutes.")
+        logger.warning("compute_reports - Skipping computation as the difference is greater than 10 minutes.")
         await upsert_vars(db, last_computation_var, new_computation_time)
         return
 
@@ -34,7 +36,7 @@ async def main(db, mail):
         try:
             config_time = datetime.datetime.strptime(config["time"], "%H:%M").time()
         except ValueError:
-            logger.warning(f"Invalid time format in configuration: {config['time']}")
+            logger.warning(f"compute_reports - Invalid time format in configuration: {config['time']}")
             continue
 
         # Check if the time interval is within the expected range
@@ -76,7 +78,7 @@ async def _get_daily_progress_report_configurations(db):
 
     configurations = await db.report_configurations.find(filters).to_list(length=None)
 
-    logger.warning(f"PROGRESS REPORT: Number of active progress reports: {len(configurations)}")
+    logger.warning(f"compute_reports - Number of active progress reports: {len(configurations)}")
     
     return configurations
 

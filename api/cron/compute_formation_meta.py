@@ -18,7 +18,7 @@ def make_hashable(obj):
 
 
 async def main(db):
-    logger.critical("Start compute_formation_meta")
+    logger.critical("compute_formation_meta - Start")
     
     engines = await db.matches.distinct("engine")
 
@@ -26,7 +26,7 @@ async def main(db):
         if engine is None:
             continue
 
-        logger.critical("compute_formation_meta for engine: " + engine)
+        logger.critical("compute_formation_meta - for engine: " + engine)
         formation_stats = defaultdict(lambda: {"victories": 0, "draws": 0, "defeats": 0, "engine": engine})
 
         cursor = db.matches.find({

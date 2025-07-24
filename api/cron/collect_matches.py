@@ -16,6 +16,7 @@ logger = logging.getLogger("collect_matches")
 logger.setLevel(logging.INFO)
 
 async def treat_new_matches(db, client, last_match_id):
+    logger.critical("collect_matches - Start")
 
     last_stored_match = await db.matches.find_one(sort=[("_id", -1)])
     last_stored_match_id = last_stored_match["_id"] if last_stored_match else last_match_id
@@ -24,7 +25,7 @@ async def treat_new_matches(db, client, last_match_id):
     last_stored_match_id += 1
 
     while treated_match_count < max_match_id_stepping and last_stored_match_id <= last_match_id:
-        logger.critical(f"collect_matches: Treat match number: {last_stored_match_id}")
+        logger.critical(f"collect_matches - Treat match number: {last_stored_match_id}")
 
         try:
             response = await client.get(
@@ -38,11 +39,11 @@ async def treat_new_matches(db, client, last_match_id):
                 last_stored_match_id += 1
                 treated_match_count += 1  
             elif response.status_code == 404:
-                logger.critical(f"collect_matches: 404 found for: {last_stored_match_id}")
+                logger.critical(f"collect_matches - 404 found for: {last_stored_match_id}")
                 last_stored_match_id += 1
 
         except httpx.RequestError as e:
-            logger.error(f"collect_matches: Error fetching match data for {last_stored_match_id}: {e}")
+            logger.error(f"collect_matches - Error fetching match data for {last_stored_match_id}: {e}")
             break
 
 async def treat_old_matches(db, client):
@@ -53,7 +54,7 @@ async def treat_old_matches(db, client):
         min_stored_match_id = min_stored_match_id["_id"] - 1
 
         while treated < min_match_id_stepping:
-            logger.critical(f"collect_matches: Treat old match number: {min_stored_match_id}")
+            logger.critical(f"collect_matches - Treat old match number: {min_stored_match_id}")
             try:
                 response = await client.get(
                     url=base_url + str(min_stored_match_id) + "?withFormations=true"
@@ -67,7 +68,7 @@ async def treat_old_matches(db, client):
 
                 min_stored_match_id -= 1
             except httpx.RequestError as e:
-                logger.error(f"collect_matches: Error fetching old match data for {min_stored_match_id}: {e}")
+                logger.error(f"collect_matches - Error fetching old match data for {min_stored_match_id}: {e}")
                 break
 
 async def treat_live_and_planned_matches(db, client):
@@ -84,7 +85,7 @@ async def treat_live_and_planned_matches(db, client):
 
     for match in matches_to_treat:
         match_id = match["_id"]
-        logger.critical(f"collect_matches: Treat live match number: {match_id}")
+        logger.critical(f"collect_matches - Treat live match number: {match_id}")
         try:
             response = await client.get(
                 url=base_url + str(match_id) + "?withFormations=true"
@@ -94,9 +95,9 @@ async def treat_live_and_planned_matches(db, client):
                 raw_match_data["id"] = match_id
                 await _treat_match(db, raw_match_data)
             else:
-                logger.warning(f"collect_matches: Failed to fetch live match {match_id}: HTTP {response.status_code}")
+                logger.warning(f"collect_matches - Failed to fetch live match {match_id}: HTTP {response.status_code}")
         except httpx.RequestError as e:
-            logger.error(f"collect_matches: Error fetching live match data for {match_id}: {e}")
+            logger.error(f"collect_matches - Error fetching live match data for {match_id}: {e}")
 
 async def main(db):
     async with httpx.AsyncClient() as client:
@@ -104,7 +105,7 @@ async def main(db):
             response = await client.get(url=last_matches_url)
             last_match_id = response.json()[0]["id"]
         except httpx.RequestError as e:
-            logger.error(f"collect_matches: Error fetching last match id: {e}")
+            logger.error(f"collect_matches - Error fetching last match id: {e}")
             return
 
         await treat_new_matches(db, client, last_match_id)

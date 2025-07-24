@@ -11,9 +11,10 @@ logger.setLevel(logging.INFO)
 
 
 async def main(db):
+    logger.critical("collect_players - Start")
 
     last_treated_player_id = await get_var_value(db, last_treated_player_id_var)
-    logger.critical("collect_players: last id: " + str(last_treated_player_id))
+    logger.critical("collect_players - last id: " + str(last_treated_player_id))
 
     async with httpx.AsyncClient() as client:  # Use httpx AsyncClient for async HTTP requests
         try:
@@ -61,6 +62,6 @@ async def main(db):
                 else:
                     await upsert_vars(db, last_treated_player_id_var, None)
             else:
-                logger.error(f"Error fetching players: {response.status_code}")
+                logger.error(f"collect_players - Error fetching players: {response.status_code}")
         except httpx.RequestError as e:
-            logger.error(f"Error making request to the player API: {e}")
+            logger.error(f"collect_players - Error making request to the player API: {e}")

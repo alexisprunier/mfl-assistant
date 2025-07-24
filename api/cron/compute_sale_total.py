@@ -28,6 +28,8 @@ sale_total_property = {
 
 
 async def main(db):
+    logger.critical("compute_sale_total - Start")
+    
     # Loop through each time unit ('h', 'd', 'm') and process the data.
     for i in ["h", "d", "m"]:
         # Player sales aggregation and insertion

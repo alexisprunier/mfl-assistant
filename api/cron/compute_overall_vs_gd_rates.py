@@ -9,7 +9,7 @@ def bucket_overall_diff(diff):
     return max(5, int(math.ceil(diff / 5.0)) * 5)
 
 async def main(db):
-    logger.critical("Start compute_overall_vs_gd_rates")
+    logger.critical("compute_overall_vs_gd_rates - Start")
 
     engine_filter = "10.1.1/6.0.2"
     collection_name = "overall_vs_gd_rates"
@@ -57,5 +57,5 @@ async def main(db):
     if output:
         await db[collection_name].insert_many(output)
 
-    logger.critical("Finished compute_overall_vs_gd_rates")
+    logger.critical("compute_overall_vs_gd_rates - Finished")
     return output

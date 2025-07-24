@@ -9,7 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from graph.query import Query
 from graph.mutation import Mutation
 import config
-from cron import compute_club_notifications, compute_player_notifications, compute_reports, collect_matches, collect_clubs, collect_sales, collect_players, \
+from cron import compute_user_count, compute_club_notifications, compute_player_notifications, compute_reports, collect_matches, collect_clubs, collect_sales, collect_players, \
     compute_club_count_per_day, compute_sale_total, compute_raw_player_pricings, compute_player_pricings, collect_users, \
     compute_formation_meta, compute_overall_vs_gd_rates
 from endpoint.generate_nonce import generate_nonce
@@ -176,6 +176,7 @@ scheduler.add_job(collect_matches.main,                 'interval', args=[db],  
 scheduler.add_job(collect_users.main,                   'interval', args=[db],          seconds=45)
 
 scheduler.add_job(compute_club_count_per_day.main,      'interval', args=[db],          seconds=60 * 20)
+scheduler.add_job(compute_user_count.main,              'interval', args=[db],          seconds=60 * 29)
 scheduler.add_job(compute_sale_total.main,              'interval', args=[db],          seconds=60 * 25)
 scheduler.add_job(compute_raw_player_pricings.main,     'interval', args=[db],          seconds=60 * 28)
 scheduler.add_job(compute_player_pricings.main,         'interval', args=[db],          seconds=60 * 60)
@@ -186,7 +187,7 @@ scheduler.start()
 
 async def backfill_player_pricings(db):
     count = await db.player_pricings.count_documents({})
-    print(count)
+
     if count > 0:
         print("Skipping backfill: player_pricings collection is not empty.")
         return

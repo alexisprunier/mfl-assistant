@@ -11,6 +11,7 @@ logger.setLevel(logging.INFO)
 
 
 async def main(db):
+    logger.critical("collect_sales - Start")
 
     last_treated_sale_datetime = await get_var_value(db, last_treated_sale_datetime_var)
     new_last_treated_sale_datetime = None
@@ -21,7 +22,7 @@ async def main(db):
     async with httpx.AsyncClient() as client:
         # Treat the new ones
         while continue_treatment:
-            logger.critical("collect_sales: Treat new ones, next_before_listing_id: " + str(next_before_listing_id))
+            logger.critical("collect_sales - Treat new ones, next_before_listing_id: " + str(next_before_listing_id))
 
             try:
                 response = await client.get(
@@ -46,7 +47,7 @@ async def main(db):
                     else:
                         next_before_listing_id = sales[-1]["id"]
             except httpx.RequestError as e:
-                logger.error(f"Error making request to the sales API: {e}")
+                logger.error(f"logger - Error making request to the sales API: {e}")
                 break  # Exit the loop if there's a request error
 
         # Update the last treated sale datetime after processing new ones
@@ -56,7 +57,7 @@ async def main(db):
         oldest_sale = await db.sales.find_one(sort=[('execution_date', 1)])
 
         if oldest_sale:
-            logger.critical("collect_sales: SMALLEST: " + f"{base_url}&beforeListingId={oldest_sale['_id']}")
+            logger.critical("collect_sales - SMALLEST: " + f"{base_url}&beforeListingId={oldest_sale['_id']}")
             try:
                 response = await client.get(
                     url=f"{base_url}&beforeListingId={oldest_sale['_id']}"
@@ -69,7 +70,7 @@ async def main(db):
                         await _treat_sale(db, s)
 
             except httpx.RequestError as e:
-                logger.error(f"Error making request to the sales API: {e}")
+                logger.error(f"collect_sales - Error making request to the sales API: {e}")
 
 
 async def _treat_sale(db, mfl_sale):

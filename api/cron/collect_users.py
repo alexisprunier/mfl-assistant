@@ -11,13 +11,14 @@ logger.setLevel(logging.INFO)
 
 
 async def main(db):
+    logger.critical("collect_users - Start")
 
     offset = await get_var_value(db, user_collection_offset_var)
 
     if offset is None:
         offset = 0
 
-    logger.critical(f"user_collection_offset: {offset}")
+    logger.critical(f"collect_users - user_collection_offset: {offset}")
 
     # Use httpx.AsyncClient() to make asynchronous requests
     async with httpx.AsyncClient() as client:
@@ -40,4 +41,4 @@ async def main(db):
                         await upsert_vars(db, user_collection_offset_var, None)
 
         except httpx.RequestError as e:
-            logger.error(f"Error making request to the API: {e}")
+            logger.error(f"collect_users - Error making request to the API: {e}")

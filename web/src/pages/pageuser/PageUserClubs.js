@@ -113,10 +113,7 @@ const PageUserClubs: React.FC<PageUserClubsProps> = () => {
               fetchNextCompetitions();
             },
             handleError: (e) => {
-              console.log(
-                `Error fetching competitions for club ID ${nextId}:`,
-                e
-              );
+              console.log(`Error fetching competitions for club ID ${nextId}:`, e);
               fetchNextCompetitions();
             },
             params: { id: nextId },
@@ -144,35 +141,20 @@ const PageUserClubs: React.FC<PageUserClubsProps> = () => {
         </div>
         <div>
           <div className="d-flex flex-row align-items-right">
-            <div
-              className="d-flex justify-content-center"
-              style={{ minWidth: 30 }}
-            >
+            <div className="d-flex justify-content-center" style={{ minWidth: 30 }}>
               #
             </div>
             <div className="flex-grow-1">Club</div>
-            <div
-              className="d-flex justify-content-center"
-              style={{ minWidth: 30 }}
-            >
+            <div className="d-flex justify-content-center" style={{ minWidth: 30 }}>
               W
             </div>
-            <div
-              className="d-flex justify-content-center"
-              style={{ minWidth: 30 }}
-            >
+            <div className="d-flex justify-content-center" style={{ minWidth: 30 }}>
               D
             </div>
-            <div
-              className="d-flex justify-content-center"
-              style={{ minWidth: 30 }}
-            >
+            <div className="d-flex justify-content-center" style={{ minWidth: 30 }}>
               L
             </div>
-            <div
-              className="d-flex justify-content-end"
-              style={{ minWidth: 30 }}
-            >
+            <div className="d-flex justify-content-end" style={{ minWidth: 30 }}>
               Pts
             </div>
           </div>{" "}
@@ -181,21 +163,13 @@ const PageUserClubs: React.FC<PageUserClubsProps> = () => {
               key={standing.club.id}
               className={
                 "d-flex justify-content-between align-items-right border-top " +
-                (Object.keys(standings).includes(String(standing.club.id))
-                  ? "bg-info text-dark"
-                  : "")
+                (Object.keys(standings).includes(String(standing.club.id)) ? "bg-info text-dark" : "")
               }
             >
-              <div
-                className="d-flex justify-content-center"
-                style={{ minWidth: 30 }}
-              >
+              <div className="d-flex justify-content-center" style={{ minWidth: 30 }}>
                 {index + 1}
               </div>
-              <div
-                className="d-flex justify-content-center"
-                style={{ minWidth: 25 }}
-              >
+              <div className="d-flex justify-content-center" style={{ minWidth: 25 }}>
                 <img
                   className="mt-1"
                   src={`https://d13e14gtps4iwl.cloudfront.net/u/clubs/${standing.club.id}/logo.png?v=63c386597972f1fcbdcef019a7b453c8`}
@@ -203,38 +177,23 @@ const PageUserClubs: React.FC<PageUserClubsProps> = () => {
                   style={{ width: "15px", height: "15px" }}
                 />
               </div>
-              <div
-                className="d-flex flex-fill text-truncate"
-                style={{ minWidth: 0 }}
-              >
+              <div className="d-flex flex-fill text-truncate" style={{ minWidth: 0 }}>
                 <div className="d-flex text-truncate" style={{ minWidth: 0 }}>
                   <div className="text-truncate" style={{ minWidth: 0 }}>
                     {standing.club.name}
                   </div>
                 </div>
               </div>
-              <div
-                className="d-flex justify-content-center"
-                style={{ minWidth: 30 }}
-              >
+              <div className="d-flex justify-content-center" style={{ minWidth: 30 }}>
                 {standing.wins}
               </div>
-              <div
-                className="d-flex justify-content-center"
-                style={{ minWidth: 30 }}
-              >
+              <div className="d-flex justify-content-center" style={{ minWidth: 30 }}>
                 {standing.draws}
               </div>
-              <div
-                className="d-flex justify-content-center"
-                style={{ minWidth: 30 }}
-              >
+              <div className="d-flex justify-content-center" style={{ minWidth: 30 }}>
                 {standing.losses}
               </div>
-              <div
-                className="d-flex justify-content-end"
-                style={{ minWidth: 30 }}
-              >
+              <div className="d-flex justify-content-end" style={{ minWidth: 30 }}>
                 {standing.points}
               </div>
             </div>
@@ -263,51 +222,25 @@ const PageUserClubs: React.FC<PageUserClubsProps> = () => {
         </div>
         <div>
           <div className="d-flex flex-row align-items-right">
-            <div
-              className="d-flex justify-content-center"
-              style={{ minWidth: 30 }}
-            ></div>
+            <div className="d-flex justify-content-center" style={{ minWidth: 30 }}></div>
             <div className="flex-grow-1">Club</div>
-            <div
-              className="d-flex justify-content-center"
-              style={{ minWidth: 30 }}
-            >
+            <div className="d-flex justify-content-center" style={{ minWidth: 30 }}>
               W
             </div>
-            <div
-              className="d-flex justify-content-center"
-              style={{ minWidth: 30 }}
-            >
+            <div className="d-flex justify-content-center" style={{ minWidth: 30 }}>
               D
             </div>
-            <div
-              className="d-flex justify-content-center"
-              style={{ minWidth: 30 }}
-            >
+            <div className="d-flex justify-content-center" style={{ minWidth: 30 }}>
               L
             </div>
-            <div
-              className="d-flex justify-content-end"
-              style={{ minWidth: 30 }}
-            >
+            <div className="d-flex justify-content-end" style={{ minWidth: 30 }}>
               Pts
             </div>
           </div>
 
-          <div
-            key={id}
-            className={
-              "d-flex justify-content-between align-items-right border-top"
-            }
-          >
-            <div
-              className="d-flex justify-content-center"
-              style={{ minWidth: 30 }}
-            ></div>
-            <div
-              className="d-flex justify-content-center"
-              style={{ minWidth: 25 }}
-            >
+          <div key={id} className={"d-flex justify-content-between align-items-right border-top"}>
+            <div className="d-flex justify-content-center" style={{ minWidth: 30 }}></div>
+            <div className="d-flex justify-content-center" style={{ minWidth: 25 }}>
               <img
                 className="mt-1"
                 src={`https://d13e14gtps4iwl.cloudfront.net/u/clubs/${id}/logo.png?v=63c386597972f1fcbdcef019a7b453c8`}
@@ -315,39 +248,24 @@ const PageUserClubs: React.FC<PageUserClubsProps> = () => {
                 style={{ width: "15px", height: "15px" }}
               />
             </div>
-            <div
-              className="d-flex flex-fill text-truncate"
-              style={{ minWidth: 0 }}
-            >
+            <div className="d-flex flex-fill text-truncate" style={{ minWidth: 0 }}>
               <div className="d-flex text-truncate" style={{ minWidth: 0 }}>
                 <div className="text-truncate" style={{ minWidth: 0 }}>
                   {name}
                 </div>
               </div>
             </div>
-            <div
-              className="d-flex justify-content-center"
-              style={{ minWidth: 30 }}
-            >
-              {cup.stats.wins}
+            <div className="d-flex justify-content-center" style={{ minWidth: 30 }}>
+              {cup.stats?.wins || 0}
             </div>
-            <div
-              className="d-flex justify-content-center"
-              style={{ minWidth: 30 }}
-            >
-              {cup.stats.draws}
+            <div className="d-flex justify-content-center" style={{ minWidth: 30 }}>
+              {cup.stats?.draws || 0}
             </div>
-            <div
-              className="d-flex justify-content-center"
-              style={{ minWidth: 30 }}
-            >
-              {cup.stats.losses}
+            <div className="d-flex justify-content-center" style={{ minWidth: 30 }}>
+              {cup.stats?.losses || 0}
             </div>
-            <div
-              className="d-flex justify-content-end"
-              style={{ minWidth: 30 }}
-            >
-              {cup.stats.points}
+            <div className="d-flex justify-content-end" style={{ minWidth: 30 }}>
+              {cup.stats?.points || 0}
             </div>
           </div>
         </div>
@@ -361,10 +279,7 @@ const PageUserClubs: React.FC<PageUserClubsProps> = () => {
         {user && clubs !== null && (
           <div className="row">
             <div className="col-12">
-              <BoxCard
-                className="pb-0"
-                title={clubs.length + " club" + (clubs.length > 0 ? "s" : "")}
-              />
+              <BoxCard className="pb-0" title={clubs.length + " club" + (clubs.length > 0 ? "s" : "")} />
             </div>
             {clubs.slice(0, clubToDisplay).map((c) => (
               <div className="col-12 col-lg-6 col-xxl-4">
@@ -402,19 +317,13 @@ const PageUserClubs: React.FC<PageUserClubsProps> = () => {
 
         {(!user || clubs === null) && (
           <div style={{ height: 60 }}>
-            <BoxCard
-              className={"h-100"}
-              content={<LoadingSquare height={60} />}
-            />
+            <BoxCard className={"h-100"} content={<LoadingSquare height={60} />} />
           </div>
         )}
 
         {canLoadMoreClubs && (
           <div className="d-flex w-100 justify-content-end">
-            <button
-              className="btn btn-info text-white mt-2 me-3"
-              onClick={() => showMoreClubs()}
-            >
+            <button className="btn btn-info text-white mt-2 me-3" onClick={() => showMoreClubs()}>
               Load more
             </button>
           </div>

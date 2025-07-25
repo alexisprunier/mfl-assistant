@@ -41,7 +41,6 @@ async def main(db, mail):
 
             if len(club_ids) > 0:
                 user = [u for u in users if u["_id"] == scope["user"]]
-                logger.critical(f"{len(user)}")
 
                 if len(user) > 0:
                     logger.critical(f"compute_club_notifications - Listing notification to send with {len(club_ids)} clubs")

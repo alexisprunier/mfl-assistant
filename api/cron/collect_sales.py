@@ -47,7 +47,7 @@ async def main(db):
                     else:
                         next_before_listing_id = sales[-1]["id"]
             except httpx.RequestError as e:
-                logger.error(f"logger - Error making request to the sales API: {e}")
+                logger.error(f"collect_sales - Error making request to the sales API: {e}")
                 break  # Exit the loop if there's a request error
 
         # Update the last treated sale datetime after processing new ones

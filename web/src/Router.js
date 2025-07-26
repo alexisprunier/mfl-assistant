@@ -3,7 +3,7 @@ import Page404 from "pages/Page404";
 import PageDash from "pages/PageDash";
 import PageDashClubs from "pages/pagedash/PageDashClubs.js";
 import PageUserMap from "pages/pageuser/PageUserMap.js";
-import PageDashMarketplace from "pages/pagedash/PageDashMarketplace.js";
+import PageDashGeneral from "pages/pagedash/PageDashGeneral.js";
 import PageDashPlayers from "pages/pagedash/PageDashPlayers.js";
 import PageHome from "pages/PageHome";
 import PageNotification from "pages/PageNotification.js";
@@ -70,8 +70,8 @@ const Router: React.FC = (props) => {
               <Route path="map" element={<PageUserMap />} />
             </Route>
             <Route path="dash" element={<PageDash yScrollPosition={yScrollPosition} />}>
-              <Route index element={<Navigate to="marketplace" replace />} />
-              <Route path="marketplace" element={<PageDashMarketplace />} />
+              <Route index element={<Navigate to="general" replace />} />
+              <Route path="general" element={<PageDashGeneral />} />
               <Route path="players" element={<PageDashPlayers />} />
               <Route path="clubs" element={<PageDashClubs />} />
             </Route>

@@ -39,10 +39,7 @@ export const logout = ({ handleSuccess = null, handleError = null }) =>
 
 /* NONCE */
 
-export const getGenerateNonce = ({
-  handleSuccess = null,
-  handleError = null,
-}) =>
+export const getGenerateNonce = ({ handleSuccess = null, handleError = null }) =>
   get(
     getApiEndpoint() + "api/generate_nonce",
     (v) => defaultHandleSuccess(handleSuccess, v),
@@ -72,11 +69,7 @@ export const getLoggedUser = ({ handleSuccess = null, handleError = null }) =>
     (e) => defaultHandleError(handleError, e)
   );
 
-export const updateLoggedUserEmail = ({
-  handleSuccess = null,
-  handleError = null,
-  params,
-}) =>
+export const updateLoggedUserEmail = ({ handleSuccess = null, handleError = null, params }) =>
   post(
     getGraphQLEndpoint(),
     JSON.stringify({
@@ -95,11 +88,7 @@ export const updateLoggedUserEmail = ({
     (e) => defaultHandleError(handleError, e)
   );
 
-export const sendConfirmationMail = ({
-  handleSuccess = null,
-  handleError = null,
-  params,
-}) =>
+export const sendConfirmationMail = ({ handleSuccess = null, handleError = null, params }) =>
   post(
     getGraphQLEndpoint(),
     JSON.stringify({
@@ -120,10 +109,7 @@ export const sendConfirmationMail = ({
 
 /* Notification */
 
-export const getNotificationScopesAndNotifications = ({
-  handleSuccess = null,
-  handleError = null,
-}) =>
+export const getNotificationScopesAndNotifications = ({ handleSuccess = null, handleError = null }) =>
   post(
     getGraphQLEndpoint(),
     JSON.stringify({
@@ -173,11 +159,7 @@ export const getNotificationScopesAndNotifications = ({
     (e) => defaultHandleError(handleError, e)
   );
 
-export const getNotificationsOfNotificationScope = ({
-  handleSuccess = null,
-  handleError = null,
-  params,
-}) =>
+export const getNotificationsOfNotificationScope = ({ handleSuccess = null, handleError = null, params }) =>
   post(
     getGraphQLEndpoint(),
     JSON.stringify({
@@ -202,11 +184,7 @@ export const getNotificationsOfNotificationScope = ({
     (e) => defaultHandleError(handleError, e)
   );
 
-export const addNotificationScope = ({
-  handleSuccess = null,
-  handleError = null,
-  params,
-}) =>
+export const addNotificationScope = ({ handleSuccess = null, handleError = null, params }) =>
   post(
     getGraphQLEndpoint(),
     JSON.stringify({
@@ -225,11 +203,7 @@ export const addNotificationScope = ({
     (e) => defaultHandleError(handleError, e)
   );
 
-export const deleteNotificationScope = ({
-  handleSuccess = null,
-  handleError = null,
-  params,
-}) =>
+export const deleteNotificationScope = ({ handleSuccess = null, handleError = null, params }) =>
   post(
     getGraphQLEndpoint(),
     JSON.stringify({
@@ -247,10 +221,7 @@ export const deleteNotificationScope = ({
     (e) => defaultHandleError(handleError, e)
   );
 
-export const getClubNotificationScopesAndNotifications = ({
-  handleSuccess = null,
-  handleError = null,
-}) =>
+export const getClubNotificationScopesAndNotifications = ({ handleSuccess = null, handleError = null }) =>
   post(
     getGraphQLEndpoint(),
     JSON.stringify({
@@ -280,11 +251,7 @@ export const getClubNotificationScopesAndNotifications = ({
     (e) => defaultHandleError(handleError, e)
   );
 
-export const getNotificationsOfClubNotificationScope = ({
-  handleSuccess = null,
-  handleError = null,
-  params,
-}) =>
+export const getNotificationsOfClubNotificationScope = ({ handleSuccess = null, handleError = null, params }) =>
   post(
     getGraphQLEndpoint(),
     JSON.stringify({
@@ -306,11 +273,7 @@ export const getNotificationsOfClubNotificationScope = ({
     (e) => defaultHandleError(handleError, e)
   );
 
-export const addClubNotificationScope = ({
-  handleSuccess = null,
-  handleError = null,
-  params,
-}) =>
+export const addClubNotificationScope = ({ handleSuccess = null, handleError = null, params }) =>
   post(
     getGraphQLEndpoint(),
     JSON.stringify({
@@ -329,11 +292,7 @@ export const addClubNotificationScope = ({
     (e) => defaultHandleError(handleError, e)
   );
 
-export const deleteClubNotificationScope = ({
-  handleSuccess = null,
-  handleError = null,
-  params,
-}) =>
+export const deleteClubNotificationScope = ({ handleSuccess = null, handleError = null, params }) =>
   post(
     getGraphQLEndpoint(),
     JSON.stringify({
@@ -353,10 +312,7 @@ export const deleteClubNotificationScope = ({
 
 /* Report */
 
-export const getReportConfigurations = ({
-  handleSuccess = null,
-  handleError = null,
-}) =>
+export const getReportConfigurations = ({ handleSuccess = null, handleError = null }) =>
   post(
     getGraphQLEndpoint(),
     JSON.stringify({
@@ -372,11 +328,7 @@ export const getReportConfigurations = ({
     (e) => defaultHandleError(handleError, e)
   );
 
-export const addReportConfiguration = ({
-  handleSuccess = null,
-  handleError = null,
-  params,
-}) =>
+export const addReportConfiguration = ({ handleSuccess = null, handleError = null, params }) =>
   post(
     getGraphQLEndpoint(),
     JSON.stringify({
@@ -396,11 +348,7 @@ export const addReportConfiguration = ({
     (e) => defaultHandleError(handleError, e)
   );
 
-export const updateReportConfiguration = ({
-  handleSuccess = null,
-  handleError = null,
-  params,
-}) =>
+export const updateReportConfiguration = ({ handleSuccess = null, handleError = null, params }) =>
   post(
     getGraphQLEndpoint(),
     JSON.stringify({
@@ -416,11 +364,7 @@ export const updateReportConfiguration = ({
     (e) => defaultHandleError(handleError, e)
   );
 
-export const deleteReportConfiguration = ({
-  handleSuccess = null,
-  handleError = null,
-  params,
-}) =>
+export const deleteReportConfiguration = ({ handleSuccess = null, handleError = null, params }) =>
   post(
     getGraphQLEndpoint(),
     JSON.stringify({
@@ -438,11 +382,7 @@ export const deleteReportConfiguration = ({
 
 /* Clubs */
 
-export const getClubs = ({
-  handleSuccess = null,
-  handleError = null,
-  params,
-}) =>
+export const getClubs = ({ handleSuccess = null, handleError = null, params }) =>
   post(
     getGraphQLEndpoint(),
     JSON.stringify({
@@ -501,11 +441,26 @@ export const getClubData = ({ handleSuccess = null, handleError = null }) =>
     (e) => defaultHandleError(handleError, e)
   );
 
-export const getMarketplaceData = ({
-  handleSuccess = null,
-  handleError = null,
-  params,
-}) =>
+export const getUserData = ({ handleSuccess = null, handleError = null }) =>
+  post(
+    getGraphQLEndpoint(),
+    JSON.stringify({
+      query: `{
+        getClubUserData: getDataPoints(property: "club_owner_count") {
+          date,
+          value
+        }
+        getPlayerUserData: getDataPoints(property: "player_owner_count") {
+          date,
+          value
+        }
+      }`,
+    }),
+    (v) => defaultHandleSuccess(handleSuccess, v),
+    (e) => defaultHandleError(handleError, e)
+  );
+
+export const getMarketplaceData = ({ handleSuccess = null, handleError = null, params }) =>
   post(
     getGraphQLEndpoint(),
     JSON.stringify({
@@ -532,86 +487,58 @@ export const getMarketplaceData = ({
     (e) => defaultHandleError(handleError, e)
   );
 
-export const getPlayerDashboardData = ({
-  handleSuccess = null,
-  handleError = null,
-  params,
-}) =>
+export const getPlayerDashboardData = ({ handleSuccess = null, handleError = null, params }) =>
   post(
     getGraphQLEndpoint(),
     JSON.stringify({
       query: `{
         getPlayerCount(${jsonToParams(params)}),
         getPlayerOwnerCount,
-        NAT: getPlayerCountByCriteria(criteria: "NAT", ${jsonToParams(
-          params
-        )}) {
+        NAT: getPlayerCountByCriteria(criteria: "NAT", ${jsonToParams(params)}) {
           key,
           count
         },
-        AGE: getPlayerCountByCriteria(criteria: "AGE", ${jsonToParams(
-          params
-        )}) {
+        AGE: getPlayerCountByCriteria(criteria: "AGE", ${jsonToParams(params)}) {
           key,
           count
         },
-        OVR: getPlayerCountByCriteria(criteria: "OVR", ${jsonToParams(
-          params
-        )}) {
+        OVR: getPlayerCountByCriteria(criteria: "OVR", ${jsonToParams(params)}) {
           key,
           count
         },
-        POS: getPlayerCountByCriteria(criteria: "POS", ${jsonToParams(
-          params
-        )}) {
+        POS: getPlayerCountByCriteria(criteria: "POS", ${jsonToParams(params)}) {
           key,
           count
         },
-        FOOT: getPlayerCountByCriteria(criteria: "FOOT", ${jsonToParams(
-          params
-        )}) {
+        FOOT: getPlayerCountByCriteria(criteria: "FOOT", ${jsonToParams(params)}) {
           key,
           count
         },
-        HEI: getPlayerCountByCriteria(criteria: "HEI", ${jsonToParams(
-          params
-        )}) {
+        HEI: getPlayerCountByCriteria(criteria: "HEI", ${jsonToParams(params)}) {
           key,
           count
         },
-        PAC: getPlayerCountByCriteria(criteria: "PAC", ${jsonToParams(
-          params
-        )}) {
+        PAC: getPlayerCountByCriteria(criteria: "PAC", ${jsonToParams(params)}) {
           key,
           count
         },
-        DRI: getPlayerCountByCriteria(criteria: "DRI", ${jsonToParams(
-          params
-        )}) {
+        DRI: getPlayerCountByCriteria(criteria: "DRI", ${jsonToParams(params)}) {
           key,
           count
         },
-        PAS: getPlayerCountByCriteria(criteria: "PAS", ${jsonToParams(
-          params
-        )}) {
+        PAS: getPlayerCountByCriteria(criteria: "PAS", ${jsonToParams(params)}) {
           key,
           count
         },
-        SHO: getPlayerCountByCriteria(criteria: "SHO", ${jsonToParams(
-          params
-        )}) {
+        SHO: getPlayerCountByCriteria(criteria: "SHO", ${jsonToParams(params)}) {
           key,
           count
         },
-        DEF: getPlayerCountByCriteria(criteria: "DEF", ${jsonToParams(
-          params
-        )}) {
+        DEF: getPlayerCountByCriteria(criteria: "DEF", ${jsonToParams(params)}) {
           key,
           count
         },
-        PHY: getPlayerCountByCriteria(criteria: "PHY", ${jsonToParams(
-          params
-        )}) {
+        PHY: getPlayerCountByCriteria(criteria: "PHY", ${jsonToParams(params)}) {
           key,
           count
         }
@@ -621,11 +548,7 @@ export const getPlayerDashboardData = ({
     (e) => defaultHandleError(handleError, e)
   );
 
-export const getPlayerCountPerCountry = ({
-  handleSuccess = null,
-  handleError = null,
-  params,
-}) =>
+export const getPlayerCountPerCountry = ({ handleSuccess = null, handleError = null, params }) =>
   post(
     getGraphQLEndpoint(),
     JSON.stringify({
@@ -640,11 +563,7 @@ export const getPlayerCountPerCountry = ({
     (e) => defaultHandleError(handleError, e)
   );
 
-export const getClubCountPerGeolocation = ({
-  handleSuccess = null,
-  handleError = null,
-  params,
-}) =>
+export const getClubCountPerGeolocation = ({ handleSuccess = null, handleError = null, params }) =>
   post(
     getGraphQLEndpoint(),
     JSON.stringify({
@@ -664,11 +583,7 @@ export const getClubCountPerGeolocation = ({
     (e) => defaultHandleError(handleError, e)
   );
 
-export const getUserCountPerGeolocation = ({
-  handleSuccess = null,
-  handleError = null,
-  params,
-}) =>
+export const getUserCountPerGeolocation = ({ handleSuccess = null, handleError = null, params }) =>
   post(
     getGraphQLEndpoint(),
     JSON.stringify({
@@ -705,11 +620,7 @@ export const getTeams = ({ handleSuccess = null, handleError = null }) =>
     (e) => defaultHandleError(handleError, e)
   );
 
-export const getTeamMembers = ({
-  handleSuccess = null,
-  handleError = null,
-  params,
-}) =>
+export const getTeamMembers = ({ handleSuccess = null, handleError = null, params }) =>
   post(
     getGraphQLEndpoint(),
     JSON.stringify({
@@ -769,11 +680,7 @@ export const addTeam = ({ handleSuccess = null, handleError = null, params }) =>
     (e) => defaultHandleError(handleError, e)
   );
 
-export const updateTeam = ({
-  handleSuccess = null,
-  handleError = null,
-  params,
-}) =>
+export const updateTeam = ({ handleSuccess = null, handleError = null, params }) =>
   post(
     getGraphQLEndpoint(),
     JSON.stringify({
@@ -789,11 +696,7 @@ export const updateTeam = ({
     (e) => defaultHandleError(handleError, e)
   );
 
-export const deleteTeam = ({
-  handleSuccess = null,
-  handleError = null,
-  params,
-}) =>
+export const deleteTeam = ({ handleSuccess = null, handleError = null, params }) =>
   post(
     getGraphQLEndpoint(),
     JSON.stringify({
@@ -809,11 +712,7 @@ export const deleteTeam = ({
     (e) => defaultHandleError(handleError, e)
   );
 
-export const addTeamMembers = ({
-  handleSuccess = null,
-  handleError = null,
-  params,
-}) =>
+export const addTeamMembers = ({ handleSuccess = null, handleError = null, params }) =>
   post(
     getGraphQLEndpoint(),
     JSON.stringify({
@@ -833,11 +732,7 @@ export const addTeamMembers = ({
     (e) => defaultHandleError(handleError, e)
   );
 
-export const updateTeamMember = ({
-  handleSuccess = null,
-  handleError = null,
-  params,
-}) =>
+export const updateTeamMember = ({ handleSuccess = null, handleError = null, params }) =>
   post(
     getGraphQLEndpoint(),
     JSON.stringify({
@@ -853,11 +748,7 @@ export const updateTeamMember = ({
     (e) => defaultHandleError(handleError, e)
   );
 
-export const deleteTeamMember = ({
-  handleSuccess = null,
-  handleError = null,
-  params,
-}) =>
+export const deleteTeamMember = ({ handleSuccess = null, handleError = null, params }) =>
   post(
     getGraphQLEndpoint(),
     JSON.stringify({
@@ -873,10 +764,7 @@ export const deleteTeamMember = ({
     (e) => defaultHandleError(handleError, e)
   );
 
-export const getPlayerNationalities = ({
-  handleSuccess = null,
-  handleError = null,
-}) =>
+export const getPlayerNationalities = ({ handleSuccess = null, handleError = null }) =>
   post(
     getGraphQLEndpoint(),
     JSON.stringify({
@@ -888,10 +776,7 @@ export const getPlayerNationalities = ({
     (e) => defaultHandleError(handleError, e)
   );
 
-export const getClubCountriesAndCities = ({
-  handleSuccess = null,
-  handleError = null,
-}) =>
+export const getClubCountriesAndCities = ({ handleSuccess = null, handleError = null }) =>
   post(
     getGraphQLEndpoint(),
     JSON.stringify({
@@ -904,11 +789,7 @@ export const getClubCountriesAndCities = ({
     (e) => defaultHandleError(handleError, e)
   );
 
-export const getPlayers = ({
-  handleSuccess = null,
-  handleError = null,
-  params,
-}) =>
+export const getPlayers = ({ handleSuccess = null, handleError = null, params }) =>
   post(
     getGraphQLEndpoint(),
     JSON.stringify({
@@ -937,11 +818,7 @@ export const getPlayers = ({
     (e) => defaultHandleError(handleError, e)
   );
 
-export const getUsers = ({
-  handleSuccess = null,
-  handleError = null,
-  params,
-}) =>
+export const getUsers = ({ handleSuccess = null, handleError = null, params }) =>
   post(
     getGraphQLEndpoint(),
     JSON.stringify({
@@ -965,11 +842,7 @@ export const getUsers = ({
     (e) => defaultHandleError(handleError, e)
   );
 
-export const getContracts = ({
-  handleSuccess = null,
-  handleError = null,
-  params,
-}) =>
+export const getContracts = ({ handleSuccess = null, handleError = null, params }) =>
   post(
     getGraphQLEndpoint(),
     JSON.stringify({
@@ -1017,11 +890,7 @@ export const getContracts = ({
     (e) => defaultHandleError(handleError, e)
   );
 
-export const getPlayerSales = ({
-  handleSuccess = null,
-  handleError = null,
-  params,
-}) =>
+export const getPlayerSales = ({ handleSuccess = null, handleError = null, params }) =>
   post(
     getGraphQLEndpoint(),
     JSON.stringify({
@@ -1057,11 +926,7 @@ export const getPlayerSales = ({
     (e) => defaultHandleError(handleError, e)
   );
 
-export const getPlayerPricingHistory = ({
-  handleSuccess = null,
-  handleError = null,
-  params,
-}) =>
+export const getPlayerPricingHistory = ({ handleSuccess = null, handleError = null, params }) =>
   post(
     getGraphQLEndpoint(),
     JSON.stringify({
@@ -1079,10 +944,7 @@ export const getPlayerPricingHistory = ({
     (e) => defaultHandleError(handleError, e)
   );
 
-export const getPlayerPricings = ({
-  handleSuccess = null,
-  handleError = null,
-}) =>
+export const getPlayerPricings = ({ handleSuccess = null, handleError = null }) =>
   post(
     getGraphQLEndpoint(),
     JSON.stringify({
@@ -1099,10 +961,7 @@ export const getPlayerPricings = ({
     (e) => defaultHandleError(handleError, e)
   );
 
-export const getRawPlayerPricings = ({
-  handleSuccess = null,
-  handleError = null,
-}) =>
+export const getRawPlayerPricings = ({ handleSuccess = null, handleError = null }) =>
   post(
     getGraphQLEndpoint(),
     JSON.stringify({

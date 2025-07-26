@@ -165,7 +165,7 @@ app.add_route("/api/confirm_email", confirm_email)
 
 scheduler = AsyncIOScheduler()
 
-scheduler.add_job(compute_player_notifications.main,    'interval', args=[db, mail],    seconds=33)
+"""scheduler.add_job(compute_player_notifications.main,    'interval', args=[db, mail],    seconds=33)
 scheduler.add_job(compute_club_notifications.main,      'interval', args=[db, mail],    seconds=55)
 scheduler.add_job(compute_reports.main,                 'interval', args=[db, mail],    seconds=40)
 
@@ -181,7 +181,7 @@ scheduler.add_job(compute_sale_total.main,              'interval', args=[db],  
 scheduler.add_job(compute_raw_player_pricings.main,     'interval', args=[db],          seconds=60 * 28)
 scheduler.add_job(compute_player_pricings.main,         'interval', args=[db],          seconds=60 * 60)
 scheduler.add_job(compute_formation_meta.main,          'interval', args=[db],          seconds=60 * 60 * 18)
-scheduler.add_job(compute_overall_vs_gd_rates.main,      'interval', args=[db],         seconds=60 * 422)
+scheduler.add_job(compute_overall_vs_gd_rates.main,      'interval', args=[db],         seconds=60 * 422)"""
 scheduler.start()
 
 

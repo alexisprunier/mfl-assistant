@@ -679,6 +679,7 @@ class Query(ObjectType):
     async def resolve_get_data_points(self, info, property):
         return await info.context["db"].data_points \
             .find({"property": property}) \
+            .sort("date", 1) \
             .to_list(length=None)
 
     get_teams = List(TeamType)

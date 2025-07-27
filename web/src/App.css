@@ -3,6 +3,13 @@
   src: url(/public/fonts/impact.ttf);
 }
 
+:root {
+  --primary-color: #0dcaf0;
+  --main-blue-color: #0dcaf0;
+  --main-pink-color: #0dcaf0;
+  --background-color: #111;
+}
+
 html,
 body,
 #root,
@@ -19,7 +26,7 @@ h1, h2, h3, h4, h5, h6 {
 #App {
   overflow-y: hidden;
   overflow-x: hidden;
-  background-image: repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.07) 1px, transparent 1px, transparent 6px);
+  background-image: repeating-linear-gradient(-45deg, rgba(13,202,240, 0.1), rgba(13,202,240, 0.1) 1px, var(--background-color) 1px, var(--background-color) 6px);
   background-size: 4px 4px;
 }
 
@@ -467,4 +474,103 @@ button.btn-link:hover {
 
 .text-small {
   font-size: .875em !important;
+}
+
+.form-control {
+  display: block !important;
+  width: 100% !important;
+  padding: 0.375rem 0.75rem !important;
+  font-size: 1rem !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  color: var(--bs-body-color) !important;
+  background-color: var(--bs-body-bg) !important;
+  background-clip: padding-box !important;
+  border: none !important;
+  border-bottom: 2px solid var(--bs-border-color) !important;
+  border-radius: 0 !important;
+  appearance: none !important;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out !important;
+  cursor: text !important; /* old-style text cursor */
+}
+
+.form-control:focus {
+  outline: none !important;
+  border-bottom-color: #0dcaf0 !important; /* highlight color on focus */
+  box-shadow: 0 2px 0 0 #0dcaf0 !important;
+}
+
+.form-select {
+  --bs-form-select-bg-img: url(data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3e%3cpath fill=%27none%27 stroke=%27343a40%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%272%27 d=%27m2 5 6 6 6-6%27/%3e%3c/svg%3e) !important;
+  display: block !important;
+  width: 100% !important;
+  padding: 0.375rem 2.25rem 0.375rem 0.75rem !important;
+  font-size: 1rem !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  color: var(--bs-body-color) !important;
+  background-color: var(--bs-body-bg) !important;
+  background-image: var(--bs-form-select-bg-img), var(--bs-form-select-bg-icon, none) !important;
+  background-repeat: no-repeat !important;
+  background-position: right 0.75rem center !important;
+  background-size: 16px 12px !important;
+  border: none !important;
+  border-bottom: 2px solid var(--bs-border-color) !important;
+  border-radius: 0 !important;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out !important;
+  appearance: none !important;
+  cursor: text !important;
+}
+
+.form-select:focus {
+  outline: none !important;
+  border-bottom-color: #0dcaf0 !important; /* highlight on focus */
+  box-shadow: 0 2px 0 0 #0dcaf0 !important;
+}
+
+input[type="checkbox" i] {
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+  width: 14px !important;
+  height: 14px !important;
+  border: 2px solid #666 !important;
+  background-color: transparent !important;
+  cursor: pointer !important;
+  position: relative !important;
+  transition: border-color 0.25s ease, background-color 0.25s ease !important;
+  margin: 8px 4px 0px 4px !important;
+  box-sizing: border-box !important;
+}
+
+input[type="checkbox" i]:hover {
+  border-color: #0dcaf0 !important;
+  background-color: rgba(13, 202, 240, 0.1) !important;
+}
+
+input[type="checkbox" i]:checked {
+  background-color: #0dcaf0 !important;
+  border-color: #0dcaf0 !important;
+}
+
+input[type="checkbox" i]:checked::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 5px;
+  width: 3px;
+  height: 7px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  pointer-events: none;
+}
+
+input[type="checkbox" i]:focus {
+  outline: 2px solid #0dcaf0 !important;
+  outline-offset: 2px !important;
+}
+
+.btn {
+  border-radius: 0px !important;
 }

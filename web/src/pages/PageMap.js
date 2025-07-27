@@ -180,7 +180,7 @@ const PageMap: React.FC = () => {
       )}
 
       <div className="map-selector position-absolute d-flex flex-column align-items-end">
-        <div className="map-select d-flex flex-row ms-md-2 border rounded-2 mb-1">
+        <div className="map-select d-flex flex-row ms-md-2 border mb-1">
           <button
             className={
               "d-flex flex-grow-1 btn btn-small" + (mapType === "users" ? " btn-info text-white" : " text-info")
@@ -201,7 +201,7 @@ const PageMap: React.FC = () => {
           </button>
         </div>
 
-        <div className="map-select d-flex flex-row ms-md-2 border rounded-2">
+        <div className="map-select d-flex flex-row ms-md-2 border">
           <button
             className={
               "d-flex flex-grow-1 btn btn-small" + (mapGeographic === "country" ? " btn-info text-white" : " text-info")

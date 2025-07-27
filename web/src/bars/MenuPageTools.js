@@ -1,5 +1,5 @@
 import React from "react";
-import "./MenuPageTools.css";
+import "./MenuTop.css";
 import { Link, useLocation } from "react-router-dom";
 
 interface MenuPageToolsProps {}
@@ -8,7 +8,7 @@ const MenuPageTools: React.FC<MenuPageToolsProps> = (props) => {
   const location = useLocation();
 
   return (
-    <nav id="MenuPageTools" className="navbar justify-content-center justify-content-md-start w-100 ps-md-5 p-2">
+    <nav className="MenuTop navbar justify-content-center justify-content-md-start w-100 p-2">
       <ul className="navbar-nav flex-row h6 ps-md-3">
         <li className="nav-item align-self-end lh-1 px-2">
           <Link

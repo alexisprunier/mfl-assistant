@@ -58,8 +58,10 @@ const PageDashGeneral: React.FC<PageDashGeneralProps> = ({}) => {
   return (
     <div id="PageDashGeneral" className="h-100 w-100">
       <div className="container container-xl h-100 w-100 px-2 px-md-4 py-4">
-        <div className="d-flex flex-column h-100 w-100 fade-in">
-          <div className="d-flex flex-column flex-md-row">
+        <div className="d-flex flex-column h-100 w-100">
+          <BoxCard title={"User base"} />
+
+          <div className="d-flex flex-column flex-md-row mb-4">
             <div className="d-flex flex-column flex-md-basis-300">
               <BoxCard
                 content={
@@ -87,8 +89,10 @@ const PageDashGeneral: React.FC<PageDashGeneralProps> = ({}) => {
               />
             </div>
 
-            <BoxCard className={"d-flex flex-fill"} title={"Users"} content={<ChartLineUserCount data={userData} />} />
+            <BoxCard className={"d-flex flex-fill"} content={<ChartLineUserCount data={userData} />} />
           </div>
+
+          <BoxCard title={"Marketplace activity"} />
 
           <div className="d-flex flex-column flex-md-row">
             <div className="d-flex flex-column flex-md-basis-300">

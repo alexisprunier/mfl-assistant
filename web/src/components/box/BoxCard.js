@@ -11,7 +11,7 @@ interface BoxCardProps {
 const BoxCard: React.FC<BoxCardProps> = ({ className, title, actions, content, contentClassName }) => {
   return (
     <div
-      className={"card d-flex flex-column m-2 p-3 pt-2 " + (className ? className : "")}
+      className={"card d-flex flex-column m-2 p-3 pt-2 " + (content ? "" : "pb-2 ") + (className ? className : "")}
       style={{
         borderWidth: "1px",
         borderStyle: "solid",
@@ -24,7 +24,7 @@ const BoxCard: React.FC<BoxCardProps> = ({ className, title, actions, content, c
     >
       <div className="d-flex flex-row">
         <div className="d-flex">
-          <h4 className="flex-grow-1">{title}</h4>
+          <h4 className={"flex-grow-1 " + (content ? "" : "mb-0")}>{title}</h4>
         </div>
 
         <div className="d-flex flex-fill overflow-auto justify-content-end align-items-end">{actions}</div>

@@ -27,7 +27,7 @@ const MenuPageUser: React.FC<MenuPageUserProps> = (props) => {
         </Link>
       </div>
 
-      <nav className="MenuTop navbar justify-content-center justify-content-md-start w-100 p-2">
+      <nav id="MenuPageUser" className="MenuTop navbar justify-content-center justify-content-md-start w-100 p-2">
         <ul className="navbar-nav flex-row h6 ps-md-3">
           <li className="nav-item align-self-end lh-1 px-2 d-md-block d-none">
             <Link className={"nav-link nav-user border px-3"}>

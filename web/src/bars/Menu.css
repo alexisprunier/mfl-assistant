@@ -1,8 +1,8 @@
 #Menu {
-  background-color: #000; /* pure black */
+  background-color: var(--lighter-background-color); /* pure black */
   background-image:
-    radial-gradient(circle at 50% -20%, rgba(13,202,240,0.25) 0%, rgba(255,255,255,0.05) 30%, transparent 70%),
-    radial-gradient(circle at 80% 120%, rgba(13,202,240,0.2) 0%, rgba(255,255,255,0.04) 70%, transparent 80%),
+    radial-gradient(circle at 80% 140%,rgba(255,255,255,0.0) 20%, rgba(13,202,240,0.15) 10%,  transparent 70%),
+    radial-gradient(circle at 80% 175%,rgba(255,255,255,0.0) 20%, rgba(13,202,240,0.15) 5%, transparent 80%),
     url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='3' height='3'><circle cx='1' cy='1' r='0.3' fill='rgba(255,255,255,0.03)'/></svg>");
   background-size: auto, auto, 5px 5px;
   background-blend-mode: screen;

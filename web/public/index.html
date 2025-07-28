@@ -1,39 +1,43 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/media/images/assistant.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Tighten your shoelaces thanks to the MFL Assistant." />
+    <script src="%PUBLIC_URL%/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link rel="stylesheet" href="%PUBLIC_URL%/css/boostrap.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Saira:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <title>MFL Assistant</title>
+    <script>
+      var _paq = (window._paq = window._paq || []);
+      _paq.push(["trackPageView"]);
+      _paq.push(["enableLinkTracking"]);
+      (function () {
+        var isLocal = window.location.hostname === "127.0.0.1" || window.location.hostname === "localhost";
+        var domain = window.location.hostname;
+        var u = isLocal ? "//127.0.0.1:8080/" : `//analytics.${domain}/`;
+        _paq.push(["setTrackerUrl", u + "matomo.php"]);
+        _paq.push(["setSiteId", "1"]);
+        var d = document,
+          g = d.createElement("script"),
+          s = d.getElementsByTagName("script")[0];
+        g.async = true;
+        g.src = u + "matomo.js";
+        s.parentNode.insertBefore(g, s);
+      })();
+    </script>
+  </head>
 
-<head>
-  <meta charset="utf-8" />
-  <link rel="icon" href="%PUBLIC_URL%/media/images/assistant.png" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#000000" />
-  <meta name="description" content="Tighten your shoelaces thanks to the MFL Assistant." />
-  <script src="%PUBLIC_URL%/js/bootstrap.min.js" crossorigin="anonymous"></script>
-  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-  <link rel="stylesheet" href="%PUBLIC_URL%/css/boostrap.min.css" />
-  <title>MFL Assistant</title>
-  <script>
-  var _paq = window._paq = window._paq || [];
-  _paq.push(['trackPageView']);
-  _paq.push(['enableLinkTracking']);
-  (function() {
-    var isLocal = window.location.hostname === "127.0.0.1" || window.location.hostname === "localhost";
-    var domain = window.location.hostname;
-    var u = isLocal ? "//127.0.0.1:8080/" : `//analytics.${domain}/`;
-    _paq.push(['setTrackerUrl', u + 'matomo.php']);
-    _paq.push(['setSiteId', '1']);
-    var d = document,
-      g = d.createElement('script'),
-      s = d.getElementsByTagName('script')[0];
-    g.async = true;
-    g.src = u + 'matomo.js';
-    s.parentNode.insertBefore(g, s);
-  })();
-  </script>
-</head>
-
-<body>
-  <noscript>You need to enable JavaScript to run this app.</noscript>
-  <div id="root"></div>
-</body>
-
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+  </body>
 </html>

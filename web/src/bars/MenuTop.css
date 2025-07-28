@@ -1,10 +1,10 @@
 .MenuTop {
-  background-color: #16191C;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='8'><polyline points='2,2 6,4 2,6' stroke='rgba(13,202,240,0.05)' stroke-width='1' fill='none'/></svg>");
-  background-size: 16px 16px;
-  box-shadow: 0 15px 15px -5px rgba(22,25,28,0.4);
-  border-bottom: 2px solid rgba(13,202,240,0.3);
-  min-height: 63px;
+  background-color: var(--lighter-background-color);
+  /*background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='8'><polyline points='2,2 6,4 2,6' stroke='rgba(13,202,240,0.05)' stroke-width='1' fill='none'/></svg>");
+  background-size: 12px 12px;
+  box-shadow: 0 5px 5px -0px rgba(13,202,240,0.2);*/
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  min-height: 74px;
 }
 
 .MenuTop .nav-link {

@@ -3,6 +3,7 @@ import ChartBarKeyCount from "components/charts/ChartBarKeyCount.js";
 import ChartBarPlayerAttributeDistribution from "components/charts/ChartBarPlayerAttributeDistribution.js";
 import ControllerPlayerCriteria from "components/controllers/ControllerPlayerCriteria.js";
 import PopupPlayers from "components/popups/PopupPlayers.js";
+import BoxCard from "components/box/BoxCard.js";
 import Count from "components/counts/Count.js";
 import FilterContainerPlayer from "components/filters/FilterContainerPlayer.js";
 import React, { useEffect, useState, useRef } from "react";
@@ -18,21 +19,11 @@ const PageDashPlayers: React.FC<PageDashPlayersProps> = () => {
   const [selectedCriteria, setSelectedCriteria] = useState("OVR");
   const [filters, setFilters] = useState({
     firstPositionOnly: false,
-    positions: searchParams.get("positions")
-      ? searchParams.get("positions").split(",")
-      : [],
-    minAge: searchParams.get("minAge")
-      ? parseInt(searchParams.get("minAge"))
-      : undefined,
-    maxAge: searchParams.get("maxAge")
-      ? parseInt(searchParams.get("maxAge"))
-      : undefined,
-    minOvr: searchParams.get("minOvr")
-      ? parseInt(searchParams.get("minOvr"))
-      : undefined,
-    maxOvr: searchParams.get("maxOvr")
-      ? parseInt(searchParams.get("maxOvr"))
-      : undefined,
+    positions: searchParams.get("positions") ? searchParams.get("positions").split(",") : [],
+    minAge: searchParams.get("minAge") ? parseInt(searchParams.get("minAge")) : undefined,
+    maxAge: searchParams.get("maxAge") ? parseInt(searchParams.get("maxAge")) : undefined,
+    minOvr: searchParams.get("minOvr") ? parseInt(searchParams.get("minOvr")) : undefined,
+    maxOvr: searchParams.get("maxOvr") ? parseInt(searchParams.get("maxOvr")) : undefined,
   });
 
   const [selectedBar, setSelectedBar] = useState(null);
@@ -64,9 +55,7 @@ const PageDashPlayers: React.FC<PageDashPlayersProps> = () => {
 
     keys.forEach((key) => {
       if (data[key]) {
-        const values = data[key]
-          .map((item) => parseInt(item.key, 10))
-          .sort((a, b) => a - b);
+        const values = data[key].map((item) => parseInt(item.key, 10)).sort((a, b) => a - b);
 
         const min = values[0];
         const max = values[values.length - 1];
@@ -142,12 +131,11 @@ const PageDashPlayers: React.FC<PageDashPlayersProps> = () => {
         filters={buildFilters()}
       />
 
-      <div className="container container-xl h-100 w-100 px-2 px-md-4 py-4">
-        <div className="d-flex flex-column h-100 w-100 fade-in">
+      <div className="container container-xl w-100 px-2 px-md-4 py-4">
+        <div className="d-flex flex-column w-100">
           <div className="d-flex flex-row flex-grow-0 flex-basis-0 justify-content-end pb-2 pe-2">
-            {Object.keys(filters).filter((k) =>
-              Array.isArray(filters[k]) ? filters[k].length > 0 : filters[k]
-            ).length > 0 && (
+            {Object.keys(filters).filter((k) => (Array.isArray(filters[k]) ? filters[k].length > 0 : filters[k]))
+              .length > 0 && (
               <button
                 className="btn btn-warning text-white align-self-end me-2"
                 onClick={() => setFilters({ positions: [], forceFetch: true })}
@@ -172,70 +160,45 @@ const PageDashPlayers: React.FC<PageDashPlayersProps> = () => {
             />
           </div>
 
-          <div className="d-flex flex-column flex-md-row flex-md-grow-0 flex-md-basis-340">
-            <div className="card d-flex flex-column flex-md-grow-0 flex-md-basis-340 m-2 p-3 pt-2">
-              <div className="d-flex flex-column flex-md-grow-1">
-                <div className="d-flex flex-column flex-grow-1 flex-basis-0 align-items-center justify-content-center py-2 py-md-0">
-                  <Count
-                    label="Players"
-                    count={data ? data.getPlayerCount : null}
-                  />
-                </div>
+          <div className="d-flex flex-column flex-md-row">
+            <div className="d-flex flex-column flex-md-basis-300">
+              <BoxCard content={<Count label="Players" count={data ? data.getPlayerCount : null} />} />
 
-                <div className="d-flex flex-column flex-grow-1 flex-basis-0 align-items-center justify-content-center py-2 py-md-0">
-                  <Count
-                    label="Owners"
-                    count={data ? data.getPlayerOwnerCount : null}
-                  />
-                </div>
-              </div>
+              <BoxCard content={<Count label="Owners" count={data ? data.getPlayerOwnerCount : null} />} />
             </div>
 
-            <div className="card d-flex flex-column flex-md-grow-1 m-2 p-3 pt-2 flex-md-basis-340">
-              <div className="d-flex flex-column flex-lg-row">
-                <div className="d-flex">
-                  <h4 className="flex-grow-1">Players per criteria</h4>
-                </div>
-
-                <div className="d-flex flex-fill overflow-auto justify-content-end align-items-end">
-                  <ControllerPlayerCriteria
-                    selectedCriteria={selectedCriteria}
-                    onChange={(c) => setSelectedCriteria(c)}
-                  />
-                </div>
-              </div>
-
-              <div className="d-flex flex-fill overflow-hidden ratio-sm ratio-sm-4x3">
-                <ChartBarKeyCount
-                  data={data && data[selectedCriteria]}
-                  onBarClick={(clickedItem) => {
-                    handleBarClick(clickedItem);
-                  }}
+            <BoxCard
+              className="d-flex flex-fill"
+              title={"Players per criteria"}
+              actions={
+                <ControllerPlayerCriteria
+                  selectedCriteria={selectedCriteria}
+                  onChange={(c) => setSelectedCriteria(c)}
                 />
-              </div>
-            </div>
+              }
+              content={
+                <div className="d-flex flex-fill overflow-hidden ratio ratio-21x9">
+                  <ChartBarKeyCount
+                    data={data && data[selectedCriteria]}
+                    onBarClick={(clickedItem) => {
+                      handleBarClick(clickedItem);
+                    }}
+                  />
+                </div>
+              }
+            />
           </div>
 
           <div className="d-flex flex-column flex-md-row flex-md-grow-1">
-            <div className="card d-flex flex-md-grow-1 m-2 p-3 pt-2">
-              <div className="d-flex flex-column flex-lg-row">
-                <div className="d-flex">
-                  <h4 className="flex-grow-1">Attribute distribution</h4>
+            <BoxCard
+              className="d-flex flex-fill"
+              title={"Attribute distribution"}
+              content={
+                <div className="d-flex flex-fill overflow-hidden ratio ratio-21x9">
+                  <ChartBarPlayerAttributeDistribution data={computePlayerDistribution()} />
                 </div>
-              </div>
-
-              <div className="d-flex flex-fill overflow-hidden ratio-sm ratio-sm-4x3">
-                <ChartBarPlayerAttributeDistribution
-                  data={computePlayerDistribution()}
-                />
-              </div>
-            </div>
-
-            <div className="card d-flex flex-md-grow-1 flex-md-shrink-1 m-2 p-3 pt-2 flex-md-basis-300">
-              <div className="d-flex flex-fill overflow-hidden ratio-sm ratio-sm-4x3">
-                <BoxSoonToCome />
-              </div>
-            </div>
+              }
+            />
           </div>
         </div>
       </div>

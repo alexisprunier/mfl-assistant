@@ -66,7 +66,7 @@ const PageDashGeneral: React.FC<PageDashGeneralProps> = ({}) => {
               <BoxCard
                 content={
                   <Count
-                    label="User with club"
+                    label="Users with club"
                     count={
                       userData && userData.getClubUserData
                         ? userData?.getClubUserData?.[userData.getClubUserData.length - 1].value ?? null
@@ -78,7 +78,7 @@ const PageDashGeneral: React.FC<PageDashGeneralProps> = ({}) => {
               <BoxCard
                 content={
                   <Count
-                    label="User with player"
+                    label="Users with player"
                     count={
                       userData && userData.getPlayerUserData
                         ? userData?.getPlayerUserData?.[userData.getPlayerUserData.length - 1].value ?? null
@@ -89,7 +89,15 @@ const PageDashGeneral: React.FC<PageDashGeneralProps> = ({}) => {
               />
             </div>
 
-            <BoxCard className={"d-flex flex-fill"} content={<ChartLineUserCount data={userData} />} />
+            <BoxCard
+              className={"d-flex flex-fill"}
+              title={"Users over time"}
+              content={
+                <div className="d-flex flex-fill ratio ratio-16x9">
+                  <ChartLineUserCount data={userData} />
+                </div>
+              }
+            />
           </div>
 
           <BoxCard title={"Marketplace activity"} />
@@ -108,49 +116,36 @@ const PageDashGeneral: React.FC<PageDashGeneralProps> = ({}) => {
                   />
                 }
               />
-              <BoxCard
-                content={
-                  <Count
-                    label="Total player volume"
-                    count={
-                      data && data.getPlayerSaleTotal
-                        ? "$" + data.getPlayerSaleTotal.reduce((acc, item) => acc + item.value, 0).toFixed(0)
-                        : null
-                    }
-                  />
-                }
-              />
             </div>
 
             <BoxCard
               className={"d-flex flex-fill"}
               title={"Player sale volume"}
+              actions={
+                <div>
+                  <button
+                    className={"btn btn-small" + (timeUnit === "h" ? " btn-info text-white" : " text-info")}
+                    onClick={() => setTimeUnit("h")}
+                  >
+                    H
+                  </button>
+                  <button
+                    className={"btn btn-small" + (timeUnit === "d" ? " btn-info text-white" : " text-info")}
+                    onClick={() => setTimeUnit("d")}
+                  >
+                    D
+                  </button>
+                  <button
+                    className={"btn btn-small" + (timeUnit === "m" ? " btn-info text-white" : " text-info")}
+                    onClick={() => setTimeUnit("m")}
+                  >
+                    M
+                  </button>
+                </div>
+              }
               content={
-                <div className="d-flex flex-fill flex-column">
-                  <div className="d-flex justify-content-end align-items-end">
-                    <button
-                      className={"btn btn-small" + (timeUnit === "h" ? " btn-info text-white" : " text-info")}
-                      onClick={() => setTimeUnit("h")}
-                    >
-                      H
-                    </button>
-                    <button
-                      className={"btn btn-small" + (timeUnit === "d" ? " btn-info text-white" : " text-info")}
-                      onClick={() => setTimeUnit("d")}
-                    >
-                      D
-                    </button>
-                    <button
-                      className={"btn btn-small" + (timeUnit === "m" ? " btn-info text-white" : " text-info")}
-                      onClick={() => setTimeUnit("m")}
-                    >
-                      M
-                    </button>
-                  </div>
-
-                  <div className="d-flex flex-fill">
-                    <ChartBarSaleVolume data={data?.getPlayerSaleTotal} />
-                  </div>
+                <div className="d-flex flex-fill ratio ratio-16x9">
+                  <ChartBarSaleVolume data={data?.getPlayerSaleTotal} />
                 </div>
               }
             />

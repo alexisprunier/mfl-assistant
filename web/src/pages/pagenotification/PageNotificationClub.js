@@ -5,6 +5,7 @@ import LoadingSquare from "components/loading/LoadingSquare.js";
 import PopupClubNotificationScope from "components/popups/PopupClubNotificationScope.js";
 import UtilConditionalRender from "components/utils/UtilConditionalRender.js";
 import React, { useEffect, useState } from "react";
+import BoxCard from "components/box/BoxCard.js";
 import {
   getClubNotificationScopesAndNotifications,
   getNotificationsOfClubNotificationScope,
@@ -15,8 +16,7 @@ interface PageNotificationClubProps {}
 const PageNotificationClub: React.FC<PageNotificationClubProps> = (props) => {
   const [notificationScopes, setNotificationScopes] = useState(null);
   const [notifications, setNotifications] = useState(null);
-  const [selectedNotificationScope, setSelectedNotificationScope] =
-    useState(null);
+  const [selectedNotificationScope, setSelectedNotificationScope] = useState(null);
   const [selectedNotification, setSelectedNotification] = useState(null);
   const [skip, setSkip] = useState(0);
 
@@ -71,12 +71,13 @@ const PageNotificationClub: React.FC<PageNotificationClubProps> = (props) => {
   return (
     <div id="PageNotificationClub" className="h-100 w-100">
       <div className="container max-width-md h-100 px-2 px-md-4 py-4">
-        <div className="d-flex flex-column h-100 w-100 fade-in">
-          <div className="card d-flex flex-column flex-md-grow-0 m-2 p-3 pt-2 flex-basis-200">
-            <div className="d-flex flex-row mb-2">
-              <h4 className="flex-grow-1">Notification scopes</h4>
-
-              {notificationScopes?.length > 0 && (
+        <div className="d-flex flex-column h-100 w-100">
+          <BoxCard
+            className="flex-md-grow-0 flex-basis-200"
+            title={"Notification scopes"}
+            contentClassName={"overflow-auto"}
+            actions={
+              notificationScopes?.length > 0 && (
                 <PopupClubNotificationScope
                   trigger={
                     <button className="btn btn-info btn-sm text-white">
@@ -86,10 +87,9 @@ const PageNotificationClub: React.FC<PageNotificationClubProps> = (props) => {
                   assistantUser={props.assistantUser}
                   onClose={fetchClubNotificationScopesAndNotifications}
                 />
-              )}
-            </div>
-
-            <div className="d-flex flex-fill overflow-auto">
+              )
+            }
+            content={
               <UtilConditionalRender
                 value={notificationScopes}
                 renderUndefined={() => <LoadingSquare />}
@@ -119,9 +119,7 @@ const PageNotificationClub: React.FC<PageNotificationClubProps> = (props) => {
                         item={s}
                         isSelected={selectedNotificationScope?.id === s.id}
                         onSelect={(s) => {
-                          setSelectedNotificationScope(
-                            selectedNotificationScope?.id !== s.id ? s : null
-                          );
+                          setSelectedNotificationScope(selectedNotificationScope?.id !== s.id ? s : null);
                         }}
                         onDelete={() => {
                           fetchClubNotificationScopesAndNotifications();
@@ -133,21 +131,18 @@ const PageNotificationClub: React.FC<PageNotificationClubProps> = (props) => {
                   </div>
                 )}
               />
-            </div>
-          </div>
+            }
+          />
 
-          <div className="card d-flex flex-column flex-md-grow-1 m-2 p-3 pt-2">
-            <div className="d-flex flex-row mb-2">
-              <h4 className="flex-grow-1">Notifications</h4>
-            </div>
-
-            <div className="d-flex flex-fill overflow-auto">
+          <BoxCard
+            className="flex-md-grow-1"
+            title={"Notifications"}
+            contentClassName={"overflow-auto"}
+            content={
               <UtilConditionalRender
                 value={notifications}
                 renderUndefined={() => <LoadingSquare />}
-                renderEmpty={() => (
-                  <BoxMessage content={"No notification found"} />
-                )}
+                renderEmpty={() => <BoxMessage content={"No notification found"} />}
                 renderOk={() => (
                   <div className="d-flex flex-column flex-fill height-md-0">
                     {notifications.map((n) => (
@@ -156,9 +151,7 @@ const PageNotificationClub: React.FC<PageNotificationClubProps> = (props) => {
                         item={n}
                         isSelected={selectedNotification?.id === n.id}
                         onSelect={(n) => {
-                          setSelectedNotification(
-                            selectedNotification?.id !== n.id ? n : null
-                          );
+                          setSelectedNotification(selectedNotification?.id !== n.id ? n : null);
                         }}
                       />
                     ))}
@@ -167,9 +160,7 @@ const PageNotificationClub: React.FC<PageNotificationClubProps> = (props) => {
                       <div className="d-flex justify-content-start">
                         <button
                           className="btn btn-sm btn-link"
-                          onClick={() =>
-                            fetchNotificationsOfClubNotificationScope()
-                          }
+                          onClick={() => fetchNotificationsOfClubNotificationScope()}
                         >
                           Load more
                         </button>
@@ -178,10 +169,10 @@ const PageNotificationClub: React.FC<PageNotificationClubProps> = (props) => {
                   </div>
                 )}
               />
-            </div>
-          </div>
+            }
+          />
         </div>
-      </div>{" "}
+      </div>
     </div>
   );
 };

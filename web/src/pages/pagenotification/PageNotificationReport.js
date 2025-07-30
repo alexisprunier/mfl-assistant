@@ -1,27 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { NotificationManager as nm } from "react-notifications";
-import ButtonLogin from "components/buttons/ButtonLogin.js";
-import BoxLogin from "components/box/BoxLogin.js";
 import LoadingSquare from "components/loading/LoadingSquare.js";
-import BoxMessage from "components/box/BoxMessage.js";
-import UtilConditionalRender from "components/utils/UtilConditionalRender.js";
-import PopupNotificationScope from "components/popups/PopupNotificationScope.js";
-import ItemNotificationScope from "components/items/ItemNotificationScope.js";
-import ItemNotification from "components/items/ItemNotification.js";
-import ItemPlayer from "components/items/ItemPlayer.js";
+import React, { useEffect, useState } from "react";
+import { NotificationManager as nm } from "react-notifications";
 import {
-  getReportConfigurations,
   addReportConfiguration,
   deleteReportConfiguration,
+  getReportConfigurations,
   updateReportConfiguration,
 } from "services/api-assistant.js";
-import { validateEmail } from "utils/re.js";
+import BoxCard from "components/box/BoxCard.js";
 
 interface PageNotificationReportProps {}
 
-const PageNotificationReport: React.FC<PageNotificationReportProps> = (
-  props
-) => {
+const PageNotificationReport: React.FC<PageNotificationReportProps> = (props) => {
   const [reportConfigurations, setReportConfigurations] = useState(null);
 
   const fetchReportConfigurations = () => {
@@ -90,64 +80,51 @@ const PageNotificationReport: React.FC<PageNotificationReportProps> = (
   return (
     <div id="PageNotificationReport" className="h-100 w-100">
       <div className="container max-width-md h-100 px-2 px-md-4 py-4">
-        <div className="d-flex flex-column h-100 w-100 fade-in">
-          <div className="card d-flex flex-column flex-md-grow-0 m-2 p-3 pt-2">
-            <div className="d-flex flex-row mb-2">
-              <h4 className="flex-grow-1">Daily report</h4>
-            </div>
-
-            <div className="d-flex">
-              {reportConfigurations !== null ? (
-                <div>
-                  <input
-                    type="checkbox"
-                    className="me-1 mb-2"
-                    defaultChecked={
-                      reportConfigurations.filter(
-                        (c) => c.type === "daily_progress_report"
-                      ).length > 0
-                    }
-                    onClick={() =>
-                      addOrDeleteReportConfiguration(
-                        reportConfigurations
-                          .filter((c) => c.type === "daily_progress_report")
-                          .pop()
-                      )
-                    }
-                  />
-                  &nbsp;Activate the 24H progression report
-                  {reportConfigurations.filter(
-                    (c) => c.type === "daily_progress_report"
-                  ).length > 0 && (
-                    <div className="ms-4 fade-in">
-                      Choose time (UTC):{" "}
-                      <input
-                        type="time"
-                        className="form-control"
-                        defaultValue={
-                          reportConfigurations
-                            .filter((c) => c.type === "daily_progress_report")
-                            .pop().time
-                        }
-                        onBlur={(v) =>
-                          modifyReportConfiguration(
-                            reportConfigurations
-                              .filter((c) => c.type === "daily_progress_report")
-                              .pop().id,
-                            { time: v.target.value }
-                          )
-                        }
-                      />
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <div className="w-100" style={{ height: "300px" }}>
-                  <LoadingSquare />
-                </div>
-              )}
-            </div>
-          </div>
+        <div className="d-flex flex-column h-100 w-100">
+          <BoxCard
+            title={"Daily report"}
+            content={
+              <div className="d-flex">
+                {reportConfigurations !== null ? (
+                  <div>
+                    <input
+                      type="checkbox"
+                      className="me-1 mb-2"
+                      defaultChecked={reportConfigurations.filter((c) => c.type === "daily_progress_report").length > 0}
+                      onClick={() =>
+                        addOrDeleteReportConfiguration(
+                          reportConfigurations.filter((c) => c.type === "daily_progress_report").pop()
+                        )
+                      }
+                    />
+                    &nbsp;Activate the 24H progression report
+                    {reportConfigurations.filter((c) => c.type === "daily_progress_report").length > 0 && (
+                      <div className="ms-4">
+                        Choose time (UTC):{" "}
+                        <input
+                          type="time"
+                          className="form-control"
+                          defaultValue={
+                            reportConfigurations.filter((c) => c.type === "daily_progress_report").pop().time
+                          }
+                          onBlur={(v) =>
+                            modifyReportConfiguration(
+                              reportConfigurations.filter((c) => c.type === "daily_progress_report").pop().id,
+                              { time: v.target.value }
+                            )
+                          }
+                        />
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="w-100" style={{ height: "300px" }}>
+                    <LoadingSquare />
+                  </div>
+                )}
+              </div>
+            }
+          />
         </div>
       </div>
     </div>

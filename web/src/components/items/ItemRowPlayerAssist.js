@@ -2,11 +2,7 @@ import React from "react";
 import "./Item.css";
 import MiscOverall from "components/misc/MiscOverall.js";
 import LoadingSquare from "components/loading/LoadingSquare";
-import {
-  positions,
-  getCalculatedOverall,
-  getOverallTag,
-} from "utils/player.js";
+import { positions, getCalculatedOverall, getOverallTag } from "utils/player.js";
 import PopupInformationPricing from "components/popups/PopupInformationPricing";
 import PopupPlayer from "components/popups/PopupPlayer";
 
@@ -55,18 +51,10 @@ const ItemRowPlayerAssist: React.FC<ItemRowPlayerAssistProps> = ({
   };
 
   return (
-    <div
-      className={
-        "Item d-flex flex-row flex-fill " + (isSelected ? "selected" : "")
-      }
-    >
+    <div className={"Item d-flex flex-row flex-fill " + (isSelected ? "selected" : "")}>
       {selectable && (
         <div className="d-flex me-1">
-          <input
-            type="checkbox"
-            defaultChecked={isSelected}
-            onChange={() => (onSelect ? onSelect(p) : undefined)}
-          />
+          <input type="checkbox" defaultChecked={isSelected} onChange={() => (onSelect ? onSelect(p) : undefined)} />
         </div>
       )}
       <PopupPlayer
@@ -87,9 +75,7 @@ const ItemRowPlayerAssist: React.FC<ItemRowPlayerAssistProps> = ({
                 <MiscOverall player={p} />
               </div>
 
-              <div className="d-flex flex-basis-120">
-                {p.positions.join(", ")}
-              </div>
+              <div className="d-flex flex-basis-120">{p.positions.join(", ")}</div>
             </div>
 
             <div className="d-flex flex-md-grow-1">
@@ -122,22 +108,22 @@ const ItemRowPlayerAssist: React.FC<ItemRowPlayerAssistProps> = ({
               {display === "stats" && (
                 <div className="d-flex flex-grow-1">
                   <div className={"me-1"}>
-                    <div className={"d-inline-block"} style={{ width: "35px" }}>
+                    <div className={"d-inline-block"} style={{ width: "38px" }}>
                       P: {getOverallTag(p.pace)}
                     </div>
-                    <div className={"d-inline-block"} style={{ width: "35px" }}>
+                    <div className={"d-inline-block"} style={{ width: "38px" }}>
                       D: {getOverallTag(p.dribbling)}
                     </div>
-                    <div className={"d-inline-block"} style={{ width: "35px" }}>
+                    <div className={"d-inline-block"} style={{ width: "38px" }}>
                       P: {getOverallTag(p.passing)}
                     </div>
-                    <div className={"d-inline-block"} style={{ width: "35px" }}>
+                    <div className={"d-inline-block"} style={{ width: "38px" }}>
                       S: {getOverallTag(p.shooting)}
                     </div>
-                    <div className={"d-inline-block"} style={{ width: "35px" }}>
+                    <div className={"d-inline-block"} style={{ width: "38px" }}>
                       D: {getOverallTag(p.defense)}
                     </div>
-                    <div className={"d-inline-block"} style={{ width: "35px" }}>
+                    <div className={"d-inline-block"} style={{ width: "38px" }}>
                       P: {getOverallTag(p.physical)}
                     </div>
                   </div>
@@ -148,16 +134,10 @@ const ItemRowPlayerAssist: React.FC<ItemRowPlayerAssistProps> = ({
                 <div className="d-flex flex-grow-1">
                   {getOVRs().map((o) => (
                     <div className={"me-1"}>
-                      <div
-                        className={"d-inline-block"}
-                        style={{ width: "35px" }}
-                      >
+                      <div className={"d-inline-block"} style={{ width: "38px" }}>
                         {o.pos}:
                       </div>
-                      <div
-                        className={"d-inline-block"}
-                        style={{ width: "40px" }}
-                      >
+                      <div className={"d-inline-block"} style={{ width: "40px" }}>
                         {getOverallTag(o.ovr)}
                         <small>{getDiff(o.diff)}</small>
                       </div>

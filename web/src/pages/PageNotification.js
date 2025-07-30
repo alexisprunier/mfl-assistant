@@ -54,7 +54,7 @@ const PageNotification: React.FC<PageNotificationProps> = (props) => {
 
       {props.assistantUser && !props.assistantUser.email && (
         <div className="d-flex h-100 justify-content-center align-items-center">
-          <div className="fade-in">
+          <div>
             <div className="card px-4 py-2">
               <div className="my-1">Please provide your email:</div>
 
@@ -83,76 +83,65 @@ const PageNotification: React.FC<PageNotificationProps> = (props) => {
         </div>
       )}
 
-      {props.assistantUser &&
-        props.assistantUser.email &&
-        !props.assistantUser.isEmailConfirmed && (
-          <div className="d-flex h-100 justify-content-center align-items-center">
-            <div className="fade-in">
-              <div className="card px-4 py-2" style={{ maxWidth: "400px" }}>
-                <div className="my-1">
-                  Please confirm your address by clicking the confirmation link
-                  received via email:
-                </div>
+      {props.assistantUser && props.assistantUser.email && !props.assistantUser.isEmailConfirmed && (
+        <div className="d-flex h-100 justify-content-center align-items-center">
+          <div>
+            <div className="card px-4 py-2" style={{ maxWidth: "400px" }}>
+              <div className="my-1">
+                Please confirm your address by clicking the confirmation link received via email:
+              </div>
 
-                <div className="my-1">
-                  <input
-                    type="email"
-                    className="form-control w-100 text-white"
-                    value={props.assistantUser.email}
-                    disabled={true}
-                  />
-                </div>
+              <div className="my-1">
+                <input
+                  type="email"
+                  className="form-control w-100 text-white"
+                  value={props.assistantUser.email}
+                  disabled={true}
+                />
+              </div>
 
-                <div className="my-3">
-                  Once done, you can refresh this page.
-                </div>
+              <div className="my-3">Once done, you can refresh this page.</div>
 
-                <div className="d-flex justify-content-end my-1">
-                  <button
-                    className="d-block btn btn-danger btn-sm text-white me-1"
-                    onClick={() => props.updateAssistantUser(null)}
-                  >
-                    <i className="bi bi-trash3"></i> Delete email
-                  </button>
+              <div className="d-flex justify-content-end my-1">
+                <button
+                  className="d-block btn btn-danger btn-sm text-white me-1"
+                  onClick={() => props.updateAssistantUser(null)}
+                >
+                  <i className="bi bi-trash3"></i> Delete email
+                </button>
 
-                  <button
-                    className="d-block btn btn-info btn-sm text-white"
-                    onClick={() =>
-                      sendConfirmationMail({
-                        handleSuccess: (v) =>
-                          nm.info(
-                            "The confirmation link has been sent via email"
-                          ),
-                        handleError: (v) =>
-                          nm.error("Error while sending the email"),
-                        params: {
-                          address: props.assistantUser.address,
-                          email: props.assistantUser.email,
-                        },
-                      })
-                    }
-                  >
-                    <i className="bi bi-envelope-arrow-up-fill"></i> Send new
-                    confirmation link
-                  </button>
-                </div>
+                <button
+                  className="d-block btn btn-info btn-sm text-white"
+                  onClick={() =>
+                    sendConfirmationMail({
+                      handleSuccess: (v) => nm.info("The confirmation link has been sent via email"),
+                      handleError: (v) => nm.error("Error while sending the email"),
+                      params: {
+                        address: props.assistantUser.address,
+                        email: props.assistantUser.email,
+                      },
+                    })
+                  }
+                >
+                  <i className="bi bi-envelope-arrow-up-fill"></i> Send new confirmation link
+                </button>
               </div>
             </div>
           </div>
-        )}
+        </div>
+      )}
 
-      {props.assistantUser &&
-        props.assistantUser.email &&
-        props.assistantUser.isEmailConfirmed && (
-          <div className="d-flex flex-column w-100 h-100">
-            <div className="flex-grow-0">
-              <MenuPageNotification user={user} {...props} />
-            </div>
-            <div className="flex-grow-1">
-              <Outlet context={user} />
-            </div>
+      {props.assistantUser && props.assistantUser.email && props.assistantUser.isEmailConfirmed && (
+        <div className="d-flex flex-column w-100 h-100">
+          <div className="flex-shrink-0">
+            <MenuPageNotification user={user} {...props} />
           </div>
-        )}
+
+          <div className="flex-grow-1 overflow-auto">
+            <Outlet context={user} />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -51,10 +51,11 @@ const PageUser: React.FC<PageUserProps> = (props) => {
       {props.yScrollPosition > 100 && <BoxScrollUp />}
 
       <div className="d-flex flex-column w-100 h-100">
-        <div className="flex-grow-0">
+        <div className="flex-shrink-0">
           <MenuPageUser user={user} {...props} />
         </div>
-        <div className="flex-grow-1">
+
+        <div className="flex-grow-1 overflow-auto">
           <Outlet context={user} />
         </div>
       </div>

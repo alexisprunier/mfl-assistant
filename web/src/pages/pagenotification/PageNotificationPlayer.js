@@ -4,21 +4,16 @@ import ItemNotificationScope from "components/items/ItemNotificationScope.js";
 import LoadingSquare from "components/loading/LoadingSquare.js";
 import PopupNotificationScope from "components/popups/PopupNotificationScope.js";
 import UtilConditionalRender from "components/utils/UtilConditionalRender.js";
+import BoxCard from "components/box/BoxCard.js";
 import React, { useEffect, useState } from "react";
-import {
-  getNotificationScopesAndNotifications,
-  getNotificationsOfNotificationScope,
-} from "services/api-assistant.js";
+import { getNotificationScopesAndNotifications, getNotificationsOfNotificationScope } from "services/api-assistant.js";
 
 interface PageNotificationMarketplaceProps {}
 
-const PageNotificationMarketplace: React.FC<
-  PageNotificationMarketplaceProps
-> = (props) => {
+const PageNotificationMarketplace: React.FC<PageNotificationMarketplaceProps> = (props) => {
   const [notificationScopes, setNotificationScopes] = useState(null);
   const [notifications, setNotifications] = useState(null);
-  const [selectedNotificationScope, setSelectedNotificationScope] =
-    useState(null);
+  const [selectedNotificationScope, setSelectedNotificationScope] = useState(null);
   const [selectedNotification, setSelectedNotification] = useState(null);
   const [skip, setSkip] = useState(0);
 
@@ -73,12 +68,13 @@ const PageNotificationMarketplace: React.FC<
   return (
     <div id="PageNotificationMarketplace" className="h-100 w-100">
       <div className="container max-width-md h-100 px-2 px-md-4 py-4">
-        <div className="d-flex flex-column h-100 w-100 fade-in">
-          <div className="card d-flex flex-column flex-md-grow-0 m-2 p-3 pt-2 flex-basis-200">
-            <div className="d-flex flex-row mb-2">
-              <h4 className="flex-grow-1">Notification scopes</h4>
-
-              {notificationScopes?.length > 0 && (
+        <div className="d-flex flex-column h-100 w-100">
+          <BoxCard
+            className="flex-md-grow-0 flex-basis-200"
+            title={"Notification scopes"}
+            contentClassName={"overflow-auto"}
+            actions={
+              notificationScopes?.length > 0 && (
                 <PopupNotificationScope
                   trigger={
                     <button className="btn btn-info btn-sm text-white">
@@ -88,10 +84,9 @@ const PageNotificationMarketplace: React.FC<
                   assistantUser={props.assistantUser}
                   onClose={fetchNotificationScopesAndNotifications}
                 />
-              )}
-            </div>
-
-            <div className="d-flex flex-fill overflow-auto">
+              )
+            }
+            content={
               <UtilConditionalRender
                 value={notificationScopes}
                 renderUndefined={() => <LoadingSquare />}
@@ -121,9 +116,7 @@ const PageNotificationMarketplace: React.FC<
                         item={s}
                         isSelected={selectedNotificationScope?.id === s.id}
                         onSelect={(s) => {
-                          setSelectedNotificationScope(
-                            selectedNotificationScope?.id !== s.id ? s : null
-                          );
+                          setSelectedNotificationScope(selectedNotificationScope?.id !== s.id ? s : null);
                         }}
                         onDelete={() => {
                           fetchNotificationScopesAndNotifications();
@@ -135,21 +128,18 @@ const PageNotificationMarketplace: React.FC<
                   </div>
                 )}
               />
-            </div>
-          </div>
+            }
+          />
 
-          <div className="card d-flex flex-column flex-md-grow-1 m-2 p-3 pt-2">
-            <div className="d-flex flex-row mb-2">
-              <h4 className="flex-grow-1">Notifications</h4>
-            </div>
-
-            <div className="d-flex flex-fill overflow-auto">
+          <BoxCard
+            className="flex-md-grow-1"
+            title={"Notifications"}
+            contentClassName={"overflow-auto"}
+            content={
               <UtilConditionalRender
                 value={notifications}
                 renderUndefined={() => <LoadingSquare />}
-                renderEmpty={() => (
-                  <BoxMessage content={"No notification found"} />
-                )}
+                renderEmpty={() => <BoxMessage content={"No notification found"} />}
                 renderOk={() => (
                   <div className="d-flex flex-column flex-fill height-md-0">
                     {notifications.map((n) => (
@@ -158,21 +148,14 @@ const PageNotificationMarketplace: React.FC<
                         item={n}
                         isSelected={selectedNotification?.id === n.id}
                         onSelect={(n) => {
-                          setSelectedNotification(
-                            selectedNotification?.id !== n.id ? n : null
-                          );
+                          setSelectedNotification(selectedNotification?.id !== n.id ? n : null);
                         }}
                       />
                     ))}
 
                     {notifications && (
                       <div className="d-flex justify-content-start">
-                        <button
-                          className="btn btn-sm btn-link"
-                          onClick={() =>
-                            fetchNotificationsOfNotificationScope()
-                          }
-                        >
+                        <button className="btn btn-sm btn-link" onClick={() => fetchNotificationsOfNotificationScope()}>
                           Load more
                         </button>
                       </div>
@@ -180,10 +163,10 @@ const PageNotificationMarketplace: React.FC<
                   </div>
                 )}
               />
-            </div>
-          </div>
+            }
+          />
         </div>
-      </div>{" "}
+      </div>
     </div>
   );
 };

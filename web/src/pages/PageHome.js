@@ -386,7 +386,7 @@ const PageHome: React.FC<PageHomeProps> = ({
             </div>
           </div>
           <div className="d-flex flex-column flex-grow-1 flex-lg-basis-50p py-lg-3 pe-lg-3" style={{ minWidth: "0" }}>
-            <BoxCard className="d-flex flex-fill" content={"hello"} />
+            <BoxCard className="d-flex flex-fill" content={"Soon to come..."} />
           </div>
         </div>
       </div>

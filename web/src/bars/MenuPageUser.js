@@ -20,14 +20,13 @@ const MenuPageUser: React.FC<MenuPageUserProps> = (props) => {
 
   return (
     <div>
-      <div id="MenuPageUser" className="navbar d-md-none w-100 p-2 pb-0">
-        <Link className={"nav-link nav-user border px-2"}>
-          <i className="bi bi-person-fill me-1"></i>
-          <span className="d-none d-md-inline ms-1">{props.user?.name ? props.user.name : <LoadingSquare />}</span>
-        </Link>
-      </div>
-
       <nav id="MenuPageUser" className="MenuTop navbar justify-content-center justify-content-md-start w-100 p-2">
+        <div id="MenuPageUser" className="navbar d-md-none w-100 p-2 pb-0 justify-content-center">
+          <Link className={"nav-link nav-user border px-2"}>
+            <i className="bi bi-person-fill me-1"></i>
+            <span className="d-none d-md-inline ms-1">{props.user?.name ? props.user.name : <LoadingSquare />}</span>
+          </Link>
+        </div>
         <ul className="navbar-nav flex-row h6 ps-md-3">
           <li className="nav-item align-self-end lh-1 px-2 d-md-block d-none">
             <Link className={"nav-link nav-user border px-3"}>

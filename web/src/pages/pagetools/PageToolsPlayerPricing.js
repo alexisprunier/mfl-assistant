@@ -1,15 +1,15 @@
+import BoxCard from "components/box/BoxCard.js";
 import BoxMessage from "components/box/BoxMessage.js";
 import ChartScatterPlayerSales from "components/charts/ChartScatterPlayerSales.js";
 import ItemRowPlayerAssist from "components/items/ItemRowPlayerAssist.js";
 import ItemSale from "components/items/ItemSale.js";
 import LoadingSquare from "components/loading/LoadingSquare.js";
-import BoxCard from "components/box/BoxCard.js";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { getPlayerSales } from "services/api-assistant.js";
 import { getPlayerListings } from "services/api-mfl.js";
 import { copyTextToClipboard } from "utils/clipboard.js";
-import { positions, scarcity } from "utils/player.js";
+import { positions } from "utils/player.js";
 import { convertDictToUrlParams } from "utils/url.js";
 
 interface PageToolsPlayerPricingProps {}
@@ -186,12 +186,12 @@ const PageToolsPlayerPricing: React.FC<PageToolsPlayerPricingProps> = () => {
   return (
     <div id="PageToolsPlayerPricing" className="h-100 w-100">
       <div className="container-xl h-100 px-2 px-md-4 py-4">
-        <div className="d-flex flex-column flex-md-row h-100 w-100 fade-in">
+        <div className="d-flex flex-column flex-md-row h-100 w-100">
           <div className="d-flex flex-column flex-md-grow-0 flex-md-basis-300">
             <BoxCard
               title={"Player profile"}
               actions={
-                <div>
+                <div className="d-flex flex-row">
                   {(position || age || minAge || maxAge || overall || minOverall || maxOverall) && (
                     <div className="flex-glow-0">
                       <button
@@ -230,6 +230,7 @@ const PageToolsPlayerPricing: React.FC<PageToolsPlayerPricingProps> = () => {
                         value={overall}
                         onChange={(v) => setOverall(parseInt(v.target.value))}
                         placeholder={"OVR"}
+                        autoFocus
                       />
                       <input
                         type="number"
@@ -346,12 +347,10 @@ const PageToolsPlayerPricing: React.FC<PageToolsPlayerPricingProps> = () => {
           </div>
 
           <div className="d-flex flex-column flex-md-column flex-md-grow-1">
-            <div className="card d-flex flex-column flex-md-grow-1 flex-md-shrink-1 flex-md-basis-auto flex-basis-0 m-2 p-3 pt-2">
-              <div className="d-flex flex-row">
-                <div className="d-flex">
-                  <h4 className="flex-grow-1">Player sales</h4>
-                </div>
-
+            <BoxCard
+              className="flex-md-grow-1 flex-md-shrink-1 flex-md-basis-auto flex-basis-0"
+              title={"Player sales"}
+              actions={
                 <div className="d-flex flex-fill overflow-auto justify-content-end align-items-center">
                   <small className="me-md-3">
                     Hide &le; 1$
@@ -411,54 +410,54 @@ const PageToolsPlayerPricing: React.FC<PageToolsPlayerPricingProps> = () => {
                     Marketplace <i class="bi bi-caret-right-fill text-white"></i>
                   </button>
                 </div>
-              </div>
-
-              <div className="d-flex flex-fill overflow-hidden">
+              }
+              content={
                 <div className="d-flex flex-fill overflow-hidden">
-                  {!sales && !isLoading ? (
-                    <BoxMessage content="No selection" />
-                  ) : (
-                    <ChartScatterPlayerSales
-                      sales={sales}
-                      timeUnit={timeUnit}
-                      hideOneAndLower={hideOneAndLower}
-                      floor={playerListings?.[0]?.price}
-                    />
-                  )}
+                  <div className="d-flex flex-fill overflow-hidden">
+                    {!sales && !isLoading ? (
+                      <BoxMessage content="No selection" />
+                    ) : (
+                      <ChartScatterPlayerSales
+                        sales={sales}
+                        timeUnit={timeUnit}
+                        hideOneAndLower={hideOneAndLower}
+                        floor={playerListings?.[0]?.price}
+                      />
+                    )}
+                  </div>
                 </div>
-              </div>
-            </div>
+              }
+            />
 
-            <div className="card d-flex flex-column flex-md-grow-1 flex-md-shrink-1 flex-md-basis-auto flex-basis-0 m-2 p-3 pt-2 max-height-md-200">
-              <div className="d-flex flex-row flex-md-grow-0">
-                <div className="d-flex">
-                  <h4 className="flex-grow-1">Player list</h4>
+            <BoxCard
+              className="flex-md-grow-1 flex-md-shrink-1 flex-md-basis-auto flex-basis-0 max-height-md-200"
+              title={"Player list"}
+              contentClassName={"overflow-auto"}
+              content={
+                <div className="d-flex flex-fill h-100 flex-column overflow-auto">
+                  {!sales && !isLoading && <BoxMessage className={"py-4 py-md-0"} content={"No selection"} />}
+
+                  {isLoading && <LoadingSquare />}
+
+                  {sales?.length === 0 && <BoxMessage className={"py-4 py-md-0"} content={"No sales found"} />}
+
+                  {sales &&
+                    !isLoading &&
+                    sales
+                      .sort((a, b) => b.executionDate.localeCompare(a.executionDate))
+                      .map((p) => (
+                        <div className="Item d-flex flex-column">
+                          <div className="d-flex flex-grow-1 me-1">
+                            <ItemSale s={p} />
+                          </div>
+                          <div className="d-flex flex-grow-1 me-1">
+                            <ItemRowPlayerAssist p={p.player} />
+                          </div>
+                        </div>
+                      ))}
                 </div>
-              </div>
-
-              <div className="d-flex flex-fill flex-column overflow-auto">
-                {!sales && !isLoading && <BoxMessage className={"py-4 py-md-0"} content={"No selection"} />}
-
-                {isLoading && <LoadingSquare />}
-
-                {sales?.length === 0 && <BoxMessage className={"py-4 py-md-0"} content={"No sales found"} />}
-
-                {sales &&
-                  !isLoading &&
-                  sales
-                    .sort((a, b) => b.executionDate.localeCompare(a.executionDate))
-                    .map((p) => (
-                      <div className="d-flex flex-column">
-                        <div className="d-flex flex-grow-1 me-1">
-                          <ItemSale s={p} />
-                        </div>
-                        <div className="d-flex flex-grow-1 me-1">
-                          <ItemRowPlayerAssist p={p.player} />
-                        </div>
-                      </div>
-                    ))}
-              </div>
-            </div>
+              }
+            />
           </div>
         </div>
       </div>

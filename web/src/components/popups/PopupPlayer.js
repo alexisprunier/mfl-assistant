@@ -1,16 +1,14 @@
-import React, { useState, useEffect } from "react";
-import Popup from "reactjs-popup";
-import ButtonMflPlayerInfo from "components/buttons/ButtonMflPlayerInfo.js";
-import ButtonMflPlayer from "components/buttons/ButtonMflPlayer.js";
 import BoxCard from "components/box/BoxCard.js";
-import { getPlayerPricingHistory } from "services/api-assistant.js";
 import ChartLinePricingHistory from "components/charts/ChartLinePricingHistory.js";
 import LoadingSquare from "components/loading/LoadingSquare.js";
-import PopupInformationPricing from "components/popups/PopupInformationPricing.js";
-import { useNavigate } from "react-router-dom";
 import MiscOverallField from "components/misc/MiscOverallField.js";
+import PopupInformationPricing from "components/popups/PopupInformationPricing.js";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Popup from "reactjs-popup";
+import { getPlayerPricingHistory } from "services/api-assistant.js";
 
-import { positions, getCalculatedOverall, getOverallTag } from "utils/player.js";
+import { getCalculatedOverall, getOverallTag, positions } from "utils/player.js";
 
 interface PopupPlayerProps {
   className: String;

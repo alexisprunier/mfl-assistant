@@ -8,13 +8,9 @@ interface ItemCardMatchReportProps {
   loading: Boolean;
 }
 
-const ItemCardMatchReport: React.FC<ItemCardMatchReportProps> = ({
-  title,
-  report,
-  loading,
-}) => {
+const ItemCardMatchReport: React.FC<ItemCardMatchReportProps> = ({ title, report, loading }) => {
   return (
-    <div className="card d-flex flex-column m-2 p-3 pt-2 fade-in">
+    <div className="card d-flex flex-column m-2 p-3 pt-2">
       <div className="d-flex flex-row">
         <div className="d-flex">
           <h4 className="flex-grow-1">{title}</h4>
@@ -32,30 +28,20 @@ const ItemCardMatchReport: React.FC<ItemCardMatchReportProps> = ({
             <div className="col-4 text-center">My club</div>
             <div className="col-4 text-center">Opponent</div>
 
-            <div className="col-12 text-white border-bottom mt-2 mb-1">
-              General
-            </div>
+            <div className="col-12 text-white border-bottom mt-2 mb-1">General</div>
 
             <div className="col-4">Average rating</div>
-            <div className="col-4 text-center">
-              {report?.myClub?.rating.toFixed(2)}
-            </div>
-            <div className="col-4 text-center">
-              {report?.opponent?.rating.toFixed(2)}
-            </div>
+            <div className="col-4 text-center">{report?.myClub?.rating.toFixed(2)}</div>
+            <div className="col-4 text-center">{report?.opponent?.rating.toFixed(2)}</div>
 
-            <div className="col-12 text-white border-bottom mt-2 mb-1">
-              Attack
-            </div>
+            <div className="col-12 text-white border-bottom mt-2 mb-1">Attack</div>
 
             <div className="col-4">Goals (xG)</div>
             <div className="col-4 text-center">
-              {report?.myClub?.goals + report?.opponent?.ownGoals} (
-              {report?.myClub?.xG.toFixed(2)})
+              {report?.myClub?.goals + report?.opponent?.ownGoals} ({report?.myClub?.xG.toFixed(2)})
             </div>
             <div className="col-4 text-center">
-              {report?.opponent?.goals + report?.myClub?.ownGoals} (
-              {report?.opponent?.xG.toFixed(2)})
+              {report?.opponent?.goals + report?.myClub?.ownGoals} ({report?.opponent?.xG.toFixed(2)})
             </div>
 
             <div className="col-4">Shots (on target)</div>
@@ -71,24 +57,14 @@ const ItemCardMatchReport: React.FC<ItemCardMatchReportProps> = ({
             <div className="col-4 text-center">{report?.opponent?.assists}</div>
 
             <div className="col-4">Fouls suff.</div>
-            <div className="col-4 text-center">
-              {report?.myClub?.foulsSuffered}
-            </div>
-            <div className="col-4 text-center">
-              {report?.opponent?.foulsSuffered}
-            </div>
+            <div className="col-4 text-center">{report?.myClub?.foulsSuffered}</div>
+            <div className="col-4 text-center">{report?.opponent?.foulsSuffered}</div>
 
-            <div className="col-12 text-white border-bottom mt-2 mb-1">
-              Creation
-            </div>
+            <div className="col-12 text-white border-bottom mt-2 mb-1">Creation</div>
 
             <div className="col-4">Successful dribbles</div>
-            <div className="col-4 text-center">
-              {report?.myClub?.dribblingSuccess}
-            </div>
-            <div className="col-4 text-center">
-              {report?.opponent?.dribblingSuccess}
-            </div>
+            <div className="col-4 text-center">{report?.myClub?.dribblingSuccess}</div>
+            <div className="col-4 text-center">{report?.opponent?.dribblingSuccess}</div>
 
             <div className="col-4">Crosses (accurate)</div>
             <div className="col-4 text-center">
@@ -106,15 +82,11 @@ const ItemCardMatchReport: React.FC<ItemCardMatchReportProps> = ({
               {report?.opponent?.passes} ({report?.opponent?.passesAccurate})
             </div>
 
-            <div className="col-12 text-white border-bottom mt-2 mb-1">
-              Defense
-            </div>
+            <div className="col-12 text-white border-bottom mt-2 mb-1">Defense</div>
 
             <div className="col-4">Own goals</div>
             <div className="col-4 text-center">{report?.myClub?.ownGoals}</div>
-            <div className="col-4 text-center">
-              {report?.opponent?.ownGoals}
-            </div>
+            <div className="col-4 text-center">{report?.opponent?.ownGoals}</div>
 
             <div className="col-4">GK saves</div>
             <div className="col-4 text-center">{report?.myClub?.saves}</div>
@@ -129,12 +101,8 @@ const ItemCardMatchReport: React.FC<ItemCardMatchReportProps> = ({
             </div>
 
             <div className="col-4">Fouls comm.</div>
-            <div className="col-4 text-center">
-              {report?.myClub?.foulsCommitted}
-            </div>
-            <div className="col-4 text-center">
-              {report?.opponent?.foulsCommitted}
-            </div>
+            <div className="col-4 text-center">{report?.myClub?.foulsCommitted}</div>
+            <div className="col-4 text-center">{report?.opponent?.foulsCommitted}</div>
           </div>
         )}
       </div>

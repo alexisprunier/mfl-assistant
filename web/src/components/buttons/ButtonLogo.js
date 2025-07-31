@@ -20,7 +20,7 @@ const ButtonLogo: React.FC<ButtonLogoProps> = (props) => {
         className={"fade-in popup-md"}
       >
         {(close) => (
-          <div className="container bg-dark overflow-auto border border-3 rounded-3 p-4">
+          <div>
             <div className="d-flex flex-column flex-md-row flex-fill">
               <div className="d-flex flex-grow-1 flex-basis-0 mb-4 mb-md-0">
                 <div className="d-flex flex-column align-items-center position-relative">

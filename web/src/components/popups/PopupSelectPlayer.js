@@ -10,12 +10,7 @@ interface PopupSelectPlayerProps {
   teamMembers: Object;
 }
 
-const PopupSelectPlayer: React.FC<PopupSelectPlayerProps> = ({
-  trigger,
-  onClose,
-  onConfirm,
-  teamMembers,
-}) => {
+const PopupSelectPlayer: React.FC<PopupSelectPlayerProps> = ({ trigger, onClose, onConfirm, teamMembers }) => {
   const [selectedTeamMember, setSelectedTeamMember] = useState(null);
 
   const confirm = (close) => {
@@ -28,15 +23,9 @@ const PopupSelectPlayer: React.FC<PopupSelectPlayerProps> = ({
 
   return (
     <div className="PopupSelectPlayer">
-      <Popup
-        trigger={trigger}
-        modal
-        closeOnDocumentClick
-        onClose={onClose && onClose()}
-        className={"fade-in popup-xl"}
-      >
+      <Popup trigger={trigger} modal closeOnDocumentClick onClose={onClose && onClose()} className={"fade-in popup-xl"}>
         {(close) => (
-          <div className="container bg-dark d-flex flex-column border border-3 rounded-3 p-4">
+          <div>
             <div className="d-flex flex-row flex-grow-0 mb-3">
               <div className="flex-grow-1">
                 <h2 className="text-white">Select team member</h2>
@@ -56,10 +45,7 @@ const PopupSelectPlayer: React.FC<PopupSelectPlayerProps> = ({
                     <ItemRowPlayerAssist
                       p={p.player}
                       selectable={true}
-                      isSelected={
-                        selectedTeamMember &&
-                        selectedTeamMember.player.id === p.player.id
-                      }
+                      isSelected={selectedTeamMember && selectedTeamMember.player.id === p.player.id}
                       onSelect={() => setSelectedTeamMember(p)}
                     />
                   ))

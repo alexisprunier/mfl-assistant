@@ -74,7 +74,7 @@ const PopupPlayer: React.FC<PopupPlayerProps> = ({ className, player, trigger })
         onOpen={fetchPlayerPricingHistory}
       >
         {(close) => (
-          <div className="container bg-dark overflow-auto border border-3 rounded-3 px-2 py-4 px-md-4">
+          <div>
             <div className="d-flex flex-row mb-3">
               <div className="flex-grow-1">
                 <h2 className="text-white">

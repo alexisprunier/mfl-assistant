@@ -1,11 +1,7 @@
 import React, { useState } from "react";
 import { NotificationManager as nm } from "react-notifications";
 import Popup from "reactjs-popup";
-import {
-  addNotificationScope,
-  deleteNotificationScope,
-  getPlayerNationalities,
-} from "services/api-assistant.js";
+import { addNotificationScope, deleteNotificationScope, getPlayerNationalities } from "services/api-assistant.js";
 import { prettifyId } from "utils/graphql.js";
 import { positions as pos } from "utils/player.js";
 
@@ -33,23 +29,15 @@ const PopupNotificationScope: React.FC<PopupNotificationScopeProps> = ({
   const [type, setType] = useState(typeValues[0]);
 
   const [positionList, setPositionList] = useState(pos.map((p) => p.name));
-  const [positions, setPositions] = useState(
-    item?.positions ? item.positions : []
-  );
+  const [positions, setPositions] = useState(item?.positions ? item.positions : []);
   const [primaryPositionOnly, setPrimaryPositionOnly] = useState(
     item?.primaryPositionOnly ? item.primaryPositionOnly : undefined
   );
   const [nationalityList, setNationalityList] = useState([]);
-  const [nationalities, setNationalities] = useState(
-    item?.nationalities ? item.nationalities : []
-  );
+  const [nationalities, setNationalities] = useState(item?.nationalities ? item.nationalities : []);
 
-  const [minPrice, setMinPrice] = useState(
-    item?.minPrice ? item.minPrice : undefined
-  );
-  const [maxPrice, setMaxPrice] = useState(
-    item?.maxPrice ? item.maxPrice : undefined
-  );
+  const [minPrice, setMinPrice] = useState(item?.minPrice ? item.minPrice : undefined);
+  const [maxPrice, setMaxPrice] = useState(item?.maxPrice ? item.maxPrice : undefined);
   const [minAge, setMinAge] = useState(item?.minAge ? item.minAge : undefined);
   const [maxAge, setMaxAge] = useState(item?.maxAge ? item.maxAge : undefined);
   const [minOvr, setMinOvr] = useState(item?.minOvr ? item.minOvr : undefined);
@@ -166,14 +154,10 @@ const PopupNotificationScope: React.FC<PopupNotificationScopeProps> = ({
         className={"fade-in popup-md"}
       >
         {(close) => (
-          <div className="container bg-dark overflow-auto border border-info border-3 rounded-3 p-4">
+          <div>
             <div className="d-flex flex-row mb-3">
               <div className="flex-grow-1">
-                <h2 className="text-white">
-                  {readOnly
-                    ? "Scope " + prettifyId(item.id)
-                    : "Add a new scope"}
-                </h2>
+                <h2 className="text-white">{readOnly ? "Scope " + prettifyId(item.id) : "Add a new scope"}</h2>
               </div>
               <div className="flex-grow-0">
                 <button className={"btn"} onClick={close}>
@@ -183,9 +167,7 @@ const PopupNotificationScope: React.FC<PopupNotificationScopeProps> = ({
             </div>
 
             <div className="d-flex flex-row m-1 mb-3">
-              <div className="flex-grow-1 align-self-center">
-                Type of notification:
-              </div>
+              <div className="flex-grow-1 align-self-center">Type of notification:</div>
               <div className="flex-grow-1 me-1">
                 <select
                   className="form-select"
@@ -224,10 +206,7 @@ const PopupNotificationScope: React.FC<PopupNotificationScopeProps> = ({
 
             <div className="d-flex justify-content-end my-1">
               <div>
-                <button
-                  className="btn btn-sm text-info"
-                  onClick={() => setShowProfileDetail(!showProfileDetail)}
-                >
+                <button className="btn btn-sm text-info" onClick={() => setShowProfileDetail(!showProfileDetail)}>
                   {showProfileDetail ? (
                     <span>
                       <i className="bi bi-dash"></i> Hide profile
@@ -290,9 +269,7 @@ const PopupNotificationScope: React.FC<PopupNotificationScopeProps> = ({
                       className="ms-1"
                       defaultChecked={primaryPositionOnly}
                       value={primaryPositionOnly}
-                      onChange={() =>
-                        setPrimaryPositionOnly(!primaryPositionOnly)
-                      }
+                      onChange={() => setPrimaryPositionOnly(!primaryPositionOnly)}
                     />
                   </small>
                 </div>
@@ -339,10 +316,7 @@ const PopupNotificationScope: React.FC<PopupNotificationScopeProps> = ({
 
             <div className="d-flex justify-content-end my-1">
               <div>
-                <button
-                  className="btn btn-sm text-info"
-                  onClick={() => setShowAttributeDetail(!showAttributeDetail)}
-                >
+                <button className="btn btn-sm text-info" onClick={() => setShowAttributeDetail(!showAttributeDetail)}>
                   {showAttributeDetail ? (
                     <span>
                       <i className="bi bi-dash"></i> Hide attributes
@@ -394,17 +368,11 @@ const PopupNotificationScope: React.FC<PopupNotificationScopeProps> = ({
             <div className="d-flex flex-row justify-content-end mt-3">
               <div>
                 {readOnly ? (
-                  <button
-                    className="btn btn-danger text-white"
-                    onClick={() => deleteScope(close)}
-                  >
+                  <button className="btn btn-danger text-white" onClick={() => deleteScope(close)}>
                     <i className="bi bi-trash3"></i> Delete
                   </button>
                 ) : (
-                  <button
-                    className="btn btn-info text-white"
-                    onClick={() => confirm(close)}
-                  >
+                  <button className="btn btn-info text-white" onClick={() => confirm(close)}>
                     Confirm
                   </button>
                 )}

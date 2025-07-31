@@ -61,7 +61,7 @@ const MenuPageNotification: React.FC<MenuPageNotificationProps> = (props) => {
           className={"fade-in popup-md"}
         >
           {(close) => (
-            <div className="container bg-dark border border-info border-3 rounded-3 p-4">
+            <div>
               <div className="d-flex flex-row mb-2">
                 <div className="flex-grow-1">
                   <h2 className="text-white">Manage email</h2>

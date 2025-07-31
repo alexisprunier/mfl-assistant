@@ -9,25 +9,15 @@ interface PFProps {
   trigger: Object;
 }
 
-const PopupNotification: React.FC<PopupNotificationProps> = ({
-  item,
-  trigger,
-}) => {
+const PopupNotification: React.FC<PopupNotificationProps> = ({ item, trigger }) => {
   return (
     <div className="PopupNotification">
-      <Popup
-        trigger={trigger}
-        modal
-        closeOnDocumentClick
-        className={"fade-in popup-md"}
-      >
+      <Popup trigger={trigger} modal closeOnDocumentClick className={"fade-in popup-md"}>
         {(close) => (
-          <div className="container bg-dark overflow-auto border border-info border-3 rounded-3 p-4">
+          <div>
             <div className="d-flex flex-row mb-3">
               <div className="flex-grow-1">
-                <h2 className="text-white">
-                  Notification {prettifyId(item.id)}
-                </h2>
+                <h2 className="text-white">Notification {prettifyId(item.id)}</h2>
               </div>
               <div className="flex-grow-0">
                 <button className={"btn"} onClick={close}>

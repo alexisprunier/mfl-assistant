@@ -13,12 +13,7 @@ interface PopupPlayersProps {
   open?: Boolean;
 }
 
-const PopupPlayers: React.FC<PopupPlayersProps> = ({
-  trigger,
-  onClose,
-  filters,
-  open,
-}) => {
+const PopupPlayers: React.FC<PopupPlayersProps> = ({ trigger, onClose, filters, open }) => {
   const [players, setPlayers] = useState(null);
   const [playerView, setPlayerView] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -40,9 +35,7 @@ const PopupPlayers: React.FC<PopupPlayersProps> = ({
         if (page === 1) {
           setPlayers(v.data.getPlayers);
         } else {
-          setPlayers(
-            players ? players.concat(v.data.getPlayers) : v.data.getPlayers
-          );
+          setPlayers(players ? players.concat(v.data.getPlayers) : v.data.getPlayers);
         }
 
         setIsLoading(false);
@@ -78,7 +71,7 @@ const PopupPlayers: React.FC<PopupPlayersProps> = ({
         className={"fade-in popup-xl"}
       >
         {(close) => (
-          <div className="container bg-dark d-flex flex-column border border-3 rounded-3 p-4">
+          <div>
             <div className="d-flex flex-row flex-grow-0 mb-3">
               <div className="flex-grow-1">
                 <h2 className="text-white">Players</h2>
@@ -91,10 +84,7 @@ const PopupPlayers: React.FC<PopupPlayersProps> = ({
             </div>
 
             <div className="d-flex flex-grow-0 justify-content-end mb-3">
-              <ButtonPlayerView
-                selectedView={playerView}
-                onChange={(v) => setPlayerView(v)}
-              />
+              <ButtonPlayerView selectedView={playerView} onChange={(v) => setPlayerView(v)} />
             </div>
 
             <div className="d-flex flex-column flex-grow-1 overflow-auto">
@@ -107,9 +97,7 @@ const PopupPlayers: React.FC<PopupPlayersProps> = ({
                     </div>
                   ))}
 
-                {players && players.length === 0 && (
-                  <BoxMessage content={"No player found"} />
-                )}
+                {players && players.length === 0 && <BoxMessage content={"No player found"} />}
 
                 {!players && (
                   <div style={{ height: "200px" }}>
@@ -124,10 +112,7 @@ const PopupPlayers: React.FC<PopupPlayersProps> = ({
                 )}
 
                 {canLoadMore && !isLoading && (
-                  <button
-                    className="btn btn-sm btn-link align-self-start"
-                    onClick={() => loadMore()}
-                  >
+                  <button className="btn btn-sm btn-link align-self-start" onClick={() => loadMore()}>
                     Load more
                   </button>
                 )}

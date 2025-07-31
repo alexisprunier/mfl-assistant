@@ -14,12 +14,7 @@ interface PopupAddPlayersProps {
   userId?: string;
 }
 
-const PopupAddPlayers: React.FC<PopupAddPlayersProps> = ({
-  trigger,
-  onClose,
-  onConfirm,
-  userId,
-}) => {
+const PopupAddPlayers: React.FC<PopupAddPlayersProps> = ({ trigger, onClose, onConfirm, userId }) => {
   const [selectedTab, setSelectedTab] = useState("my-players");
 
   const [defaultFilters] = useState({
@@ -63,9 +58,7 @@ const PopupAddPlayers: React.FC<PopupAddPlayersProps> = ({
         if (page === 1) {
           setPlayers(v.data.getPlayers);
         } else {
-          setPlayers(
-            players ? players.concat(v.data.getPlayers) : v.data.getPlayers
-          );
+          setPlayers(players ? players.concat(v.data.getPlayers) : v.data.getPlayers);
         }
 
         setIsLoading(false);
@@ -127,7 +120,7 @@ const PopupAddPlayers: React.FC<PopupAddPlayersProps> = ({
         className={"fade-in popup-xl"}
       >
         {(close) => (
-          <div className="container bg-dark d-flex flex-column border border-info border-3 rounded-3 p-4">
+          <div>
             <div className="d-flex flex-row flex-grow-0 mb-3">
               <div className="flex-grow-1">
                 <h2 className="text-white">Add players</h2>
@@ -145,9 +138,7 @@ const PopupAddPlayers: React.FC<PopupAddPlayersProps> = ({
                   type="text"
                   className="form-control me-1"
                   value={filters.search}
-                  onChange={(v) =>
-                    setFilters({ ...filters, search: v.target.value })
-                  }
+                  onChange={(v) => setFilters({ ...filters, search: v.target.value })}
                   placeholder={"Name"}
                   autoFocus
                 />
@@ -155,11 +146,7 @@ const PopupAddPlayers: React.FC<PopupAddPlayersProps> = ({
                   trigger={
                     <button className="d-flex flex-row btn btn-info text-white me-1">
                       <i className="bi bi-filter-square-fill" />
-                      {countFilters() > 0 ? (
-                        <div className="ms-2">{countFilters()}</div>
-                      ) : (
-                        ""
-                      )}
+                      {countFilters() > 0 ? <div className="ms-2">{countFilters()}</div> : ""}
                     </button>
                   }
                   filters={filters}
@@ -171,17 +158,11 @@ const PopupAddPlayers: React.FC<PopupAddPlayersProps> = ({
                   deactivateNavigate={true}
                 />
                 {(countFilters() > 0 || filters.search) && (
-                  <button
-                    className="btn btn-warning text-white me-1"
-                    onClick={() => setFilters(defaultFilters)}
-                  >
+                  <button className="btn btn-warning text-white me-1" onClick={() => setFilters(defaultFilters)}>
                     <i className="bi bi-x-square-fill text-white"></i>
                   </button>
                 )}
-                <button
-                  className="btn btn-info text-white"
-                  onClick={() => fetchPlayers()}
-                >
+                <button className="btn btn-info text-white" onClick={() => fetchPlayers()}>
                   <i className="bi bi-search text-white"></i>
                 </button>
               </div>
@@ -207,10 +188,7 @@ const PopupAddPlayers: React.FC<PopupAddPlayersProps> = ({
                     onChange={() => setUserPlayerOnly(!userPlayerOnly)}
                   />
                 </small>
-                <ButtonPlayerView
-                  selectedView={playerView}
-                  onChange={(v) => setPlayerView(v)}
-                />
+                <ButtonPlayerView selectedView={playerView} onChange={(v) => setPlayerView(v)} />
               </div>
 
               <div className="d-flex flex-grow-1 flex-column overflow-auto">
@@ -222,17 +200,13 @@ const PopupAddPlayers: React.FC<PopupAddPlayersProps> = ({
                         p={p}
                         display={playerView}
                         selectable={true}
-                        isSelected={
-                          selectedPlayers.map((p) => p.id).indexOf(p.id) >= 0
-                        }
+                        isSelected={selectedPlayers.map((p) => p.id).indexOf(p.id) >= 0}
                         onSelect={(p) => onPlayerSelection(p)}
                       />
                     </div>
                   ))}
 
-                {players && players.length === 0 && (
-                  <BoxMessage content={"No player found"} />
-                )}
+                {players && players.length === 0 && <BoxMessage content={"No player found"} />}
 
                 {!players && (
                   <div style={{ height: "200px" }}>
@@ -247,10 +221,7 @@ const PopupAddPlayers: React.FC<PopupAddPlayersProps> = ({
                 )}
 
                 {canLoadMore && !isLoading && (
-                  <button
-                    className="btn btn-sm btn-link align-self-start"
-                    onClick={() => loadMore()}
-                  >
+                  <button className="btn btn-sm btn-link align-self-start" onClick={() => loadMore()}>
                     Load more
                   </button>
                 )}
@@ -260,10 +231,7 @@ const PopupAddPlayers: React.FC<PopupAddPlayersProps> = ({
             <div className="d-flex flex-grow-0 flex-row justify-content-end mt-3">
               <div>
                 {selectedPlayers.length > 0 && (
-                  <button
-                    className="btn btn-warning text-white me-1"
-                    onClick={() => setSelectedPlayers([])}
-                  >
+                  <button className="btn btn-warning text-white me-1" onClick={() => setSelectedPlayers([])}>
                     <i className="bi bi-x-square-fill text-white"></i>
                   </button>
                 )}
@@ -272,8 +240,7 @@ const PopupAddPlayers: React.FC<PopupAddPlayersProps> = ({
                   disabled={selectedPlayers.length <= 0}
                   onClick={() => confirm(close)}
                 >
-                  Confirm{" "}
-                  {selectedPlayers.length > 0 && `(${selectedPlayers.length})`}
+                  Confirm {selectedPlayers.length > 0 && `(${selectedPlayers.length})`}
                 </button>
               </div>
             </div>

@@ -11,12 +11,7 @@ interface PopupSelectClubProps {
   userId: String;
 }
 
-const PopupSelectClub: React.FC < PopupSelectClubProps > = ({
-  trigger,
-  onClose,
-  onConfirm,
-  userId,
-}) => {
+const PopupSelectClub: React.FC<PopupSelectClubProps> = ({ trigger, onClose, onConfirm, userId }) => {
   const [clubs, setClubs] = useState(null);
   const [selectedClub, setSelectedClub] = useState(null);
 
@@ -49,7 +44,7 @@ const PopupSelectClub: React.FC < PopupSelectClubProps > = ({
         className={"fade-in popup-md"}
       >
         {(close) => (
-          <div className="container bg-dark d-flex flex-column border border-info border-3 rounded-3 p-4">
+          <div>
             <div className="d-flex flex-row flex-grow-0 mb-3">
               <div className="flex-grow-1">
                 <h2 className="text-white">Select club</h2>

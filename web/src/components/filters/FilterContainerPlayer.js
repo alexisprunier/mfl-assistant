@@ -95,9 +95,7 @@ const FilterContainerPlayer: React.FC<FilterContainerPlayerProps> = ({
         </span>
       );
       text.push(<i className="bi bi-arrow-right small mx-2"></i>);
-      text.push(
-        <span>{filters.maxAge || <i className="bi bi-infinity"></i>}</span>
-      );
+      text.push(<span>{filters.maxAge || <i className="bi bi-infinity"></i>}</span>);
 
       return text;
     }
@@ -132,9 +130,7 @@ const FilterContainerPlayer: React.FC<FilterContainerPlayerProps> = ({
       <input
         className="form-control w-auto flex-grow-0 me-1"
         value={value}
-        placeholder={
-          fieldName.slice(0, 3).charAt(0).toUpperCase() + fieldName.slice(1, 3)
-        }
+        placeholder={fieldName.slice(0, 3).charAt(0).toUpperCase() + fieldName.slice(1, 3)}
         onChange={(v) =>
           onChange({
             ...filters,
@@ -167,18 +163,12 @@ const FilterContainerPlayer: React.FC<FilterContainerPlayerProps> = ({
 
   return (
     <div className="FilterContainerPlayer">
-      <Popup
-        trigger={trigger}
-        modal
-        onOpen={onOpen}
-        onClose={onPopupClose}
-        className={"slide-in"}
-      >
+      <Popup trigger={trigger} modal onOpen={onOpen} onClose={onPopupClose} className={"slide-in"}>
         {(close) => (
-          <div className="FilterContainerPlayer-content container bg-dark border border-info border-3 rounded-3 p-4">
+          <div className="FilterContainerPlayer-content popup-content">
             <div className="row mb-4">
               <div className="col">
-                <h2 className="text-white">FILTERS</h2>
+                <h2 className="text-white">Filters</h2>
               </div>
               <div className="col-auto">
                 <button className={"btn"} onClick={close}>
@@ -254,10 +244,7 @@ const FilterContainerPlayer: React.FC<FilterContainerPlayerProps> = ({
 
             <div className="d-flex justify-content-end my-1">
               <div>
-                <button
-                  className="btn btn-sm text-info"
-                  onClick={() => setShowProfileDetail(!showProfileDetail)}
-                >
+                <button className="btn btn-sm text-info" onClick={() => setShowProfileDetail(!showProfileDetail)}>
                   {showProfileDetail ? (
                     <span>
                       <i className="bi bi-dash"></i> Hide profile
@@ -327,10 +314,7 @@ const FilterContainerPlayer: React.FC<FilterContainerPlayerProps> = ({
 
             <div className="d-flex justify-content-end mt-1 mb-2">
               <div>
-                <button
-                  className="btn btn-sm text-info"
-                  onClick={() => setShowAttributeDetail(!showAttributeDetail)}
-                >
+                <button className="btn btn-sm text-info" onClick={() => setShowAttributeDetail(!showAttributeDetail)}>
                   {showAttributeDetail ? (
                     <span>
                       <i className="bi bi-dash"></i> Hide attributes
@@ -382,10 +366,7 @@ const FilterContainerPlayer: React.FC<FilterContainerPlayerProps> = ({
             <div className="row">
               <div className="col-md-12 mt-1">
                 <div className="float-end">
-                  <button
-                    className="btn btn-info text-white"
-                    onClick={() => onPopupApply(close)}
-                  >
+                  <button className="btn btn-info text-white" onClick={() => onPopupApply(close)}>
                     Apply
                   </button>
                 </div>
